@@ -37,3 +37,4 @@ Shared repository for ECE1140 team TIMMOS THE TANK ENGINE
     - Once done, hit create, then under `reviewers`, add someone or multiple people to review your changes
     - Once they are done reviewing, the users should approve the pull request
     - After the user who created the pull request has recieved atleast 2 approvals, they can merge the code to main
+
