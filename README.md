@@ -1,6 +1,6 @@
 # ECE1140
 Shared repository for ECE1140 trains team
-Testing Testing 123
+Team: Alex Ivensky, Keshav Shankar, Nate Ginck, John Deibert, Tim Horrell, Ben Shuttleworth
 
 ## Using Git
 1. Clone this repository to your local machine
