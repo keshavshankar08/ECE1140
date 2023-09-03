@@ -1,5 +1,5 @@
 # ECE1140
-Shared repository for ECE1140 team TIMMOS THE TANK ENGINE
+Shared repository for ECE1140 trains team
 
 ## Using Git
 1. Clone this repository to your local machine
