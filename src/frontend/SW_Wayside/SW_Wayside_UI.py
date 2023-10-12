@@ -119,15 +119,23 @@ class SWWaysideModuleUI(QtWidgets.QMainWindow):
                                                         self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].trafficLightColor = "Green"
                                                         if(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockNumber == 6):
                                                                 self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-6"
+                                                                self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].switchDirection = "5-6"
+                                                                self.track.lines[0].waysides[prevBlockNextNextWayside].blocks[prevBlockNextNextIndex].switchDirection = "5-6"
                                                         else:
                                                                 self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-11"
+                                                                self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].switchDirection = "5-11"
+                                                                self.track.lines[0].waysides[prevBlockNextWayside].blocks[prevBlockNextIndex].switchDirection = "5-11"
                                                 else:
                                                         self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Red"
                                                         self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].trafficLightColor = "Green"
                                                         if(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockNumber == 6):
                                                                 self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-11"
+                                                                self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].switchDirection = "5-11"
+                                                                self.track.lines[0].waysides[prevBlockNextNextWayside].blocks[prevBlockNextNextIndex].switchDirection = "5-11"
                                                         else:
                                                                 self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-6"
+                                                                self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].switchDirection = "5-6"
+                                                                self.track.lines[0].waysides[prevBlockNextWayside].blocks[prevBlockNextIndex].switchDirection = "5-6"
                                         # If both receivers occupied
                                         elif(self.track.lines[0].waysides[prevBlockNextWayside].blocks[prevBlockNextIndex].blockOccupied == True and self.track.lines[0].waysides[prevBlockNextNextWayside].blocks[prevBlockNextNextIndex].blockOccupied == True):
                                                 # If switch block not occupied
@@ -137,9 +145,13 @@ class SWWaysideModuleUI(QtWidgets.QMainWindow):
                                                         if(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockNumber == 6):
                                                                 self.track.lines[0].waysides[prevBlockNextNextWayside].blocks[prevBlockNextNextIndex].trafficLightColor = "Red"
                                                                 self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-6"
+                                                                self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].switchDirection = "5-6"
+                                                                self.track.lines[0].waysides[prevBlockNextNextWayside].blocks[prevBlockNextNextIndex].switchDirection = "5-6"
                                                         else:
                                                                 self.track.lines[0].waysides[prevBlockNextWayside].blocks[prevBlockNextIndex].trafficLightColor = "Red"
                                                                 self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-11"
+                                                                self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].switchDirection = "5-11"
+                                                                self.track.lines[0].waysides[prevBlockNextWayside].blocks[prevBlockNextIndex].switchDirection = "5-11"
                                                 else:
                                                         self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].trafficLightColor = "Red"
                                                         self.track.lines[0].waysides[prevBlockNextWayside].blocks[prevBlockNextIndex].trafficLightColor = "Red"
@@ -156,12 +168,15 @@ class SWWaysideModuleUI(QtWidgets.QMainWindow):
                                                         self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].trafficLightColor = "Green"
                                                         self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Green"
                                                         self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-11"
-
+                                                        self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].switchDirection = "5-11"
+                                                        self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].switchDirection = "5-11"
                                                 else:
                                                         self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].trafficLightColor = "Green"
                                                         self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].trafficLightColor = "Red"
                                                         self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Green"
                                                         self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-6"
+                                                        self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].switchDirection = "5-6"
+                                                        self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].switchDirection = "5-6"
                                         # If two receivers occupied
                                         elif(self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].blockOccupied == True and self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].blockOccupied == True):
                                                 self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].trafficLightColor = "Red"
@@ -173,6 +188,8 @@ class SWWaysideModuleUI(QtWidgets.QMainWindow):
                                                 self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].trafficLightColor = "Red"
                                                 self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Green"
                                                 self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-6"
+                                                self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].switchDirection = "5-6"
+                                                self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].switchDirection = "5-6"
  
                         self.JunctionSwitchDirectionValue.addItems(["5-11", "5-6"])
                         self.JunctionSwitchDirectionValue.setCurrentText(str(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection))
