@@ -105,62 +105,74 @@ class SWWaysideModuleUI(QtWidgets.QMainWindow):
                         if(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockOccupied == True):
                                 # If block is receiver end
                                 if(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].isReceiverEnd == True):
-                                        prevBlock = self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].previousBlockNumber
-                                        prevBlockNext = self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].nextBlockNumber
-                                        prevBlockNextNext = self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].nextNextBlockNumber
+                                        prevBlockIndex = 4
+                                        prevBlockWayside = 0
+                                        prevBlockNextIndex = 0
+                                        prevBlockNextWayside = 1
+                                        prevBlockNextNextIndex = 0
+                                        prevBlockNextNextWayside = 2
                                         # If one receiver occupied
-                                        if(self.track.lines[0].waysides[currWayside].blocks[prevBlockNext].blockOccupied == True ^ self.track.lines[0].waysides[currWayside].blocks[prevBlockNextNext].blockOccupied == True):
+                                        if(self.track.lines[0].waysides[prevBlockNextWayside].blocks[prevBlockNextIndex].blockOccupied == True ^ self.track.lines[0].waysides[prevBlockNextNextWayside].blocks[prevBlockNextNextIndex].blockOccupied == True):
                                                 # If switch block not occupied
-                                                if(self.track.lines[0].waysides[currWayside].blocks[prevBlock].blockOccupied == False):
+                                                if(self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].blockOccupied == False):
                                                         self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Green"
-                                                        self.track.lines[0].waysides[currWayside].blocks[prevBlock].trafficLightColor = "Green"
+                                                        self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].trafficLightColor = "Green"
                                                         if(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockNumber == 6):
                                                                 self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-6"
                                                         else:
                                                                 self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-11"
                                                 else:
                                                         self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Red"
-                                                        self.track.lines[0].waysides[currWayside].blocks[prevBlock].trafficLightColor = "Green"
+                                                        self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].trafficLightColor = "Green"
                                                         if(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockNumber == 6):
                                                                 self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-11"
                                                         else:
                                                                 self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-6"
                                         # If both receivers occupied
-                                        elif(self.track.lines[0].waysides[currWayside].blocks[prevBlockNext].blockOccupied == True and self.track.lines[0].waysides[currWayside].blocks[prevBlockNextNext].blockOccupied == True):
+                                        elif(self.track.lines[0].waysides[prevBlockNextWayside].blocks[prevBlockNextIndex].blockOccupied == True and self.track.lines[0].waysides[prevBlockNextNextWayside].blocks[prevBlockNextNextIndex].blockOccupied == True):
                                                 # If switch block not occupied
-                                                if(self.track.lines[0].waysides[currWayside].blocks[prevBlock].blockOccupied == False):
+                                                if(self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].blockOccupied == False):
                                                         self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Green"
-                                                        self.track.lines[0].waysides[currWayside].blocks[prevBlock].trafficLightColor = "Green"
+                                                        self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].trafficLightColor = "Green"
                                                         if(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockNumber == 6):
-                                                                self.track.lines[0].waysides[currWayside].blocks[prevBlockNextNext].trafficLightColor = "Red"
+                                                                self.track.lines[0].waysides[prevBlockNextNextWayside].blocks[prevBlockNextNextIndex].trafficLightColor = "Red"
                                                                 self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-6"
                                                         else:
-                                                                self.track.lines[0].waysides[currWayside].blocks[prevBlockNext].trafficLightColor = "Red"
+                                                                self.track.lines[0].waysides[prevBlockNextWayside].blocks[prevBlockNextIndex].trafficLightColor = "Red"
                                                                 self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-11"
                                                 else:
-                                                        self.track.lines[0].waysides[currWayside].blocks[prevBlock].trafficLightColor = "Red"
-                                                        self.track.lines[0].waysides[currWayside].blocks[prevBlockNext].trafficLightColor = "Red"
-                                                        self.track.lines[0].waysides[currWayside].blocks[prevBlockNextNext].trafficLightColor = "Red"
+                                                        self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].trafficLightColor = "Red"
+                                                        self.track.lines[0].waysides[prevBlockNextWayside].blocks[prevBlockNextIndex].trafficLightColor = "Red"
+                                                        self.track.lines[0].waysides[prevBlockNextNextWayside].blocks[prevBlockNextNextIndex].trafficLightColor = "Red"
                                 else:
-                                        nextBlock = self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].nextBlockNumber
-                                        nextNextBlock = self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].nextNextBlockNumber
+                                        nextBlockIndex = 0
+                                        nextBlockWayside = 1
+                                        nextNextBlockIndex = 0
+                                        nextnextBlockWayside = 2
                                         # If one receiver occupied
-                                        if(self.track.lines[0].waysides[currWayside].blocks[nextBlock].blockOccupied == True ^ self.track.lines[0].waysides[currWayside].blocks[nextNextBlock].blockOccupied == True):
-                                                if(self.track.lines[0].waysides[currWayside].blocks[nextBlock].blockOccupied == True):
-                                                        self.track.lines[0].waysides[currWayside].blocks[nextBlock].trafficLightColor = "Red"
-                                                        self.track.lines[0].waysides[currWayside].blocks[nextNextBlock].trafficLightColor = "Green"
+                                        if(self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].blockOccupied == True ^ self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].blockOccupied == True):
+                                                if(self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].blockOccupied == True):
+                                                        self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].trafficLightColor = "Red"
+                                                        self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].trafficLightColor = "Green"
                                                         self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Green"
                                                         self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-11"
 
                                                 else:
-                                                        self.track.lines[0].waysides[currWayside].blocks[nextBlock].trafficLightColor = "Green"
-                                                        self.track.lines[0].waysides[currWayside].blocks[nextNextBlock].trafficLightColor = "Red"
+                                                        self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].trafficLightColor = "Green"
+                                                        self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].trafficLightColor = "Red"
                                                         self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Green"
                                                         self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-6"
-                                        elif(self.track.lines[0].waysides[currWayside].blocks[nextBlock].blockOccupied == True and self.track.lines[0].waysides[currWayside].blocks[nextNextBlock].blockOccupied == True):
-                                                self.track.lines[0].waysides[currWayside].blocks[nextBlock].trafficLightColor = "Red"
-                                                self.track.lines[0].waysides[currWayside].blocks[nextNextBlock].trafficLightColor = "Red"
+                                        # If two receivers occupied
+                                        elif(self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].blockOccupied == True and self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].blockOccupied == True):
+                                                self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].trafficLightColor = "Red"
+                                                self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].trafficLightColor = "Red"
                                                 self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Red"
+                                        # If not receivers occupied
+                                        elif(self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].blockOccupied == False and self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].blockOccupied == False):
+                                                self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].trafficLightColor = "Green"
+                                                self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].trafficLightColor = "Red"
+                                                self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Green"
+                                                self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-6"
  
                         self.JunctionSwitchDirectionValue.addItems(["5-11", "5-6"])
                         self.JunctionSwitchDirectionValue.setCurrentText(str(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection))
@@ -226,6 +238,14 @@ class SWWaysideModuleUI(QtWidgets.QMainWindow):
                         self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].maintenanceActive = True
                 else:
                         self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].maintenanceActive = False
+                if(self.JunctionSwitchDirectionValue.currentText() == "5-6"):
+                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-6"
+                else:
+                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-11"
+                if(self.JunctionTrafficLightValue.currentText() == "Green"):
+                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "Green"
+                else:
+                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "Red"
                 
         def setupUi(self, SWWaysideModule):
                 # Main Window
