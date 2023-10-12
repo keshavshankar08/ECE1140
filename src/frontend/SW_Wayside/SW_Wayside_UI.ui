@@ -49,7 +49,7 @@
      <property name="geometry">
       <rect>
        <x>250</x>
-       <y>20</y>
+       <y>17</y>
        <width>131</width>
        <height>32</height>
       </rect>
@@ -77,6 +77,14 @@
        <family>Arial</family>
       </font>
      </property>
+     <property name="maxCount">
+      <number>3</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>Select Mode...</string>
+      </property>
+     </item>
      <item>
       <property name="text">
        <string>Manual</string>
@@ -106,8 +114,28 @@
       <number>10</number>
      </property>
      <property name="maxCount">
-      <number>3</number>
+      <number>4</number>
      </property>
+     <item>
+      <property name="text">
+       <string>Select Line...</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Blue Line</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Red Line</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Green Line</string>
+      </property>
+     </item>
     </widget>
     <widget class="QGroupBox" name="WaysideControllerBox">
      <property name="geometry">
@@ -143,6 +171,11 @@
       <property name="maxCount">
        <number>50</number>
       </property>
+      <item>
+       <property name="text">
+        <string>Select Wayside...</string>
+       </property>
+      </item>
      </widget>
      <widget class="QPushButton" name="WaysideControllerUploadPLCProgramButton">
       <property name="geometry">
@@ -196,6 +229,11 @@
        <property name="maxCount">
         <number>200</number>
        </property>
+       <item>
+        <property name="text">
+         <string>Select Block...</string>
+        </property>
+       </item>
       </widget>
       <widget class="QGroupBox" name="GeneralBox">
        <property name="geometry">
@@ -262,7 +300,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>210</x>
-          <y>40</y>
+          <y>44</y>
           <width>113</width>
           <height>21</height>
          </rect>
@@ -281,7 +319,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>242</x>
-          <y>90</y>
+          <y>95</y>
           <width>81</width>
           <height>21</height>
          </rect>
@@ -290,7 +328,7 @@ p, li { white-space: pre-wrap; }
          <string/>
         </property>
         <property name="maxLength">
-         <number>3</number>
+         <number>5</number>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -365,7 +403,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>242</x>
-          <y>40</y>
+          <y>45</y>
           <width>81</width>
           <height>21</height>
          </rect>
@@ -374,7 +412,7 @@ p, li { white-space: pre-wrap; }
          <string/>
         </property>
         <property name="maxLength">
-         <number>3</number>
+         <number>5</number>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -387,7 +425,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>242</x>
-          <y>90</y>
+          <y>96</y>
           <width>81</width>
           <height>21</height>
          </rect>
@@ -396,7 +434,7 @@ p, li { white-space: pre-wrap; }
          <string/>
         </property>
         <property name="maxLength">
-         <number>3</number>
+         <number>5</number>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -449,7 +487,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>160</x>
-          <y>40</y>
+          <y>44</y>
           <width>171</width>
           <height>21</height>
          </rect>
@@ -486,7 +524,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>230</x>
-          <y>40</y>
+          <y>44</y>
           <width>104</width>
           <height>26</height>
          </rect>
@@ -544,7 +582,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>230</x>
-          <y>40</y>
+          <y>45</y>
           <width>104</width>
           <height>26</height>
          </rect>
@@ -628,7 +666,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>230</x>
-          <y>140</y>
+          <y>145</y>
           <width>104</width>
           <height>26</height>
          </rect>
@@ -646,7 +684,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>220</x>
-          <y>90</y>
+          <y>95</y>
           <width>113</width>
           <height>21</height>
          </rect>
@@ -655,7 +693,7 @@ p, li { white-space: pre-wrap; }
          <string/>
         </property>
         <property name="maxLength">
-         <number>3</number>
+         <number>5</number>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -674,7 +712,7 @@ p, li { white-space: pre-wrap; }
          <x>790</x>
          <y>40</y>
          <width>361</width>
-         <height>291</height>
+         <height>341</height>
         </rect>
        </property>
        <property name="title">
@@ -686,7 +724,7 @@ p, li { white-space: pre-wrap; }
           <x>20</x>
           <y>80</y>
           <width>321</width>
-          <height>191</height>
+          <height>241</height>
          </rect>
         </property>
         <property name="title">
@@ -759,10 +797,13 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
         <widget class="QComboBox" name="TestBlockOccupiedValue">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="geometry">
           <rect>
            <x>200</x>
-           <y>140</y>
+           <y>144</y>
            <width>104</width>
            <height>26</height>
           </rect>
@@ -775,12 +816,25 @@ p, li { white-space: pre-wrap; }
          <property name="maxCount">
           <number>2</number>
          </property>
+         <item>
+          <property name="text">
+           <string>False</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>True</string>
+          </property>
+         </item>
         </widget>
         <widget class="QComboBox" name="TestMaintenenaceActiveValue">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="geometry">
           <rect>
            <x>200</x>
-           <y>90</y>
+           <y>94</y>
            <width>104</width>
            <height>26</height>
           </rect>
@@ -793,12 +847,25 @@ p, li { white-space: pre-wrap; }
          <property name="maxCount">
           <number>2</number>
          </property>
+         <item>
+          <property name="text">
+           <string>False</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>True</string>
+          </property>
+         </item>
         </widget>
         <widget class="QComboBox" name="TestTrackFaultDetectedValue">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="geometry">
           <rect>
            <x>200</x>
-           <y>40</y>
+           <y>44</y>
            <width>104</width>
            <height>26</height>
           </rect>
@@ -811,6 +878,16 @@ p, li { white-space: pre-wrap; }
          <property name="maxCount">
           <number>2</number>
          </property>
+         <item>
+          <property name="text">
+           <string>False</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>True</string>
+          </property>
+         </item>
         </widget>
        </widget>
        <widget class="QPushButton" name="TestBenchActivateButton">
@@ -839,28 +916,23 @@ p, li { white-space: pre-wrap; }
          <string>Deactivate</string>
         </property>
        </widget>
+       <widget class="QPushButton" name="TestBenchSendSignalsButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>120</x>
+          <y>270</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Send Signals</string>
+        </property>
+       </widget>
       </widget>
-     </widget>
-     <widget class="QComboBox" name="WaysideControllerSectionLetterValue">
-      <property name="geometry">
-       <rect>
-        <x>270</x>
-        <y>40</y>
-        <width>150</width>
-        <height>26</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Arial</family>
-       </font>
-      </property>
-      <property name="maxVisibleItems">
-       <number>10</number>
-      </property>
-      <property name="maxCount">
-       <number>26</number>
-      </property>
      </widget>
     </widget>
    </widget>
@@ -893,37 +965,10 @@ p, li { white-space: pre-wrap; }
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QComboBox" name="ModuleSelectionMenu">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>20</y>
-       <width>200</width>
-       <height>50</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-      </font>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(211, 215, 215)</string>
-     </property>
-     <property name="maxVisibleItems">
-      <number>10</number>
-     </property>
-     <property name="maxCount">
-      <number>12</number>
-     </property>
-    </widget>
     <widget class="QPushButton" name="SystemInfoButton">
      <property name="geometry">
       <rect>
-       <x>1020</x>
+       <x>1000</x>
        <y>20</y>
        <width>200</width>
        <height>50</height>
@@ -944,7 +989,7 @@ p, li { white-space: pre-wrap; }
     <widget class="QDoubleSpinBox" name="SystemSpeedValue">
      <property name="geometry">
       <rect>
-       <x>440</x>
+       <x>160</x>
        <y>20</y>
        <width>151</width>
        <height>51</height>
@@ -977,7 +1022,7 @@ p, li { white-space: pre-wrap; }
     <widget class="QTimeEdit" name="SystemClockValue">
      <property name="geometry">
       <rect>
-       <x>780</x>
+       <x>570</x>
        <y>20</y>
        <width>150</width>
        <height>51</height>
@@ -1031,8 +1076,8 @@ p, li { white-space: pre-wrap; }
     <widget class="QLabel" name="SystemSpeedLabel">
      <property name="geometry">
       <rect>
-       <x>330</x>
-       <y>40</y>
+       <x>40</x>
+       <y>36</y>
        <width>111</width>
        <height>20</height>
       </rect>
@@ -1047,11 +1092,11 @@ p, li { white-space: pre-wrap; }
       <string>System Speed:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="SystemBlockLabel">
+    <widget class="QLabel" name="SystemClockLabel">
      <property name="geometry">
       <rect>
-       <x>680</x>
-       <y>40</y>
+       <x>450</x>
+       <y>36</y>
        <width>101</width>
        <height>20</height>
       </rect>
@@ -1066,12 +1111,6 @@ p, li { white-space: pre-wrap; }
       <string>System Clock:</string>
      </property>
     </widget>
-    <zorder>SystemInfoButton</zorder>
-    <zorder>SystemSpeedValue</zorder>
-    <zorder>SystemClockValue</zorder>
-    <zorder>ModuleSelectionMenu</zorder>
-    <zorder>SystemSpeedLabel</zorder>
-    <zorder>SystemBlockLabel</zorder>
    </widget>
   </widget>
  </widget>
