@@ -1,4 +1,4 @@
-#!/Users/keshavshankar/Documents/Trains/ECE1140/.venv/bin/python3
+#!/Users/keshavshankar/Documents/Trains/ECE1140/.venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
