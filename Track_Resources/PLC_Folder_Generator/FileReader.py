@@ -65,6 +65,5 @@ with open(filename, mode = 'r')as file, open(output, mode = 'w', newline='') as 
     output.writerow(["WS_INF_START"])
 
     # write Wayside info
-
-
+    print('successful up to line 68')
     
