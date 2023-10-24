@@ -40,7 +40,7 @@ class Mainmenu(QtWidgets.QMainWindow):
     #window for the se wayside controller
     def swWaysideClicked(self):
         super().__init__()
-        uic.loadUi("", self)
+        uic.loadUi("Modules/SW_Wayside/Frontend/SW_Wayside_UI.ui", self)
         self.show()
 
     #window for the hw wayside controller
@@ -52,7 +52,7 @@ class Mainmenu(QtWidgets.QMainWindow):
     #window for the train controller
     def trainControllerClicked(self):
         super().__init__()
-        uic.loadUi("", self)
+        uic.loadUi("Modules/ /Frontend/", self)
         self.show()
 
 
