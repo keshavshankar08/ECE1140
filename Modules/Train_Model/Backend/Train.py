@@ -1,6 +1,7 @@
 import PyQt6
-    
-class Train:
+from PyQt6.QtCore import QObject
+
+class Train(QObject):
     def __init__(self):
         # PI Controller Parameters
         self.Kp = 0
