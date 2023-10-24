@@ -52,7 +52,7 @@ class Mainmenu(QtWidgets.QMainWindow):
     #window for the train controller
     def trainControllerClicked(self):
         super().__init__()
-        uic.loadUi("Modules/ /Frontend/", self)
+        uic.loadUi("Modules/Train_Controller/Frontend/TrainControllerUI.ui", self)
         self.show()
 
 
