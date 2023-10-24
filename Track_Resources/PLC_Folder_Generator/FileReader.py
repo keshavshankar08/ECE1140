@@ -4,7 +4,7 @@ import sys
 sys.path.append(".")
 
 # csv file name
-filename = "Track_Resources\\PLC_Folder_Generator\\GreenLine.csv"
+filename = "Track_Resources\\PLC_Folder_Generator\\RedLine.csv"
 
 # set up letter converter
 def letter_to_number(letter):
@@ -98,16 +98,16 @@ with open(filename, mode = 'r')as file:
         with open(output, mode = 'w', newline="")as outfile:
             Out = csv.writer(outfile, delimiter='"')
             # WRITE LINE 1
-            Out.writerow(["LN_INF_START"])
+            Out.writerow(["LN_START"])
 
             # WRITE LINE color
             Out.writerow([f"LINCO {LINCO}"])
 
             # write line 3
-            Out.writerow(["LN_INF_END"])
+            Out.writerow(["LN_END"])
 
             # Write line 4
-            Out.writerow(["WS_INF_START"])
+            Out.writerow(["WS_START"])
 
             # find Wayside info
             binary_wayside = format(Wayside_Number, '05b')[-5:]
@@ -119,7 +119,7 @@ with open(filename, mode = 'r')as file:
             Out.writerow([f"WS008 {binary_wayside[1]}"])
             Out.writerow([f"WS0016 {binary_wayside[0]}"])
 
-            Out.writerow(["WS_INF_END"])
+            Out.writerow(["WS_END"])
 
             # Write Block Info
             Out.writerow(["BLK_START"])
