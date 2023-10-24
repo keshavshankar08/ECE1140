@@ -4,16 +4,17 @@ from PyQt6.QtCore import QObject, pyqtSignal, QTime
 class signalsList(QObject):
     #Timer
     current_system_time = pyqtSignal(QTime)
+    stop_timer = pyqtSignal()
     #region SW Track Controller
     # Inputs
     
-    #swtrack_block_occupancy = pyqtSignal()
-    #swtrack_track_fault_detected = pyqtSignal()
-    #swtrack_maintenance_active = pyqtSignal()
-    #swtrack_suggested_speed = pyqtSignal()
-    #swtrack_suggested_authority = pyqtSignal()
-    #swtrack_system_clock = pyqtSignal()
-    #swtrack_system_speed = pyqtSignal()
+    swtrack_block_occupancy = pyqtSignal()
+    swtrack_track_fault_detected = pyqtSignal()
+    swtrack_maintenance_active = pyqtSignal()
+    swtrack_suggested_speed = pyqtSignal()
+    swtrack_suggested_authority = pyqtSignal()
+    swtrack_system_clock = pyqtSignal()
+    swtrack_system_speed = pyqtSignal()
     
     # Outputs
     #swtrack_output = pyqtSignal(Track)
