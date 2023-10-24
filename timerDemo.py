@@ -7,6 +7,10 @@ import sys
 
 def dummyFunction(current_time):
         print("Current Time:", current_time)
+        if current_time.second() == 3:
+                signals.stop_timer.emit()
+                sys.exit(1)
+
 
 if __name__ == '__main__':
         app = QCoreApplication([])
