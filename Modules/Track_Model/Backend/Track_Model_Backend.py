@@ -1,7 +1,7 @@
 import sys
 import os
 from PyQt6 import QtWidgets, QtGui, uic
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QEvent
 from PyQt6.QtWidgets import QFileDialog
 import openpyxl
 
@@ -33,7 +33,14 @@ class TrackModelModule(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
 
-        uic.loadUi("Track_Model_UI.ui", self)
+        uic.loadUi('/Users/benshuttleworth/Desktop/ECE 1140/trains/ECE1140/Modules/Track_Model/Frontend/Track_Model_UI.ui',self)
+        
+        # disable line selector until track is loaded to avoid undefined behavior
+        self.TrackLineColorValue.setEnabled(False)
+        
+        # line color combo box hint behavior, hide hint initially
+        self.TrackLineColorValue.installEventFilter(self)
+        self.LineSelectHint.setVisible(True)
         
         # load track model button
         self.LoadTrackModelButton.clicked.connect(self.track_layout)
@@ -45,28 +52,15 @@ class TrackModelModule(QtWidgets.QMainWindow):
         # build track in graphics view
         self.TrackLineColorValue.currentTextChanged.connect(self.build_track_map)
         
-        # create rectangle item
-        '''
-        rect = QtWidgets.QGraphicsRectItem(0, 0, 100, 100) 
-        rect.setBrush(QtGui.QColor(0, 255, 255))  # Use QColor to specify blue (RGB: 0, 0, 255)
-        rect.setPen(QtGui.QColor(0, 0, 0))     # Use QColor to specify black (RGB: 0, 0, 0)
-        self.graphicsView.scene().addItem(rect)
-        
-        
-        # move rectangle to new coordinates
-        rect.setPos(100,200)
-        
-        
-        # open popup when clicked 
-        rect.mousePressEvent = self.showBlockInfo
-        '''
-        
+    # functions 
+    
     def showBlockInfo(self,event):
         if event.button() == Qt.MouseButton.LeftButton:
             popup = BlockInfoPopup()
             popup.exec()
     
     def track_layout(self):
+        
         file_filter = 'Excel File (*.xlsx)'
         response, _ = QFileDialog.getOpenFileName(
             parent=self,
@@ -81,77 +75,69 @@ class TrackModelModule(QtWidgets.QMainWindow):
         layout_data = openpyxl.load_workbook(file_name, data_only=True) # open workbook and extract data only (take result from cells with formulas)
         
         # get assign sheets to sheet names from the file
-        sheet1 = layout_data['Blue Line'] 
-        sheet2 = layout_data['Red Line']
-        sheet3 = layout_data['Green Line']
+        sheet3 = layout_data['Red Line']
+        sheet4 = layout_data['Green Line']
         
         # declare list to store line data
-        self.blue_line_data = []
         self.red_line_data = []
         self.green_line_data = []
         
         # iterate through to extract data
-        for row in sheet1.iter_rows(min_row=2, max_row=16, values_only=True):
-            line, section, block_number, block_length, block_grade, speed_limit, infrastructure, elevation, cumulative_elevation = row[:9]
-            
-            # Append the data to the list in the desired format
-            self.blue_line_data.append((line, section, block_number, block_length, block_grade, speed_limit, infrastructure, elevation, cumulative_elevation))
-            
-        
-        # do same for red and green lines
-        for row in sheet2.iter_rows(min_row=2, max_row=77, values_only=True):
+        for row in sheet3.iter_rows(min_row=2, max_row=77, values_only=True):
             line, section, block_number, block_length, block_grade, speed_limit, infrastructure, station_side, elevation, cumulative_elevation = row[:10]
             
             self.red_line_data.append((line, section, block_number, block_length, block_grade, speed_limit, infrastructure, station_side, elevation, cumulative_elevation))
             
         
-        for row in sheet3.iter_rows(min_row=2,max_row=151, values_only=True):
+        for row in sheet4.iter_rows(min_row=2,max_row=151, values_only=True):
             line, section, block_number, block_length, block_grade, speed_limit, infrastructure, station_side, elevation, cumulative_elevation, traversal_time = row[:11]
             
             self.green_line_data.append((line, section, block_number, block_length, block_grade, speed_limit, infrastructure, station_side, elevation, cumulative_elevation, traversal_time))
         
+        # enable line selection after track layout is loaded 
+        self.LineSelectHint.setVisible(False)
+        self.TrackLineColorValue.setEnabled(True)
             
         
     def build_track_map(self):
         line_name = self.TrackLineColorValue.currentText()
         block_width = 20
         block_height = 20
-        x = 50
-        y = 50
+        x = 10
+        y = 10
     
         previous_block = None
     
-        if line_name == 'Blue Line':
-            data = self.blue_line_data
-        elif line_name == 'Red Line':
-            data = self.red_line_data
+        if line_name == 'Red Line':
+            # place the yard block and go from there
+            yard = QtWidgets.QGraphicsRectItem(800,0,20,20)
+            yard.setBrush(QtGui.QColor(128,128,128)) # gray color for yard block 
+            self.graphicsView.scene().addItem(yard)
+            
+            # add label to yard 
+            text = QtWidgets.QGraphicsTextItem('Yard')
+            text.setPos(792,25)
+            self.graphicsView.scene().addItem(text)
+            
+            # add next blocks
+            block9 = QtWidgets.QGraphicsRectItem(800,-70,40,40)
+            block9.setBrush(QtGui.QColor(0,128,0)) # green color by default for block
+            self.graphicsView.scene().addItem(block9)
+            
+            block8 = QtWidgets.QGraphicsRectItem(775,-100,20,20)
+            block8.setBrush(QtGui.QColor(0,128,0)) # green color by default for block
+            self.graphicsView.scene().addItem(block8)
+            
+            # connect blocks
+            line1 = QtWidgets.QGraphicsLineItem(810,-50,810,0)
+            line1.setPen(QtGui.QColor(255,255,255)) # white color for lines
+            self.graphicsView.scene().addItem(line1)
+            
+            
         elif line_name == 'Green Line':
             data = self.green_line_data
-    
-        for row in data:
-            section, block_number, block_length, infrastructure = row[1], row[2], row[3], row[6]
         
-            # create rectangle for block
-            block = QtWidgets.QGraphicsRectItem(x, y, block_width, block_height)
-            block.setBrush(QtGui.QColor(0, 128, 0))  # Green
-            self.graphicsView.scene().addItem(block)
-        
-            # add block number label
-            text = QtWidgets.QGraphicsTextItem(f'Block {block_number}')
-            text.setPos(x, y - 25)
-            self.graphicsView.scene().addItem(text)
-
-            # connect blocks with lines
-            if previous_block is not None:
-                line = QtWidgets.QGraphicsLineItem(previous_block.x() + block_width, y + block_height / 2, block.x(), y + block_height / 2)
-                line.setPen(QtGui.QColor(255, 255, 255))  # White
-                self.graphicsView.scene().addItem(line)
-        
-            previous_block = block
-        
-            x += block_width + 50  # Spacing between blocks
-        
-        block.mousePressEvent = self.showBlockInfo
+        yard.mousePressEvent = self.showBlockInfo
 
 
 

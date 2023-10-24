@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1280</width>
-    <height>720</height>
+    <width>980</width>
+    <height>1050</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,8 +18,8 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>1280</width>
-    <height>720</height>
+    <width>980</width>
+    <height>1050</height>
    </size>
   </property>
   <property name="font">
@@ -44,9 +44,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>110</y>
+      <y>10</y>
       <width>1256</width>
-      <height>621</height>
+      <height>1031</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -69,10 +69,10 @@
     <widget class="QComboBox" name="TrackLineColorValue">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>-10</y>
+       <x>50</x>
+       <y>20</y>
        <width>151</width>
-       <height>71</height>
+       <height>41</height>
       </rect>
      </property>
      <property name="sizePolicy">
@@ -100,17 +100,18 @@
      </item>
      <item>
       <property name="text">
-       <string>Blue Line</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
        <string>Red Line</string>
+      </property>
+      <property name="icon">
+       <iconset theme="red"/>
       </property>
      </item>
      <item>
       <property name="text">
        <string>Green Line</string>
+      </property>
+      <property name="icon">
+       <iconset theme="green"/>
       </property>
      </item>
     </widget>
@@ -120,7 +121,7 @@
        <x>20</x>
        <y>60</y>
        <width>1211</width>
-       <height>631</height>
+       <height>961</height>
       </rect>
      </property>
      <property name="sizePolicy">
@@ -142,17 +143,23 @@
        <rect>
         <x>-5</x>
         <y>21</y>
-        <width>1221</width>
-        <height>521</height>
+        <width>941</width>
+        <height>941</height>
        </rect>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
      </widget>
     </widget>
     <widget class="QSpinBox" name="SetEnvironmentTemperatureInputBox">
      <property name="geometry">
       <rect>
-       <x>801</x>
-       <y>21</y>
+       <x>690</x>
+       <y>10</y>
        <width>71</width>
        <height>41</height>
       </rect>
@@ -176,9 +183,9 @@
     <widget class="QLabel" name="EnvironmentTemperatureLabel">
      <property name="geometry">
       <rect>
-       <x>870</x>
-       <y>10</y>
-       <width>281</width>
+       <x>760</x>
+       <y>0</y>
+       <width>191</width>
        <height>61</height>
       </rect>
      </property>
@@ -195,7 +202,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Environment Temperature (degrees Fahrenheit)</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Environment Temperature (degrees Fahrenheit)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -207,7 +214,7 @@
     <widget class="QPushButton" name="LoadTrackModelButton">
      <property name="geometry">
       <rect>
-       <x>480</x>
+       <x>440</x>
        <y>10</y>
        <width>221</width>
        <height>51</height>
@@ -232,7 +239,7 @@
     <widget class="QWidget" name="formLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>240</x>
+       <x>270</x>
        <y>10</y>
        <width>161</width>
        <height>71</height>
@@ -331,210 +338,25 @@
      <zorder>PowerFailureToggleButton</zorder>
      <zorder>BrokenRailToggleButton</zorder>
     </widget>
-   </widget>
-   <widget class="QFrame" name="MenuSection">
-    <property name="geometry">
-     <rect>
-      <x>12</x>
-      <y>12</y>
-      <width>1256</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="font">
-     <font>
-      <family>Arial</family>
-     </font>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
-    </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(21, 175, 255)</string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QComboBox" name="ModuleSelectionMenu">
+    <widget class="QLabel" name="LineSelectHint">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>20</y>
-       <width>200</width>
-       <height>50</height>
+       <x>10</x>
+       <y>0</y>
+       <width>251</width>
+       <height>41</height>
       </rect>
-     </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-      </font>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(211, 215, 215)</string>
-     </property>
-     <property name="maxVisibleItems">
-      <number>10</number>
-     </property>
-     <property name="maxCount">
-      <number>12</number>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="SystemInfoButton">
-     <property name="geometry">
-      <rect>
-       <x>1020</x>
-       <y>20</y>
-       <width>200</width>
-       <height>50</height>
-      </rect>
-     </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>1</horstretch>
-       <verstretch>1</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(211, 215, 215);
-color: black;</string>
      </property>
      <property name="text">
-      <string>System Info</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#fc0107;&quot;&gt;Please Load a Track Model to Select a Line!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QDoubleSpinBox" name="SystemSpeedValue">
+    <widget class="QLabel" name="FailureModesBoxLabel">
      <property name="geometry">
       <rect>
-       <x>440</x>
-       <y>20</y>
-       <width>151</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);
-color: black;</string>
-     </property>
-     <property name="suffix">
-      <string> x</string>
-     </property>
-     <property name="decimals">
-      <number>1</number>
-     </property>
-     <property name="minimum">
-      <double>1.000000000000000</double>
-     </property>
-     <property name="maximum">
-      <double>50.000000000000000</double>
-     </property>
-     <property name="singleStep">
-      <double>0.100000000000000</double>
-     </property>
-    </widget>
-    <widget class="QTimeEdit" name="SystemClockValue">
-     <property name="geometry">
-      <rect>
-       <x>780</x>
-       <y>20</y>
-       <width>150</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);
-color: black;</string>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-     <property name="dateTime">
-      <datetime>
-       <hour>13</hour>
-       <minute>56</minute>
-       <second>59</second>
-       <year>2000</year>
-       <month>1</month>
-       <day>1</day>
-      </datetime>
-     </property>
-     <property name="maximumTime">
-      <time>
-       <hour>13</hour>
-       <minute>56</minute>
-       <second>59</second>
-      </time>
-     </property>
-     <property name="minimumTime">
-      <time>
-       <hour>0</hour>
-       <minute>0</minute>
-       <second>0</second>
-      </time>
-     </property>
-     <property name="currentSection">
-      <enum>QDateTimeEdit::HourSection</enum>
-     </property>
-     <property name="displayFormat">
-      <string>h:mm</string>
-     </property>
-     <property name="currentSectionIndex">
-      <number>0</number>
-     </property>
-    </widget>
-    <widget class="QLabel" name="SystemSpeedLabel">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>40</y>
-       <width>111</width>
+       <x>290</x>
+       <y>0</y>
+       <width>121</width>
        <height>20</height>
       </rect>
      </property>
@@ -546,73 +368,25 @@ color: black;</string>
      </property>
      <property name="font">
       <font>
-       <family>Arial</family>
-       <pointsize>15</pointsize>
+       <family>Helvetica</family>
+       <pointsize>18</pointsize>
+       <weight>75</weight>
+       <italic>false</italic>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
-      <string>System Speed:</string>
+      <string>Failure Modes</string>
      </property>
     </widget>
-    <widget class="QLabel" name="SystemBlockLabel">
-     <property name="geometry">
-      <rect>
-       <x>680</x>
-       <y>40</y>
-       <width>101</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-       <pointsize>15</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>System Clock:</string>
-     </property>
-    </widget>
-    <zorder>SystemInfoButton</zorder>
-    <zorder>SystemSpeedValue</zorder>
-    <zorder>SystemClockValue</zorder>
-    <zorder>ModuleSelectionMenu</zorder>
-    <zorder>SystemSpeedLabel</zorder>
-    <zorder>SystemBlockLabel</zorder>
-   </widget>
-   <widget class="QLabel" name="FailureModesBoxLabel">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>100</y>
-      <width>121</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="font">
-     <font>
-      <family>Helvetica</family>
-      <pointsize>18</pointsize>
-      <weight>75</weight>
-      <italic>false</italic>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Failure Modes</string>
-    </property>
+    <zorder>TrackModelBox</zorder>
+    <zorder>SetEnvironmentTemperatureInputBox</zorder>
+    <zorder>EnvironmentTemperatureLabel</zorder>
+    <zorder>LoadTrackModelButton</zorder>
+    <zorder>formLayoutWidget</zorder>
+    <zorder>TrackLineColorValue</zorder>
+    <zorder>LineSelectHint</zorder>
+    <zorder>FailureModesBoxLabel</zorder>
    </widget>
   </widget>
  </widget>

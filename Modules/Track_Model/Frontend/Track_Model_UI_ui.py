@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'Track_Model_UI.ui'
+# Form implementation generated from reading ui file '/Users/benshuttleworth/Desktop/ECE 1140/trains/ECE1140/Modules/Track_Model/Frontend/Track_Model_UI.ui'
 #
 # Created by: PyQt6 UI code generator 6.5.2
 #
@@ -58,8 +58,10 @@ class Ui_TrackModelModule(object):
         self.TrackLineColorValue.setMaxCount(4)
         self.TrackLineColorValue.setObjectName("TrackLineColorValue")
         self.TrackLineColorValue.addItem("")
-        self.TrackLineColorValue.addItem("")
-        self.TrackLineColorValue.addItem("")
+        icon = QtGui.QIcon.fromTheme("red")
+        self.TrackLineColorValue.addItem(icon, "")
+        icon = QtGui.QIcon.fromTheme("green")
+        self.TrackLineColorValue.addItem(icon, "")
         self.TrackModelBox = QtWidgets.QGroupBox(parent=self.ModuleSection)
         self.TrackModelBox.setGeometry(QtCore.QRect(20, 60, 1211, 961))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
@@ -215,13 +217,3 @@ class Ui_TrackModelModule(object):
         self.PowerFailureToggleButton.setText(_translate("TrackModelModule", "Power Failure"))
         self.LineSelectHint.setText(_translate("TrackModelModule", "<html><head/><body><p><span style=\" font-size:12pt; color:#fc0107;\">Please Load a Track Model to Select a Line!</span></p></body></html>"))
         self.FailureModesBoxLabel.setText(_translate("TrackModelModule", "Failure Modes"))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    TrackModelModule = QtWidgets.QMainWindow()
-    ui = Ui_TrackModelModule()
-    ui.setupUi(TrackModelModule)
-    TrackModelModule.show()
-    sys.exit(app.exec())
