@@ -4,6 +4,8 @@ import sys
 
 # CONSTANTS
 INTERVAL = 50
+SYSTEM_SPEED = 5
+TIME_DELTA = INTERVAL * SYSTEM_SPEED
 START_HOUR = 12
 START_MIN = 0
 START_SEC = 0
@@ -19,7 +21,7 @@ class SystemTime(QObject):
 
 
     def timerHandler(self):
-        self.current_time = self.current_time.addMSecs(INTERVAL)
+        self.current_time = self.current_time.addMSecs(TIME_DELTA)
         signals.current_system_time.emit(self.current_time)
 
     def stopTimer(self):
