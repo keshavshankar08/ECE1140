@@ -14,6 +14,7 @@ class SystemTime(QObject):
         self.current_time = QTime(START_HOUR, START_MIN, START_SEC)
         self.system_timer = QTimer()
         self.system_timer.timeout.connect(self.timerHandler)
+        signals.stop_timer.connect(self.stopTimer)
         self.system_timer.start(INTERVAL)
 
 
@@ -21,13 +22,5 @@ class SystemTime(QObject):
         self.current_time = self.current_time.addMSecs(INTERVAL)
         signals.current_system_time.emit(self.current_time)
 
-if __name__ == '__main__':
-    app = QCoreApplication([])  
-
-    thread = QThread() 
-    system_time = SystemTime()
-    system_time.moveToThread(thread) 
-
-    thread.start()
-
-    sys.exit(app.exec())
+    def stopTimer(self):
+        self.system_timer.stop()
