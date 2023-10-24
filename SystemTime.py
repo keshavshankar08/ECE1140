@@ -1,28 +1,23 @@
-# This can handle the system time which is adjustable from 0.5x to 50x
+from PyQt6.QtCore import QTime, QTimer, Qt, QCoreApplication, QObject
+import time
 
-# ----- Pseudocode -----
+class SystemTime(QObject):
+    def __init__(self):
+        # System Speed Chosen By User
+        self.systemSpeed = 1.0
+        # HH:MM:SS info
+        self.currentTime = QTime(0, 0, 0) # starting at 00:00:00 for now
+        ##### CAUTION - THIS VALUE SHOULD NOT BE CHANGED  #####
+        self.timerPeriod = 0.005 # timer will have a period of 50 ms
+        # Time Delta for Module Calculations
+        self.timeDelta_MS = (self.timerPeriod) * self.systemSpeed # time delta that should be used by individual modules for their time-related calculations.
+        # for example, if system speed is set to 1, then the time delta will be 50 ms, as standard.
+        # if system speed is set to 3, the time delta will be 150 ms, but 50 ms will have passed between actual timer iterations.
 
-# The general idea is that
-# 1x time = 1 seconds / cycle
-# 2x time = 1*2 seconds / cycle
-# 50x time = 1*50 seconds / cycle
-# 0.5x time = 1*0.5 seconds / cycle
+    def run(self):
+        self.app.exec()
 
-# So the algorithm goes like this
 
-systemSpeedChosen = 1.0 # This will be whatever the user chooses from 0.5x - 50x
+timerTest = SystemTime()
+print(timerTest.currentTime.hour())
 
-systemSpeedConstant = 1.0 # This is the constant for 1 seconds / cycle
-
-systemSpeedCalculated = systemSpeedConstant*systemSpeedChosen # This will give the new system speed in number of seconds / cycle
-
-systemSpeedConversionConstant = 1000.0 # This is the constant for 1000 mS / 1 second
-
-systemSpeed = systemSpeedCalculated * systemSpeedConversionConstant # This takes the speed speed 
-
-# We can put this all in a class and have a function of it that ouputs the systemSpeed in ms to the signals.py
-
-# The idea is that we can use something like delay(systemSpeed) at the end of looping structure for the backend program
-# so that the system just takes a delay before the next loop cycle
-
-# This class would be called to update the signals.py with the systemSpeed whenever the main_ui detects the user changed the system speed slider
