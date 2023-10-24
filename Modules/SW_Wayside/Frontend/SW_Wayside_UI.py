@@ -2,7 +2,8 @@ from PyQt6 import QtCore, QtGui, QtWidgets, uic
 from PyQt6.QtWidgets import *
 import sys
 import cv2
-from Track_Resources.Track import *
+sys.path.append(".")
+import Track_Resources.Track as track
 
 class SWWaysideModuleUI(QtWidgets.QMainWindow):
         def __init__(self):
@@ -10,7 +11,7 @@ class SWWaysideModuleUI(QtWidgets.QMainWindow):
                 uic.loadUi("Modules/SW_Wayside/Frontend/SW_Wayside_UI.ui", self)
                 
                 # Create default track object
-                self.track = Track.generateDefaultTrack()
+                self.track = track.generateDefaultTrack()
                 
                 # Line Option Calls
                 linesList = [self.track.lines[0].lineColor]
