@@ -1,72 +1,23 @@
-LN_INF_START
-    LN001 - Line Color Binary 1 (1 = blue, 2 = red, 3 = green)
-    LN002 - Line Color Binary 2
+LN_START
+    LINCO - Line Color (0 = red, 1 = green)
 LN_INF_END
-WS_INF_START
-    WS001 - Wayside Number Binary 1 (1 = ws1)
+WS_START
+    WS001 - Wayside Number Binary 1 (00001 = wayside 1)
     WS002 - Wayside Number Binary 2
     WS004 - Wayside Number Binary 4
     WS008 - Wayside Number Binary 8
     WS016 - Wayside Number Binary 16
-WS_INF_END
-
+WS_END
 BLK_START
-    SL001 - Section Letter Binary 1         (____1) (1 = A, 2 = B, ...)
-    SL002 - Section Letter Binary 2         (___1_)
-    SL004 - Section Letter Binary 4         (__1__)
-    SL008 - Section Letter Binary 8         (_1___)
-    SL016 - Section Letter Binary 16        (1____)
-
-    BK001 - Block Binary 1      (_______1) (1 = blk 1)
-    BK002 - Block Binary 2      (______1_)
-    BK004 - Block Binary 4      (_____1__)
-    BK008 - Block Binary 8      (____1___)
-    BK016 - Block Binary 16     (___1____)
-    BK032 - Block Binary 32     (__1_____)
-    BK064 - Block Binary 64     (_1______)
-    BK128 - Block Binary 128    (1_______)
-
-    NB001 - Next Block Binary 1      (_______1)
-    NB002 - Next Block Binary 2      (______1_)
-    NB004 - Next Block Binary 4      (_____1__)
-    NB008 - Next Block Binary 8      (____1___)
-    NB016 - Next Block Binary 16     (___1____)
-    NB032 - Next Block Binary 32     (__1_____)
-    NB064 - Next Block Binary 64     (_1______)
-    NB128 - Next Block Binary 128    (1_______)
-
-    NN001 - 2nd Next Block Binary 1      (_______1)
-    NN002 - 2nd Next Block Binary 2      (______1_)
-    NN004 - 2nd Next Block Binary 4      (_____1__)
-    NN008 - 2nd Next Block Binary 8      (____1___)
-    NN016 - 2nd Next Block Binary 16     (___1____)
-    NN032 - 2nd Next Block Binary 32     (__1_____)
-    NN064 - 2nd Next Block Binary 64     (_1______)
-    NN128 - 2nd Next Block Binary 128    (1_______)
-
-    PB001 - Previous Block Binary 1      (_______1)
-    PB002 - Previous Block Binary 2      (______1_)
-    PB004 - Previous Block Binary 4      (_____1__)
-    PB008 - Previous Block Binary 8      (____1___)
-    PB016 - Previous Block Binary 16     (___1____)
-    PB032 - Previous Block Binary 32     (__1_____)
-    PB064 - Previous Block Binary 64     (_1______)
-    PB128 - Previous Block Binary 128    (1_______)
-
-    TDEFA - Block Default Type (0 = not default, 1 = default)
-    TJUNC - Block Junction Type (0 = not junction, 1 = junction)
-    TCROS - Block Crossing Type (0 = not crossing, 1 = crossing)
-    TSTAT - Block Station Type (0 = not station, 1 = station)
-
-    SWITC - Block Junction Switch On (0 = switched right, 1 = switched left)
-    RECIE - Block Junction Switch Reciever End (0 = Contains Switch, 1 = Contains Reciever)
+    BK001 - Block Binary 1 (00001111 = block 15)
+    BK002 - Block Binary 2  
+    BK004 - Block Binary 4  
+    BK008 - Block Binary 8  
+    BK016 - Block Binary 16 
+    BK032 - Block Binary 32 
+    BK064 - Block Binary 64 
+    BK128 - Block Binary 128
+    SWITC - Block Junction Switch On (0 = switched left, 1 = switched right)
     TRAFF - Block Junction Traffic Light (0 = Red, 1 = Green)
-
-    SN001 - Block Station Name Binary 1     (____1)
-    SN002 - Block Station Name Binary 2     (___1_)
-    SN004 - Block Station Name Binary 4     (__1__)
-    SN008 - Block Station Name Binary 8     (_1___)
-    SN016 - Block Station Name Binary 16    (1____)
-
     CROSS - Block Crossing Active (0 = not active, 1 = active)
 BLK_END
