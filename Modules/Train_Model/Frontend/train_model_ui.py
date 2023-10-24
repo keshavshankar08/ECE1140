@@ -6,7 +6,7 @@ class TrainModelUI(QtWidgets.QMainWindow):
     def __init__(self):
         #setup
         super().__init__()
-        uic.loadUi("src/frontend/Train_Model/Train_Model_UI.ui", self)
+        uic.loadUi("Modules/Train_Model/Frontend/Train_Model_UI.ui", self)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
