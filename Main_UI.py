@@ -22,37 +22,37 @@ class Mainmenu(QtWidgets.QMainWindow):
     #window for the ctc office
     def ctcOfficeClicked(self):
         super().__init__()
-        uic.loadUi("pyt\\Mainmenu.ui", self)
+        uic.loadUi("", self)
         self.show()
 
     #window for the track model
     def trackModelClicked(self):
         super().__init__()
-        uic.loadUi("pyt\\Mainmenu.ui", self)
+        uic.loadUi("", self)
         self.show()
 
     #window for the train model 
     def trainModelClicked(self):
         super().__init__()
-        uic.loadUi("pyt\\Mainmenu.ui", self)
+        uic.loadUi("", self)
         self.show()
 
     #window for the se wayside controller
     def swWaysideClicked(self):
         super().__init__()
-        uic.loadUi("pyt\\Mainmenu.ui", self)
+        uic.loadUi("", self)
         self.show()
 
     #window for the hw wayside controller
     def hwWaysideClicked(self):
         super().__init__()
-        uic.loadUi("pyt\\Mainmenu.ui", self)
+        uic.loadUi("", self)
         self.show()
 
     #window for the train controller
     def trainControllerClicked(self):
         super().__init__()
-        uic.loadUi("pyt\\TrainControllerUI.ui", self)
+        uic.loadUi("", self)
         self.show()
 
 
