@@ -3,7 +3,7 @@ import os
 from PyQt6 import QtWidgets, QtGui, uic
 from PyQt6.QtCore import Qt, QEvent
 from PyQt6.QtWidgets import QFileDialog
-import openpyxl
+import openpyxl, re
 
 class BlockInfoPopup(QtWidgets.QDialog):
     def __init__(self):
@@ -101,45 +101,110 @@ class TrackModelModule(QtWidgets.QMainWindow):
         
     def build_track_map(self):
         line_name = self.TrackLineColorValue.currentText()
-        block_width = 20
-        block_height = 20
-        x = 10
-        y = 10
-    
-        previous_block = None
     
         if line_name == 'Red Line':
             # place the yard block and go from there
-            yard = QtWidgets.QGraphicsRectItem(800,0,20,20)
-            yard.setBrush(QtGui.QColor(128,128,128)) # gray color for yard block 
-            self.graphicsView.scene().addItem(yard)
+            block0 = QtWidgets.QGraphicsRectItem(800,0,40,40)
+            block0.setBrush(QtGui.QColor(128,128,128)) # gray color for yard block 
+            self.graphicsView.scene().addItem(block0)
             
             # add label to yard 
             text = QtWidgets.QGraphicsTextItem('Yard')
-            text.setPos(792,25)
+            text.setPos(802,40)
             self.graphicsView.scene().addItem(text)
             
-            # add next blocks
-            block9 = QtWidgets.QGraphicsRectItem(800,-70,40,40)
-            block9.setBrush(QtGui.QColor(0,128,0)) # green color by default for block
-            self.graphicsView.scene().addItem(block9)
-            
-            block8 = QtWidgets.QGraphicsRectItem(775,-100,20,20)
-            block8.setBrush(QtGui.QColor(0,128,0)) # green color by default for block
-            self.graphicsView.scene().addItem(block8)
-            
-            # connect blocks
-            line1 = QtWidgets.QGraphicsLineItem(810,-50,810,0)
-            line1.setPen(QtGui.QColor(255,255,255)) # white color for lines
-            self.graphicsView.scene().addItem(line1)
-            
+            # use function to keep building map
+            self.add_block_to_map(800,-70,'block9','9','right',800,0)
+            self.add_block_to_map(775,-120,'block8','8','right',800,-70)
+            self.add_block_to_map(740,-170,'block7','7','top',775,-120)
+            self.add_block_to_map(690,-170,'block6','6','top',740,-170)
+            self.add_block_to_map(640,-150,'block5','5','top',690,-170)
+            self.add_block_to_map(590,-130,'block4','4','top',640,-150)
+            self.add_block_to_map(540,-110,'block3','3','top',590,-130)
+            self.add_block_to_map(490,-90,'block2','2','top',540,-110)
+            self.add_block_to_map(440,-70,'block1','1','top',490,-90)
+            self.add_block_to_map(390,-50,'block16','16','top',440,-70)
+            self.add_block_to_map(460,0,'block15','15','bottom',390,-50)
             
         elif line_name == 'Green Line':
             data = self.green_line_data
         
-        yard.mousePressEvent = self.showBlockInfo
+        block0.mousePressEvent = self.showBlockInfo
 
-
+    def add_block_to_map(self,x,y,block_number,block_number_2,label_pos,prev_x,prev_y):
+            block_number = QtWidgets.QGraphicsRectItem(x,y,40,40)
+            block_number.setBrush(QtGui.QColor(0,128,0)) # gray color for yard block 
+            self.graphicsView.scene().addItem(block_number)
+            
+            # handle different positions for the block label
+            if label_pos == 'top' and y<0:
+                text = QtWidgets.QGraphicsTextItem(block_number_2)
+                text.setPos(x+13,y-20)
+                self.graphicsView.scene().addItem(text)
+            
+            if label_pos == 'top' and y>=0:
+                text = QtWidgets.QGraphicsTextItem(block_number_2)
+                text.setPos(x+15,y+20)
+                self.graphicsView.scene().addItem(text)
+            
+            if label_pos == 'right':
+                text = QtWidgets.QGraphicsTextItem(block_number_2)
+                text.setPos(x+40,y+10)
+                self.graphicsView.scene().addItem(text)
+            
+            if label_pos == 'left':
+                text = QtWidgets.QGraphicsTextItem(block_number_2)
+                text.setPos(x-40,y+10)
+                self.graphicsView.scene().addItem(text)
+            
+            if label_pos == 'bottom' and y<0:
+                text = QtWidgets.QGraphicsTextItem(block_number_2)
+                text.setPos(x-15,y+20)
+                self.graphicsView.scene().addItem(text)
+            
+            if label_pos == 'bottom' and y>=0:
+                text = QtWidgets.QGraphicsTextItem(block_number_2)
+                text.setPos(x+11 ,y+40)
+                self.graphicsView.scene().addItem(text)
+            
+            # draw line to connect blocks with handling for different orientations 
+            # blocks in line vertically 
+            if x == prev_x and y<0: 
+                line = QtWidgets.QGraphicsLineItem(x+20,prev_y,prev_x+20,prev_y-30)
+                line.setPen(QtGui.QColor(255,255,255)) # white color for lines
+                self.graphicsView.scene().addItem(line)
+            
+            if x == prev_x and y>=0:
+                line = QtWidgets.QGraphicsLineItem(x+20,prev_y,prev_x+20,prev_y+30)
+                line.setPen(QtGui.QColor(255,255,255))
+                self.graphicsView.scene().addItem(line)
+            
+            # blocks in line horizontally
+            if y == prev_y and y<0:
+                line = QtWidgets.QGraphicsLineItem(x+40,prev_y+20,prev_x,prev_y+20)
+                line.setPen(QtGui.QColor(255,255,255))
+                self.graphicsView.scene().addItem(line)
+             
+            if y == prev_y and y>=0:
+                line = QtWidgets.QGraphicsLineItem(x+20,prev_y+20,prev_x-20,prev_y+20)
+                line.setPen(QtGui.QColor(255,255,255))
+                self.graphicsView.scene().addItem(line)
+            
+            # diagonal cases
+            elif x != prev_x and y != prev_y and x<prev_x and y<prev_y and y<0:
+                line = QtWidgets.QGraphicsLineItem(x+30,y+40,prev_x+10,prev_y)
+                line.setPen(QtGui.QColor(255,255,255))
+                self.graphicsView.scene().addItem(line)
+            
+            elif x != prev_x and y != prev_y and y>=0:
+                line = QtWidgets.QGraphicsLineItem(x+30,y-40,prev_x+10,prev_y)
+                line.setPen(QtGui.QColor(255,255,255))
+                self.graphicsView.scene().addItem(line)
+            
+            elif x != prev_x and y != prev_y and y>prev_y:
+                line = QtWidgets.QGraphicsLineItem(prev_x,prev_y+20,x+40,y+10)
+                line.setPen(QtGui.QColor(255,255,255))
+                self.graphicsView.scene().addItem(line)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
