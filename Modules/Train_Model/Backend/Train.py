@@ -13,7 +13,8 @@ S_BRAKE_MAX_DECEL = 1.2 # m/s^2
 E_BRAKE_DECEL = 2.73 # m/s^2
 
 # Class to model a train.
-# Written by Alex Ivensky
+# Constants reflect the properties of the Alstom/Bombardier Flexity 2.
+# Written by Alex Ivensky for ECE 1140
 
 class Train(QObject):
     def __init__(self):
