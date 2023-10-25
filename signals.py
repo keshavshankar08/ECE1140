@@ -1,13 +1,15 @@
 from PyQt6.QtCore import QObject, pyqtSignal, QTime
 # from src.backend.SW_Wayside.Track import *
 
+# class to represent a complete list of all inter-module signals
+
 class signalsList(QObject):
     #Timer
     current_system_time = pyqtSignal(QTime)
     stop_timer = pyqtSignal()
+
     #region SW Track Controller
     # Inputs
-    
     swtrack_block_occupancy = pyqtSignal()
     swtrack_track_fault_detected = pyqtSignal()
     swtrack_maintenance_active = pyqtSignal()

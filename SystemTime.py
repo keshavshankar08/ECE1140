@@ -3,12 +3,14 @@ from signals import signals
 import sys
 
 # CONSTANTS
-INTERVAL = 50
-SYSTEM_SPEED = 1
-TIME_DELTA = INTERVAL * SYSTEM_SPEED
-START_HOUR = 8
-START_MIN = 38
-START_SEC = 0
+INTERVAL = 50 # ms - DO NOT CHANGE
+SYSTEM_SPEED = 1 # dimensionless
+TIME_DELTA = INTERVAL * SYSTEM_SPEED # ms
+START_HOUR = 6 # hours
+START_MIN = 0 # minutes
+START_SEC = 0 # seconds
+
+# class to represent an adaptation of QTimer and QTime from PyQt6 for the purposes of a train control system
 
 class SystemTime(QObject):
     def __init__(self):
