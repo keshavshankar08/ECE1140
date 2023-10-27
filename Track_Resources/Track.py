@@ -10,8 +10,8 @@ class Track:
 
         # Red line block information
         redLineDefaultBlocks = [2,3,4,5,6,8,11,12,13,14,18,19,20,22,23,24,26,29,30,31,34,36,37,40,41,42,46,49,50,54,55,56,57,58,59,61,62,63,64,65,68,69,70,73,74,75]
-        redLineStationBlocks = [7,17,21,25,35,45,48,60]
-        redLineStationNames = ["Shadyside", "Herron Ave", "Swissville", "Penn Station", "Steel Plaza", "First Ave", "Station Square", "South Hills Junction"]
+        self.redLineStationBlocks = [7,17,21,25,35,45,48,60]
+        self.redLineStationNames = ["Shadyside", "Herron Ave", "Swissville", "Penn Station", "Steel Plaza", "First Ave", "Station Square", "South Hills Junction"]
         redLineCrossingBlocks = [47]
         redLineJunctionBlocks = [9,0,10,16,1,15,27,28,76,33,72,32,38,39,71,44,67,43,52,53,66]
         redLineJunctionSwitchEnds = [9,16,27,33,38,44,52]
@@ -102,9 +102,9 @@ class Track:
             blk.blockNumber = i
             if(i in redLineDefaultBlocks):
                 blk.blockType = "Default"
-            elif(i in redLineStationBlocks):
+            elif(i in self.redLineStationBlocks):
                 blk.blockType = "Station"
-                blk.stationName = redLineStationNames[redLineStationBlocks.index(i)]
+                blk.stationName = self.redLineStationNames[self.redLineStationBlocks.index(i)]
             elif(i in redLineJunctionBlocks):
                 blk.blockType = "Junction"
                 if(i in redLineJunctionReceiverEnds):
@@ -125,8 +125,8 @@ class Track:
         
         # Green line block information
         greenLineDefaultBlocks = [3,4,5,6,7,8,10,11,14,15,17,18,20,21,23,24,25,26,27,30,32,33,34,35,36,37,38,40,41,42,43,44,45,46,47,49,50,51,52,53,54,55,59,60,61,64,66,67,68,69,70,71,72,74,75,79,80,81,82,83,84,86,87,89,90,91,92,93,94,95,97,98,99,102,103,104,106,107,108,109,110,111,112,113,115,116,117,118,119,120,121,122,124,125,126,127,128,129,130,131,133,134,135,136,137,138,139,140,142,143,144,145,146,147,148,149]
-        greenLineStationBlocks = [2,9,16,22,31,39,48,56,65,73,88,96,105,114,123,132,141]
-        greenLineStationNames = ["Pioneer", "Edgebrook", "Jalappa", "Whited", "South Bank", "Central", "Inglewood", "Overbrook", "Glenbury", "Dormont", "Mt Lebanon", "Poplar", "Castle Shannon", "Dormont", "Glenbury", "Overbrook", "Inglewood", "Central"]
+        self.greenLineStationBlocks = [2,9,16,22,31,39,48,56,65,73,88,96,105,114,123,132,141]
+        self.greenLineStationNames = ["Pioneer", "Edgebrook", "Jalappa", "Whited", "South Bank", "Central", "Inglewood", "Overbrook", "Glenbury", "Dormont", "Mt Lebanon", "Poplar", "Castle Shannon", "Dormont", "Glenbury", "Overbrook", "Inglewood", "Central"]
         greenLineCrossingBlocks = [19]
         greenLineJunctionBlocks = [13,12,1,28,29,150,57,0,58,65,62,0,77,101,76,85,86,100]
         greenLineJunctionSwitchEnds = [[13],[28],[57],[63],[77],[85]]
@@ -291,9 +291,9 @@ class Track:
             # Set block types and specific information
             if(i in greenLineDefaultBlocks):
                 blk.blockType = "Default"
-            elif(i in greenLineStationBlocks):
+            elif(i in self.greenLineStationBlocks):
                 blk.blockType = "Station"
-                blk.stationName = greenLineStationNames[greenLineStationBlocks.index(i)]
+                blk.stationName = self.greenLineStationNames[self.greenLineStationBlocks.index(i)]
             elif(i in greenLineJunctionBlocks):
                 blk.blockType = "Junction"
                 if(i in greenLineJunctionReceiverEnds):
@@ -311,6 +311,7 @@ class Track:
         # Store lines in track
         self.lines.append(redLine)
         self.lines.append(greenLine)
+
 
 # Line Object - A single line from the entire track network
 class Line:
