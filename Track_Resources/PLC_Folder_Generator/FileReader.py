@@ -4,7 +4,7 @@ import sys
 sys.path.append(".")
 
 # csv file name
-filename = "Track_Resources\\PLC_Folder_Generator\\RedLine.csv"
+filename = "Track_Resources\\PLC_Folder_Generator\\GreenLine.csv"
 
 # set up letter converter
 def letter_to_number(letter):
@@ -76,10 +76,10 @@ with open(filename, mode = 'r')as file:
                 Ap.writerow([f"BK002 {binary_block[6]}"])
                 Ap.writerow([f"BK004 {binary_block[5]}"])
                 Ap.writerow([f"BK008 {binary_block[4]}"])
-                Ap.writerow([f"BK0016 {binary_block[3]}"])
-                Ap.writerow([f"BK0032 {binary_block[2]}"])
-                Ap.writerow([f"BK0064 {binary_block[1]}"])
-                Ap.writerow([f"BK0128 {binary_block[0]}"])
+                Ap.writerow([f"BK016 {binary_block[3]}"])
+                Ap.writerow([f"BK032 {binary_block[2]}"])
+                Ap.writerow([f"BK064 {binary_block[1]}"])
+                Ap.writerow([f"BK128 {binary_block[0]}"])
 
                 # Write block info
                 Ap.writerow(["SWITC 0"])
@@ -117,7 +117,7 @@ with open(filename, mode = 'r')as file:
             Out.writerow([f"WS002 {binary_wayside[3]}"])
             Out.writerow([f"WS004 {binary_wayside[2]}"])
             Out.writerow([f"WS008 {binary_wayside[1]}"])
-            Out.writerow([f"WS0016 {binary_wayside[0]}"])
+            Out.writerow([f"WS016 {binary_wayside[0]}"])
 
             Out.writerow(["WS_END"])
 
@@ -132,10 +132,10 @@ with open(filename, mode = 'r')as file:
             Out.writerow([f"BK002 {binary_block[6]}"])
             Out.writerow([f"BK004 {binary_block[5]}"])
             Out.writerow([f"BK008 {binary_block[4]}"])
-            Out.writerow([f"BK0016 {binary_block[3]}"])
-            Out.writerow([f"BK0032 {binary_block[2]}"])
-            Out.writerow([f"BK0064 {binary_block[1]}"])
-            Out.writerow([f"BK0128 {binary_block[0]}"])
+            Out.writerow([f"BK016 {binary_block[3]}"])
+            Out.writerow([f"BK032 {binary_block[2]}"])
+            Out.writerow([f"BK064 {binary_block[1]}"])
+            Out.writerow([f"BK128 {binary_block[0]}"])
 
             # Write block info
             Out.writerow(["SWITC 0"])
