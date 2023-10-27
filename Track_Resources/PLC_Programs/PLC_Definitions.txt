@@ -1,13 +1,6 @@
 LN_START
     LINCO - Line Color (0 = red, 1 = green)
 LN_INF_END
-WS_START
-    WS001 - Wayside Number Binary 1 (00001 = wayside 1)
-    WS002 - Wayside Number Binary 2
-    WS004 - Wayside Number Binary 4
-    WS008 - Wayside Number Binary 8
-    WS016 - Wayside Number Binary 16
-WS_END
 BLK_START
     BK001 - Block Binary 1 (00001111 = block 15)
     BK002 - Block Binary 2  
