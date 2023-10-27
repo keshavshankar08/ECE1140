@@ -1,12 +1,12 @@
 # Track Object - A entire track network
-class Track:
+class Track():
     def __init__(self):
         self.lines: list[Line] = []
 
         # ----- Initializing with preload data -----
         # Create red line
         redLine = Line()
-        redLine.lineColor = "Red"
+        redLine.lineColor = 0
 
         # Red line block information
         redLineDefaultBlocks = [2,3,4,5,6,8,11,12,13,14,18,19,20,22,23,24,26,29,30,31,34,36,37,40,41,42,46,49,50,54,55,56,57,58,59,61,62,63,64,65,68,69,70,73,74,75]
@@ -118,10 +118,11 @@ class Track:
                     blk.receiverEnds = redLineJunctionReceiverEnds[redLineJunctionSwitchEnds.index(i)]
             elif(i in redLineCrossingBlocks):
                 blk.blockType = "Crossing"
+            redLine.blocks.append(blk)
             
         # Create green line
         greenLine = Line()
-        greenLine.lineColor = "Green"
+        greenLine.lineColor = 1
         
         # Green line block information
         greenLineDefaultBlocks = [3,4,5,6,7,8,10,11,14,15,17,18,20,21,23,24,25,26,27,30,32,33,34,35,36,37,38,40,41,42,43,44,45,46,47,49,50,51,52,53,54,55,59,60,61,64,66,67,68,69,70,71,72,74,75,79,80,81,82,83,84,86,87,89,90,91,92,93,94,95,97,98,99,102,103,104,106,107,108,109,110,111,112,113,115,116,117,118,119,120,121,122,124,125,126,127,128,129,130,131,133,134,135,136,137,138,139,140,142,143,144,145,146,147,148,149]
@@ -132,9 +133,156 @@ class Track:
         greenLineJunctionSwitchEnds = [[13],[28],[57],[63],[77],[85]]
         greenLineJunctionReceiverEnds = [[12,1],[29,150],[0,58],[62,0],[101,76],[86,100]]
         greenLine.graph = {
-            0:[57,63],
-            1:[]
-            # continue this for rest of green line
+            0:[63],
+            1:[13],
+            2:[1],
+            3:[2],
+            4:[3],
+            5:[4],
+            6:[5],
+            7:[6],
+            8:[7],
+            9:[8],
+            10:[9],
+            11:[10],
+            12:[11],
+            13:[12],
+            14:[13,15],
+            15:[14,16],
+            16:[15,17],
+            17:[16,18],
+            18:[17,19],
+            19:[18,20],
+            20:[19,21],
+            21:[20,22],
+            22:[21,23],
+            23:[22,24],
+            24:[23,25],
+            25:[24,26],
+            26:[25,27],
+            27:[26,28],
+            28:[29],
+            29:[30],
+            30:[31],
+            31:[32],
+            32:[33],
+            33:[34],
+            34:[35],
+            35:[36],
+            36:[37],
+            37:[38],
+            38:[39],
+            39:[40],
+            40:[41],
+            41:[42],
+            42:[43],
+            43:[44],
+            44:[45],
+            45:[46],
+            46:[47],
+            47:[48],
+            48:[49],
+            49:[50],
+            50:[51],
+            51:[52],
+            52:[53],
+            53:[54],
+            54:[55],
+            55:[56],
+            57:[0,58],
+            58:[59],
+            59:[60],
+            60:[61],
+            61:[62],
+            62:[63],
+            63:[64],
+            64:[65],
+            65:[66],
+            66:[67],
+            67:[68],
+            68:[69],
+            69:[70],
+            70:[71],
+            71:[72],
+            72:[73],
+            73:[74],
+            74:[75],
+            75:[76],
+            76:[77],
+            77:[78,101],
+            78:[77,79],
+            79:[78,80],
+            80:[79,81],
+            81:[80,82],
+            82:[81,83],
+            83:[82,84],
+            84:[83,85],
+            85:[86],
+            86:[87],
+            87:[88],
+            88:[89],
+            89:[90],
+            90:[91],
+            91:[92],
+            92:[93],
+            93:[94],
+            94:[95],
+            95:[96],
+            96:[97],
+            97:[98],
+            98:[99],
+            99:[100],
+            100:[85],
+            101:[102],
+            102:[103],
+            103:[104],
+            104:[105],
+            105:[106],
+            106:[107],
+            107:[108],
+            108:[109],
+            109:[110],
+            110:[111],
+            111:[112],
+            112:[113],
+            113:[114],
+            114:[115],
+            115:[116],
+            116:[117],
+            117:[118],
+            118:[119],
+            119:[120],
+            120:[121],
+            121:[122],
+            122:[123],
+            123:[124],
+            124:[125],
+            125:[126],
+            126:[127],
+            127:[128],
+            128:[129],
+            129:[130],
+            130:[131],
+            131:[132],
+            132:[133],
+            133:[134],
+            134:[135],
+            135:[136],
+            136:[137],
+            137:[138],
+            138:[139],
+            139:[140],
+            140:[141],
+            141:[142],
+            142:[143],
+            143:[144],
+            144:[145],
+            145:[146],
+            146:[147],
+            147:[148],
+            148:[149],
+            149:[150],
+            150:[28]
         }
 
         # Fill green line
@@ -160,10 +308,11 @@ class Track:
                     blk.receiverEnds = greenLineJunctionReceiverEnds[greenLineJunctionSwitchEnds.index(i)]
             elif(i in greenLineCrossingBlocks):
                 blk.blockType = "Crossing"
+            greenLine.blocks.append(blk)
 
         # Store lines in track
-        self.lines.append(redLine)
-        self.lines.append(greenLine)
+        self.lines.insert(0, redLine)
+        self.lines.insert(1, greenLine)
 
 # Line Object - A single line from the entire track network
 class Line:
@@ -180,9 +329,33 @@ class Block:
         self.blockOccupied = False
         self.trackFaultDetected = False
         self.maintenanceActive = False
-        self.switchDirection = ""
+        self.switchDirection = 0
         self.receiverEnds = []
         self.isReceiverEnd = False
         self.trafficLightColor = ""
         self.stationName = ""
         self.crossingActive = False
+
+    # Returns switch direction string
+    def getSwitchDirectionString(self, lineColor):
+        # Junction switch-receiver pairs
+        redLineJunctionSwitchEnds = [9,16,27,33,38,44,52]
+        redLineJunctionReceiverEnds = [[0,10],[1,15],[28,76],[72,32],[39,71],[67,43],[53,66]]
+        greenLineJunctionSwitchEnds = [13,28,57,63,77,85]
+        greenLineJunctionReceiverEnds = [[12,1],[29,150],[0,58],[62,0],[101,76],[86,100]]
+
+        # Find correct display string
+        if(lineColor == 0):
+            listPos = redLineJunctionSwitchEnds.index(self.blockNumber)
+            return str(redLineJunctionSwitchEnds[listPos]) + "-" + str(redLineJunctionReceiverEnds[listPos][0]) if(self.switchDirection == 0) else str(redLineJunctionSwitchEnds[listPos]) + "-" + str(redLineJunctionReceiverEnds[listPos][1])
+        elif(lineColor == 1):
+            listPos = greenLineJunctionSwitchEnds.index(self.blockNumber)
+            return str(greenLineJunctionSwitchEnds[listPos]) + "-" + str(greenLineJunctionReceiverEnds[listPos][0]) if(self.switchDirection == 0) else str(greenLineJunctionSwitchEnds[listPos]) + "-" + str(greenLineJunctionReceiverEnds[listPos][1])
+            
+    # Returns receiver end string
+    def getIsReceiverEndString(self):
+        return "True" if(self.isReceiverEnd == True) else "False"
+    
+    # Returns crossing status string
+    def getCrossingActiveString(self):
+        return "True" if(self.crossingActive == True) else "False"
