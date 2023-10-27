@@ -1,7 +1,5 @@
-from PyQt6.QtCore import QObject
-
 # Track Object - A entire track network
-class Track(QObject):
+class Track():
     def __init__(self):
         self.lines: list[Line] = []
 
@@ -120,6 +118,7 @@ class Track(QObject):
                     blk.receiverEnds = redLineJunctionReceiverEnds[redLineJunctionSwitchEnds.index(i)]
             elif(i in redLineCrossingBlocks):
                 blk.blockType = "Crossing"
+            redLine.blocks.append(blk)
             
         # Create green line
         greenLine = Line()
@@ -309,6 +308,7 @@ class Track(QObject):
                     blk.receiverEnds = greenLineJunctionReceiverEnds[greenLineJunctionSwitchEnds.index(i)]
             elif(i in greenLineCrossingBlocks):
                 blk.blockType = "Crossing"
+            greenLine.blocks.append(blk)
 
         # Store lines in track
         self.lines.insert(0, redLine)
@@ -336,6 +336,7 @@ class Block:
         self.stationName = ""
         self.crossingActive = False
 
+    # Returns switch direction string
     def getSwitchDirectionString(self, lineColor):
         # Junction switch-receiver pairs
         redLineJunctionSwitchEnds = [9,16,27,33,38,44,52]
@@ -351,8 +352,10 @@ class Block:
             listPos = greenLineJunctionSwitchEnds.index(self.blockNumber)
             return str(greenLineJunctionSwitchEnds[listPos]) + "-" + str(greenLineJunctionReceiverEnds[listPos][0]) if(self.switchDirection == 0) else str(greenLineJunctionSwitchEnds[listPos]) + "-" + str(greenLineJunctionReceiverEnds[listPos][1])
             
+    # Returns receiver end string
     def getIsReceiverEndString(self):
         return "True" if(self.isReceiverEnd == True) else "False"
     
+    # Returns crossing status string
     def getCrossingActiveString(self):
         return "True" if(self.crossingActive == True) else "False"

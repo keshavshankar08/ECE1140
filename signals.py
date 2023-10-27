@@ -6,12 +6,10 @@ class signalsList(QObject):
     current_system_time = pyqtSignal(QTime)
     stop_timer = pyqtSignal()
 
-    #region SW Track Controller
-    swtrack_update_track = pyqtSignal(Track)
-    swtrack_track = pyqtSignal(Track)
-    #endregion SW Track Controller
+    # SW Wayside Signals
+    sw_wayside_track_update = pyqtSignal(Track)
 
-    # Train Model
+    # Train Model Signals
     trainModel_test_changeSpeed = pyqtSignal(float)
 
 signals = signalsList()

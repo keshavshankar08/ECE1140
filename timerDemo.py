@@ -1,6 +1,6 @@
 from PyQt6.QtCore import QThread, QCoreApplication
 from signals import signals
-from SystemTime import SystemTime
+from Main_Backend import SystemTime
 import sys
 
 # run this function to see how the clock works

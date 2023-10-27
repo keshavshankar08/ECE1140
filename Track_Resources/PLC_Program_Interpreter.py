@@ -2,13 +2,14 @@ import sys
 sys.path.append(".")
 from signals import *
 from Track_Resources.Track import *
+from Main_Backend import *
 
 class Interpreter():
     def __init__(self):
-        # Create default track object
-        self.trackCopy = Track()#need to figure out how to get most recent track instance
+        # Create copy of current track instance
+        self.trackCopy = mainInstance.trackInstance
 
-    # Interpret one PLC file
+    # Interprets one PLC file
     def interpretSingleFile(self, filename):
         fileIn = open(filename,"r")
         line = fileIn.readline()
@@ -48,13 +49,13 @@ class Interpreter():
                     
                 # Update crossing active status
                 self.trackCopy.lines[trackLineColor].blocks[blockNumber].crossingActive = crossingActive
-
             line = fileIn.readline()
 
         # Emit signal to update track
-        signals.swtrack_update_track.emit(self.trackCopy)
+        signals.sw_wayside_track_update.emit(self.trackCopy)
+        return self.trackCopy
 
-    # Interpret multiple PLC files
+    # Interprets multiple PLC files
     def interpretMultipleFiles(self, filenames):
         for filename in filenames:
             self.interpretSingleFile(self, filename)
