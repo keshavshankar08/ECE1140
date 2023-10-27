@@ -52,5 +52,30 @@ class Train(QObject):
         self.currentBlock = 0 # dimensionless
         self.beaconList = [] # list of all beacons received
 
+    def TrainModelUpdateValues(self):
+        pass
+
+    def trainModelServiceBrake(self, value):
+        pass
+
+    def toggleEmergencyBrake(self):
+        pass
+
+    def toggleInteriorLights(self):
+        pass
+
+    def toggleExteriorLights(self):
+        pass
+
+    def toggleLeftDoors(self):
+        pass
+
+    def toggleRightDoors(self):
+        pass
+
+    def setTemperature(self):
+        pass
+
+    
 
 
