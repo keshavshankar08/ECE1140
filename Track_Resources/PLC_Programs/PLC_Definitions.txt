@@ -1,23 +1,16 @@
 LN_START
-LINCO - Line Color Binary 1 (1 = green, 0 = red)
-LN_END
-WS_START
-WS001 - Wayside Number Binary 1 (1 = ws1)
-WS002 - Wayside Number Binary 2
-WS004 - Wayside Number Binary 4
-WS008 - Wayside Number Binary 8
-WS016 - Wayside Number Binary 16
-WS_END
+    LINCO - Line Color (0 = red, 1 = green)
+LN_INF_END
 BLK_START
-BK001 - Block Binary 1      (_______1) (1 = blk 1)
-BK002 - Block Binary 2      (______1_)
-BK004 - Block Binary 4      (_____1__)
-BK008 - Block Binary 8      (____1___)
-BK016 - Block Binary 16     (___1____)
-BK032 - Block Binary 32     (__1_____)
-BK064 - Block Binary 64     (_1______)
-BK128 - Block Binary 128    (1_______)
-SWITC - Block Junction Switch On (0 = switched right, 1 = switched left)
-TRAFF - Block Junction Traffic Light (0 = Red, 1 = Green)
-CROSS - Block Crossing Active (0 = not active, 1 = active)
+    BK001 - Block Binary 1 (00001111 = block 15)
+    BK002 - Block Binary 2  
+    BK004 - Block Binary 4  
+    BK008 - Block Binary 8  
+    BK016 - Block Binary 16 
+    BK032 - Block Binary 32 
+    BK064 - Block Binary 64 
+    BK128 - Block Binary 128
+    SWITC - Block Junction Switch On (0 = switched left, 1 = switched right)
+    TRAFF - Block Junction Traffic Light (0 = Red, 1 = Green)
+    CROSS - Block Crossing Active (0 = not active, 1 = active)
 BLK_END
