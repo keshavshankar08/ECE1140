@@ -1,12 +1,12 @@
 # Track Object - A entire track network
-class Track:
+class Track():
     def __init__(self):
         self.lines: list[Line] = []
 
         # ----- Initializing with preload data -----
         # Create red line
         redLine = Line()
-        redLine.lineColor = "Red"
+        redLine.lineColor = 0
 
         # Red line block information
         redLineDefaultBlocks = [2,3,4,5,6,8,11,12,13,14,18,19,20,22,23,24,26,29,30,31,34,36,37,40,41,42,46,49,50,54,55,56,57,58,59,61,62,63,64,65,68,69,70,73,74,75]
@@ -118,10 +118,11 @@ class Track:
                     blk.receiverEnds = redLineJunctionReceiverEnds[redLineJunctionSwitchEnds.index(i)]
             elif(i in redLineCrossingBlocks):
                 blk.blockType = "Crossing"
+            redLine.blocks.append(blk)
             
         # Create green line
         greenLine = Line()
-        greenLine.lineColor = "Green"
+        greenLine.lineColor = 1
         
         # Green line block information
         greenLineDefaultBlocks = [3,4,5,6,7,8,10,11,14,15,17,18,20,21,23,24,25,26,27,30,32,33,34,35,36,37,38,40,41,42,43,44,45,46,47,49,50,51,52,53,54,55,59,60,61,64,66,67,68,69,70,71,72,74,75,79,80,81,82,83,84,86,87,89,90,91,92,93,94,95,97,98,99,102,103,104,106,107,108,109,110,111,112,113,115,116,117,118,119,120,121,122,124,125,126,127,128,129,130,131,133,134,135,136,137,138,139,140,142,143,144,145,146,147,148,149]
@@ -307,10 +308,11 @@ class Track:
                     blk.receiverEnds = greenLineJunctionReceiverEnds[greenLineJunctionSwitchEnds.index(i)]
             elif(i in greenLineCrossingBlocks):
                 blk.blockType = "Crossing"
+            greenLine.blocks.append(blk)
 
         # Store lines in track
-        self.lines.append(redLine)
-        self.lines.append(greenLine)
+        self.lines.insert(0, redLine)
+        self.lines.insert(1, greenLine)
 
 
 # Line Object - A single line from the entire track network
@@ -328,9 +330,33 @@ class Block:
         self.blockOccupied = False
         self.trackFaultDetected = False
         self.maintenanceActive = False
-        self.switchDirection = ""
+        self.switchDirection = 0
         self.receiverEnds = []
         self.isReceiverEnd = False
         self.trafficLightColor = ""
         self.stationName = ""
         self.crossingActive = False
+
+    # Returns switch direction string
+    def getSwitchDirectionString(self, lineColor):
+        # Junction switch-receiver pairs
+        redLineJunctionSwitchEnds = [9,16,27,33,38,44,52]
+        redLineJunctionReceiverEnds = [[0,10],[1,15],[28,76],[72,32],[39,71],[67,43],[53,66]]
+        greenLineJunctionSwitchEnds = [13,28,57,63,77,85]
+        greenLineJunctionReceiverEnds = [[12,1],[29,150],[0,58],[62,0],[101,76],[86,100]]
+
+        # Find correct display string
+        if(lineColor == 0):
+            listPos = redLineJunctionSwitchEnds.index(self.blockNumber)
+            return str(redLineJunctionSwitchEnds[listPos]) + "-" + str(redLineJunctionReceiverEnds[listPos][0]) if(self.switchDirection == 0) else str(redLineJunctionSwitchEnds[listPos]) + "-" + str(redLineJunctionReceiverEnds[listPos][1])
+        elif(lineColor == 1):
+            listPos = greenLineJunctionSwitchEnds.index(self.blockNumber)
+            return str(greenLineJunctionSwitchEnds[listPos]) + "-" + str(greenLineJunctionReceiverEnds[listPos][0]) if(self.switchDirection == 0) else str(greenLineJunctionSwitchEnds[listPos]) + "-" + str(greenLineJunctionReceiverEnds[listPos][1])
+            
+    # Returns receiver end string
+    def getIsReceiverEndString(self):
+        return "True" if(self.isReceiverEnd == True) else "False"
+    
+    # Returns crossing status string
+    def getCrossingActiveString(self):
+        return "True" if(self.crossingActive == True) else "False"
