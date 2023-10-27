@@ -1,14 +1,16 @@
 import sys
 from PyQt6 import QtCore, QtGui, QtWidgets, uic
 from PyQt6.QtWidgets import *
-
+sys.path.append(".")
+from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
+from Modules.Train_Controller.Frontend.TrainController import *
 
 
 class Mainmenu(QtWidgets.QMainWindow):
     def __init__(self):
         #setup
         super().__init__()
-        uic.loadUi("pyt\\MainLauncherUI.ui", self)
+        uic.loadUi("Main_UI", self)
 
         self.ctcOfficeButt.clicked.connect(self.ctcOfficeClicked)
         self.trackModelButt.clicked.connect(self.trackModelClicked)
