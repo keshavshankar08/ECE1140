@@ -5,4 +5,4 @@ from Track_Resources.Track import *
 
 class WaysideSystem():
     def __init__(self):
-        self.test = 0
+        pass
