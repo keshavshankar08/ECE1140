@@ -21,7 +21,7 @@ class SystemTime(QObject):
         self.system_timer.timeout.connect(self.timerHandler)
         signals.stop_timer.connect(self.stopTimer)
         self.system_timer.start(INTERVAL)
-
+        
         # SW Wayside Instances
         self.trackInstance = Track()
         signals.sw_wayside_track_update.connect(self.updateTrackInstance)        
@@ -29,6 +29,7 @@ class SystemTime(QObject):
     def timerHandler(self):
         self.current_time = self.current_time.addMSecs(TIME_DELTA)
         signals.current_system_time.emit(self.current_time)
+        signals.main_backend_update_values.emit()
 
     def stopTimer(self):
         self.system_timer.stop()
@@ -38,4 +39,12 @@ class SystemTime(QObject):
         self.trackInstance = updatedTrack
 
 mainInstance = SystemTime()
+
+if __name__ == '__main__':
+        app = QCoreApplication([])
+        thread = QThread() 
+        system_time = SystemTime()
+        system_time.moveToThread(thread) 
+        thread.start()
+        sys.exit(app.exec())
 
