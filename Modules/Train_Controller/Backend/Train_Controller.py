@@ -3,9 +3,11 @@ from PyQt6.QtCore import QObject
 
 
 #<> = constructed
+#<< = accessed and mutated
 #<><> = done
 #think about number of trains, maybe use train id
 #think about automatic/manuel mode
+#must report position to the train model by using commanded speed and time
 #INPUTS
     #need L doors and r doors <><>
     #need int lights and ext lights <><>
@@ -67,13 +69,16 @@ class trainController:
         #train Id to know what train is which
         self.trainID = " "
 
-    #this sets the train ID
-    def setTrainID(self, trainNumber):
-        self.trainID = trainNumber
+    # #this sets the train ID
+    # def setTrainID(self, trainNumber):
+    #     self.trainID = trainNumber
 
-    #accessor for the train ID
-    def getTrainID(self):
-        return self.trainID
+    # def setServiceBrake(self, modeType):
+    #     self.mode = modeType
+
+    # #accessor for the train ID
+    # def getTrainID(self):
+    #     return self.trainID
 
 
     #this function will toggle the emergency brake
