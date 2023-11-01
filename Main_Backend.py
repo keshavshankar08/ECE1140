@@ -24,12 +24,15 @@ class SystemTime(QObject):
         
         # SW Wayside Instances
         self.trackInstance = Track()
+        # receiving track object from wayside
         signals.sw_wayside_track_update.connect(self.updateTrackInstance)        
 
     def timerHandler(self):
         self.current_time = self.current_time.addMSecs(TIME_DELTA)
-        signals.current_system_time.emit(self.current_time)
-        signals.main_backend_update_values.emit()
+        signals.current_system_time.emit(self.current_time) #h:m:s
+        signals.main_backend_update_track.emit(self.trackInstance) #sends current state of track out
+        signals.main_backend_update_values.emit() #tells modules to refresh
+        
 
     def stopTimer(self):
         self.system_timer.stop()
@@ -37,8 +40,6 @@ class SystemTime(QObject):
     # SW Wayside Instance Updaters
     def updateTrackInstance(self, updatedTrack):
         self.trackInstance = updatedTrack
-
-mainInstance = SystemTime()
 
 if __name__ == '__main__':
         app = QCoreApplication([])
