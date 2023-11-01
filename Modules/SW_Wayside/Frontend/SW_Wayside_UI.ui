@@ -138,6 +138,16 @@
         <string>Select Wayside...</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>Wayside 1</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Wayside 2</string>
+       </property>
+      </item>
      </widget>
      <widget class="QPushButton" name="UploadPLCProgramButton">
       <property name="geometry">

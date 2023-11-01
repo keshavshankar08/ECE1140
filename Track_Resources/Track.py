@@ -325,14 +325,13 @@ class Line:
 class Block:
     def __init__(self):
         self.blockNumber = 0
-        self.blockType = ""
+        self.blockType = 0
         self.blockOccupied = False
         self.trackFaultDetected = False
         self.maintenanceActive = False
-        self.switchDirection = 0
-        self.receiverEnds = []
+        self.switchDirection = False
         self.isReceiverEnd = False
-        self.trafficLightColor = ""
+        self.trafficLightColor = False
         self.stationName = ""
         self.crossingActive = False
 
