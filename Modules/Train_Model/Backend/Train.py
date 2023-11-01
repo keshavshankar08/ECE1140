@@ -41,15 +41,13 @@ class Train(QObject):
         #### Signals
         signals.current_system_time.connect(self.setCurrentTime)
         signals.main_backend_update_values.connect(self.TrainModelUpdateValues)
+        signals.trainController_send_power_command.connect(self.setPowerCommand)
         #### Train ID
         self.train_id = 0
         #### Number of Cars
         self.numCars = 1
         #### Number of Passengers
         self.numPassengers = 0
-        #### PI Controller Parameters
-        self.Kp = 0
-        self.Ki = 0
         #### Intrinsic Properties
         self.mass = CAR_WEIGHT_EMPTY * self.numCars # kg
         self.length = CAR_LENGTH * self.numCars # m
@@ -83,6 +81,7 @@ class Train(QObject):
         self.current_time = QTime(START_HOUR, START_MIN, START_SEC)
         #### Failure
         self.current_failureMode = TrainEnums.NORMAL
+        #### Advertisemenets
         
 
     def TrainModelUpdateValues(self):
@@ -137,6 +136,9 @@ class Train(QObject):
     
     def setCurrentTime(self, time):
         self.current_time = time
+        
+    def setPowerCommand(self, value):
+        self.commandedPower = value
         
     def receiveBeacon(self, beacon):
         self.beaconList.append(beacon)
