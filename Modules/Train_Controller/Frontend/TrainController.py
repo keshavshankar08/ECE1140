@@ -18,22 +18,22 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         self.Automaticbutton.clicked.connect(self.Automatic_Button_clicked)
         self.manualbutton.clicked.connect(self.Manual_Button_clicked)
         self.EmergencyButton.clicked.connect(self.Emergency_Button_clicked)
-        self.ServiceBrake.clicked.connect(self.Service_Button_clicked)
-        self.ResumeButton.clicked.connect(self.Resume_Button_clicked)
-        self.leftdooropen.clicked.connect(self.LeftDoorOpen_Button_clicked)
-        self.leftdoorclosed.clicked.connect(self.LeftDoorClosed_Button_clicked)
-        self.rightdooropen.clicked.connect(self.RightDoorOpen_Button_clicked)
-        self.rightdoorclosed.clicked.connect(self.RightDoorClosed_Button_clicked)
-        self.intlighton.clicked.connect(self.IntLightOn_Button_clicked)
-        self.intlightoff.clicked.connect(self.IntLightOff_Button_clicked)
-        self.extlighton.clicked.connect(self.ExtLightOn_Button_clicked)
-        self.extlightoff.clicked.connect(self.ExtLightOff_Button_clicked)
+
+        #self.ResumeButton.clicked.connect(self.Resume_Button_clicked)
+        self.leftDoorOpen.clicked.connect(self.LeftDoorOpen_Button_clicked)
+        self.leftDoorClosed.clicked.connect(self.LeftDoorClosed_Button_clicked)
+        self.rightDoorOpen.clicked.connect(self.RightDoorOpen_Button_clicked)
+        self.rightDoorClosed.clicked.connect(self.RightDoorClosed_Button_clicked)
+        self.intLightOn.clicked.connect(self.IntLightOn_Button_clicked)
+        self.intLightOff.clicked.connect(self.IntLightOff_Button_clicked)
+        self.extLightOn.clicked.connect(self.ExtLightOn_Button_clicked)
+        self.extLightOff.clicked.connect(self.ExtLightOff_Button_clicked)
         self.authorityinput.valueChanged.connect(self.UpdateValueAuthority)
-        self.commandedspeedinput.valueChanged.connect(self.UpdateValueComSpeed)
         self.commandedpowerinput.valueChanged.connect(self.UpdateValueComPower)
-        self.driverspeedinput.valueChanged.connect(self.UpdateValueDriverSpeed)
         self.KIinput.valueChanged.connect(self.UpdateValueKI)
         self.Kpinput.valueChanged.connect(self.UpdateValueKP)
+        #self.driverSpeedChanged.valueChanged.connect()
+        #self.serviceBrakeChanged.valueChanged.connect()
 
         self.show()
 
@@ -65,43 +65,43 @@ class TrainControllerUI(QtWidgets.QMainWindow):
     
     #function for left door mode
     def LeftDoorOpen_Button_clicked(self):
-        self.leftdoorclosed.setStyleSheet("background-color: rgb(255, 255, 255)")
-        self.leftdooropen.setStyleSheet("background-color: rgb(199, 199, 199)") 
+        self.leftDoorClosed.setStyleSheet("background-color: rgb(255, 255, 255)")
+        self.leftDoorOpen.setStyleSheet("background-color: rgb(199, 199, 199)") 
 
     #function for left door mode
     def LeftDoorClosed_Button_clicked(self):
-        self.leftdoorclosed.setStyleSheet("background-color: rgb(199, 199, 199)")
-        self.leftdooropen.setStyleSheet("background-color: rgb(255, 255, 255)")  
+        self.leftDoorClosed.setStyleSheet("background-color: rgb(199, 199, 199)")
+        self.leftDoorOpen.setStyleSheet("background-color: rgb(255, 255, 255)")  
 
     #function for right door mode
     def RightDoorOpen_Button_clicked(self):
-        self.rightdoorclosed.setStyleSheet("background-color: rgb(255, 255, 255)")
-        self.rightdooropen.setStyleSheet("background-color: rgb(199, 199, 199)") 
+        self.rightDoorClosed.setStyleSheet("background-color: rgb(255, 255, 255)")
+        self.rightDoorOpen.setStyleSheet("background-color: rgb(199, 199, 199)") 
 
     #function for right door mode
     def RightDoorClosed_Button_clicked(self):
-        self.rightdoorclosed.setStyleSheet("background-color: rgb(199, 199, 199)")
-        self.rightdooropen.setStyleSheet("background-color: rgb(255, 255, 255)") 
+        self.rightDoorClosed.setStyleSheet("background-color: rgb(199, 199, 199)")
+        self.rightDoorOpen.setStyleSheet("background-color: rgb(255, 255, 255)") 
 
     #function for int light mode
     def IntLightOn_Button_clicked(self):
-        self.intlighton.setStyleSheet("background-color: rgb(199, 199, 199)")
-        self.intlightoff.setStyleSheet("background-color: rgb(255, 255, 255)") 
+        self.intLightOn.setStyleSheet("background-color: rgb(199, 199, 199)")
+        self.intLightOff.setStyleSheet("background-color: rgb(255, 255, 255)") 
 
     #function for int light mode
     def IntLightOff_Button_clicked(self):
-        self.intlighton.setStyleSheet("background-color: rgb(255, 255, 255)")
-        self.intlightoff.setStyleSheet("background-color: rgb(199, 199, 199)") 
+        self.intLightOn.setStyleSheet("background-color: rgb(255, 255, 255)")
+        self.intLightOff.setStyleSheet("background-color: rgb(199, 199, 199)") 
     
     #function for int light mode
     def ExtLightOn_Button_clicked(self):
-        self.extlighton.setStyleSheet("background-color: rgb(199, 199, 199)")
-        self.extlightoff.setStyleSheet("background-color: rgb(255, 255, 255)") 
+        self.extLightOn.setStyleSheet("background-color: rgb(199, 199, 199)")
+        self.extLightOff.setStyleSheet("background-color: rgb(255, 255, 255)") 
 
     #function for ext light mode
     def ExtLightOff_Button_clicked(self):
-        self.extlighton.setStyleSheet("background-color: rgb(255, 255, 255)")
-        self.extlightoff.setStyleSheet("background-color: rgb(199, 199, 199)")
+        self.extLightOn.setStyleSheet("background-color: rgb(255, 255, 255)")
+        self.extLightOff.setStyleSheet("background-color: rgb(199, 199, 199)")
 
     #functions for Qspinbox to text
     def UpdateValueAuthority(self):
