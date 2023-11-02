@@ -143,6 +143,18 @@ class Train(QObject):
     def receiveBeacon(self, beacon):
         self.beaconList.append(beacon)
         
+    def receiveSuggestedSpeed(self, value):
+        pass
+    
+    def receiveSuggestedAuthority(self, value):
+        pass
+    
+    def receiveSpeedLimit(self, value):
+        pass
+    
+    def showAdvertisement(self):
+        pass
+        
 
     
 
