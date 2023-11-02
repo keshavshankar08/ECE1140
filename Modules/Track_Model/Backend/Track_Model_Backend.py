@@ -4,19 +4,6 @@ from PyQt6 import QtWidgets, QtGui, uic
 from PyQt6.QtCore import Qt, QEvent
 from PyQt6.QtWidgets import QFileDialog
 import openpyxl, re
-        
-                
-class Block():
-    # member variables
-    BlockNumber, PrevBlockNumber, NextBlockNumber = None, None, None # ints
-    BlockType, StationName, SwitchDirection = None, None, None # strings
-    BlockOccupancy, TrackFault, Maintenance, CrossingActive, IsReceiver, LightColor = None, None, None, None, None, None # bools
-    
-class LineStatus():
-    # member variables
-    LineName = None # string
-    Blocks = [] # array of blocks
-    # TODO declare map here 
     
         
 class TrackModelModule(QtWidgets.QMainWindow):
