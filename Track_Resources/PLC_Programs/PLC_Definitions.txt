@@ -1,16 +1,8 @@
-LN_START
-    LINCO - Line Color (0 = red, 1 = green)
-LN_INF_END
-BLK_START
-    BK001 - Block Binary 1 (00001111 = block 15)
-    BK002 - Block Binary 2  
-    BK004 - Block Binary 4  
-    BK008 - Block Binary 8  
-    BK016 - Block Binary 16 
-    BK032 - Block Binary 32 
-    BK064 - Block Binary 64 
-    BK128 - Block Binary 128
-    SWITC - Block Junction Switch On (0 = switched left, 1 = switched right)
-    TRAFF - Block Junction Traffic Light (0 = Red, 1 = Green)
-    CROSS - Block Crossing Active (0 = not active, 1 = active)
-BLK_END
+STRT_SW     # Start of switch information
+SW 16       # switch block #
+IF 0        # 0 = left; 1 = right
+SS 16,1     # Switch State 16-1
+SL 16,1     # Switch Light 16 = green
+SL 1,1      # Switch Light 1 = green
+SL 15,0     # Switch Light 15 = red
+END_SW      # End of switch information

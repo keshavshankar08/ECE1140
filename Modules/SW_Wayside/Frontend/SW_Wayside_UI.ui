@@ -410,7 +410,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>290</x>
-         <y>170</y>
+         <y>140</y>
          <width>321</width>
          <height>71</height>
         </rect>
@@ -469,7 +469,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>290</x>
-         <y>240</y>
+         <y>220</y>
          <width>321</width>
          <height>71</height>
         </rect>
@@ -529,7 +529,7 @@ p, li { white-space: pre-wrap; }
          <x>290</x>
          <y>20</y>
          <width>321</width>
-         <height>151</height>
+         <height>111</height>
         </rect>
        </property>
        <property name="font">
@@ -580,33 +580,11 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont';&quot;&gt;Switch Direction&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
-       <widget class="QTextBrowser" name="IsReceiverEndLabel">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>70</y>
-          <width>161</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Arial</family>
-         </font>
-        </property>
-        <property name="html">
-         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Is Receiver End&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
        <widget class="QTextBrowser" name="TrafficLightColorLabel">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>110</y>
+          <y>70</y>
           <width>161</width>
           <height>31</height>
          </rect>
@@ -628,7 +606,7 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>200</x>
-          <y>114</y>
+          <y>70</y>
           <width>101</width>
           <height>26</height>
          </rect>
@@ -640,31 +618,6 @@ p, li { white-space: pre-wrap; }
         </property>
         <property name="maxCount">
          <number>3</number>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="IsReceiverEndValue">
-        <property name="geometry">
-         <rect>
-          <x>210</x>
-          <y>74</y>
-          <width>91</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="maxLength">
-         <number>5</number>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="clearButtonEnabled">
-         <bool>false</bool>
         </property>
        </widget>
       </widget>

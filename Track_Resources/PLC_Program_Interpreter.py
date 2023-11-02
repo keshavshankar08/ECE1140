@@ -6,11 +6,10 @@ from Main_Backend import *
 
 class Interpreter():
     def __init__(self):
-        # Create copy of current track instance
-        self.trackCopy = mainInstance.trackInstance
+        self.waysides: list[PLCLogic] = []
 
     # Interprets one PLC file
-    def interpretSingleFile(self, filename):
+    def interpret_file(self, filename):
         fileIn = open(filename,"r")
         line = fileIn.readline()
         while line:
@@ -54,8 +53,22 @@ class Interpreter():
         # Emit signal to update track
         signals.sw_wayside_track_update.emit(self.trackCopy)
         return self.trackCopy
+    
 
-    # Interprets multiple PLC files
-    def interpretMultipleFiles(self, filenames):
-        for filename in filenames:
-            self.interpretSingleFile(self, filename)
+class PLCLogic():
+    def __init__(self):
+        self.switch_block_number = 0
+        self.left_block_number = 0
+        self.right_block_number = 0
+
+        # Lefts vars
+        self.switch_state_if_left = ""
+        self.switch_light_if_left = 0
+        self.left_block_light_if_left = 0
+        self.right_block_light_if_left = 0
+
+        # Right vars
+        self.switch_state_if_right = ""
+        self.switch_light_if_right = 0
+        self.left_block_light_if_right = 0
+        self.right_block_light_if_right = 0
