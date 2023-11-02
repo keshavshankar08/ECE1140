@@ -2,59 +2,43 @@
 #This holds both the route class and a route queue
 #This holds helper functions also
 
-import re
 import sys
-import numpy as np
 sys.path.append(".")
+from signals import signals
 from Track_Resources.Track import *
+from Train_Resources.CTC_Train import *
 
-class RouteQueue:
+class CTCBackend():
     def __init__(self):
-        self.routes: list[Route] = []
+        signals.ctc_office_backend_update.connect(self.update_CTC)
+        self.track_instance_copy = Track()
+        self.active_trains = ActiveTrains()
+        self.queue_trains = QueueTrains()
+        self.route_queue = RouteQueue()
 
-class Route:
-    def __init__(self):
-        #create a counter
-        self.stops = []
-        self.stopTime = []
+    def update_ui(self):
+        signals.ctc_office_frontend_update(self.track_instance_copy)
 
+    def update_copy_track(self, updated_track):
+        self.track_instance_copy = updated_track
 
+    def update_copy_active_trains(self, updated_active_trains):
+        self.active_trains_instance_copy = updated_active_trains
 
-#Helper Functions
+    #main function to carry out all necessary functions in a cycle
+    def update_CTC(self, trackInstance):
+        self.trackInstanceCopy = trackInstance
+        self.update_ui()
 
-#Validates time in 00:00 to 23:59 format
-def validateTimeInput(inputTime):
-    #use regular expression to check time
-    if re.match('^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$', inputTime):
-        return True
-    else:
-        return False
-    
-#swaps station names to their block numbers
-def stationNamesToBlocks(stationList, line):
-    #make a block list and track object
-    track = Track()
-    stationList = np.array(stationList)
+        #updates main instance at end of cycle
+        signals.ctc_office_track_update.emit(self.trackInstanceCopy)
+        #signals.ctc_office_active_trains_update.emit()
 
-    if(line == "Red"):
-        lineStationList = np.array(track.redLineStationNames)
-        #block index array
-        blockIndex = np.isin(lineStationList, stationList)
-        #station block number array
-        blockList = []
-        for i in range(len(track.redLineStationBlocks)):
-            if(blockIndex[i] == True):
-                blockList.append(track.redLineStationBlocks[i])
-        return blockList
+    def verify_schedule(route_schedule):
+        pass
 
-    elif(line == "Green"):
-        lineStationList = np.array(track.greenLineStationNames)
-        #block index array
-        blockIndex = np.isin(lineStationList, stationList)
-        #station block number array
-        blockList = []
-        for i in range(len(track.greenLineStationBlocks)):
-            if(blockIndex[i] == True):
-                blockList.append(track.greenLineStationBlocks[i])
-        return blockList
-    
+    def verify_time_between(route_schedule):
+        pass
+
+    def verify_route_order(route_stops):
+        pass

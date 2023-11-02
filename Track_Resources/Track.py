@@ -5,8 +5,8 @@ class Track():
 
         # ----- Initializing with preload data -----
         # Create red line
-        redLine = Line()
-        redLine.lineColor = 0
+        self.redLine = Line()
+        self.redLine.lineColor = 0
 
         # Red line block information
         redLineDefaultBlocks = [2,3,4,5,6,8,11,12,13,14,18,19,20,22,23,24,26,29,30,31,34,36,37,40,41,42,46,49,50,54,55,56,57,58,59,61,62,63,64,65,68,69,70,73,74,75]
@@ -16,7 +16,7 @@ class Track():
         redLineJunctionBlocks = [9,0,10,16,1,15,27,28,76,33,72,32,38,39,71,44,67,43,52,53,66]
         redLineJunctionSwitchEnds = [9,16,27,33,38,44,52]
         redLineJunctionReceiverEnds = [[0,10],[1,15],[28,76],[72,32],[39,71],[67,43],[53,66]]
-        redLine.graph = {
+        self.redLine.graph = {
             0:[9],
             1:[16,2],
             2:[1,3],
@@ -118,11 +118,11 @@ class Track():
                     blk.receiverEnds = redLineJunctionReceiverEnds[redLineJunctionSwitchEnds.index(i)]
             elif(i in redLineCrossingBlocks):
                 blk.blockType = "Crossing"
-            redLine.blocks.append(blk)
+            self.redLine.blocks.append(blk)
             
         # Create green line
-        greenLine = Line()
-        greenLine.lineColor = 1
+        self.greenLine = Line()
+        self.greenLine.lineColor = 1
         
         # Green line block information
         greenLineDefaultBlocks = [3,4,5,6,7,8,10,11,14,15,17,18,20,21,23,24,25,26,27,30,32,33,34,35,36,37,38,40,41,42,43,44,45,46,47,49,50,51,52,53,54,55,59,60,61,64,66,67,68,69,70,71,72,74,75,79,80,81,82,83,84,86,87,89,90,91,92,93,94,95,97,98,99,102,103,104,106,107,108,109,110,111,112,113,115,116,117,118,119,120,121,122,124,125,126,127,128,129,130,131,133,134,135,136,137,138,139,140,142,143,144,145,146,147,148,149]
@@ -132,7 +132,7 @@ class Track():
         greenLineJunctionBlocks = [13,12,1,28,29,150,57,0,58,65,62,0,77,101,76,85,86,100]
         greenLineJunctionSwitchEnds = [[13],[28],[57],[63],[77],[85]]
         greenLineJunctionReceiverEnds = [[12,1],[29,150],[0,58],[62,0],[101,76],[86,100]]
-        greenLine.graph = {
+        self.greenLine.graph = {
             0:[63],
             1:[13],
             2:[1],
@@ -308,11 +308,11 @@ class Track():
                     blk.receiverEnds = greenLineJunctionReceiverEnds[greenLineJunctionSwitchEnds.index(i)]
             elif(i in greenLineCrossingBlocks):
                 blk.blockType = "Crossing"
-            greenLine.blocks.append(blk)
+            self.greenLine.blocks.append(blk)
 
         # Store lines in track
-        self.lines.insert(0, redLine)
-        self.lines.insert(1, greenLine)
+        self.lines.insert(0, self.redLine)
+        self.lines.insert(1, self.greenLine)
 
 
 # Line Object - A single line from the entire track network
@@ -321,6 +321,15 @@ class Line:
         self.lineColor = ""
         self.blocks: list[Block] = []
         self.graph: dict[int, list[int]] = {}
+
+    def get_shortest_path(start, end, path =[]):
+        pass
+
+    def get_time_between(start, end):
+        pass
+
+    def check_order(stop_list):
+        pass
 
 # Block Object - A single block linked to a single Track
 class Block:
