@@ -1,16 +1,16 @@
 import sys
+sys.path.append(".")
 import os
 from PyQt6 import QtWidgets, QtGui, uic
 from PyQt6.QtCore import Qt, QEvent
 from PyQt6.QtWidgets import QFileDialog
 import openpyxl, re
-    
         
 class TrackModelModule(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
 
-        uic.loadUi('/Users/benshuttleworth/Desktop/ECE 1140/trains/ECE1140/Modules/Track_Model/Frontend/Track_Model_UI.ui',self)
+        uic.loadUi('Modules/Track_Model/Frontend/Track_Model_UI.ui',self)
         
         # disable line selector until track is loaded to avoid undefined behavior
         self.TrackLineColorValue.setEnabled(False)
