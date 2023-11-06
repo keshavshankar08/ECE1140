@@ -226,7 +226,7 @@
         <x>939</x>
         <y>57</y>
         <width>271</width>
-        <height>391</height>
+        <height>404</height>
        </rect>
       </property>
       <layout class="QFormLayout" name="formLayout">
@@ -395,6 +395,16 @@
        <item row="11" column="1">
         <widget class="QLineEdit" name="cum_elevation_display"/>
        </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_27">
+         <property name="text">
+          <string>Block Number</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QLabel" name="label_13">
@@ -528,8 +538,8 @@
      <widget class="QWidget" name="formLayoutWidget_4">
       <property name="geometry">
        <rect>
-        <x>940</x>
-        <y>750</y>
+        <x>950</x>
+        <y>780</y>
         <width>271</width>
         <height>131</height>
        </rect>
@@ -601,7 +611,7 @@
       <property name="geometry">
        <rect>
         <x>1000</x>
-        <y>720</y>
+        <y>750</y>
         <width>153</width>
         <height>22</height>
        </rect>
