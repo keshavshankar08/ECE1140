@@ -1,5 +1,5 @@
-from PyQt6.QtCore import QObject, pyqtSignal, QTime
-from Track_Resources.Track import *
+from PyQt6.QtCore import QObject, pyqtSignal
+from src.backend.SW_Wayside.Track import *
 
 class signalsList(QObject):
     #Timer
