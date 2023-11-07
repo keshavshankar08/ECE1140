@@ -1,17 +1,23 @@
 from PyQt6.QtCore import QObject, pyqtSignal
 from src.backend.SW_Wayside.Track import *
 
-class Signals(QObject):
-    #region SW Track Controller
-    # Inputs
-    swtrack_block_occupancy = pyqtSignal()
-    swtrack_track_fault_detected = pyqtSignal()
-    swtrack_maintenance_active = pyqtSignal()
-    swtrack_suggested_speed = pyqtSignal()
-    swtrack_suggested_authority = pyqtSignal()
-    swtrack_system_clock = pyqtSignal()
-    swtrack_system_speed = pyqtSignal()
+class signalsList(QObject):
+    #Timer
+    current_system_time = pyqtSignal(QTime)
+    stop_timer = pyqtSignal()
+    main_backend_update_values = pyqtSignal()
+    main_backend_update_track = pyqtSignal(Track)
+
+    # SW Wayside Signals
+    sw_wayside_track_update = pyqtSignal(Track)
+
+    # Train Model Signals
+    trainModel_test_changeSpeed = pyqtSignal(float)
+    trainModel_send_actual_velocity = pyqtSignal(float)
     
-    # Outputs
-    swtrack_output = pyqtSignal(Track)
-    #endregion SW Track Controller
+    # Train Controller Signals
+    trainController_send_power_command = pyqtSignal(float)
+
+signals = signalsList()
+
+
