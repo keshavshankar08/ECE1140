@@ -38,12 +38,6 @@
     </item>
     <item>
      <widget class="Line" name="line_4">
-      <property name="maximumSize">
-       <size>
-        <width>640</width>
-        <height>480</height>
-       </size>
-      </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
