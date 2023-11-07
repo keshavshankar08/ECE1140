@@ -36,7 +36,7 @@ class TrainEnums(Enum):
     
 
 class Train(QObject):
-    def __init__(self):
+    def __init__(self, numCars):
         super().__init__()
         #### Signals
         signals.current_system_time.connect(self.setCurrentTime)
@@ -45,7 +45,7 @@ class Train(QObject):
         #### Train ID
         self.train_id = 0
         #### Number of Cars
-        self.numCars = 1
+        self.numCars = numCars
         #### Number of Passengers
         self.numPassengers = 0
         #### Intrinsic Properties
