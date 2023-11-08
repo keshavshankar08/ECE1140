@@ -1,12 +1,21 @@
 import sys
 from PyQt6 import QtCore, QtGui, QtWidgets, uic
 from PyQt6.QtWidgets import *
+sys.path.append(".")
+#THIS IS KESHAV'S FILE REPLACE WITH TIMS UI
+#from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
+from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
+#THIS IS KESHAV'S FILE REPLACE WITH NATES UI
+#from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
+from Modules.Track_Model.Frontend.Track_Model_UI import *
+from Modules.Train_Model.Frontend.train_model_ui import *
+from Modules.Train_Controller.Frontend.TrainController import *
 
 class Mainmenu(QtWidgets.QMainWindow):
     def __init__(self):
         #setup
         super().__init__()
-        uic.loadUi("pyt\\MainLauncherUI.ui", self)
+        uic.loadUi("MainLauncherUI.ui", self)
 
         self.ctcOfficeButt.clicked.connect(self.ctcOfficeClicked)
         self.trackModelButt.clicked.connect(self.trackModelClicked)
@@ -14,44 +23,40 @@ class Mainmenu(QtWidgets.QMainWindow):
         self.swWaysideButt.clicked.connect(self.swWaysideClicked)
         self.hwWaysideButt.clicked.connect(self.hwWaysideClicked)
         self.trainControllerButt.clicked.connect(self.trainControllerClicked)
-
+            
         self.show()
 
     #window for the ctc office
     def ctcOfficeClicked(self):
-        super().__init__()
-        uic.loadUi("", self)
-        self.show()
+        self.ctcWindow = SWWaysideModuleUI() #KESHAV UI NOT TIMS
+        self.ctcWindow.show()
 
     #window for the track model
     def trackModelClicked(self):
-        super().__init__()
-        uic.loadUi("", self)
-        self.show()
+        self.trackModelWindow = QtWidgets.QMainWindow()
+        ui = Ui_TrackModelModule()
+        ui.setupUi(self.trackModelWindow)
+        self.trackModelWindow.show()
 
     #window for the train model 
     def trainModelClicked(self):
-        super().__init__()
-        uic.loadUi("", self)
-        self.show()
+        self.trainModelWindow = TrainModelUI()
+        self.trainModelWindow.show()
 
     #window for the se wayside controller
     def swWaysideClicked(self):
-        super().__init__()
-        uic.loadUi("Modules/SW_Wayside/Frontend/SW_Wayside_UI.ui", self)
-        self.show()
+        self.swWaysideWindow = SWWaysideModuleUI()
+        self.swWaysideWindow.show()
 
     #window for the hw wayside controller
     def hwWaysideClicked(self):
-        super().__init__()
-        uic.loadUi("", self)
-        self.show()
+        self.hwWaysideWindow = SWWaysideModuleUI() #KESHAV UI NOT NATE
+        self.hwWaysideWindow.show()
 
     #window for the train controller
     def trainControllerClicked(self):
-        super().__init__()
-        uic.loadUi("Modules/Train_Controller/Frontend/TrainControllerUI.ui", self)
-        self.show()
+        self.trainWindow = TrainControllerUI()
+        self.trainWindow.show()
 
 
 #Main
