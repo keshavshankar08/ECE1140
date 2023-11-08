@@ -2,9 +2,9 @@
 # Constants reflect the properties of the Alstom/Bombardier Flexity 2.
 # Written by Alex Ivensky for ECE 1140
 
-from PyQt6.QtCore import QObject, QTime
+from PyQt6.QtCore import QObject, QDateTime, pyqtSignal
 from signals import signals
-from Main_Backend import START_HOUR, START_MIN, START_SEC, TIME_DELTA
+from Main_Backend import START_YEAR, START_MONTH, START_DAY, START_HOUR, START_MIN, START_SEC, TIME_DELTA
 
 import math
 from enum import Enum
@@ -21,18 +21,6 @@ S_BRAKE_MAX_DECEL = 1.2 # m/s^2
 E_BRAKE_DECEL = 2.73 # m/s^2
 MAX_MOTOR_POWER = 120000 # Watts
 GRAVITY = 9.8 # m/s^2
-
-class TrainEnums(Enum):
-    DOOR_CLOSED = "CLOSED"
-    DOOR_OPEN = "OPEN"
-    LIGHT_ON = "ON"
-    LIGHT_OFF = "OFF"
-    E_BRAKE_OFF = "OFF"
-    E_BRAKE_ON = "ON"
-    NORMAL = 0
-    ENGINE_FAIL = 1
-    BRAKE_FAIL = 2
-    SIGNAL_FAIL = 3
     
 
 class Train(QObject):
@@ -53,19 +41,22 @@ class Train(QObject):
         self.length = CAR_LENGTH * self.numCars # m
         self.height = CAR_HEIGHT # m
         self.width = CAR_WIDTH # m
-        #### Doors and Lights 
-        self.leftDoor = TrainEnums.DOOR_CLOSED
-        self.rightDoor = TrainEnums.DOOR_CLOSED
-        self.interiorLight = TrainEnums.LIGHT_OFF
-        self.exteriorLight = TrainEnums.LIGHT_OFF
+        #### Doors - False is open, True is closed
+        self.leftDoor = False 
+        self.rightDoor = False
+        #### Lights - False is off, True is on
+        self.interiorLight = False
+        self.exteriorLight = False
         #### Interior Train Temperature
-        self.temperature = 60 # F
+        self.temperatureCommand = 60 # F
+        self.temperatureActual = 60 # F
         #### Emergency Brake - either on or off
-        self.emergencyBrake = TrainEnums.E_BRAKE_OFF
+        self.emergencyBrake = False
         #### Service Brake - ranges from 0.0 (no brake) to 1.0 (full brake)
         self.serviceBrake = 0.0 # dimensionless
         #### Instantaneous Values
         self.currentSpeed = 0 # m/s
+        self.previousSpeed = 0 # m/s
         self.currentAccel = 0 # m/s^2
         self.previousAccel = 0 # m/s^2
         self.accelSum = 0 # m/s^2 ??
@@ -78,15 +69,24 @@ class Train(QObject):
         self.currentGradient = 0.0 # %
         self.beaconList = [] # list of all beacons received
         #### Time
-        self.current_time = QTime(START_HOUR, START_MIN, START_SEC)
+        self.current_time = QDateTime(START_YEAR, START_MONTH, START_MONTH, START_DAY, START_HOUR, START_MIN, START_SEC)
         #### Failure
-        self.current_failureMode = TrainEnums.NORMAL
-        #### Advertisemenets
+        self.engineFail = False
+        self.brakeFail = False
+        self.signalFail = False
+        #### Advertisements
+        # not implemented haha hahahaha
+        #### UI Signals
+        self.displayBeacon = pyqtSignal(str)
+        
         
 
     def TrainModelUpdateValues(self):
         self.previousAccel = self.currentAccel
-        self.engineForce = self.commandedPower / self.currentSpeed
+        try:
+            self.engineForce = self.commandedPower / self.currentSpeed
+        except ZeroDivisionError:
+            self.engineForce = 0
         self.slopeForce = self.mass * GRAVITY * math.atan(self.currentGradient / 100)
         self.netForce = self.engineForce - self.slopeForce
         self.currentAccel = self.netForce / self.mass
@@ -96,43 +96,45 @@ class Train(QObject):
         else:
             self.currentSpeed = self.currentSpeed
             
-        # emit wherever
+        # Signals to Train Controller
+        
+        # Signals to Track Model
 
     def trainModelServiceBrake(self, value):
         pass
 
     def onEmergencyBrake(self):
-        self.emergencyBrake = TrainEnums.E_BRAKE_OFF
+        self.emergencyBrake = True
         
     def offEmergencyBrake(self):
-        self.emergencyBrake = TrainEnums.E_BRAKE_ON
+        self.emergencyBrake = False
 
     def onInteriorLights(self):
-        self.interiorLight = TrainEnums.LIGHT_ON
+        self.interiorLight = True
     
     def offInteriorLights(self):
-        self.interiorLight = TrainEnums.LIGHT_OFF
+        self.interiorLight = False
 
     def onExteriorLights(self):
-        self.exteriorLight = TrainEnums.LIGHT_ON
+        self.exteriorLight = True
     
     def offExteriorLights(self):
-        self.exteriorLight = TrainEnums.LIGHT_OFF
+        self.exteriorLight = False
 
     def openLeftDoors(self):
-        self.leftDoor = TrainEnums.DOOR_OPEN
+        self.leftDoor = False
     
     def closeLeftDoors(self):
-        self.leftDoor = TrainEnums.DOOR_CLOSED
+        self.leftDoor = True
 
     def openRightDoors(self):
-        self.rightDoor = TrainEnums.DOOR_OPEN
+        self.rightDoor = False
     
     def closeLeftDoors(self):
-        self.leftDoor = TrainEnums.DOOR_CLOSED
+        self.leftDoor = True
 
-    def setTemperature(self, value):
-        pass
+    def receiveTemperature(self, value):
+        self.temperatureCommand = value
     
     def setCurrentTime(self, time):
         self.current_time = time
@@ -143,17 +145,19 @@ class Train(QObject):
     def receiveBeacon(self, beacon):
         self.beaconList.append(beacon)
         
-    def receiveSuggestedSpeed(self, value):
-        pass
+    def passSuggestedSpeed(self, value):
+        signals.trainModel_send_suggested_speed.emit(value)
     
-    def receiveSuggestedAuthority(self, value):
-        pass
+    def passSuggestedAuthority(self, value):
+        signals.trainModel_send_authority.emit(value)
     
-    def receiveSpeedLimit(self, value):
-        pass
+    def passSpeedLimit(self, value):
+        signals.trainModel_send_speed_limit.emit(value)
     
     def showAdvertisement(self):
         pass
+    
+    
         
 
     
