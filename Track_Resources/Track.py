@@ -316,9 +316,11 @@ class Block:
         self.station_name = ""
         self.crossing_status = False
             
+    # Get block number string
     def get_block_number_string(self):
         return str(self.block_number)
     
+    # Get block type string
     def get_block_type_string(self):
         if(self.block_type == 0):
             return "Default"
@@ -329,24 +331,24 @@ class Block:
         elif(self.block_type == 3):
             return "Crossing"
         
+    # Get block occupancy string
     def get_block_occupancy_string(self):
         return "Occupied" if(self.block_occupancy) else "Unoccupied"
     
+    # Get track fault status string
     def get_track_fault_status_string(self):
         return "Detected" if(self.track_fault_status) else "Undetected"
     
+    # Get maintenance status string
     def get_maintenance_status_string(self):
         return "Active" if(self.maintenance_status) else "Inactive"
     
-    # Returns switch direction string
+    # Get switch direction string
     def get_switch_direction_string(self, line_int):
-        # Junction switch-receiver pairs
         red_line_junction_switch_ends = [9,16,27,33,38,44,52]
         red_line_junction_receiver_ends = [[0,10],[1,15],[28,76],[72,32],[39,71],[67,43],[53,66]]
         green_line_junction_switch_ends = [13,28,57,63,77,85]
         green_line_junction_receiver_ends = [[12,1],[29,150],[0,58],[62,0],[101,76],[86,100]]
-
-        # Find correct display string
         if(line_int == 0):
             listPos = red_line_junction_switch_ends.index(self.block_number)
             return str(red_line_junction_switch_ends[listPos]) + "-" + str(red_line_junction_receiver_ends[listPos][0]) if(not self.switch_direction) else str(red_line_junction_switch_ends[listPos]) + "-" + str(red_line_junction_receiver_ends[listPos][1])
@@ -354,13 +356,12 @@ class Block:
             listPos = green_line_junction_switch_ends.index(self.block_number)
             return str(green_line_junction_switch_ends[listPos]) + "-" + str(green_line_junction_receiver_ends[listPos][0]) if(not self.switch_direction) else str(green_line_junction_switch_ends[listPos]) + "-" + str(green_line_junction_receiver_ends[listPos][1])
     
+    # Get switch direction string list
     def get_switch_direction_string_list(self, line_int):
-        # Junction switch-receiver pairs
         red_line_junction_switch_ends = [9,16,27,33,38,44,52]
         red_line_junction_receiver_ends = [[0,10],[1,15],[28,76],[72,32],[39,71],[67,43],[53,66]]
         green_line_junction_switch_ends = [13,28,57,63,77,85]
         green_line_junction_receiver_ends = [[12,1],[29,150],[0,58],[62,0],[101,76],[86,100]]
-
         if(line_int == 0):
             listPos = red_line_junction_switch_ends.index(self.block_number)
             return [str(red_line_junction_switch_ends[listPos]) + "-" + str(red_line_junction_receiver_ends[listPos][0]), str(red_line_junction_switch_ends[listPos]) + "-" + str(red_line_junction_receiver_ends[listPos][1])]
@@ -368,13 +369,12 @@ class Block:
             listPos = green_line_junction_switch_ends.index(self.block_number)
             return [str(green_line_junction_switch_ends[listPos]) + "-" + str(green_line_junction_receiver_ends[listPos][0]), str(green_line_junction_switch_ends[listPos]) + "-" + str(green_line_junction_receiver_ends[listPos][1])]
 
+    # Get switch direction boolean
     def get_switch_direction_bool(self, direction, line_int):
-        # Junction switch-receiver pairs
         red_line_junction_switch_ends = [9,16,27,33,38,44,52]
         red_line_junction_receiver_ends = [[0,10],[1,15],[28,76],[72,32],[39,71],[67,43],[53,66]]
         green_line_junction_switch_ends = [13,28,57,63,77,85]
         green_line_junction_receiver_ends = [[12,1],[29,150],[0,58],[62,0],[101,76],[86,100]]
-        
         first_num = int(direction.split('-')[0])
         second_num = int(direction.split('-')[1])
         if(line_int == 0):
@@ -384,15 +384,18 @@ class Block:
             list_pos_switch = green_line_junction_switch_ends.index(first_num)
             return False if(second_num == green_line_junction_receiver_ends[list_pos_switch][0]) else True
 
+    # Get crossing status string
     def get_traffic_light_color_string(self):
         return "Green" if(self.traffic_light_color) else "Red"
     
+    # Get crossing status boolean
     def get_traffic_light_color_bool(self, color):
         return True if(color == "Green") else False
     
+    # Gets crossing status boolean
     def get_crossing_status_bool(self, status):
         return True if(status == "Active") else False
         
-    # Returns crossing status string
-    def getCrossingActiveString(self):
+    # Gets crossing status string
+    def get_crossing_status_string(self):
         return "Active" if(self.crossing_status == True) else "Inactive"

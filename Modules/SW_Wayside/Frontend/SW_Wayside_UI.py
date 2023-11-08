@@ -13,48 +13,45 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
                 uic.loadUi("Modules/SW_Wayside/Frontend/SW_Wayside_UI.ui", self)
                 self.track_instance_copy = Track()
 
-                # Receives updates from backend
+                # receives updates from wayside backend
                 signals.sw_wayside_update_frontend.connect(self.update_frontend)
 
-                # If any change in manual mode, need to override system with their inputs
+                # handles override signals for manual inputs
                 self.switch_direction_dropdown.currentTextChanged.connect(self.manual_switch_toggled)
                 self.traffic_light_color_dropdown.currentTextChanged.connect(self.manual_light_toggled)
                 self.crossing_status_dropdown.currentTextChanged.connect(self.manual_crossing_toggled)
 
-                # If PLC upload button clicked
+                # handles plc button clicked
                 self.upload_plc_program_button.clicked.connect(self.uploadPLCClicked)
 
-                # If view track map button clicked
+                # handles track map button clicked
                 self.track_map_view_button.clicked.connect(self.view_track_map_clicked)
-
-                self.show()
         
         # Handles all frontend updates
         def update_frontend(self, track_instance):
                 # update local instance of track
-                self.track_instance_copy = track_instance
+                self.update_copy_track(track_instance)
 
                 # update the ui information
                 self.update_display()
 
-                # send any updates back to backend
-                self.frontend_update()
+                # send updated signals to wayside backend
+                self.send_backend_update()
 
-        # Sends updates to backend
-        def frontend_update(self):
+        # Sends updates from wayside frontend to wayside backend
+        def send_backend_update(self):
                 signals.sw_wayside_frontend_update.emit(self.track_instance_copy)
 
-        # Calls all UI information
+        # Updates all UI display information
         def update_display(self):
                 self.update_opeartion_dropdown()
                 self.update_line_dropdown()
                 self.update_wayside_dropdown()
                 self.update_block_dropdown()
-                self.update_block_information()
 
-        # Updates copy track instance
-        def update_copy_track(self, updatedTrack):
-                self.trackInstanceCopy = updatedTrack
+        # Updates local instance of track
+        def update_copy_track(self, updated_track):
+                self.trackInstanceCopy = updated_track
         
         # Updates elements shown once mode chosen
         def update_opeartion_dropdown(self):
@@ -149,7 +146,10 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
                                 self.crossing_status_dropdown.clear()
                                 self.crossing_status_dropdown.addItems(["Active","Inactive"])
                         else:
-                                self.crossing
+                                self.junction_box.setEnabled(False)
+                                self.station_box.setEnabled(False)
+                                self.crossing_box.setEnabled(False)
+                        self.update_block_information()
 
         # Gets the integer representation of the current line chosen
         def get_current_line_displayed_int(self):
@@ -168,14 +168,14 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
         def update_block_information(self):
                 curr_line_int = self.get_current_line_displayed_int()
                 curr_block_int = self.get_current_block_displayed_int()
-                self.block_type_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].block_type)
-                self.block_occupancy_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].block_occupancy)
-                self.track_fault_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].track_fault_status)
-                self.maintenance_active_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].maintenance_status)
-                self.switch_direction_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].switch_direction)
-                self.traffic_light_color_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].traffic_light_color)
+                self.block_type_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_type_string())
+                self.block_occupancy_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_occupancy_string())
+                self.track_fault_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_track_fault_status_string())
+                self.maintenance_active_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_maintenance_status_string())
+                self.switch_direction_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_switch_direction_string(curr_line_int))
+                self.traffic_light_color_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_traffic_light_color_string())
                 self.station_name_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].station_name)
-                self.crossing_status_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].crossing_status)
+                self.crossing_status_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_crosing_status_string())
 
         # Handles view track map button clicked
         def view_track_map_clicked(self):
@@ -208,8 +208,3 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
                 curr_line_int = self.get_current_line_displayed_int()
                 curr_block_int = self.get_current_block_displayed_int()
                 self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].crossing_status = self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_crossing_status_bool(self.crossing_status_dropdown.currentText())
-
-if __name__ == "__main__":
-        app = QtWidgets.QApplication(sys.argv)
-        window = SWWaysideFrontend()
-        app.exec()

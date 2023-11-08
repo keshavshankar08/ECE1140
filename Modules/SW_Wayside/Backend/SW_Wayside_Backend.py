@@ -3,25 +3,42 @@ sys.path.append(".")
 from signals import signals
 from Track_Resources.Track import *
 
-class WaysideSystem():
+class WaysideBackend():
     def __init__(self):
-        signals.sw_wayside_backend_update.connect(self.UpdateWayside)
         self.trackInstanceCopy = Track()
 
-    def UpdateUI(self):
-        signals.sw_wayside_frontend_update.emit(self.trackInstanceCopy)
+        # receives updates from main backend
+        signals.sw_wayside_update_backend.connect(self.backend_update)
+        
+        # receives updates from wayside frontend
+        signals.sw_wayside_frontend_update.connect(self.backend_update)
 
-    def update_copy_track(self, updatedTrack):
-        self.trackInstanceCopy = updatedTrack
+    # Sends updates from wayside backend to wayside frontend
+    def send_frontend_update(self):
+        signals.sw_wayside_update_frontend.emit(self.trackInstanceCopy)
+
+    # Sends updates from wayside backend to main backend
+    def send_main_backend_update(self):
+        signals.sw_wayside_backend_update.emit(self.trackInstanceCopy)
+
+    # Updates local instance of track
+    def update_copy_track(self, updated_track):
+        self.trackInstanceCopy = updated_track
 
     # The main function to carry out all necessary functions in a cycle
-    def UpdateWayside(self, trackInstance):
-        self.trackInstanceCopy = trackInstance
-        self.UpdateUI()
+    def backend_update(self, track_instance):
+        # update local instance of track
+        self.update_copy_track(track_instance)
 
-        # Updates main instance at end of cycle
-        signals.sw_wayside_track_update.emit(self.trackInstanceCopy)
+        # send updated signals to wayside frontend
+        self.send_frontend_update()
 
-    # all the damn functions to change switches and lights
+        # all the backend logic function calls
 
-    
+        # send updated signals to main backend
+        self.send_main_backend_update()
+
+    # Apply updates from UI
+    def backend_update(self, track_instance):
+        # update local instance of track
+        self.update_copy_track(track_instance)
