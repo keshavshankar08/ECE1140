@@ -21,7 +21,9 @@ class signalsList(QObject):
     # Train Model Signals
     trainModel_send_actual_velocity = pyqtSignal(float)
     trainModel_send_emergency_brake = pyqtSignal(bool)
+    trainModel_send_suggested_speed = pyqtSignal(float)
     trainModel_send_authority = pyqtSignal(float)
+    trainModel_send_speed_limit = pyqtSignal(float)
     trainModel_send_beacon = pyqtSignal(str)
     trainModel_send_train_length = pyqtSignal(float)
     trainModel_send_distance_from_yard = pyqtSignal(float)
