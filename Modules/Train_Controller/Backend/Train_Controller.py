@@ -87,23 +87,32 @@ class trainController(QObject):
         else:
             pass
         
-        self.commandedPower = self.KP*self.ek + self.KI*self.uk 
+        self.commandedPower = self.KP*self.ek + self.KI*self.uk
+        signals.train_controller_power.emit()
         
         #now we set uk1 to uk and ek1 to ek, since they be past values now homie
         self.uk1 = self.uk
         self.ek1 = self.ek
 
+    #this function will set the kp by the engineer
+    def setKP(self, kp):
+        self.KP = kp
+
+    #this function will set the ki by the engineer
+    def setKP(self, ki):
+        self.KI = ki
+
     #this function updates the setpoint speed
-    def updateSetPointSpeed(self):
-        pass
+    def updateSetPointSpeed(self, setPointSpeed):
+        self.setpointSpeed = setPointSpeed
 
     #this function goes through a station stop
     def trainStationStop(self):
         pass
 
     #this function updates the commanded speed
-    def updateCommandedSpeed(self):
-        pass
+    def updateCommandedSpeed(self, commandSpeed):
+        self.commandedSpeed = commandSpeed
 
     #this function updates the current speed
     def updateCurrentSpeed(self):
@@ -114,30 +123,29 @@ class trainController(QObject):
         pass
 
     #this function updates the temp
-    def updateTempValue(self):
-        pass
+    def updateTempValue(self, temperature):
+        self.trainTemp = temperature
+        signals.train_controller_temperature_value.emit()
 
     #this function updates the service brake value
-    def updateServiceBrakeValue(self):
-        pass
+    def updateServiceBrakeValue(self, braking):
+        self.serviceBrake = braking
+        signals.train_controller_service_brake_value.emit()
+        #reminder that service brake is 0 to 10 so the final result must be divided by 10
 
     #this function report E brake on
     def emergencyBrakeOn(self):
         self.emergencyBrake = True
-        signals.emergency_brake_on.emit()
+        signals.train_controller_emergency_brake_on.emit()
 
     #this function will report e brake off
     def emergencyBrakeOff(self):
         self.emergencyBrake = False
-        signals.emergency_brake_off.emit()
+        signals.train_controller_emergency_brake_off.emit()
 
     #this function will toggle modes
     def toggleModes(self):
         self.mode = not self.mode
-        if(self.mode == True):
-            signals.train_controller_mode_type_auto.emit()
-        else:
-            signals.train_controller_mode_type_manual.emit()
 
     #this function will report left doors
     def toggleDoorsLeft(self):
@@ -174,10 +182,6 @@ class trainController(QObject):
 
     #this function is for announcements
     def toggleAnnouncements(self):
-        pass
-
-    #this function is for advertisements
-    def toggleAds(self):
         pass
 
 

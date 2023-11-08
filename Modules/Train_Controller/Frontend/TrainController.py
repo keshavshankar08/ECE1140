@@ -33,13 +33,13 @@ class TrainControllerUI(QtWidgets.QMainWindow):
 
     #function for automatic mode
     def Automatic_Button_clicked(self):
-        self.Automaticbutton.setStyleSheet("background-color: rgb(199, 199, 199)")
-        self.manualbutton.setStyleSheet("background-color: rgb(255, 255, 255)")
+        self.automaticButton.setStyleSheet("background-color: rgb(199, 199, 199)")
+        self.manualButton.setStyleSheet("background-color: rgb(255, 255, 255)")
 
     #function for manual mode
     def Manual_Button_clicked(self):
-        self.Automaticbutton.setStyleSheet("background-color: rgb(255, 255, 255)")
-        self.manualbutton.setStyleSheet("background-color: rgb(199, 199, 199)")    
+        self.automaticButton.setStyleSheet("background-color: rgb(255, 255, 255)")
+        self.manualButton.setStyleSheet("background-color: rgb(199, 199, 199)")    
 
     #function for emergency brakes
     def Emergency_Button_clicked(self):
