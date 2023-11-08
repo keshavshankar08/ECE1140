@@ -48,7 +48,8 @@ class Train(QObject):
         self.interiorLight = False
         self.exteriorLight = False
         #### Interior Train Temperature
-        self.temperature = 60 # F
+        self.temperatureCommand = 60 # F
+        self.temperatureActual = 60 # F
         #### Emergency Brake - either on or off
         self.emergencyBrake = False
         #### Service Brake - ranges from 0.0 (no brake) to 1.0 (full brake)
@@ -77,6 +78,7 @@ class Train(QObject):
         # not implemented haha hahahaha
         #### UI Signals
         self.displayBeacon = pyqtSignal(str)
+        
         
 
     def TrainModelUpdateValues(self):
@@ -131,8 +133,8 @@ class Train(QObject):
     def closeLeftDoors(self):
         self.leftDoor = True
 
-    def setTemperature(self, value):
-        pass
+    def receiveTemperature(self, value):
+        self.temperatureCommand = value
     
     def setCurrentTime(self, time):
         self.current_time = time
@@ -143,14 +145,14 @@ class Train(QObject):
     def receiveBeacon(self, beacon):
         self.beaconList.append(beacon)
         
-    def receiveSuggestedSpeed(self, value):
-        pass
+    def passSuggestedSpeed(self, value):
+        signals.trainModel_send_suggested_speed.emit(value)
     
-    def receiveSuggestedAuthority(self, value):
-        pass
+    def passSuggestedAuthority(self, value):
+        signals.trainModel_send_authority.emit(value)
     
-    def receiveSpeedLimit(self, value):
-        pass
+    def passSpeedLimit(self, value):
+        signals.trainModel_send_speed_limit.emit(value)
     
     def showAdvertisement(self):
         pass
