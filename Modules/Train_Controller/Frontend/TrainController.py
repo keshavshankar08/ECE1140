@@ -15,11 +15,9 @@ class TrainControllerUI(QtWidgets.QMainWindow):
 
 
         #inputs for test bench
-        self.Automaticbutton.clicked.connect(self.Automatic_Button_clicked)
-        self.manualbutton.clicked.connect(self.Manual_Button_clicked)
-        self.EmergencyButton.clicked.connect(self.Emergency_Button_clicked)
-
-        #self.ResumeButton.clicked.connect(self.Resume_Button_clicked)
+        self.automaticButton.clicked.connect(self.Automatic_Button_clicked)
+        self.manualButton.clicked.connect(self.Manual_Button_clicked)
+        self.emergencyButton.clicked.connect(self.Emergency_Button_clicked)
         self.leftDoorOpen.clicked.connect(self.LeftDoorOpen_Button_clicked)
         self.leftDoorClosed.clicked.connect(self.LeftDoorClosed_Button_clicked)
         self.rightDoorOpen.clicked.connect(self.RightDoorOpen_Button_clicked)
@@ -28,10 +26,6 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         self.intLightOff.clicked.connect(self.IntLightOff_Button_clicked)
         self.extLightOn.clicked.connect(self.ExtLightOn_Button_clicked)
         self.extLightOff.clicked.connect(self.ExtLightOff_Button_clicked)
-        self.authorityinput.valueChanged.connect(self.UpdateValueAuthority)
-        self.commandedpowerinput.valueChanged.connect(self.UpdateValueComPower)
-        self.KIinput.valueChanged.connect(self.UpdateValueKI)
-        self.Kpinput.valueChanged.connect(self.UpdateValueKP)
         #self.driverSpeedChanged.valueChanged.connect()
         #self.serviceBrakeChanged.valueChanged.connect()
 
@@ -49,19 +43,10 @@ class TrainControllerUI(QtWidgets.QMainWindow):
 
     #function for emergency brakes
     def Emergency_Button_clicked(self):
-        self.EmergencyButton.setStyleSheet("background-color: red")
-        # self.ServiceBrake.setStyleSheet("background-color: white")
-
-    #function for service brake
-    def Service_Button_clicked(self):
-        self.ServiceBrake.setStyleSheet("background-color: blue")
-        # self.EmergencyButton.setStyleSheet("background-color: white")
-
-    #function for exiting brakes
-    def Resume_Button_clicked(self):
-        self.ResumeButton.setStyleSheet("background-color: white")
-        self.EmergencyButton.setStyleSheet("background-color: white")
-        self.ServiceBrake.setStyleSheet("background-color: white")
+        if (self.emergencyButton == self.emergencyButton.setStyleSheet("background-color: red")):
+            self.emergencyButton.setStyleSheet("background-color: white")
+        else:
+            self.emergencyButton.setStyleSheet("background-color: red")
     
     #function for left door mode
     def LeftDoorOpen_Button_clicked(self):

@@ -1,6 +1,8 @@
 import PyQt6
 import sys
 from PyQt6.QtCore import QObject
+from signals import signals
+from Main_Backend import START_HOUR, START_MIN, START_SEC, TIME_DELTA
 
 #This class represents the train controller
 #There will be a separate class that incorporates the entire train system(maybe, prob would be best but idk)
@@ -23,15 +25,13 @@ from PyQt6.QtCore import QObject
 #CONSTANTS
 MAX_POWER = 120000
 TRAIN_SAMPLE_PERIOD = 1 #change for later when we find out tample meriod
-KP_VALUE = 0
-KI_VALUE = 0
 
 class trainController(QObject):
     def __init__(self):
         #KP and KI values I also amded the mode so we chillin hom slice btw false = manuel, true = autobots assemble
         self.KP = 0
         self.KI = 0
-        self.mode = False
+        self.mode = True
 
         #Door/lightboolb values, True = Closed/on, False = Open/off
         self.Rdoor = True
@@ -43,12 +43,11 @@ class trainController(QObject):
 
         #I am SPEED kachow mf (range from any value up to speed limit)
         self.commandedSpeed = 0.0
-        self.currentSpeed = 0.0
+        self.currentSpeed = 0.0 #make setter for getting curr speed from TM
         self.setpointSpeed = 0.0
 
         #BOWER (Juan Bazerque evil laugh.mp3) and tings
         self.commandedPower = 0.0
-        self.newCommandedPower = 0.0
         self.uk = 0
         self.uk1 = 0
         self.ek = 0
@@ -77,19 +76,19 @@ class trainController(QObject):
         self.ek = vError
 
         if self.commandedPower < MAX_POWER:
-            self.uk = self.uk1 + TRAIN_SAMPLE_PERIOD/2 *(self.ek + self.ek1)
-        else: #train sample period would now be 0
+            self.uk = self.uk1 + TRAIN_SAMPLE_PERIOD/2 *(self.ek - self.ek1)
+        else: 
             self.uk = self.uk1
 
         if self.emergencyBrake == True or self.serviceBrake == 1.0:
             self.commandedPower = 0
             self.uk = 0
             self.ek = 0
-        elif self.serviceBrake != 1.0 or self.serviceBrake != 0.0:
-            pass
         else:
             pass
-
+        
+        self.commandedPower = self.KP*self.ek + self.KI*self.uk 
+        
         #now we set uk1 to uk and ek1 to ek, since they be past values now homie
         self.uk1 = self.uk
         self.ek1 = self.ek
@@ -122,23 +121,56 @@ class trainController(QObject):
     def updateServiceBrakeValue(self):
         pass
 
-    #this function will toggle the emergency brake
-    def toggleEmergencyBrake(self):
-        self.emergencyBrake = not self.emergencyBrake
+    #this function report E brake on
+    def emergencyBrakeOn(self):
+        self.emergencyBrake = True
+        signals.emergency_brake_on.emit()
+
+    #this function will report e brake off
+    def emergencyBrakeOff(self):
+        self.emergencyBrake = False
+        signals.emergency_brake_off.emit()
 
     #this function will toggle modes
     def toggleModes(self):
         self.mode = not self.mode
+        if(self.mode == True):
+            signals.train_controller_mode_type_auto.emit()
+        else:
+            signals.train_controller_mode_type_manual.emit()
 
-    #this function will toggle the doors back and forth
-    def toggleDoors(self):
-        self.Rdoor = not self.Rdoor
+    #this function will report left doors
+    def toggleDoorsLeft(self):
         self.Ldoor = not self.Ldoor
+        if(self.Ldoor == True):
+            signals.train_controller_left_door_closed.emit()
+        else:
+            signals.train_controller_left_door_open.emit()
 
-    #this function will toggle the lights back and forth
-    def toggleLights(self):
+    #this function will report right doors
+    def toggleDoorsRight(self):
+        self.Rdoor = not self.Rdoor
+        if(self.Rdoor == True):
+            signals.train_controller_right_door_closed.emit()
+        else:
+            signals.train_controller_right_door_open.emit()
+
+    #this function will report int lights 
+    def toggleLightsInt(self):
         self.intLights = not self.intLights
+        if(self.intLights == True):
+            signals.train_controller_int_lights_on.emit()
+        else:
+            signals.train_controller_int_lights_off.emit()
+
+    #this function will report ext lights 
+    def toggleLightsExt(self):
         self.extLights = not self.extLights
+        if(self.extLights == True):
+            signals.train_controller_ext_lights_on.emit()
+        else:
+            signals.train_controller_ext_lights_off.emit()
+        
 
     #this function is for announcements
     def toggleAnnouncements(self):
@@ -147,18 +179,6 @@ class trainController(QObject):
     #this function is for advertisements
     def toggleAds(self):
         pass
-
-#SIGNALS
-#signal.sendPower.connect()
-#signal.sendDoorStatus.connect()
-#signal.sendLightStatus.connect()
-#signal.sendTempValue.connect()
-#signal.sendEBrakeStatus.connect()
-#signal.sendServiceBrakeStatus.connect()
-#signal.updateSetPointSpeed.connect()
-#signal.modeType.connect()
-#signal.sendKPKI.connect()
-#signal.updateCommandSpeed()
 
 
 
