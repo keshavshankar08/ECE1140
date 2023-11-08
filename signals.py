@@ -1,11 +1,12 @@
-from PyQt6.QtCore import QObject, pyqtSignal, QTime
-from Track_Resources.Track import *
+from PyQt6.QtCore import QObject, pyqtSignal
+from src.backend.SW_Wayside.Track import *
 
 class signalsList(QObject):
     #Timer
     current_system_time = pyqtSignal(QTime)
     stop_timer = pyqtSignal()
     main_backend_update_values = pyqtSignal()
+    main_backend_update_track = pyqtSignal(Track)
 
     # SW Wayside Signals
     sw_wayside_update_backend = pyqtSignal(Track) # update from main backend to sw wayside backend
@@ -23,6 +24,9 @@ class signalsList(QObject):
     # Train Model Signals
     trainModel_test_changeSpeed = pyqtSignal(float)
     trainModel_send_actual_velocity = pyqtSignal(float)
+    
+    # Train Controller Signals
+    trainController_send_power_command = pyqtSignal(float)
 
 signals = signalsList()
 

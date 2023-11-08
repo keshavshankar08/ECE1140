@@ -32,13 +32,13 @@ class Interpreter():
                 line.strip()
                 switchDirection = int(line[6])
 
-                line = fileIn.readline()
-                line.strip()
-                trafficLight = int(line[6])
+        line = fileIn.readline()
+        line.strip()
+        stationType = line[6]
 
-                line = fileIn.readline()
-                line.strip()
-                crossingActive = int(line[6])
+        line = fileIn.readline()
+        line.strip()
+        switchOn = line[6]
 
                 # Update switch direction
                 trackCopy.lines[trackLineColor].blocks[blockNumber].switchDirection = switchDirection

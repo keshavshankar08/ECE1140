@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>480</height>
+    <width>1280</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -48,8 +48,8 @@
     <widget class="QPushButton" name="track_map_view_button">
      <property name="geometry">
       <rect>
-       <x>280</x>
-       <y>10</y>
+       <x>250</x>
+       <y>17</y>
        <width>131</width>
        <height>32</height>
       </rect>
@@ -66,8 +66,41 @@
     <widget class="QComboBox" name="line_selection_dropdown">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>10</y>
+       <x>1090</x>
+       <y>20</y>
+       <width>141</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+      </font>
+     </property>
+     <property name="maxCount">
+      <number>3</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>Select Mode...</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Manual</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Automatic</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QComboBox" name="TrackLineColorValue">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
        <width>141</width>
        <height>26</height>
       </rect>
@@ -86,6 +119,11 @@
      <item>
       <property name="text">
        <string>Select Line...</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Blue Line</string>
       </property>
      </item>
      <item>
@@ -119,8 +157,8 @@
      <widget class="QComboBox" name="wayside_selection_dropdown">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>30</y>
+        <x>20</x>
+        <y>40</y>
         <width>150</width>
         <height>26</height>
        </rect>
@@ -152,8 +190,8 @@
      <widget class="QPushButton" name="upload_plc_program_button">
       <property name="geometry">
        <rect>
-        <x>260</x>
-        <y>30</y>
+        <x>510</x>
+        <y>40</y>
         <width>171</width>
         <height>32</height>
        </rect>
@@ -187,8 +225,8 @@
       <widget class="QComboBox" name="block_selection_dropdown">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>30</y>
+         <x>20</x>
+         <y>40</y>
          <width>150</width>
          <height>26</height>
         </rect>
@@ -210,10 +248,10 @@
       <widget class="QGroupBox" name="general_box">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>60</y>
-         <width>271</width>
-         <height>111</height>
+         <x>20</x>
+         <y>80</y>
+         <width>351</width>
+         <height>141</height>
         </rect>
        </property>
        <property name="font">
@@ -227,8 +265,8 @@
        <widget class="QTextBrowser" name="block_type_label">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>30</y>
+          <x>20</x>
+          <y>40</y>
           <width>121</width>
           <height>31</height>
          </rect>
@@ -249,8 +287,8 @@ p, li { white-space: pre-wrap; }
        <widget class="QTextBrowser" name="block_occupancy_label">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>70</y>
+          <x>20</x>
+          <y>90</y>
           <width>121</width>
           <height>31</height>
          </rect>
@@ -271,9 +309,9 @@ p, li { white-space: pre-wrap; }
        <widget class="QLineEdit" name="block_type_value">
         <property name="geometry">
          <rect>
-          <x>150</x>
-          <y>36</y>
-          <width>101</width>
+          <x>210</x>
+          <y>44</y>
+          <width>113</width>
           <height>21</height>
          </rect>
         </property>
@@ -290,9 +328,9 @@ p, li { white-space: pre-wrap; }
        <widget class="QLineEdit" name="block_occupancy_value">
         <property name="geometry">
          <rect>
-          <x>150</x>
-          <y>75</y>
-          <width>101</width>
+          <x>242</x>
+          <y>95</y>
+          <width>81</width>
           <height>21</height>
          </rect>
         </property>
@@ -313,10 +351,10 @@ p, li { white-space: pre-wrap; }
       <widget class="QGroupBox" name="maintenance_box">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>180</y>
-         <width>271</width>
-         <height>111</height>
+         <x>20</x>
+         <y>240</y>
+         <width>351</width>
+         <height>141</height>
         </rect>
        </property>
        <property name="font">
@@ -330,8 +368,8 @@ p, li { white-space: pre-wrap; }
        <widget class="QTextBrowser" name="track_fault_label">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>30</y>
+          <x>20</x>
+          <y>40</y>
           <width>151</width>
           <height>31</height>
          </rect>
@@ -352,8 +390,8 @@ p, li { white-space: pre-wrap; }
        <widget class="QTextBrowser" name="maintenance_active_label">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>70</y>
+          <x>20</x>
+          <y>90</y>
           <width>151</width>
           <height>31</height>
          </rect>
@@ -374,9 +412,9 @@ p, li { white-space: pre-wrap; }
        <widget class="QLineEdit" name="track_fault_value">
         <property name="geometry">
          <rect>
-          <x>180</x>
-          <y>35</y>
-          <width>71</width>
+          <x>242</x>
+          <y>45</y>
+          <width>81</width>
           <height>21</height>
          </rect>
         </property>
@@ -396,9 +434,9 @@ p, li { white-space: pre-wrap; }
        <widget class="QLineEdit" name="maintenance_active_value">
         <property name="geometry">
          <rect>
-          <x>180</x>
-          <y>75</y>
-          <width>71</width>
+          <x>242</x>
+          <y>96</y>
+          <width>81</width>
           <height>21</height>
          </rect>
         </property>
@@ -419,10 +457,10 @@ p, li { white-space: pre-wrap; }
       <widget class="QGroupBox" name="station_box">
        <property name="geometry">
         <rect>
-         <x>290</x>
-         <y>170</y>
-         <width>321</width>
-         <height>71</height>
+         <x>420</x>
+         <y>240</y>
+         <width>351</width>
+         <height>91</height>
         </rect>
        </property>
        <property name="font">
@@ -436,8 +474,8 @@ p, li { white-space: pre-wrap; }
        <widget class="QTextBrowser" name="station_name_label">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>30</y>
+          <x>20</x>
+          <y>40</y>
           <width>121</width>
           <height>31</height>
          </rect>
@@ -458,8 +496,8 @@ p, li { white-space: pre-wrap; }
        <widget class="QLineEdit" name="station_name_value">
         <property name="geometry">
          <rect>
-          <x>140</x>
-          <y>35</y>
+          <x>160</x>
+          <y>44</y>
           <width>171</width>
           <height>21</height>
          </rect>
@@ -558,10 +596,10 @@ p, li { white-space: pre-wrap; }
       <widget class="QGroupBox" name="junction_box">
        <property name="geometry">
         <rect>
-         <x>290</x>
-         <y>20</y>
-         <width>321</width>
-         <height>151</height>
+         <x>420</x>
+         <y>40</y>
+         <width>351</width>
+         <height>191</height>
         </rect>
        </property>
        <property name="font">

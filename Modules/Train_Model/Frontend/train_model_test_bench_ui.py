@@ -2,7 +2,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets, uic
 from PyQt6.QtWidgets import QApplication, QMainWindow
 import sys
 sys.path.append(".")
-from signals import Signals
+from signals import signals
 
 class TrainModelTestBenchUI(QtWidgets.QMainWindow):
     def __init__(self):

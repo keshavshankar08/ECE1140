@@ -1,5 +1,5 @@
 # Track Object - A entire track network
-class Track():
+class Track:
     def __init__(self):
         self.lines: list[Line] = []
 
@@ -301,9 +301,8 @@ class Line:
     def __init__(self):
         self.line_color = ""
         self.blocks: list[Block] = []
-        self.graph: dict[int, list[int]] = {}
 
-# Block Object - A single block linked to a single Track
+# Block Object - A single block linked to a single wayside controller
 class Block:
     def __init__(self):
         self.block_number = 0
