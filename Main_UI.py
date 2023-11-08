@@ -11,8 +11,6 @@ from Modules.Track_Model.Frontend.Track_Model_UI import *
 from Modules.Train_Model.Frontend.train_model_ui import *
 from Modules.Train_Controller.Frontend.TrainController import *
 
-
-
 class Mainmenu(QtWidgets.QMainWindow):
     def __init__(self):
         #setup
