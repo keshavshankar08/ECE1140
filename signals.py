@@ -9,7 +9,17 @@ class signalsList(QObject):
     main_backend_update_track = pyqtSignal(Track)
 
     # SW Wayside Signals
-    sw_wayside_track_update = pyqtSignal(Track)
+    sw_wayside_update_backend = pyqtSignal(Track) # update from main backend to sw wayside backend
+    sw_wayside_update_frontend = pyqtSignal(Track) # update from sw wayside backend to sw wayside frontend
+    sw_wayside_frontend_update = pyqtSignal(Track) # update from sw wayside frontend to sw wayside backend
+    sw_wayside_backend_update = pyqtSignal(Track) # update from sw wayside backend to main backend
+    '''
+    Main Backend    ->  SW Wayside Backend  ->  SW Wayside Frontend
+                                                        |
+                                                        ▼
+                        Main Backend    <-      SW Wayside Backend             
+    '''
+    
 
     # Train Model Signals
     trainModel_test_changeSpeed = pyqtSignal(float)
