@@ -94,12 +94,9 @@ class trainController(QObject):
         self.uk1 = self.uk
         self.ek1 = self.ek
 
-    #this function will set the kp by the engineer
-    def setKP(self, kp):
+    #this function will set the kp and ki by the engineer
+    def setKPKI(self, kp, ki):
         self.KP = kp
-
-    #this function will set the ki by the engineer
-    def setKP(self, ki):
         self.KI = ki
 
     #this function updates the setpoint speed
