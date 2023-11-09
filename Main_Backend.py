@@ -5,6 +5,7 @@ from signals import signals
 from Track_Resources.Track import *
 from Modules.SW_Wayside.Backend.SW_Wayside_Backend import *
 from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
+from Main_UI import *
 
 # System clock constants
 INTERVAL = 50
@@ -25,18 +26,20 @@ class SystemTime(QObject):
         self.system_timer.timeout.connect(self.timerHandler)
         signals.stop_timer.connect(self.stopTimer)
         self.system_timer.start(INTERVAL)
-        #self.app = QtWidgets.QApplication(sys.argv)
         
         # SW Wayside Instances
         self.sw_wayside_backend_instance = WaysideBackend()
-        self.sw_wayside_frontend_instance = SWWaysideFrontend()
         self.track_instance = Track()
-        signals.sw_wayside_backend_update.connect(self.updateTrackInstance)        
+        signals.sw_wayside_backend_update.connect(self.updateTrackInstance)      
+        
+        
+        self.menu_instance = Mainmenu()  
+        self.menu_instance.show()
 
     def timerHandler(self):
         self.current_time = self.current_time.addMSecs(TIME_DELTA)
         signals.current_system_time.emit(self.current_time) #Y:M:D:h:m:s
-        signals.main_backend_update_track.emit(self.trackInstance) #sends current state of track out
+        signals.main_backend_update_track.emit(self.track_instance) #sends current state of track out
         signals.main_backend_update_values.emit() #tells modules to refresh
         
 
@@ -48,11 +51,10 @@ class SystemTime(QObject):
         self.track_instance = updatedTrack
 
 if __name__ == '__main__':
-        app = QCoreApplication([])
+        app = QApplication([])
         thread = QThread() 
         system_time = SystemTime()
         system_time.moveToThread(thread) 
         thread.start()
-        #system_time.sw_wayside_frontend_instance.show()
         sys.exit(app.exec())
 
