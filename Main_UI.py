@@ -19,12 +19,12 @@ class Mainmenu(QtWidgets.QMainWindow):
         super().__init__()
         uic.loadUi("MainLauncherUI.ui", self)
 
-        self.ctcOfficeButt.clicked.connect(self.ctcOfficeClicked)
-        self.trackModelButt.clicked.connect(self.trackModelClicked)
-        self.trainModelButt.clicked.connect(self.trainModelClicked)
-        self.swWaysideButt.clicked.connect(self.swWaysideClicked)
-        self.hwWaysideButt.clicked.connect(self.hwWaysideClicked)
-        self.trainControllerButt.clicked.connect(self.trainControllerClicked)
+        self.ctc_office_button.clicked.connect(self.ctcOfficeClicked)
+        self.track_model_button.clicked.connect(self.trackModelClicked)
+        self.train_model_button.clicked.connect(self.trainModelClicked)
+        self.sw_wayside_button.clicked.connect(self.swWaysideClicked)
+        self.hw_wayside_button.clicked.connect(self.hwWaysideClicked)
+        self.train_controller_button.clicked.connect(self.trainControllerClicked)
             
         self.show()
 
