@@ -24,14 +24,14 @@
   <property name="windowTitle">
    <string>SW Wayside</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <widget class="QFrame" name="ModuleSection">
+  <widget class="QWidget" name="main_widget">
+   <widget class="QFrame" name="line_box">
     <property name="geometry">
      <rect>
       <x>12</x>
-      <y>90</y>
-      <width>1256</width>
-      <height>621</height>
+      <y>30</y>
+      <width>621</width>
+      <height>441</height>
      </rect>
     </property>
     <property name="font">
@@ -45,7 +45,7 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QPushButton" name="TrackMapViewButton">
+    <widget class="QPushButton" name="track_map_view_button">
      <property name="geometry">
       <rect>
        <x>250</x>
@@ -63,7 +63,7 @@
       <string>View Track Map</string>
      </property>
     </widget>
-    <widget class="QComboBox" name="OperationModeValue">
+    <widget class="QComboBox" name="line_selection_dropdown">
      <property name="geometry">
       <rect>
        <x>1090</x>
@@ -137,13 +137,13 @@
       </property>
      </item>
     </widget>
-    <widget class="QGroupBox" name="WaysideControllerBox">
+    <widget class="QGroupBox" name="wayside_box">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>60</y>
-       <width>1211</width>
-       <height>551</height>
+       <x>0</x>
+       <y>40</y>
+       <width>621</width>
+       <height>401</height>
       </rect>
      </property>
      <property name="font">
@@ -154,7 +154,7 @@
      <property name="title">
       <string>Wayside Controller</string>
      </property>
-     <widget class="QComboBox" name="WaysideControllerWaysideValue">
+     <widget class="QComboBox" name="wayside_selection_dropdown">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -176,8 +176,18 @@
         <string>Select Wayside...</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>Wayside 1</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Wayside 2</string>
+       </property>
+      </item>
      </widget>
-     <widget class="QPushButton" name="WaysideControllerUploadPLCProgramButton">
+     <widget class="QPushButton" name="upload_plc_program_button">
       <property name="geometry">
        <rect>
         <x>510</x>
@@ -195,13 +205,13 @@
        <string>Upload PLC Program</string>
       </property>
      </widget>
-     <widget class="QGroupBox" name="BlockStatusBox">
+     <widget class="QGroupBox" name="block_box">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>80</y>
-        <width>1171</width>
-        <height>451</height>
+        <x>0</x>
+        <y>60</y>
+        <width>621</width>
+        <height>341</height>
        </rect>
       </property>
       <property name="font">
@@ -212,7 +222,7 @@
       <property name="title">
        <string>Block Status</string>
       </property>
-      <widget class="QComboBox" name="BlockStatusBlockNumberValue">
+      <widget class="QComboBox" name="block_selection_dropdown">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -235,7 +245,7 @@
         </property>
        </item>
       </widget>
-      <widget class="QGroupBox" name="GeneralBox">
+      <widget class="QGroupBox" name="general_box">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -252,7 +262,7 @@
        <property name="title">
         <string>General</string>
        </property>
-       <widget class="QTextBrowser" name="BlockTypeLabel">
+       <widget class="QTextBrowser" name="block_type_label">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -274,7 +284,7 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont';&quot;&gt;Block Type&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
-       <widget class="QTextBrowser" name="BlockOccupancyLabel">
+       <widget class="QTextBrowser" name="block_occupancy_label">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -296,7 +306,7 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont';&quot;&gt;Block Occupied&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="BlockTypeValue">
+       <widget class="QLineEdit" name="block_type_value">
         <property name="geometry">
          <rect>
           <x>210</x>
@@ -315,7 +325,7 @@ p, li { white-space: pre-wrap; }
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QLineEdit" name="BlockOccupancyValue">
+       <widget class="QLineEdit" name="block_occupancy_value">
         <property name="geometry">
          <rect>
           <x>242</x>
@@ -338,7 +348,7 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="MaintenanceBox">
+      <widget class="QGroupBox" name="maintenance_box">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -355,7 +365,7 @@ p, li { white-space: pre-wrap; }
        <property name="title">
         <string>Maintenance</string>
        </property>
-       <widget class="QTextBrowser" name="MaintenanceTrackFaultLabel">
+       <widget class="QTextBrowser" name="track_fault_label">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -377,7 +387,7 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont';&quot;&gt;Track Fault Detected&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
-       <widget class="QTextBrowser" name="MaintenanceActiveLabel">
+       <widget class="QTextBrowser" name="maintenance_active_label">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -399,7 +409,7 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont';&quot;&gt;Maintenance Active&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="MaintenanceTrackFaultValue">
+       <widget class="QLineEdit" name="track_fault_value">
         <property name="geometry">
          <rect>
           <x>242</x>
@@ -421,7 +431,7 @@ p, li { white-space: pre-wrap; }
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QLineEdit" name="MaintenanceActiveValue">
+       <widget class="QLineEdit" name="maintenance_active_value">
         <property name="geometry">
          <rect>
           <x>242</x>
@@ -444,7 +454,7 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="StationBox">
+      <widget class="QGroupBox" name="station_box">
        <property name="geometry">
         <rect>
          <x>420</x>
@@ -461,7 +471,7 @@ p, li { white-space: pre-wrap; }
        <property name="title">
         <string>Station</string>
        </property>
-       <widget class="QTextBrowser" name="StationNameLabel">
+       <widget class="QTextBrowser" name="station_name_label">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -483,7 +493,7 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont';&quot;&gt;Station Name&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="StationNameValue">
+       <widget class="QLineEdit" name="station_name_value">
         <property name="geometry">
          <rect>
           <x>160</x>
@@ -503,12 +513,12 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="CrossingBox">
+      <widget class="QGroupBox" name="crossing_box">
        <property name="geometry">
         <rect>
-         <x>420</x>
-         <y>340</y>
-         <width>351</width>
+         <x>290</x>
+         <y>240</y>
+         <width>321</width>
          <height>91</height>
         </rect>
        </property>
@@ -520,11 +530,11 @@ p, li { white-space: pre-wrap; }
        <property name="title">
         <string>Crossing</string>
        </property>
-       <widget class="QComboBox" name="BlockCrossingActiveValue">
+       <widget class="QComboBox" name="crossing_status_dropdown">
         <property name="geometry">
          <rect>
-          <x>230</x>
-          <y>44</y>
+          <x>200</x>
+          <y>60</y>
           <width>104</width>
           <height>26</height>
          </rect>
@@ -538,10 +548,10 @@ p, li { white-space: pre-wrap; }
          <number>2</number>
         </property>
        </widget>
-       <widget class="QTextBrowser" name="BlockCrossingActiveLabel">
+       <widget class="QTextBrowser" name="crossing_status_label">
         <property name="geometry">
          <rect>
-          <x>20</x>
+          <x>10</x>
           <y>40</y>
           <width>121</width>
           <height>31</height>
@@ -557,11 +567,33 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont';&quot;&gt;Crossing Active&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont';&quot;&gt;Crossing Status&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="crossing_status_value">
+        <property name="geometry">
+         <rect>
+          <x>230</x>
+          <y>30</y>
+          <width>71</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="maxLength">
+         <number>5</number>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="JunctionBox">
+      <widget class="QGroupBox" name="junction_box">
        <property name="geometry">
         <rect>
          <x>420</x>
@@ -578,12 +610,12 @@ p, li { white-space: pre-wrap; }
        <property name="title">
         <string>Junction</string>
        </property>
-       <widget class="QComboBox" name="JunctionSwitchDirectionValue">
+       <widget class="QComboBox" name="switch_direction_dropdown">
         <property name="geometry">
          <rect>
-          <x>230</x>
-          <y>45</y>
-          <width>104</width>
+          <x>220</x>
+          <y>60</y>
+          <width>91</width>
           <height>26</height>
          </rect>
         </property>
@@ -596,10 +628,10 @@ p, li { white-space: pre-wrap; }
          <number>5</number>
         </property>
        </widget>
-       <widget class="QTextBrowser" name="JunctionSwitchDirectionLabel">
+       <widget class="QTextBrowser" name="switch_direction_label">
         <property name="geometry">
          <rect>
-          <x>20</x>
+          <x>10</x>
           <y>40</y>
           <width>161</width>
           <height>31</height>
@@ -618,33 +650,11 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont';&quot;&gt;Switch Direction&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
-       <widget class="QTextBrowser" name="JunctionIsReceiverEndLabel">
+       <widget class="QTextBrowser" name="traffic_light_color_label">
         <property name="geometry">
          <rect>
-          <x>20</x>
-          <y>90</y>
-          <width>161</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Arial</family>
-         </font>
-        </property>
-        <property name="html">
-         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Is Receiver End&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-       <widget class="QTextBrowser" name="JunctionTrafficLightLabel">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>140</y>
+          <x>10</x>
+          <y>100</y>
           <width>161</width>
           <height>31</height>
          </rect>
@@ -662,12 +672,12 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont';&quot;&gt;Traffic Light Color&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
-       <widget class="QComboBox" name="JunctionTrafficLightValue">
+       <widget class="QComboBox" name="traffic_light_color_dropdown">
         <property name="geometry">
          <rect>
-          <x>230</x>
-          <y>145</y>
-          <width>104</width>
+          <x>210</x>
+          <y>120</y>
+          <width>101</width>
           <height>26</height>
          </rect>
         </property>
@@ -680,12 +690,12 @@ p, li { white-space: pre-wrap; }
          <number>3</number>
         </property>
        </widget>
-       <widget class="QLineEdit" name="JunctionIsReceiverEndValue">
+       <widget class="QLineEdit" name="traffic_light_color_value">
         <property name="geometry">
          <rect>
-          <x>220</x>
-          <y>95</y>
-          <width>113</width>
+          <x>230</x>
+          <y>90</y>
+          <width>71</width>
           <height>21</height>
          </rect>
         </property>
@@ -701,248 +711,40 @@ p, li { white-space: pre-wrap; }
         <property name="readOnly">
          <bool>true</bool>
         </property>
-        <property name="clearButtonEnabled">
-         <bool>false</bool>
-        </property>
        </widget>
-      </widget>
-      <widget class="QGroupBox" name="TestBenchBox">
-       <property name="geometry">
-        <rect>
-         <x>790</x>
-         <y>40</y>
-         <width>361</width>
-         <height>341</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Test Bench</string>
-       </property>
-       <widget class="QGroupBox" name="InputsBox">
+       <widget class="QLineEdit" name="switch_direction_value">
         <property name="geometry">
          <rect>
-          <x>20</x>
-          <y>80</y>
-          <width>321</width>
-          <height>241</height>
-         </rect>
-        </property>
-        <property name="title">
-         <string>Inputs</string>
-        </property>
-        <widget class="QTextBrowser" name="TestMaintenanceActiveLabel">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>90</y>
-           <width>151</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <family>Arial</family>
-          </font>
-         </property>
-         <property name="html">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont';&quot;&gt;Maintenance Active&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-        <widget class="QTextBrowser" name="TestTrackFaultDetectedLabel">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>40</y>
-           <width>151</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <family>Arial</family>
-          </font>
-         </property>
-         <property name="html">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont';&quot;&gt;Track Fault Detected&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-        <widget class="QTextBrowser" name="TestBlockOccupiedLabel">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>140</y>
-           <width>121</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <family>Arial</family>
-          </font>
-         </property>
-         <property name="html">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont';&quot;&gt;Block Occupied&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-        <widget class="QComboBox" name="TestBlockOccupiedValue">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>200</x>
-           <y>144</y>
-           <width>104</width>
-           <height>26</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <family>Arial</family>
-          </font>
-         </property>
-         <property name="maxCount">
-          <number>2</number>
-         </property>
-         <item>
-          <property name="text">
-           <string>False</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>True</string>
-          </property>
-         </item>
-        </widget>
-        <widget class="QComboBox" name="TestMaintenenaceActiveValue">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>200</x>
-           <y>94</y>
-           <width>104</width>
-           <height>26</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <family>Arial</family>
-          </font>
-         </property>
-         <property name="maxCount">
-          <number>2</number>
-         </property>
-         <item>
-          <property name="text">
-           <string>False</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>True</string>
-          </property>
-         </item>
-        </widget>
-        <widget class="QComboBox" name="TestTrackFaultDetectedValue">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>200</x>
-           <y>44</y>
-           <width>104</width>
-           <height>26</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <family>Arial</family>
-          </font>
-         </property>
-         <property name="maxCount">
-          <number>2</number>
-         </property>
-         <item>
-          <property name="text">
-           <string>False</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>True</string>
-          </property>
-         </item>
-        </widget>
-       </widget>
-       <widget class="QPushButton" name="TestBenchActivateButton">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>40</y>
-          <width>113</width>
-          <height>32</height>
+          <x>230</x>
+          <y>30</y>
+          <width>71</width>
+          <height>21</height>
          </rect>
         </property>
         <property name="text">
-         <string>Activate</string>
+         <string/>
         </property>
-       </widget>
-       <widget class="QPushButton" name="TestBenchDeactivateButton">
-        <property name="geometry">
-         <rect>
-          <x>190</x>
-          <y>40</y>
-          <width>113</width>
-          <height>32</height>
-         </rect>
+        <property name="maxLength">
+         <number>5</number>
         </property>
-        <property name="text">
-         <string>Deactivate</string>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
-       </widget>
-       <widget class="QPushButton" name="TestBenchSendSignalsButton">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>120</x>
-          <y>270</y>
-          <width>113</width>
-          <height>32</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Send Signals</string>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
        </widget>
       </widget>
      </widget>
     </widget>
    </widget>
-   <widget class="QFrame" name="MenuSection">
+   <widget class="QComboBox" name="mode_selection_dropdown">
     <property name="geometry">
      <rect>
-      <x>12</x>
-      <y>12</y>
-      <width>1256</width>
-      <height>81</height>
+      <x>10</x>
+      <y>0</y>
+      <width>141</width>
+      <height>26</height>
      </rect>
     </property>
     <property name="font">
@@ -950,172 +752,27 @@ p, li { white-space: pre-wrap; }
       <family>Arial</family>
      </font>
     </property>
-    <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
+    <property name="maxCount">
+     <number>3</number>
     </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(21, 175, 255)</string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QPushButton" name="SystemInfoButton">
-     <property name="geometry">
-      <rect>
-       <x>1000</x>
-       <y>20</y>
-       <width>200</width>
-       <height>50</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(211, 215, 215)</string>
-     </property>
+    <item>
      <property name="text">
-      <string>System Info</string>
+      <string>Select Mode...</string>
      </property>
-    </widget>
-    <widget class="QDoubleSpinBox" name="SystemSpeedValue">
-     <property name="geometry">
-      <rect>
-       <x>160</x>
-       <y>20</y>
-       <width>151</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(211, 215, 215)</string>
-     </property>
-     <property name="suffix">
-      <string> x</string>
-     </property>
-     <property name="decimals">
-      <number>1</number>
-     </property>
-     <property name="minimum">
-      <double>1.000000000000000</double>
-     </property>
-     <property name="maximum">
-      <double>50.000000000000000</double>
-     </property>
-     <property name="singleStep">
-      <double>0.100000000000000</double>
-     </property>
-    </widget>
-    <widget class="QTimeEdit" name="SystemClockValue">
-     <property name="geometry">
-      <rect>
-       <x>570</x>
-       <y>20</y>
-       <width>150</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(211, 215, 215)</string>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-     <property name="dateTime">
-      <datetime>
-       <hour>1</hour>
-       <minute>0</minute>
-       <second>0</second>
-       <year>2000</year>
-       <month>1</month>
-       <day>1</day>
-      </datetime>
-     </property>
-     <property name="maximumTime">
-      <time>
-       <hour>13</hour>
-       <minute>56</minute>
-       <second>59</second>
-      </time>
-     </property>
-     <property name="minimumTime">
-      <time>
-       <hour>0</hour>
-       <minute>0</minute>
-       <second>0</second>
-      </time>
-     </property>
-     <property name="currentSection">
-      <enum>QDateTimeEdit::HourSection</enum>
-     </property>
-     <property name="displayFormat">
-      <string>h:mm</string>
-     </property>
-     <property name="currentSectionIndex">
-      <number>0</number>
-     </property>
-    </widget>
-    <widget class="QLabel" name="SystemSpeedLabel">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>36</y>
-       <width>111</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-       <pointsize>15</pointsize>
-      </font>
-     </property>
+    </item>
+    <item>
      <property name="text">
-      <string>System Speed:</string>
+      <string>Manual</string>
      </property>
-    </widget>
-    <widget class="QLabel" name="SystemClockLabel">
-     <property name="geometry">
-      <rect>
-       <x>450</x>
-       <y>36</y>
-       <width>101</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-       <pointsize>15</pointsize>
-      </font>
-     </property>
+    </item>
+    <item>
      <property name="text">
-      <string>System Clock:</string>
+      <string>Automatic</string>
      </property>
-    </widget>
+    </item>
    </widget>
   </widget>
  </widget>
- <resources>
-  <include location="../../../../../../../../private/var/folders/ng/01ftyqy97f76p5nf0wp0m97c0000gn/T/com.apple.Photos.NSItemProvider/version=1&amp;uuid=D09791C0-EEBA-4D5E-BF34-686A3C7DDA6D&amp;mode=compatible&amp;noloc=0.jpeg/IMG_2625.jpeg"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
