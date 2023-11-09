@@ -9,18 +9,19 @@ from Modules.Track_Model.Frontend.Track_Model_UI import *
 from Modules.Train_Model.Frontend.train_model_test_bench_ui import *
 from Modules.Train_Controller.Frontend.TrainController import *
 
+
 class Mainmenu(QtWidgets.QMainWindow):
     def __init__(self):
         #setup
         super().__init__()
         uic.loadUi("MainLauncherUI.ui", self)
 
-        self.ctc_office_button.clicked.connect(self.ctcOfficeClicked)
-        self.track_model_button.clicked.connect(self.trackModelClicked)
-        self.train_model_button.clicked.connect(self.trainModelClicked)
-        self.sw_wayside_button.clicked.connect(self.swWaysideClicked)
-        self.hw_wayside_button.clicked.connect(self.hwWaysideClicked)
-        self.train_controller_button.clicked.connect(self.trainControllerClicked)
+        self.ctc_office_button.clicked.connect(self.ctc_office_clicked)
+        self.track_model_button.clicked.connect(self.track_model_clicked)
+        self.train_model_button.clicked.connect(self.train_model_clicked)
+        self.sw_wayside_button.clicked.connect(self.sw_wayside_clicked)
+        self.hw_wayside_button.clicked.connect(self.hw_wayside_clicked)
+        self.train_controller_button.clicked.connect(self.train_controller_clicked)
             
         self.show()
 
@@ -58,6 +59,10 @@ class Mainmenu(QtWidgets.QMainWindow):
     def train_controller_clicked(self):
         self.trainWindow = TrainModelTestBenchUI()
         self.trainWindow.show()
+    
+    def sytem_timer(self):
+        self.HourLCD.display(self.timeEdit.HourSection)
+        self.MinuteLCD.display(self.timeEdit.MinuteSection)
 
 
 #Main
