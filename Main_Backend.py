@@ -4,6 +4,7 @@ from PyQt6.QtCore import QTime, QTimer, QThread, QCoreApplication, QObject
 from signals import signals
 from Track_Resources.Track import *
 from Modules.SW_Wayside.Backend.SW_Wayside_Backend import *
+from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
 
 # System clock constants
 INTERVAL = 50
@@ -21,24 +22,25 @@ class SystemTime(QObject):
         self.system_timer.timeout.connect(self.timerHandler)
         signals.stop_timer.connect(self.stopTimer)
         self.system_timer.start(INTERVAL)
+        #self.app = QtWidgets.QApplication(sys.argv)
         
         # SW Wayside Instances
-        self.trackInstance = Track()
-        signals.sw_wayside_track_update.connect(self.updateTrackInstance)        
+        self.sw_wayside_backend_instance = WaysideBackend()
+        self.sw_wayside_frontend_instance = SWWaysideFrontend()
+        self.track_instance = Track()
+        signals.sw_wayside_backend_update.connect(self.updateTrackInstance)        
 
     def timerHandler(self):
         self.current_time = self.current_time.addMSecs(TIME_DELTA)
         signals.current_system_time.emit(self.current_time)
-        signals.main_backend_update_values.emit()
+        signals.sw_wayside_update_backend.emit(self.track_instance)
 
     def stopTimer(self):
         self.system_timer.stop()
 
     # SW Wayside Instance Updaters
     def updateTrackInstance(self, updatedTrack):
-        self.trackInstance = updatedTrack
-
-mainInstance = SystemTime()
+        self.track_instance = updatedTrack
 
 if __name__ == '__main__':
         app = QCoreApplication([])
@@ -46,5 +48,6 @@ if __name__ == '__main__':
         system_time = SystemTime()
         system_time.moveToThread(thread) 
         thread.start()
+        #system_time.sw_wayside_frontend_instance.show()
         sys.exit(app.exec())
 

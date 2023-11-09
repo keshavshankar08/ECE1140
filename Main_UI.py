@@ -2,8 +2,6 @@ import sys
 from PyQt6 import QtCore, QtGui, QtWidgets, uic
 from PyQt6.QtWidgets import *
 
-
-
 class Mainmenu(QtWidgets.QMainWindow):
     def __init__(self):
         #setup

@@ -4,268 +4,207 @@ import sys
 import cv2
 sys.path.append(".")
 import Track_Resources.Track as track
+from Main_Backend import *
+from signals import *
 
-class SWWaysideModuleUI(QtWidgets.QMainWindow):
+class SWWaysideFrontend(QtWidgets.QMainWindow):
         def __init__(self):
                 super().__init__()
                 uic.loadUi("Modules/SW_Wayside/Frontend/SW_Wayside_UI.ui", self)
-                
-                # Create default track object
-                self.track = track.generateDefaultTrack()
-                
-                # Line Option Calls
-                linesList = [self.track.lines[0].lineColor]
-                self.TrackLineColorValue.addItems(linesList)
-                self.TrackLineColorValue.textActivated.connect(self.updateWaysideMenu)
-                self.TrackMapViewButton.clicked.connect(self.mapViewClicked)
-                self.OperationModeValue.textActivated.connect(self.switchOperationMode)
+                self.track_instance_copy = Track()
 
-                # Wayside Option Calls
-                self.WaysideControllerUploadPLCProgramButton.clicked.connect(self.uploadPLCClicked)
-                self.WaysideControllerWaysideValue.textActivated.connect(self.updateBlockMenu)
+                # receives updates from wayside backend
+                signals.sw_wayside_update_frontend.connect(self.update_frontend)
 
-                # Block Option Calls
-                self.BlockStatusBlockNumberValue.textActivated.connect(self.updateBlockInfo)
+                # handles override signals for manual inputs
+                self.switch_direction_dropdown.currentTextChanged.connect(self.manual_switch_toggled)
+                self.traffic_light_color_dropdown.currentTextChanged.connect(self.manual_light_toggled)
+                self.crossing_status_dropdown.currentTextChanged.connect(self.manual_crossing_toggled)
 
-                # Test Bench Option Calls
-                self.TestBenchActive = False
-                self.TestBenchActivateButton.clicked.connect(self.activateTestBench)
-                self.TestBenchDeactivateButton.clicked.connect(self.deactivateTestbench)
-                self.TestBenchSendSignalsButton.clicked.connect(self.testbenchSendSignal)
+                # handles plc button clicked
+                self.upload_plc_program_button.clicked.connect(self.uploadPLCClicked)
 
-                self.show()
-
-        # Opens map of device layout for current line
-        def mapViewClicked(self):
-                lineNumber = 1
-                if(lineNumber == 1):
-                        image = cv2.imread("src/frontend/SW_Wayside/BlueLine.jpg")
-                elif(lineNumber == 2):
-                        image = cv2.imread("src/frontend/SW_Wayside/BlueLine.jpg")
-                elif(lineNumber == 3):
-                        image = cv2.imread("src/frontend/SW_Wayside/BlueLine.jpg")
-                cv2.imshow("Blue Line Map", image)
-                cv2.waitKey(0)
-                cv2.destroyAllWindows()
-
-        # Updates UI editability based on operation mode
-        def switchOperationMode(self):
-                if(self.OperationModeValue.currentText() == "Manual"):
-                        self.JunctionSwitchDirectionValue.setEnabled(True)
-                        self.JunctionTrafficLightValue.setEnabled(True)
-                        self.BlockCrossingActiveValue.setEnabled(True)
-                        self.TestBenchBox.setEnabled(True)
-                        SWWaysideModuleUI.deactivateTestbench(self)
-                elif(self.OperationModeValue.currentText() == "Automatic"):
-                        self.JunctionSwitchDirectionValue.setEnabled(False)
-                        self.JunctionTrafficLightValue.setEnabled(False)
-                        self.BlockCrossingActiveValue.setEnabled(False)
-                        self.TestBenchBox.setEnabled(False)
-
-        def updateWaysideMenu(self):
-                self.WaysideControllerWaysideValue.clear()
-                if(self.TrackLineColorValue.currentText() == "Blue Line"):
-                        waysidesList = []
-                        for wayside in self.track.lines[0].waysides:
-                                waysidesList.append("Wayside " + str(wayside.waysideNumber))
-                        self.WaysideControllerWaysideValue.addItems(waysidesList)
-                else:
-                        self.WaysideControllerWaysideValue.clear()
+                # handles track map button clicked
+                self.track_map_view_button.clicked.connect(self.view_track_map_clicked)
         
-        def updateBlockMenu(self):
-                self.BlockStatusBlockNumberValue.clear()
-                currWayside = int((self.WaysideControllerWaysideValue.currentText())[-1])
-                blockList = []
-                for block in self.track.lines[0].waysides[currWayside-1].blocks:
-                        blockList.append("Block " + str(block.blockNumber))
-                self.BlockStatusBlockNumberValue.addItems(blockList)
+        # Handles all frontend updates
+        def update_frontend(self, track_instance):
+                # update local instance of track
+                self.update_copy_track(track_instance)
 
-        def updateBlockInfo(self):
-                currWayside = int((self.WaysideControllerWaysideValue.currentText())[7:]) - 1
-                blockIndex = []
-                if(currWayside == 0):
-                        blockIndex = [1,2,3,4,5]
-                elif(currWayside == 1):
-                        blockIndex = [6,7,8,9,10]
-                elif(currWayside == 2):
-                        blockIndex = [11,12,13,14,15]
-                currBlock = int((self.BlockStatusBlockNumberValue.currentText())[5:])
-                currBlockIndex = blockIndex.index(currBlock)
-                self.BlockTypeValue.setText(str(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockType))
-                self.BlockOccupancyValue.setText(str(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockOccupied))
-                self.MaintenanceTrackFaultValue.setText(str(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trackFaultDetected))
-                self.MaintenanceActiveValue.setText(str(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].maintenanceActive))
-                if(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockType == "Junction"):
-                        self.JunctionBox.setEnabled(True)
-                        self.StationBox.setEnabled(False)
-                        self.CrossingBox.setEnabled(False)
-                        self.JunctionSwitchDirectionValue.clear()
-                        self.JunctionTrafficLightValue.clear()
+                # update the ui information
+                self.update_display()
 
-                        # Junction Switch Logic
-                        if(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockOccupied == True):
-                                # If block is receiver end
-                                if(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].isReceiverEnd == True):
-                                        prevBlockIndex = 4
-                                        prevBlockWayside = 0
-                                        prevBlockNextIndex = 0
-                                        prevBlockNextWayside = 1
-                                        prevBlockNextNextIndex = 0
-                                        prevBlockNextNextWayside = 2
-                                        # If one receiver occupied
-                                        if(self.track.lines[0].waysides[prevBlockNextWayside].blocks[prevBlockNextIndex].blockOccupied == True ^ self.track.lines[0].waysides[prevBlockNextNextWayside].blocks[prevBlockNextNextIndex].blockOccupied == True):
-                                                # If switch block not occupied
-                                                if(self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].blockOccupied == False):
-                                                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Green"
-                                                        self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].trafficLightColor = "Green"
-                                                        if(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockNumber == 6):
-                                                                self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-6"
-                                                                self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].switchDirection = "5-6"
-                                                                self.track.lines[0].waysides[prevBlockNextNextWayside].blocks[prevBlockNextNextIndex].switchDirection = "5-6"
-                                                        else:
-                                                                self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-11"
-                                                                self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].switchDirection = "5-11"
-                                                                self.track.lines[0].waysides[prevBlockNextWayside].blocks[prevBlockNextIndex].switchDirection = "5-11"
-                                                else:
-                                                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Red"
-                                                        self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].trafficLightColor = "Green"
-                                                        if(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockNumber == 6):
-                                                                self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-11"
-                                                                self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].switchDirection = "5-11"
-                                                                self.track.lines[0].waysides[prevBlockNextNextWayside].blocks[prevBlockNextNextIndex].switchDirection = "5-11"
-                                                        else:
-                                                                self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-6"
-                                                                self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].switchDirection = "5-6"
-                                                                self.track.lines[0].waysides[prevBlockNextWayside].blocks[prevBlockNextIndex].switchDirection = "5-6"
-                                        # If both receivers occupied
-                                        elif(self.track.lines[0].waysides[prevBlockNextWayside].blocks[prevBlockNextIndex].blockOccupied == True and self.track.lines[0].waysides[prevBlockNextNextWayside].blocks[prevBlockNextNextIndex].blockOccupied == True):
-                                                # If switch block not occupied
-                                                if(self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].blockOccupied == False):
-                                                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Green"
-                                                        self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].trafficLightColor = "Green"
-                                                        if(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockNumber == 6):
-                                                                self.track.lines[0].waysides[prevBlockNextNextWayside].blocks[prevBlockNextNextIndex].trafficLightColor = "Red"
-                                                                self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-6"
-                                                                self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].switchDirection = "5-6"
-                                                                self.track.lines[0].waysides[prevBlockNextNextWayside].blocks[prevBlockNextNextIndex].switchDirection = "5-6"
-                                                        else:
-                                                                self.track.lines[0].waysides[prevBlockNextWayside].blocks[prevBlockNextIndex].trafficLightColor = "Red"
-                                                                self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-11"
-                                                                self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].switchDirection = "5-11"
-                                                                self.track.lines[0].waysides[prevBlockNextWayside].blocks[prevBlockNextIndex].switchDirection = "5-11"
-                                                else:
-                                                        self.track.lines[0].waysides[prevBlockWayside].blocks[prevBlockIndex].trafficLightColor = "Red"
-                                                        self.track.lines[0].waysides[prevBlockNextWayside].blocks[prevBlockNextIndex].trafficLightColor = "Red"
-                                                        self.track.lines[0].waysides[prevBlockNextNextWayside].blocks[prevBlockNextNextIndex].trafficLightColor = "Red"
-                                else:
-                                        nextBlockIndex = 0
-                                        nextBlockWayside = 1
-                                        nextNextBlockIndex = 0
-                                        nextnextBlockWayside = 2
-                                        # If one receiver occupied
-                                        if(self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].blockOccupied == True ^ self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].blockOccupied == True):
-                                                if(self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].blockOccupied == True):
-                                                        self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].trafficLightColor = "Red"
-                                                        self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].trafficLightColor = "Green"
-                                                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Green"
-                                                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-11"
-                                                        self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].switchDirection = "5-11"
-                                                        self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].switchDirection = "5-11"
-                                                else:
-                                                        self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].trafficLightColor = "Green"
-                                                        self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].trafficLightColor = "Red"
-                                                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Green"
-                                                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-6"
-                                                        self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].switchDirection = "5-6"
-                                                        self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].switchDirection = "5-6"
-                                        # If two receivers occupied
-                                        elif(self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].blockOccupied == True and self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].blockOccupied == True):
-                                                self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].trafficLightColor = "Red"
-                                                self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].trafficLightColor = "Red"
-                                                self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Red"
-                                        # If not receivers occupied
-                                        elif(self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].blockOccupied == False and self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].blockOccupied == False):
-                                                self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].trafficLightColor = "Green"
-                                                self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].trafficLightColor = "Red"
-                                                self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trafficLightColor = "Green"
-                                                self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-6"
-                                                self.track.lines[0].waysides[nextBlockWayside].blocks[nextBlockIndex].switchDirection = "5-6"
-                                                self.track.lines[0].waysides[nextnextBlockWayside].blocks[nextNextBlockIndex].switchDirection = "5-6"
- 
-                        self.JunctionSwitchDirectionValue.addItems(["5-11", "5-6"])
-                        self.JunctionSwitchDirectionValue.setCurrentText(str(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection))
-                        self.JunctionIsReceiverEndValue.setText(str(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].isReceiverEnd))
-                        self.JunctionTrafficLightValue.addItems(["Green", "Red"])
-                if(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockType == "Station"):
-                        self.StationBox.setEnabled(True)
-                        self.JunctionBox.setEnabled(False)
-                        self.CrossingBox.setEnabled(False)
-                        self.StationNameValue.setText(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].stationName)
-                elif(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockType == "Crossing"):
-                        self.CrossingBox.setEnabled(True)
-                        self.JunctionBox.setEnabled(False)
-                        self.StationBox.setEnabled(False)
-                        self.BlockCrossingActiveValue.clear()
-                        self.BlockCrossingActiveValue.addItems([str(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].crossingActive), str(not(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].crossingActive))])
-                elif(self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockType == "Default"):
-                        self.CrossingBox.setEnabled(False)
-                        self.JunctionBox.setEnabled(False)
-                        self.StationBox.setEnabled(False)
+                # send updated signals to wayside backend
+                self.send_backend_update()
 
-        # Opens file browser to open/upload .txt PLC file
+        # Sends updates from wayside frontend to wayside backend
+        def send_backend_update(self):
+                signals.sw_wayside_frontend_update.emit(self.track_instance_copy)
+
+        # Updates all UI display information
+        def update_display(self):
+                self.update_opeartion_dropdown()
+                self.update_line_dropdown()
+                self.update_wayside_dropdown()
+                self.update_block_dropdown()
+
+        # Updates local instance of track
+        def update_copy_track(self, updated_track):
+                self.trackInstanceCopy = updated_track
+        
+        # Updates elements shown once mode chosen
+        def update_opeartion_dropdown(self):
+                if(self.mode_selection_dropdown.currentText() == "Select Mode..."):
+                        self.mode_selection_dropdown.setEnabled(False)
+                        self.line_box.setEnabled(False)
+                        self.switch_direction_dropdown.setEnabled(False)
+                        self.traffic_light_color_dropdown.setEnabled(False)
+                        self.crossing_status_dropdown.setEnabled(False)
+                elif(self.mode_selection_dropdown.currentText() == "Manual"):
+                        self.mode_selection_dropdown.setEnabled(False)
+                        self.line_box.setEnabled(True)
+                        self.switch_direction_dropdown.setEnabled(True)
+                        self.traffic_light_color_dropdown.setEnabled(True)
+                        self.crossing_status_dropdown.setEnabled(True)
+                elif(self.mode_selection_dropdown.currentText() == "Automatic"):
+                        self.mode_selection_dropdown.setEnabled(False)
+                        self.line_box.setEnabled(True)
+                        self.switch_direction_dropdown.setEnabled(False)
+                        self.traffic_light_color_dropdown.setEnabled(False)
+                        self.crossing_status_dropdown.setEnabled(False)
+
+        # Updates elements shown once line chosen
+        def update_line_dropdown(self):
+                if(self.line_selection_dropdown.currentText() == "Select Line..."):
+                        self.track_map_view_button.setEnabled(False)
+                        self.wayside_box.setEnabled(False)
+                elif(self.line_selection_dropdown.currentText() == "Green Line"):
+                        self.track_map_view_button.setEnabled(True)
+                        self.wayside_box.setEnabled(True)
+                elif(self.line_selection_dropdown.currentText() == "Red Line"):
+                        self.track_map_view_button.setEnabled(True)
+                        self.wayside_box.setEnabled(True)
+
+        # Updates elements shown once wayside chosen
+        def update_wayside_dropdown(self):
+                if(self.wayside_selection_dropdown.currentText() == "Select Wayside..."):
+                        self.upload_plc_program_button.setEnabled(False)
+                        self.block_box.setEnabled(False)
+                elif(self.wayside_selection_dropdown.currentText() == "Wayside 1"):
+                        self.upload_plc_program_button.setEnabled(True)
+                        self.block_box.setEnabled(True)
+                        self.block_selection_dropdown.clear()
+                        self.block_selection_dropdown.addItem("Select Block...")
+                        if(self.line_selection_dropdown.currentText() == "Green Line"):
+                                for i in range(69):
+                                        self.block_selection_dropdown.addItem("Block " + str(self.track_instance_copy.lines[1].blocks[i].blockNumber))
+                        elif(self.line_selection_dropdown.currentText() == "Red Line"):
+                                for i in range(24):
+                                        self.block_selection_dropdown.addItem("Block " + str(self.track_instance_copy.lines[0].blocks[i].blockNumber))
+                elif(self.wayside_selection_dropdown.currentText() == "Wayside 2"):
+                        self.upload_plc_program_button.setEnabled(True)
+                        self.block_box.setEnabled(True)
+                        self.block_selection_dropdown.clear()
+                        self.block_selection_dropdown.addItem("Select Block...")
+                        if(self.line_selection_dropdown.currentText() == "Green Line"):
+                                for i in range(69, 151):
+                                        self.block_selection_dropdown.addItem("Block " + str(self.track_instance_copy.lines[1].blocks[i].blockNumber))
+                        elif(self.line_selection_dropdown.currentText() == "Red Line"):
+                                for i in range(24, 77):
+                                        self.block_selection_dropdown.addItem("Block " + str(self.track_instance_copy.lines[0].blocks[i].blockNumber))
+
+        # Updates elements shown once block chosen
+        def update_block_dropdown(self):
+                if(self.block_selection_dropdown.currentText() == "Select Block..."):
+                        self.general_box.setEnabled(False)
+                        self.maintenance_box.setEnabled(False)
+                        self.junction_box.setEnabled(False)
+                        self.station_box.setEnabled(False)
+                        self.crossing_box.setEnabled(False)
+                else:
+                        self.general_box.setEnabled(True)
+                        self.maintenance_box.setEnabled(True)
+                        curr_line_int = self.get_current_line_displayed_int()
+                        curr_block_int = self.get_current_block_displayed_int()
+                        if(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].blockType == "Junction"):
+                                self.junction_box.setEnabled(True)
+                                self.station_box.setEnabled(False)
+                                self.crossing_box.setEnabled(False)
+                                self.switch_direction_dropdown.clear()
+                                self.switch_direction_dropdown.addItems(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_switch_direction_string_list(curr_line_int))
+                                self.traffic_light_color_dropdown.clear()
+                                self.traffic_light_color_dropdown.addItems(["Red", "Green"])
+                        elif(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].blockType == "Station"):
+                                self.junction_box.setEnabled(False)
+                                self.station_box.setEnabled(True)
+                                self.crossing_box.setEnabled(False)
+                        elif(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].blockType == "Crossing"):
+                                self.junction_box.setEnabled(False)
+                                self.station_box.setEnabled(False)
+                                self.crossing_box.setEnabled(True)
+                                self.crossing_status_dropdown.clear()
+                                self.crossing_status_dropdown.addItems(["Active","Inactive"])
+                        else:
+                                self.junction_box.setEnabled(False)
+                                self.station_box.setEnabled(False)
+                                self.crossing_box.setEnabled(False)
+                        self.update_block_information()
+
+        # Gets the integer representation of the current line chosen
+        def get_current_line_displayed_int(self):
+                curr_line = self.line_selection_dropdown.currentText()
+                if(curr_line == "Green Line"):
+                        return 1
+                elif(curr_line == "Red Line"):
+                        return 0
+                
+        # Gets the integer representation of the current block chosen
+        def get_current_block_displayed_int(self):
+                curr_block = self.block_selection_dropdown.currentText()
+                return int(curr_block[6:])
+                        
+        # Updates display block information
+        def update_block_information(self):
+                curr_line_int = self.get_current_line_displayed_int()
+                curr_block_int = self.get_current_block_displayed_int()
+                self.block_type_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_type_string())
+                self.block_occupancy_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_occupancy_string())
+                self.track_fault_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_track_fault_status_string())
+                self.maintenance_active_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_maintenance_status_string())
+                self.switch_direction_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_switch_direction_string(curr_line_int))
+                self.traffic_light_color_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_traffic_light_color_string())
+                self.station_name_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].station_name)
+                self.crossing_status_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_crosing_status_string())
+
+        # Handles view track map button clicked
+        def view_track_map_clicked(self):
+                # figure out alternative to opencv to open up the map pictures
+                # need to make a good map with devices to show
+                pass
+
+        # Handles upload plc program button clicked
         def uploadPLCClicked(self):
                 fileName = QtWidgets.QFileDialog.getOpenFileName(self, "Open File", "", "Text Files (*.txt)")
+                # this will get fed into the interpreter
+                # the interpreter will spit back a wayside logic object
+                # this gets added to a copy of the wayside controller object, which contains the logic and info from the track for each wayside
+                # most importantly, it has a wayside logic object for each controller
+        
+        # Handles switch toggle in manual mode
+        def manual_switch_toggled(self):
+                curr_line_int = self.get_current_line_displayed_int()
+                curr_block_int = self.get_current_block_displayed_int()
+                self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].switch_direction = self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_switch_direction_bool(self.switch_direction_dropdown.currentText(), curr_line_int)
+        
+        # Handles light toggle in manual mode
+        def manual_light_toggled(self):
+                curr_line_int = self.get_current_line_displayed_int()
+                curr_block_int = self.get_current_block_displayed_int()
+                self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].traffic_light_color = self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_traffic_light_color_bool(self.traffic_light_color_dropdown.currentText())
 
-        # Activates test bench
-        def activateTestBench(self):
-                self.TestTrackFaultDetectedValue.setEnabled(True)
-                self.TestMaintenenaceActiveValue.setEnabled(True)
-                self.TestBlockOccupiedValue.setEnabled(True)
-                self.TestBenchSendSignalsButton.setEnabled(True)
-                self.TestBenchActive = True
-
-        # Deactivates test bench
-        def deactivateTestbench(self):
-                self.TestTrackFaultDetectedValue.setEnabled(False)
-                self.TestMaintenenaceActiveValue.setEnabled(False)
-                self.TestBlockOccupiedValue.setEnabled(False)
-                self.TestBenchSendSignalsButton.setEnabled(False)
-                self.TestBenchActive = False
-
-        # Sends test bench signals
-        def testbenchSendSignal(self):
-                currWayside = int((self.WaysideControllerWaysideValue.currentText())[7:]) - 1
-                blockIndex = []
-                if(currWayside == 0):
-                        blockIndex = [1,2,3,4,5]
-                elif(currWayside == 1):
-                        blockIndex = [6,7,8,9,10]
-                elif(currWayside == 2):
-                        blockIndex = [11,12,13,14,15]
-                currBlock = int((self.BlockStatusBlockNumberValue.currentText())[5:])
-                currBlockIndex = blockIndex.index(currBlock)
-                if(self.TestBlockOccupiedValue.currentText() == "True"):
-                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockOccupied = True
-                else:
-                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].blockOccupied = False
-                if(self.TestTrackFaultDetectedValue.currentText() == "True"):
-                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trackFaultDetected = True
-                else:
-                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].trackFaultDetected = False
-                if(self.TestMaintenenaceActiveValue.currentText() == "True"):
-                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].maintenanceActive = True
-                else:
-                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].maintenanceActive = False
-                if(self.JunctionSwitchDirectionValue.currentText() == "5-6"):
-                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-6"
-                else:
-                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "5-11"
-                if(self.JunctionTrafficLightValue.currentText() == "Green"):
-                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "Green"
-                else:
-                        self.track.lines[0].waysides[currWayside].blocks[currBlockIndex].switchDirection = "Red"
-
-if __name__ == "__main__":
-        app = QtWidgets.QApplication(sys.argv)
-        window = SWWaysideModuleUI()
-        app.exec()
+        # Handles crossing toggle in manual mode
+        def manual_crossing_toggled(self):
+                curr_line_int = self.get_current_line_displayed_int()
+                curr_block_int = self.get_current_block_displayed_int()
+                self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].crossing_status = self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_crossing_status_bool(self.crossing_status_dropdown.currentText())
