@@ -4,7 +4,7 @@ import sys
 import cv2
 sys.path.append(".")
 import Track_Resources.Track as track
-from Main_Backend import *
+#from Main_Backend import *
 from signals import *
 
 class SWWaysideFrontend(QtWidgets.QMainWindow):
