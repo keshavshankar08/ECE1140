@@ -11,7 +11,7 @@ class TrainControllerUI(QtWidgets.QMainWindow):
     def __init__(self):
         #setup
         super().__init__()
-        uic.loadUi("pyt\\TrainControllerUI.ui", self) 
+        uic.loadUi("Modules/Train_Controller/Frontend/TrainControllerUI.ui", self) 
 
 
         #inputs for test bench
