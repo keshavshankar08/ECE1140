@@ -19,6 +19,9 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #CONFIGURATION
         #Create objects
         self.track_instance_copy = Track()
+        self.active_trains_copy = ActiveTrains()
+        self.queue_trains_copy = QueueTrains()
+        self.route_queue_copy = RouteQueue()
 
         #Table Space
         manual_table_header = self.manual_table.horizontalHeader()
@@ -80,8 +83,25 @@ class CTCFrontend(QtWidgets.QMainWindow):
         self.show()
 
     #Update Frontend Functions
-    def update_frontend(self, trackInstsance):
+    def update_frontend(self, track_instance):
+        #update local instance of track
+        self.update_copy_track(track_instance)
+
+        #update the ui information
+        self.update_display()
+
+        #send update signals to ctc backend
+        self.send_backend_update()
+
+    def send_backend_update(self):
+        signals.ctc_office_frontend_update.emit(self.track_instance_copy)
+
+    def update_display(self):
+        #update functions
         pass
+
+    def update_copy_track(self, updated_track):
+        self.track_instance_copy = updated_track
 
     #Menu Bar Functions
     def schedule_builder_clicked(self):
@@ -94,23 +114,30 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #update line status
         if (str(self.line_value_box.currentText()) == 'Red Line'):
             self.set_block_maintenance_value.clear()
-            self.set_block_maintenance_value.addItems([str(x) for x in list(self.track.redLine.graph.keys())])
+            self.set_block_maintenance_value.addItems([str(x) for x in list(self.track_instance_copy.redLine.graph.keys())])
         if (str(self.line_value_box.currentText()) == 'Green Line'):
             self.set_block_maintenance_value.clear()
-            self.set_block_maintenance_value.addItems([str(x) for x in list(self.track.greenLine.graph.keys())])
+            self.set_block_maintenance_value.addItems([str(x) for x in list(self.track_instance_copy.greenLine.graph.keys())])
 
-    def upload_schedule_clicked(self):
+    def upload_schedule_button_clicked(self):
         pass
 
     #Manual Scheduling Functions
     def add_stop_button_clicked(self):
+        #add a row
         rowPosition = self.manual_table.rowCount()
         self.manual_table.insertRow(rowPosition)
+
+        #fill dwell time as 1:00
+        dwell = QTableWidgetItem("1:00")
+        self.manual_table.setItem(rowPosition, 2, dwell)
+        
+        #add a combo box in the first row
         combo = QtWidgets.QComboBox()
         if(self.line_value_box.currentText() == "Red Line"):
-            combo.addItems(self.track.redLineStationNames)
+            combo.addItems(self.track_instance_copy.redLineStationNames)
         if(self.line_value_box.currentText() == "Green Line"):
-            combo.addItems(self.track.greenLineStationNames)
+            combo.addItems(self.track_instance_copy.greenLineStationNames)
         self.manual_table.setCellWidget(rowPosition, 0, combo)
       
     def delete_stop_button_clicked(self):
@@ -122,31 +149,44 @@ class CTCFrontend(QtWidgets.QMainWindow):
 
     def manual_dispatch_button_clicked(self):
         #create station and time data
-        stopStationData = []
-        stopTimeData = []
+        new_route = Route()
 
         #loop through 
         for row in range(self.manual_table.rowCount()):
             #errors for station
-            if self.manual_table.cellWidget(row, 0).currentText() in stopStationData:
+            if self.manual_table.cellWidget(row, 0).currentText() in new_route.stops:
                 #TODO - Error of duplicate station
                 continue
+            
             #TODO - Error for station out of order
 
             #errors for time
             if self.manual_table.item(row, 1) == None:
                 #TODO - Error if empty time
                 print("no time")
-                continue
-            #if not validateTimeInput(str(self.manual_table.item(row, 1).text())):
+                
+            if not validate_time_hours(str(self.manual_table.item(row, 1).text())):
                 #TODO - Error if incompatible time
-                #print("bad time")
-                #continue
+                print("incorrect stop time format")
+                
+            if not validate_time_minutes(str(self.manual_table.item(row, 2).text())):
+                #TODO - Error if incompatible time
+                print("incorrect dwell time format")
 
-            #save data to route queue
-            stopStationData.append(self.manual_table.cellWidget(row, 0).currentText())
-            stopTimeData.append(str(self.manual_table.item(row, 1).text()))
+            #save data to route object
+            new_route.stops.append(self.manual_table.cellWidget(row, 0).currentText())
+            new_route.stop_time.append(str(self.manual_table.item(row, 1).text()))
+            new_route.dwell_time.append(str(self.manual_table.item(row, 2).text()))
         
+        #add new route to the route queue
+        self.route_queue_copy.add_route(new_route)
+
+        testTrain = Train(new_route)
+        #print(testTrain)
+
+        #make a train in the train queue
+        #self.queue_trains_copy.add_train(Train(new_route))
+
         self.manual_table.setRowCount(0)
 
     #Queue Tab Functions

@@ -314,6 +314,15 @@ class Track():
         self.lines.insert(0, self.redLine)
         self.lines.insert(1, self.greenLine)
 
+    def red_line_station_to_block (self, swap_stations):
+        #loop through stations to get swapped
+        for i in range(len(swap_stations)):
+            for j in range(len(self.redLineStationNames)):
+                if swap_stations[i] == self.redLineStationNames[j]:
+                    swap_stations[i] = self.redLineStationBlocks[j]
+        
+        #return the block numbers
+        return swap_stations
 
 # Line Object - A single line from the entire track network
 class Line:
@@ -322,14 +331,26 @@ class Line:
         self.blocks: list[Block] = []
         self.graph: dict[int, list[int]] = {}
 
-    def get_shortest_path(start, end, path =[]):
-        pass
+    def get_shortest_path(self, start, end, path =[]):
+        path = path + [start]
+        if start == end:
+            return path
+        shortest = None
+        for node in self.graph[start]:
+            if node not in path:
+                newpath = self.get_shortest_path(node, end, path)
+                if newpath:
+                    if not shortest or len(newpath) < len(shortest):
+                        shortest = newpath
+        return shortest
 
-    def get_time_between(start, end):
-        pass
+    def get_time_between(self, start, end):
+        #get shortest path first
+        path = self.get_shortest_path(start, end, path=[])
 
-    def check_order(stop_list):
-        pass
+        #multiply each block by time
+        return len(path)*15
+
 
 # Block Object - A single block linked to a single Track
 class Block:
