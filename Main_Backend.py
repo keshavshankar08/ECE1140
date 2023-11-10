@@ -39,8 +39,7 @@ class SystemTime(QObject):
     def timerHandler(self):
         self.current_time = self.current_time.addMSecs(TIME_DELTA)
         signals.current_system_time.emit(self.current_time) #Y:M:D:h:m:s
-        signals.main_backend_update_track.emit(self.track_instance) #sends current state of track out
-        signals.main_backend_update_values.emit() #tells modules to refresh
+        signals.sw_wayside_update_backend.emit(self.track_instance) #sends current state of track out
         
 
     def stopTimer(self):

@@ -6,8 +6,6 @@ class signalsList(QObject):
     #Timer
     current_system_time = pyqtSignal(QDateTime)
     stop_timer = pyqtSignal()
-    main_backend_update_values = pyqtSignal()
-    main_backend_update_track = pyqtSignal(Track)
 
     # SW Wayside Signals
     sw_wayside_update_backend = pyqtSignal(Track) # update from main backend to sw wayside backend

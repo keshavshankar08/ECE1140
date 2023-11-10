@@ -99,16 +99,16 @@ class Track:
             blk = Block()
             blk.block_number = i
             if(i in red_line_default_blocks):
-                blk.block_type = "Default"
+                blk.block_type = 0
             elif(i in red_line_station_blocks):
-                blk.block_type = "Station"
+                blk.block_type = 2
                 blk.station_name = red_line_station_names[red_line_station_blocks.index(i)]
             elif(i in red_line_junction_blocks):
-                blk.block_type = "Junction"
+                blk.block_type = 1
                 blk.switch_direction = 0
                 blk.traffic_light_color = 0
             elif(i in red_line_crossing_blocks):
-                blk.block_type = "Crossing"
+                blk.block_type = 3
             red_line.blocks.append(blk)
             
         # Create green line
@@ -280,16 +280,16 @@ class Track:
             blk.block_number = i
             # Set block types and specific information
             if(i in green_line_default_blocks):
-                blk.block_type = "Default"
+                blk.block_type = 0
             elif(i in green_line_station_blocks):
-                blk.block_type = "Station"
+                blk.block_type = 2
                 blk.station_name = green_line_station_names[green_line_station_blocks.index(i)]
             elif(i in green_line_junction_blocks):
-                blk.block_type = "Junction"
+                blk.block_type = 1
                 blk.switch_direction = 0
                 blk.traffic_light_color = 0
             elif(i in green_line_crossing_blocks):
-                blk.block_type = "Crossing"
+                blk.block_type = 3
             green_line.blocks.append(blk)
 
         # Store lines in track
@@ -344,38 +344,82 @@ class Block:
     
     # Get switch direction string
     def get_switch_direction_string(self, line_int):
-        red_line_junction_switch_ends = [9,16,27,33,38,44,52]
-        red_line_junction_receiver_ends = [[0,10],[1,15],[28,76],[72,32],[39,71],[67,43],[53,66]]
-        green_line_junction_switch_ends = [13,28,57,63,77,85]
-        green_line_junction_receiver_ends = [[12,1],[29,150],[0,58],[62,0],[101,76],[86,100]]
-        if(line_int == 0):
-            listPos = red_line_junction_switch_ends.index(self.block_number)
-            return str(red_line_junction_switch_ends[listPos]) + "-" + str(red_line_junction_receiver_ends[listPos][0]) if(not self.switch_direction) else str(red_line_junction_switch_ends[listPos]) + "-" + str(red_line_junction_receiver_ends[listPos][1])
-        elif(line_int == 1):
-            listPos = green_line_junction_switch_ends.index(self.block_number)
-            return str(green_line_junction_switch_ends[listPos]) + "-" + str(green_line_junction_receiver_ends[listPos][0]) if(not self.switch_direction) else str(green_line_junction_switch_ends[listPos]) + "-" + str(green_line_junction_receiver_ends[listPos][1])
-    
+        if(self.block_type == 1):
+            red_line_junction_switch_ends = [9,16,27,33,38,44,52]
+            red_line_junction_receiver_ends = [[0,10],[1,15],[28,76],[72,32],[39,71],[67,43],[53,66]]
+            red_line_junction_receiver_ends_left = [0,1,28,72,39,67,53]
+            red_line_junction_receiver_ends_right = [10,15,76,32,71,43,66]
+            green_line_junction_switch_ends = [13,28,57,63,77,85]
+            green_line_junction_receiver_ends = [[12,1],[29,150],[0,58],[62,0],[101,76],[86,100]]
+            green_line_junction_receiver_ends_left = [12,29,0,62,101,86]
+            green_line_junction_receiver_ends_right = [1,150,58,0,76,100]
+            if(line_int == 0):
+                list_pos = 0
+                if(self.block_number in red_line_junction_receiver_ends_left):
+                    list_pos = red_line_junction_receiver_ends_left.index(self.block_number)
+                elif(self.block_number in red_line_junction_receiver_ends_right):
+                    list_pos = red_line_junction_receiver_ends_right.index(self.block_number)
+                elif(self.block_number in red_line_junction_switch_ends):
+                    list_pos = red_line_junction_switch_ends.index(self.block_number)
+                return str(red_line_junction_switch_ends[list_pos]) + "-" + str(red_line_junction_receiver_ends[list_pos][0]) if(not self.switch_direction) else str(red_line_junction_switch_ends[list_pos]) + "-" + str(red_line_junction_receiver_ends[list_pos][1])
+            elif(line_int == 1):
+                list_pos = 0
+                if(self.block_number in green_line_junction_receiver_ends_left):
+                    list_pos = green_line_junction_receiver_ends_left.index(self.block_number)
+                elif(self.block_number in green_line_junction_receiver_ends_right):
+                    list_pos = green_line_junction_receiver_ends_right.index(self.block_number)
+                elif(self.block_number in green_line_junction_switch_ends):
+                    list_pos = green_line_junction_switch_ends.index(self.block_number)
+                return str(green_line_junction_switch_ends[list_pos]) + "-" + str(green_line_junction_receiver_ends[list_pos][0]) if(not self.switch_direction) else str(green_line_junction_switch_ends[list_pos]) + "-" + str(green_line_junction_receiver_ends[list_pos][1])
+        else:
+            return ""
+        
     # Get switch direction string list
     def get_switch_direction_string_list(self, line_int):
         red_line_junction_switch_ends = [9,16,27,33,38,44,52]
         red_line_junction_receiver_ends = [[0,10],[1,15],[28,76],[72,32],[39,71],[67,43],[53,66]]
+        red_line_junction_receiver_ends_left = [0,1,28,72,39,67,53]
+        red_line_junction_receiver_ends_right = [10,15,76,32,71,43,66]
         green_line_junction_switch_ends = [13,28,57,63,77,85]
         green_line_junction_receiver_ends = [[12,1],[29,150],[0,58],[62,0],[101,76],[86,100]]
+        green_line_junction_receiver_ends_left = [12,29,0,62,101,86]
+        green_line_junction_receiver_ends_right = [1,150,58,0,76,100]
         if(line_int == 0):
-            listPos = red_line_junction_switch_ends.index(self.block_number)
-            return [str(red_line_junction_switch_ends[listPos]) + "-" + str(red_line_junction_receiver_ends[listPos][0]), str(red_line_junction_switch_ends[listPos]) + "-" + str(red_line_junction_receiver_ends[listPos][1])]
+            list_pos = 0
+            if(self.block_number in red_line_junction_receiver_ends_left):
+                list_pos = red_line_junction_receiver_ends_left.index(self.block_number)
+            elif(self.block_number in red_line_junction_receiver_ends_right):
+                list_pos = red_line_junction_receiver_ends_right.index(self.block_number)
+            elif(self.block_number in red_line_junction_switch_ends):
+                list_pos = red_line_junction_switch_ends.index(self.block_number)
+            if(self.switch_direction == 0):
+                return [str(red_line_junction_switch_ends[list_pos]) + "-" + str(red_line_junction_receiver_ends[list_pos][0]), str(red_line_junction_switch_ends[list_pos]) + "-" + str(red_line_junction_receiver_ends[list_pos][1])]
+            else:
+                return [str(red_line_junction_switch_ends[list_pos]) + "-" + str(red_line_junction_receiver_ends[list_pos][1]), str(red_line_junction_switch_ends[list_pos]) + "-" + str(red_line_junction_receiver_ends[list_pos][0])]
         elif(line_int == 1):
-            listPos = green_line_junction_switch_ends.index(self.block_number)
-            return [str(green_line_junction_switch_ends[listPos]) + "-" + str(green_line_junction_receiver_ends[listPos][0]), str(green_line_junction_switch_ends[listPos]) + "-" + str(green_line_junction_receiver_ends[listPos][1])]
-
+            list_pos = 0
+            if(self.block_number in green_line_junction_receiver_ends_left):
+                list_pos = green_line_junction_receiver_ends_left.index(self.block_number)
+            elif(self.block_number in green_line_junction_receiver_ends_right):
+                list_pos = green_line_junction_receiver_ends_right.index(self.block_number)
+            elif(self.block_number in green_line_junction_switch_ends):
+                list_pos = green_line_junction_switch_ends.index(self.block_number)
+            if(self.switch_direction == 0):
+                return [str(green_line_junction_switch_ends[list_pos]) + "-" + str(green_line_junction_receiver_ends[list_pos][0]), str(green_line_junction_switch_ends[list_pos]) + "-" + str(green_line_junction_receiver_ends[list_pos][1])]
+            else:
+                return [str(green_line_junction_switch_ends[list_pos]) + "-" + str(green_line_junction_receiver_ends[list_pos][1]), str(green_line_junction_switch_ends[list_pos]) + "-" + str(green_line_junction_receiver_ends[list_pos][0])]
+            
     # Get switch direction boolean
     def get_switch_direction_bool(self, direction, line_int):
+        if(direction == ""):
+           return False
         red_line_junction_switch_ends = [9,16,27,33,38,44,52]
         red_line_junction_receiver_ends = [[0,10],[1,15],[28,76],[72,32],[39,71],[67,43],[53,66]]
         green_line_junction_switch_ends = [13,28,57,63,77,85]
         green_line_junction_receiver_ends = [[12,1],[29,150],[0,58],[62,0],[101,76],[86,100]]
-        first_num = int(direction.split('-')[0])
-        second_num = int(direction.split('-')[1])
+        string_split = direction.split("-")
+        first_num = int(string_split[0])
+        second_num = int(string_split[1])
         if(line_int == 0):
             list_pos_switch = red_line_junction_switch_ends.index(first_num)
             return False if(second_num == red_line_junction_receiver_ends[list_pos_switch][0]) else True
@@ -383,10 +427,42 @@ class Block:
             list_pos_switch = green_line_junction_switch_ends.index(first_num)
             return False if(second_num == green_line_junction_receiver_ends[list_pos_switch][0]) else True
 
+    # Gets index of 3 blocks in junction
+    def get_all_junction_block_indexes(self, line_int, block_int, direction):
+        red_line_junction_switch_ends = [9,16,27,33,38,44,52]
+        red_line_junction_receiver_ends = [[0,10],[1,15],[28,76],[72,32],[39,71],[67,43],[53,66]]
+        red_line_junction_receiver_ends_left = [0,1,28,72,39,67,53]
+        red_line_junction_receiver_ends_right = [10,15,76,32,71,43,66]
+        green_line_junction_switch_ends = [13,28,57,63,77,85]
+        green_line_junction_receiver_ends = [[12,1],[29,150],[0,58],[62,0],[101,76],[86,100]]
+        green_line_junction_receiver_ends_left = [12,29,0,62,101,86]
+        green_line_junction_receiver_ends_right = [1,150,58,0,76,100]
+        if(line_int == 0):
+            list_pos = 0
+            if(block_int in red_line_junction_receiver_ends_left):
+                list_pos = red_line_junction_receiver_ends_left.index(block_int)
+            elif(block_int in red_line_junction_receiver_ends_right):
+                list_pos = red_line_junction_receiver_ends_right.index(block_int)
+            elif(block_int in red_line_junction_switch_ends):
+                list_pos = red_line_junction_switch_ends.index(block_int)
+            return [red_line_junction_switch_ends[list_pos], red_line_junction_receiver_ends_left[list_pos], red_line_junction_receiver_ends_right[list_pos]]
+        elif(line_int == 1):
+            list_pos = 0
+            if(block_int in green_line_junction_receiver_ends_left):
+                list_pos = green_line_junction_receiver_ends_left.index(block_int)
+            elif(block_int in green_line_junction_receiver_ends_right):
+                list_pos = green_line_junction_receiver_ends_right.index(block_int)
+            elif(block_int in green_line_junction_switch_ends):
+                list_pos = green_line_junction_switch_ends.index(block_int)
+            return [green_line_junction_switch_ends[list_pos], green_line_junction_receiver_ends_left[list_pos], green_line_junction_receiver_ends_right[list_pos]]
+
     # Get crossing status string
     def get_traffic_light_color_string(self):
-        return "Green" if(self.traffic_light_color) else "Red"
-    
+        if(self.block_type == 1):
+            return "Green" if(self.traffic_light_color) else "Red"
+        else:
+            return ""
+        
     # Get crossing status boolean
     def get_traffic_light_color_bool(self, color):
         return True if(color == "Green") else False
@@ -397,4 +473,7 @@ class Block:
         
     # Gets crossing status string
     def get_crossing_status_string(self):
-        return "Active" if(self.crossing_status == True) else "Inactive"
+        if(self.block_type == 3):
+            return "Active" if(self.crossing_status == True) else "Inactive"
+        else:
+            return ""
