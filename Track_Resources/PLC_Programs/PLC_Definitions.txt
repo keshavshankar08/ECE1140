@@ -1,8 +1,22 @@
-STRT_SW     # Start of switch information
-SW 16       # switch block #
-IF 0        # 0 = left; 1 = right
-SS 16,1     # Switch State 16-1
-SL 16,1     # Switch Light 16 = green
-SL 1,1      # Switch Light 1 = green
-SL 15,0     # Switch Light 15 = red
-END_SW      # End of switch information
+SW                      # Defines switch logic start
+    READ SS SL SR       # Read in variables (state switch, state left, state right)
+    COND SD             # Condition variable (switch direction)
+        OPP NOT SS      # Operation to execute (NOT SS)
+        OPP SR          # Operation to execute (SR)
+        OPP AND SD      # Operation to execute (SD = AND STACK)
+    COND TLS            # Condition variables (traffic light switch)
+        OPP SS          # Operation to execute (SS)
+        OPP NOT SL      # Operation to execute (NOT SL)
+        OPP AND TLS     # Opeartion to execute (TLS = AND STACK)
+    COND TLL            # Condition variable (traffic light left)
+        OPP 0           # Operation to execute (TLL = 0)
+    COND TLR            # Condition variable (traffic light right)
+        OPP NOT SS      # Operation to execute (NOT SS)
+        OPP SR          # Operation to execute (SR)
+        OPP AND TLR     # Operation to execute (TLR = AND STACK)
+CR
+    READ CF CB          # Read in variables (crossing front, crossing back)
+    COND CS             # Condition variable (crossing status)
+        OPP CF          # Operation to execute (CF)
+        OPP CB          # Operation to execute (CB)
+        OPP OR CS       # Operation to execute (CS = OR STACK)
