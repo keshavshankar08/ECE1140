@@ -1,26 +1,22 @@
-STRT_SW
-SW 77
-IF 0   
-SS 77,101
-SL 77,1
-SL 101,1 
-SL 76,0
-IF 1 
-SS 77,76
-SL 77,1
-SL 101,0
-SL 76,1
-END_SW
-STRT_SW
-SW 85
-IF 0   
-SS 85,86
-SL 85,1
-SL 86,1 
-SL 100,0
-IF 1 
-SS 85,100
-SL 85,1
-SL 86,0
-SL 100,1
-END_SW
+SW                 
+    READ SS SL SR  
+    COND SD        
+        OPP NOT SS 
+        OPP SR     
+        OPP AND SD 
+    COND TLS       
+        OPP SS     
+        OPP NOT SL 
+        OPP AND TLS
+    COND TLL       
+        OPP 0      
+    COND TLR       
+        OPP NOT SS 
+        OPP SR     
+        OPP AND TLR
+CR
+    READ CF CB     
+    COND CS        
+        OPP CF     
+        OPP CB     
+        OPP OR CS  
