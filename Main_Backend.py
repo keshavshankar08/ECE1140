@@ -5,6 +5,7 @@ from signals import signals
 from Track_Resources.Track import *
 from Modules.SW_Wayside.Backend.SW_Wayside_Backend import *
 from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
+from Track_Resources.PLC import *
 from Main_UI import *
 
 # System clock constants
@@ -29,11 +30,11 @@ class SystemTime(QObject):
         
         # SW Wayside Instances
         self.sw_wayside_backend_instance = WaysideBackend()
+        self.plc_instance = PLC()
         self.track_instance = Track()
         signals.sw_wayside_backend_update.connect(self.updateTrackInstance)      
         
-        
-        self.menu_instance = Mainmenu()  
+        self.menu_instance = Mainmenu()
         self.menu_instance.show()
 
     def timerHandler(self):

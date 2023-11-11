@@ -9,16 +9,11 @@ class signalsList(QObject):
 
     # SW Wayside Signals
     sw_wayside_update_backend = pyqtSignal(Track) # update from main backend to sw wayside backend
+    sw_wayside_update_plc = pyqtSignal(Track, str, int, int)#,ActiveTrains) # update from sw wayside backend to plc
     sw_wayside_update_frontend = pyqtSignal(Track) # update from sw wayside backend to sw wayside frontend
-    sw_wayside_frontend_update = pyqtSignal(Track) # update from sw wayside frontend to sw wayside backend
+    sw_wayside_frontend_update = pyqtSignal(Track, str, int, int) # update from sw wayside frontend to sw wayside backend
+    sw_wayside_plc_update = pyqtSignal(Track)#,ActiveTrains) # update from plc to sw wayside backend
     sw_wayside_backend_update = pyqtSignal(Track) # update from sw wayside backend to main backend
-    '''
-    Main Backend    ->  SW Wayside Backend  ->  SW Wayside Frontend
-                                                        |
-                                                        ▼
-                        Main Backend    <-      SW Wayside Backend             
-    '''
-    
     
     # Track Model
     track_model_block_occupancy = pyqtSignal(int)
