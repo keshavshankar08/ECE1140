@@ -6,7 +6,7 @@ class Track:
         # ----- Initializing with preload data -----
         # Create red line
         self.red_line = Line()
-        self.red_line.line_color = 0
+        self.red_line.lineColor = 0
 
         # Red line block information
         red_line_default_blocks = [2,3,4,5,6,8,11,12,13,14,18,19,20,22,23,24,26,29,30,31,34,36,37,40,41,42,46,49,50,54,55,56,57,58,59,61,62,63,64,65,68,69,70,73,74,75]
@@ -321,10 +321,9 @@ class Track:
 # Line Object - A single line from the entire track network
 class Line:
     def __init__(self):
-        self.line_color = ""
-        self.line_color = ""
+        self.lineColor = ""
         self.blocks: list[Block] = []
-        self.graph: list[int, list[int]]
+        self.graph: dict[int, list[int]] = {}
 
     #Function to find shortest route between two blocks
     def get_shortest_path(self, start, end, path =[]):
@@ -349,7 +348,7 @@ class Line:
         return len(path)*15
 
 
-# Block Object - A single block linked to a single wayside controller
+# Block Object - A single block linked to a single Track
 class Block:
     def __init__(self):
         self.block_number = 0

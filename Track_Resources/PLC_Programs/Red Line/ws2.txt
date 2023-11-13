@@ -1,65 +1,25 @@
-STRT_SW
-SW 27
-IF 0   
-SS 27,28
-SL 27,1
-SL 28,1 
-SL 76,0
-IF 1 
-SS 27,76
-SL 27,1
-SL 28,0
-SL 76,1
-END_SW
-STRT_SW
-SW 33
-IF 0   
-SS 33,72
-SL 33,1
-SL 72,1 
-SL 32,0
-IF 1 
-SS 33,32
-SL 33,1
-SL 72,0
-SL 32,1
-END_SW
-STRT_SW
-SW 38
-IF 0   
-SS 38,39
-SL 38,1
-SL 39,1 
-SL 71,0
-IF 1 
-SS 38,71
-SL 38,1
-SL 39,0
-SL 71,1
-END_SW
-STRT_SW
-SW 44
-IF 0   
-SS 44,67
-SL 44,1
-SL 67,1 
-SL 43,0
-IF 1 
-SS 44,43
-SL 44,1
-SL 67,0
-SL 43,1
-END_SW
-STRT_SW
-SW 52
-IF 0   
-SS 52,53
-SL 52,1
-SL 53,1 
-SL 66,0
-IF 1 
-SS 52,66
-SL 52,1
-SL 53,0
-SL 66,1
-END_SW
+SW                 
+    READ SS SL SR  
+    COND SD        
+        OPP NOT SS 
+        OPP SR     
+        OPP AND SD 
+    COND TLS       
+        OPP SS     
+        OPP NOT SL 
+        OPP AND TLS
+    COND TLL       
+        OPP NOT SS
+        OPP SL
+        OPP NOT SR
+        OPP AND TLL      
+    COND TLR       
+        OPP NOT SS 
+        OPP SR     
+        OPP AND TLR
+CR
+    READ CF CB     
+    COND CS        
+        OPP CF     
+        OPP CB     
+        OPP OR CS  

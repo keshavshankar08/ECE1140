@@ -479,3 +479,4 @@ class Ui_TrackModelModule(object):
         self.BrokenRailToggleButton.setText(_translate("TrackModelModule", "Broken Rail"))
         self.LineSelectHint.setText(_translate("TrackModelModule", "<html><head/><body><p><span style=\" font-size:12pt; color:#fc0107;\">Please Load a Track Model to Select a Line!</span></p></body></html>"))
         self.FailureModesBoxLabel.setText(_translate("TrackModelModule", "Failure Modes"))
+
