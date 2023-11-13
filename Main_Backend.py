@@ -3,6 +3,8 @@ sys.path.append(".")
 from PyQt6.QtCore import QTimer, QThread, QCoreApplication, QObject, QDateTime
 from signals import signals
 from Track_Resources.Track import *
+from Train_Resources.CTC_Train import *
+from Modules.CTC.Backend.CTC_Backend import *
 from Modules.SW_Wayside.Backend.SW_Wayside_Backend import *
 from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
 from Main_UI import *
@@ -44,6 +46,10 @@ class SystemTime(QObject):
 
     def stopTimer(self):
         self.system_timer.stop()
+
+    #CTC Office Instance Updaters
+    def updateActiveTrains(self, updatedActiveTrains):
+        self.activeTrains = updatedActiveTrains
 
     # SW Wayside Instance Updaters
     def updateTrackInstance(self, updatedTrack):

@@ -5,16 +5,16 @@ class Track:
 
         # ----- Initializing with preload data -----
         # Create red line
-        red_line = Line()
-        red_line.lineColor = 0
+        self.red_line = Line()
+        self.self.red_line.lineColor = 0
 
         # Red line block information
         red_line_default_blocks = [2,3,4,5,6,8,11,12,13,14,18,19,20,22,23,24,26,29,30,31,34,36,37,40,41,42,46,49,50,54,55,56,57,58,59,61,62,63,64,65,68,69,70,73,74,75]
-        red_line_station_blocks = [7,17,21,25,35,45,48,60]
-        red_line_station_names = ["Shadyside", "Herron Ave", "Swissville", "Penn Station", "Steel Plaza", "First Ave", "Station Square", "South Hills Junction"]
+        self.red_line_station_blocks = [7,17,21,25,35,45,48,60]
+        self.red_line_station_names = ["Shadyside", "Herron Ave", "Swissville", "Penn Station", "Steel Plaza", "First Ave", "Station Square", "South Hills Junction"]
         red_line_crossing_blocks = [47]
         red_line_junction_blocks = [9,0,10,16,1,15,27,28,76,33,72,32,38,39,71,44,67,43,52,53,66]
-        red_line.graph = {
+        self.red_line.graph = {
             0:[9],
             1:[16,2],
             2:[1,3],
@@ -100,28 +100,28 @@ class Track:
             blk.block_number = i
             if(i in red_line_default_blocks):
                 blk.block_type = 0
-            elif(i in red_line_station_blocks):
+            elif(i in self.red_line_station_blocks):
                 blk.block_type = 2
-                blk.station_name = red_line_station_names[red_line_station_blocks.index(i)]
+                blk.station_name = self.red_line_station_names[self.red_line_station_blocks.index(i)]
             elif(i in red_line_junction_blocks):
                 blk.block_type = 1
                 blk.switch_direction = 0
                 blk.traffic_light_color = 0
             elif(i in red_line_crossing_blocks):
                 blk.block_type = 3
-            red_line.blocks.append(blk)
+            self.red_line.blocks.append(blk)
             
         # Create green line
-        green_line = Line()
-        green_line.line_color = 1
+        self.green_line = Line()
+        self.green_line.line_color = 1
         
         # Green line block information
         green_line_default_blocks = [3,4,5,6,7,8,10,11,14,15,17,18,20,21,23,24,25,26,27,30,32,33,34,35,36,37,38,40,41,42,43,44,45,46,47,49,50,51,52,53,54,55,59,60,61,64,66,67,68,69,70,71,72,74,75,79,80,81,82,83,84,86,87,89,90,91,92,93,94,95,97,98,99,102,103,104,106,107,108,109,110,111,112,113,115,116,117,118,119,120,121,122,124,125,126,127,128,129,130,131,133,134,135,136,137,138,139,140,142,143,144,145,146,147,148,149]
-        green_line_station_blocks = [2,9,16,22,31,39,48,56,65,73,88,96,105,114,123,132,141]
-        green_line_station_names = ["Pioneer", "Edgebrook", "Jalappa", "Whited", "South Bank", "Central", "Inglewood", "Overbrook", "Glenbury", "Dormont", "Mt Lebanon", "Poplar", "Castle Shannon", "Dormont", "Glenbury", "Overbrook", "Inglewood", "Central"]
+        self.green_line_station_blocks = [2,9,16,22,31,39,48,56,65,73,88,96,105,114,123,132,141]
+        self.green_line_station_names = ["Pioneer", "Edgebrook", "Jalappa", "Whited", "South Bank", "Central", "Inglewood", "Overbrook", "Glenbury", "Dormont", "Mt Lebanon", "Poplar", "Castle Shannon", "Dormont", "Glenbury", "Overbrook", "Inglewood", "Central"]
         green_line_crossing_blocks = [19]
         green_line_junction_blocks = [13,12,1,28,29,150,57,0,58,65,62,0,77,101,76,85,86,100]
-        green_line.graph = {
+        self.green_line.graph = {
             0:[63],
             1:[13],
             2:[1],
@@ -281,28 +281,76 @@ class Track:
             # Set block types and specific information
             if(i in green_line_default_blocks):
                 blk.block_type = 0
-            elif(i in green_line_station_blocks):
+            elif(i in self.green_line_station_blocks):
                 blk.block_type = 2
-                blk.station_name = green_line_station_names[green_line_station_blocks.index(i)]
+                blk.station_name = self.green_line_station_names[self.green_line_station_blocks.index(i)]
             elif(i in green_line_junction_blocks):
                 blk.block_type = 1
                 blk.switch_direction = 0
                 blk.traffic_light_color = 0
             elif(i in green_line_crossing_blocks):
                 blk.block_type = 3
-            green_line.blocks.append(blk)
+            self.green_line.blocks.append(blk)
 
         # Store lines in track
-        self.lines.insert(0, red_line)
-        self.lines.insert(1, green_line)
+        self.lines.insert(0, self.red_line)
+        self.lines.insert(1, self.green_line)
+
+
+    #Function to swap between station names and block number
+    def red_line_station_to_block (self, swap_stations):
+        #loop through stations to get swapped
+        for i in range(len(swap_stations)):
+            for j in range(len(self.red_line_station_names)):
+                if swap_stations[i] == self.red_line_station_names[j]:
+                    swap_stations[i] = self.red_line_station_blocks[j]
+        
+        #return the block numbers
+        return swap_stations
+
+    #Function to swap between station names and block number
+    def green_line_station_to_block (self, swap_stations):
+        #loop through stations to get swapped
+        for i in range(len(swap_stations)):
+            for j in range(len(self.green_line_station_names)):
+                if swap_stations[i] == self.green_line_station_names[j]:
+                    swap_stations[i] = self.green_line_station_blocks[j]
+        
+        #return the block numbers
+        return swap_stations
+
 
 # Line Object - A single line from the entire track network
 class Line:
     def __init__(self):
         self.line_color = ""
         self.blocks: list[Block] = []
+        self.graph: dict[int, list[int]] = {}
 
-# Block Object - A single block linked to a single wayside controller
+    #Function to find shortest route between two blocks
+    def get_shortest_path(self, start, end, path =[]):
+        path = path + [start]
+        if start == end:
+            return path
+        shortest = None
+        for node in self.graph[start]:
+            if node not in path:
+                newpath = self.get_shortest_path(node, end, path)
+                if newpath:
+                    if not shortest or len(newpath) < len(shortest):
+                        shortest = newpath
+        return shortest
+
+    #Function to get time between two blocks
+    def get_time_between(self, start, end):
+        #get shortest path first
+        path = self.get_shortest_path(start, end, path=[])
+
+        #multiply each block by time
+        return len(path)*15
+
+
+# Block Object - A single block linked to a single Track
 class Block:
     def __init__(self):
         self.block_number = 0
