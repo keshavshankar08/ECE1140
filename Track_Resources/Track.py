@@ -6,7 +6,7 @@ class Track:
         # ----- Initializing with preload data -----
         # Create red line
         self.red_line = Line()
-        self.red_line.lineColor = 0
+        self.self.red_line.lineColor = 0
 
         # Red line block information
         red_line_default_blocks = [2,3,4,5,6,8,11,12,13,14,18,19,20,22,23,24,26,29,30,31,34,36,37,40,41,42,46,49,50,54,55,56,57,58,59,61,62,63,64,65,68,69,70,73,74,75]
@@ -296,6 +296,7 @@ class Track:
         self.lines.insert(0, self.red_line)
         self.lines.insert(1, self.green_line)
 
+
     #Function to swap between station names and block number
     def red_line_station_to_block (self, swap_stations):
         #loop through stations to get swapped
@@ -318,10 +319,11 @@ class Track:
         #return the block numbers
         return swap_stations
 
+
 # Line Object - A single line from the entire track network
 class Line:
     def __init__(self):
-        self.lineColor = ""
+        self.line_color = ""
         self.blocks: list[Block] = []
         self.graph: dict[int, list[int]] = {}
 
