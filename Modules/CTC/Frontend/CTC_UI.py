@@ -114,10 +114,10 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #update line status
         if (str(self.line_value_box.currentText()) == 'Red Line'):
             self.set_block_maintenance_value.clear()
-            self.set_block_maintenance_value.addItems([str(x) for x in list(self.track_instance_copy.redLine.graph.keys())])
+            self.set_block_maintenance_value.addItems([str(x) for x in list(self.track_instance_copy.red_line.graph.keys())])
         if (str(self.line_value_box.currentText()) == 'Green Line'):
             self.set_block_maintenance_value.clear()
-            self.set_block_maintenance_value.addItems([str(x) for x in list(self.track_instance_copy.greenLine.graph.keys())])
+            self.set_block_maintenance_value.addItems([str(x) for x in list(self.track_instance_copy.green_line.graph.keys())])
 
     def upload_schedule_button_clicked(self):
         pass
@@ -135,9 +135,9 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #add a combo box in the first row
         combo = QtWidgets.QComboBox()
         if(self.line_value_box.currentText() == "Red Line"):
-            combo.addItems(self.track_instance_copy.redLineStationNames)
+            combo.addItems(self.track_instance_copy.red_line_station_names)
         if(self.line_value_box.currentText() == "Green Line"):
-            combo.addItems(self.track_instance_copy.greenLineStationNames)
+            combo.addItems(self.track_instance_copy.green_line_station_names)
         self.manual_table.setCellWidget(rowPosition, 0, combo)
       
     def delete_stop_button_clicked(self):
@@ -232,7 +232,7 @@ class CTCFrontend(QtWidgets.QMainWindow):
     def test_bench_update_button_clicked(self):
         pass
 '''
-        
+
 #Main
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
