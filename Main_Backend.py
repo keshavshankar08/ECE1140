@@ -30,6 +30,9 @@ class SystemTime(QObject):
         signals.stop_timer.connect(self.stopTimer)
         self.system_timer.start(INTERVAL)
         
+        # CTC Instances
+        self.active_trains_instance = ActiveTrains()
+
         # SW Wayside Instances
         self.sw_wayside_backend_instance = WaysideBackend()
         self.plc_instance = PLC()
@@ -42,19 +45,18 @@ class SystemTime(QObject):
     def timerHandler(self):
         self.current_time = self.current_time.addMSecs(TIME_DELTA)
         signals.current_system_time.emit(self.current_time) #Y:M:D:h:m:s
-        signals.sw_wayside_update_backend.emit(self.track_instance) #sends current state of track out
-        
+        signals.sw_wayside_update_backend.emit(self.track_instance, self.active_trains_instance)
 
     def stopTimer(self):
         self.system_timer.stop()
 
     #CTC Office Instance Updaters
-    def updateActiveTrains(self, updatedActiveTrains):
-        self.activeTrains = updatedActiveTrains
+    def updateActiveTrains(self, updated_active_trains):
+        self.active_trains_instance = updated_active_trains
 
     # SW Wayside Instance Updaters
-    def updateTrackInstance(self, updatedTrack):
-        self.track_instance = updatedTrack
+    def updateTrackInstance(self, updated_track):
+        self.track_instance = updated_track
 
 if __name__ == '__main__':
         app = QApplication([])

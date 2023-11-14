@@ -2,11 +2,12 @@ import sys
 sys.path.append(".")
 from signals import signals
 from Track_Resources.Track import *
+from Train_Resources.CTC_Train import *
 
 class WaysideBackend():
     def __init__(self):
         self.track_instance_copy = Track()
-        self.active_trains_instance_copy = 1#ActiveTrains()
+        self.active_trains_instance_copy = ActiveTrains()
         self.plc_file_name = ""
         self.plc_line_number = -1
         self.plc_wayside_number = -1
@@ -30,7 +31,7 @@ class WaysideBackend():
     
     # Sends updates from wayside backend to main backend
     def send_main_backend_update(self):
-        signals.sw_wayside_backend_update.emit(self.track_instance_copy)
+        signals.sw_wayside_backend_update.emit(self.track_instance_copy, self.active_trains_instance_copy)
 
     # Updates local instance of track
     def update_copy_track(self, updated_track):

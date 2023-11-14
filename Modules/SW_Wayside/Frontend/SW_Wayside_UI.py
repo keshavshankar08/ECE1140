@@ -219,7 +219,7 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
 
         # Handles upload plc program button clicked
         def uploadPLCClicked(self):
-                self.plc_file_name = QtWidgets.QFileDialog.getOpenFileName(self, "Open File", "", "Text Files (*.txt)")
+                self.plc_file_name, _filter = QtWidgets.QFileDialog.getOpenFileName(self, "Open File", "", "Text Files (*.txt)")
                 self.plc_line_number = self.get_current_line_displayed_int()
                 self.plc_wayside_number = self.get_current_wayside_displayed_int()
         
