@@ -16,11 +16,13 @@ CAR_HEIGHT = 3.42 # meters
 CAR_WIDTH = 2.65 # meters
 CAR_WEIGHT_EMPTY = 37103.86 # kg
 CAR_WEIGHT_LOADED = 51437.37 # kg
-MAX_SPEED = 70 # km/h
+MAX_SPEED = 19.444 # m/s
 S_BRAKE_FORCE = 61716 # N
 E_BRAKE_FORCE = 140404 # N
 MAX_MOTOR_POWER = 120000 # Watts
 GRAVITY = 9.8 # m/s^2
+MAX_ENGINE_FORCE = 40000 # N
+FRICTION_COEFF = 0 # dimensionless
     
 
 class Train(QObject):
@@ -65,11 +67,13 @@ class Train(QObject):
         self.slopeForce = 0.0 # N
         self.netForce = 0.0 # N
         self.brakeForce = 0.0 # N
+        self.frictionForce = 0.0 # N
         ## Track
         self.currentAuthority = 0.0 # m
         self.currentBlock = 0 # dimensionless
         self.trackPolarity = 1 # or -1
         self.currentGradient = 0.0 # %
+        self.currentAngle = 0.0 # radians
         self.distanceFromYard = 0.0
         self.distanceFromBlockStart = 0.0
         self.currentBeacon = None
@@ -89,6 +93,7 @@ class Train(QObject):
 
     def TrainModelUpdateValues(self):
         self.previousAccel = self.currentAccel
+        ### BRAKE
         if (self.serviceBrake and not self.emergencyBrake):
             self.brakeForce = S_BRAKE_FORCE
         if (self.emergencyBrake):
@@ -96,13 +101,22 @@ class Train(QObject):
             self.commandedPower = 0
         if (not self.emergencyBrake and not self.serviceBrake):
             self.brakeForce = 0
+        ### ENGINE
         try:
             self.engineForce = abs(self.commandedPower / self.currentSpeed)
         except ZeroDivisionError:
             if (self.commandedPower > 0):
-                self.currentSpeed = 0.01 # ????
-        self.slopeForce = self.mass * GRAVITY * math.sin(math.atan(self.currentGradient / 100))
-        self.netForce = self.engineForce - self.slopeForce - self.brakeForce
+                self.currentSpeed = 0.1 # ????
+        ### SLOPE
+        self.currentAngle = math.atan(self.currentGradient / 100)
+        self.slopeForce = self.mass * GRAVITY * math.sin(self.currentAngle)
+        ### FRICTION
+        self.frictionForce = self.mass * GRAVITY * FRICTION_COEFF * math.cos(self.currentAngle)
+        
+        
+        self.netForce = self.engineForce - self.slopeForce - self.brakeForce - self.frictionForce
+        if (self.netForce > MAX_ENGINE_FORCE):
+            self.netForce = MAX_ENGINE_FORCE
         self.currentAccel = self.netForce / self.mass
         
         if (self.commandedPower <= MAX_MOTOR_POWER):
@@ -113,6 +127,7 @@ class Train(QObject):
             
         if (self.currentSpeed > MAX_SPEED):
             self.currentSpeed = MAX_SPEED
+        
             
         # Signals to Train Controller
         signals.trainModel_send_engine_failure.emit(self.engineFail)

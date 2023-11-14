@@ -18,13 +18,14 @@ class TrainModelTestBenchUI(QtWidgets.QMainWindow):
         self.testingTimer.timeout.connect(self.testTimerHandler)
         self.testingTimer.start(INTERVAL)
         #self.tb_beaconEntry.textChanged.connect(self.beaconReceive)
-        self.tb_engFail.stateChanged.connect(self.engineFailCheckBoxReceive)
-        self.tb_sigFail.stateChanged.connect(self.signalFailCheckBoxReceive)
-        self.tb_brakeFail.stateChanged.connect(self.brakeFailCheckBoxReceive)
-        self.tb_eBrakeToggle.currentTextChanged.connect(self.eBrakeReceive)
-        self.tb_sBrakeToggle.currentTextChanged.connect(self.sBrakeReceive)
-        self.tb_power.valueChanged.connect(self.powerReceive)
-        self.tb_gradient.valueChanged.connect(self.gradientReceive)
+        #self.tb_engFail.stateChanged.connect(self.engineFailCheckBoxReceive)
+        #self.tb_sigFail.stateChanged.connect(self.signalFailCheckBoxReceive)
+        #self.tb_brakeFail.stateChanged.connect(self.brakeFailCheckBoxReceive)
+        #self.tb_eBrakeToggle.currentTextChanged.connect(self.eBrakeReceive)
+        #self.tb_sBrakeToggle.currentTextChanged.connect(self.sBrakeReceive)
+        #self.tb_power.valueChanged.connect(self.powerReceive)
+        #self.tb_gradient.valueChanged.connect(self.gradientReceive)
+        self.send.clicked.connect(self.sendValues)
         
         
         #Actual Signals
@@ -41,10 +42,39 @@ class TrainModelTestBenchUI(QtWidgets.QMainWindow):
     def testTimerHandler(self): # WORKS
         self.engForceDisplay.setText(format(self.testTrain.engineForce, '.2f'))
         self.tb_slopeForceDisplay.setText(format(self.testTrain.slopeForce, '.2f'))
+        self.tb_brakeForce.setText(format(self.testTrain.brakeForce, '.2f'))
+        self.tb_fricForce.setText(format(self.testTrain.frictionForce, '.2f'))
+        self.tb_netForce.setText(format(self.testTrain.netForce, '.2f'))
         self.tb_accel.setText(format(self.testTrain.currentAccel, '.2f'))
+        self.tb_mass.setText(format(self.testTrain.mass, '.2f'))
+        self.tb_psgrDis.setText(format(self.testTrain.numPassengers, '.0f'))
         
         
     #### UI INPUTS 
+    
+    def sendValues(self):
+        self.testTrain.engineFail = self.tb_engFail.isChecked()
+        self.testTrain.brakeFail = self.tb_brakeFail.isChecked()
+        self.testTrain.signalFail = self.tb_sigFail.isChecked()
+        if (self.tb_eBrakeToggle.currentText() == "on"):
+            self.testTrain.emergencyBrake = True
+        else:
+            self.testTrain.emergencyBrake = False
+        if (self.tb_sBrakeToggle.currentText() == "on"):
+            self.testTrain.serviceBrake = True
+        else:
+            self.testTrain.serviceBrake = False
+        if (self.tb_polarity.currentText() == "1"):
+            self.testTrain.trackPolarity = 1
+        else:
+            self.testTrain.trackPolarity = -1
+        self.testTrain.commandedPower = self.tb_power.value()
+        self.testTrain.currentGradient = self.tb_gradient.value()
+        self.testTrain.speedLimit = self.tb_speedLimitSelect.value()
+        self.testTrain.beaconList.append(self.tb_beaconEntry.text())
+        self.testTrain.numPassengers += self.tb_psgr.value()
+        
+        
         
     def engineFailCheckBoxReceive(self, value):
         self.testTrain.engineFail = value
@@ -116,6 +146,8 @@ class TrainModelTestBenchUI(QtWidgets.QMainWindow):
         
     def lenDisplay(self, value):
         self.tb_lenDisplay.setText(str(value))
+        
+    
         
 
     

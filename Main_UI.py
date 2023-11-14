@@ -6,7 +6,7 @@ from Modules.CTC.Frontend.frontend import *
 from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
 from Modules.HW_Wayside.Frontend.frontend import *
 from Modules.Track_Model.Frontend.Track_Model_UI import *
-from Modules.Train_Model.Frontend.train_model_test_bench_ui import *
+#from Modules.Train_Model.Frontend.train_model_test_bench_ui import *
 from Modules.Train_Controller.Frontend.TrainController import *
 
 class Mainmenu(QtWidgets.QMainWindow):
