@@ -11,7 +11,7 @@ from Main_UI import *
 
 # System clock constants
 INTERVAL = 50
-SYSTEM_SPEED = 5
+SYSTEM_SPEED = 1
 TIME_DELTA = INTERVAL * SYSTEM_SPEED
 START_YEAR = 2023
 START_MONTH = 1
