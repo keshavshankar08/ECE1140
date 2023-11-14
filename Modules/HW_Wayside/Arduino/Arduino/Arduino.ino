@@ -1,32 +1,53 @@
 #include <LiquidCrystal_I2C.h> // Library for LCD
 
-String incomingByte ; 
+char incomingByte; 
+String Data = "";
 bool TDEFA, TJUNC, TCROS, TSTAT;
 int i = 0;
 bool value;
 char valueA;
-String L1,L2,L3,L4;
+String L1,L2,L3,L4,input;
 LiquidCrystal_I2C lcd(0x20, 16, 4); // I2C address 0x27, 16 column and 2 rows
 
 void setup() {
   Serial.begin(9600);
-  //pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(7, OUTPUT);
-  pinMode(6, OUTPUT);
-  pinMode(5, OUTPUT);
-  pinMode(4, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
+  LCD_setup();
 
-  
-  lcd.init(); //initialize the lcd
-  lcd.backlight(); //open the backlight 
-  lcd.clear();
+  lcd.print("Getting Set up...");
+  delay(1);
+  LCD_setup();
   }
 
 void loop() {
 
+  // READ PLC PROGRAM - convert to string
   if (Serial.available() > 0) {
-    delay(10);
+    // read data
+    while (Serial.available() > 0)
+    {
+      incomingByte = Serial.read(); // read byte
+      digitalWrite(LED_BUILTIN, HIGH);
 
+      lcd.print(incomingByte); 
+      Data += incomingByte;
+    }
+
+    // PERFORM LOGIC WITH PLC PROGRAM
+    //
+    //
+    //
+    //
+    //
+
+    
+    Serial.write("Received: ");
+    for (int i = 0; i < Data.length(); i++)
+    {
+      Serial.write(Data[i]);
+    }
+    Serial.write("\n");
+    /*
     incomingByte = Serial.read(); // read byte of data
       //Serial.write("I recieved: ");
       //Serial.write(incomingByte[0]);
@@ -131,6 +152,13 @@ void loop() {
       //Serial.write(incomingByte[0]);
       //Serial.write("\n");
     delay(10); // delay 1 second before next reading
-
+    */
     }
   }
+
+void LCD_setup(){
+  lcd.init(); //initialize the lcd
+  lcd.backlight(); //open the backlight 
+  lcd.clear();
+  lcd.setCursor(0, 0);
+}
