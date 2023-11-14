@@ -40,7 +40,6 @@ void loop() {
     //
     //
 
-    
     Serial.write("Received: ");
     for (int i = 0; i < Data.length(); i++)
     {
