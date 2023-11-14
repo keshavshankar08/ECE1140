@@ -12,10 +12,10 @@ time.sleep(1)
 def send_PLC(data):
     SER.write(data.encode('ascii'))
 
-PLC = "I love Keshav 3"
+PLC = "Program PLC  Here is the PLC Program for testing"
 send_PLC(PLC)
 
-time.sleep(5)
+time.sleep(1)
 
 response = SER.readline().decode('ascii').strip()
 print("Arduino says: ", response)
