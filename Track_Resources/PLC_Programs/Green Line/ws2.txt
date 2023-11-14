@@ -2,21 +2,22 @@ SW
     READ,SS,SL,SR  
     COND,SD        
         OPP,NOT,SS 
-        OPP,SR     
-        OPP,AND,SD 
+        OPP,NC,SR     
+        OPP,AND
     COND,TLS       
-        OPP,SS     
+        OPP,NC,SS     
         OPP,NOT,SL 
-        OPP,AND,TLS
+        OPP,AND
     COND,TLL       
-        OPP,0      
+        OPP,NC,0
+        OPP,SV    
     COND,TLR       
         OPP,NOT,SS 
-        OPP,SR     
-        OPP,AND,TLR
+        OPP,NC,SR     
+        OPP,AND
 CR
     READ,CF,CB     
     COND,CS        
-        OPP,CF     
-        OPP,CB     
-        OPP,OR,CS  
+        OPP,NC,CF     
+        OPP,NC,CB     
+        OPP,OR

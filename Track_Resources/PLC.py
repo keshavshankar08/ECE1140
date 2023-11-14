@@ -81,38 +81,55 @@ class PLC():
     
     # Executes PLC code for a wayside controller block
     def interpreter(self, line_number, wayside_number, block_number):
+        # get the tokens for the required wayside
         tokens = self.get_tokens(line_number, wayside_number)
+
+        # token state storage variables
         curr_device = ""
         set_device_stage = False
+        curr_device_var = ""
+        stack = []
+
+        # inputs to PLC devices
         ss_register = False
         sl_register = False
         sr_register = False
         cf_register = False
         cb_register = False
+
+        # ouputs from PLC
         sd_register = False
         tls_register = False
         tll_register = False
         tlr_register = False
         cs_register = False
-        curr_device_var = ""
-        stack = []
+
+        # loop through every line of tokens
         for token_line in tokens:
+            # SW device logic identified
             if(token_line[0] == "SW"):
                 curr_device = "SW"
                 set_device_stage = True
+            # CR device logic identified
             elif(token_line[0] == "CR"):
                 curr_device = "CR"
                 set_device_stage = True
             else:
                 set_device_stage = False
 
+            # Once device identified
             if(set_device_stage == False):
+                # if device is switch
                 if(curr_device == "SW"):
+                    # read - read in variables for switch
                     if(token_line[0] == "READ"):
                         ss_register, sl_register, sr_register = self.get_pre_junction_occupancies(line_number, block_number)
+                    # condition - get which output register
                     elif(token_line[0] == "COND"):
                         curr_device_var = token_line[1]
+                    # operation - compute and add to stack for calculation
                     elif(token_line[0] == "OPP"):
+                        # not gate - not the variable identified and add to stack
                         if(token_line[1] == "NOT"):
                             if(token_line[2] == "SS"):
                                 stack.append(not(ss_register))
@@ -120,14 +137,22 @@ class PLC():
                                 stack.append(not(ss_register))
                             elif(token_line[2] == "SR"):
                                 stack.append(not(ss_register))
-                        elif(token_line[1] == "SS"):
-                            stack.append(ss_register)
-                        elif(token_line[1] == "SL"):
-                            stack.append(sl_register)
-                        elif(token_line[1] == "SR"):
-                            stack.append(sr_register)
-                        elif(token_line[1] == "0"):
-                            stack.append(False)
+                        # no change gate - add the variable to stack
+                        elif(token_line[1] == "NC"):
+                            if(token_line[2] == "SS"):
+                                stack.append(ss_register)
+                            elif(token_line[2] == "SL"):
+                                stack.append(sl_register)
+                            elif(token_line[2] == "SR"):
+                                stack.append(sr_register)
+                            elif(token_line[2] == "0"):
+                                stack.append(False)
+                        # save gate - store stack var to designated output
+                        elif(token_line[1] == "SV"):
+                            if(curr_device_var == "TLL"):
+                                tll_register = stack[0]
+                            stack.clear()
+                        # and gate - and all elements in stack and store to designated output
                         elif(token_line[1] == "AND"):
                             if(curr_device_var == "SD"):
                                 for log in stack:
@@ -141,6 +166,8 @@ class PLC():
                             elif(curr_device_var == "TLR"):
                                 for log in stack:
                                     tlr_register = log and tlr_register
+                            stack.clear()
+                # if device is crossing
                 elif(curr_device == "CR"):
                     if(token_line[0] == "READ"):
                         cf_register, cb_register = self.get_pre_crossing_occupancies(line_number)
@@ -152,14 +179,16 @@ class PLC():
                                 stack.append(not(cf_register))
                             elif(token_line[2] == "CB"):
                                 stack.append(not(cb_register))
-                        elif(token_line[1] == "CF"):
-                            stack.append(cf_register)
-                        elif(token_line[1] == "CB"):
-                            stack.append(cb_register)
+                        elif(token_line[1] == "NC"):         
+                            if(token_line[2] == "CF"):
+                                stack.append(cf_register)
+                            elif(token_line[2] == "CB"):
+                                stack.append(cb_register)
                         elif(token_line[1] == "OR"):
                             if(curr_device_var == "CS"):
                                 for log in stack:
-                                    cs_register = log and cs_register
+                                    cs_register = log or cs_register
+                            stack.clear()
         if(self.track_instance_copy.lines[line_number].blocks[block_number].block_type == 1):
             self.track_instance_copy.lines[line_number].blocks[block_number].switch_direction = sd_register
             self.track_instance_copy.lines[line_number].blocks[block_number].switch_direction = sd_register # left one
