@@ -14,17 +14,9 @@ class TrainModelTestBenchUI(QtWidgets.QMainWindow):
         uic.loadUi("Modules/Train_Model/Frontend/Train_Model_Test_Bench_UI.ui", self)
         self.testTrain = Train()
         self.testingTimer = QTimer()
-        self.testingTimer.timeout.connect(signals.main_backend_update_values)
+        self.testingTimer.timeout.connect(signals.trainModel_backend_update)
         self.testingTimer.timeout.connect(self.testTimerHandler)
         self.testingTimer.start(INTERVAL)
-        #self.tb_beaconEntry.textChanged.connect(self.beaconReceive)
-        #self.tb_engFail.stateChanged.connect(self.engineFailCheckBoxReceive)
-        #self.tb_sigFail.stateChanged.connect(self.signalFailCheckBoxReceive)
-        #self.tb_brakeFail.stateChanged.connect(self.brakeFailCheckBoxReceive)
-        #self.tb_eBrakeToggle.currentTextChanged.connect(self.eBrakeReceive)
-        #self.tb_sBrakeToggle.currentTextChanged.connect(self.sBrakeReceive)
-        #self.tb_power.valueChanged.connect(self.powerReceive)
-        #self.tb_gradient.valueChanged.connect(self.gradientReceive)
         self.send.clicked.connect(self.sendValues)
         
         

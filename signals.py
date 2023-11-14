@@ -34,6 +34,7 @@ class signalsList(QObject):
     track_model_authority = pyqtSignal(float)
     track_model_beacon = pyqtSignal(str)
     # Train Model Signals
+    trainModel_backend_update = pyqtSignal()
     trainModel_send_actual_velocity = pyqtSignal(float)
     trainModel_send_emergency_brake = pyqtSignal(bool)
     trainModel_send_suggested_speed = pyqtSignal(float)
@@ -46,7 +47,7 @@ class signalsList(QObject):
     trainModel_send_engine_failure = pyqtSignal(bool)
     trainModel_send_brake_failure = pyqtSignal(bool)
     trainModel_send_signal_failure = pyqtSignal(bool)
-
+    
     #Train Controller Signals
     #lights
     train_controller_int_lights_on = pyqtSignal(bool)
