@@ -41,9 +41,6 @@ class signalsList(QObject):
     trainModel_send_engine_failure = pyqtSignal(bool)
     trainModel_send_brake_failure = pyqtSignal(bool)
     trainModel_send_signal_failure = pyqtSignal(bool)
-    
-    # Train Controller Signals
-    trainController_send_power_command = pyqtSignal(float)
 
     #Train Controller Signals
     #lights
@@ -57,11 +54,11 @@ class signalsList(QObject):
     train_controller_left_door_closed = pyqtSignal(bool)
     train_controller_left_door_open = pyqtSignal(bool)
     #Bower
-    train_controller_power = pyqtSignal(float)
+    train_controller_send_power_command = pyqtSignal(float)
     #Temperature
     train_controller_temperature_value = pyqtSignal(float)
     #Braking
-    train_controller_service_brake_value = pyqtSignal(float)
+    train_controller_service_brake = pyqtSignal(float)
     train_controller_emergency_brake_on = pyqtSignal(bool)
     train_controller_emergency_brake_off = pyqtSignal(bool)
 
