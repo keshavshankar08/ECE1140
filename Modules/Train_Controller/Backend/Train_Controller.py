@@ -3,7 +3,6 @@ import sys
 from PyQt6.QtCore import QObject, QDateTime, pyqtSignal
 sys.path.append(".")
 from signals import signals
-import threading
 from Main_Backend import START_YEAR, START_MONTH, START_DAY, START_HOUR, START_MIN, START_SEC, TIME_DELTA
 
 #This class represents the train controller
@@ -204,7 +203,6 @@ class trainController():
                 self.serviceBrake = not self.serviceBrake
         else:
             self.serviceBrake = not self.serviceBrake
-            
 
     #this function report E brake on
     def emergencyBrakeOn(self):
