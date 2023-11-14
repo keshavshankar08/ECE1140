@@ -26,9 +26,7 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         #inputs for test bench
         self.automaticButton.clicked.connect(self.Automatic_Button_clicked)
         self.manualButton.clicked.connect(self.Manual_Button_clicked)
-
-        self.emergencyButton.setCheckable(True)
-        self.emergencyButton.clicked.connect(self.Emergency_Button_clicked)
+        
 
         #self.driverSpeedChanged.valueChanged.connect()
         #self.serviceBrakeChanged.valueChanged.connect()
