@@ -55,9 +55,9 @@ class TrackModelModule(QtWidgets.QMainWindow):
         
         # iterate through to extract data
         for row in sheet3.iter_rows(min_row=2, max_row=77, values_only=True):
-            line, section, block_number, block_length, block_grade, speed_limit, infrastructure, station_side, elevation, cumulative_elevation = row[:10]
+            line, section, block_number, block_length, block_grade, speed_limit, infrastructure, station_side, elevation, cumulative_elevation, traversal_time = row[:11]
             
-            self.red_line_data.append((line, section, block_number, block_length, block_grade, speed_limit, infrastructure, station_side, elevation, cumulative_elevation))
+            self.red_line_data.append((line, section, block_number, block_length, block_grade, speed_limit, infrastructure, station_side, elevation, cumulative_elevation, traversal_time))
             
         
         for row in sheet4.iter_rows(min_row=2,max_row=151, values_only=True):
@@ -91,22 +91,22 @@ class TrackModelModule(QtWidgets.QMainWindow):
             self.graphicsView.scene().addItem(text)
             
             # use function to keep building map
-            self.add_block_to_map(800,-70,'block9','9','right',800,0)
-            self.add_block_to_map(775,-120,'block8','8','right',800,-70)
-            self.add_block_to_map(740,-170,'block7','7','top',775,-120)
-            self.add_block_to_map(690,-170,'block6','6','top',740,-170)
-            self.add_block_to_map(640,-150,'block5','5','top',690,-170)
-            self.add_block_to_map(590,-130,'block4','4','top',640,-150)
-            self.add_block_to_map(540,-110,'block3','3','top',590,-130)
-            self.add_block_to_map(490,-90,'block2','2','top',540,-110)
-            self.add_block_to_map(440,-70,'block1','1','top',490,-90)
-            self.add_block_to_map(390,-30,'block16','16','top',440,-70)
-            self.add_block_to_map(460,-10,'block15','15','bottom',390,-30)
-            self.add_block_to_map(520,-12,'block14','14','bottom',460,-10)
-            self.add_block_to_map(580,-14,'block13','13','bottom',520,-12)
-            self.add_block_to_map(630,-16,'block12','12','bottom',580,-14)
-            self.add_block_to_map(680,-20,'block11','11','bottom',630,-16)
-            self.add_block_to_map(730,-24,'block10','10','bottom',680,-20)
+            self.add_block_to_map(800,-70,40,'block9','9','right',800,0)
+            self.add_block_to_map(775,-120,40,'block8','8','right',800,-70)
+            self.add_block_to_map(740,-170,40,'block7','7','top',775,-120)
+            self.add_block_to_map(690,-170,40,'block6','6','top',740,-170)
+            self.add_block_to_map(640,-150,40,'block5','5','top',690,-170)
+            self.add_block_to_map(590,-130,40,'block4','4','top',640,-150)
+            self.add_block_to_map(540,-110,40,'block3','3','top',590,-130)
+            self.add_block_to_map(490,-90,40,'block2','2','top',540,-110)
+            self.add_block_to_map(440,-70,40,'block1','1','top',490,-90)
+            self.add_block_to_map(390,-30,40,'block16','16','top',440,-70)
+            self.add_block_to_map(460,-10,40,'block15','15','bottom',390,-30)
+            self.add_block_to_map(520,-12,40,'block14','14','bottom',460,-10)
+            self.add_block_to_map(580,-14,40,'block13','13','bottom',520,-12)
+            self.add_block_to_map(630,-16,40,'block12','12','bottom',580,-14)
+            self.add_block_to_map(680,-20,40,'block11','11','bottom',630,-16)
+            self.add_block_to_map(730,-24,40,'block10','10','bottom',680,-20)
             
             # connect blocks 9 and 10
             line = QtWidgets.QGraphicsLineItem(770,-4,800,-50)
@@ -114,134 +114,344 @@ class TrackModelModule(QtWidgets.QMainWindow):
             self.graphicsView.scene().addItem(line)
             
             # add more blocks
-            self.add_block_to_map(330,-30,'block17','17','top',390,-30)
-            self.add_block_to_map(270,-30,'block18','18','top',330,-30)
-            self.add_block_to_map(210,-30,'block19','19','top',270,-30)
-            self.add_block_to_map(150,-30,'block20','20','top',210,-30)
-            self.add_block_to_map(90,-20,'block21','21','top',150,-30)
-            self.add_block_to_map(40,30,'block22','22','left',90,-20)
-            self.add_block_to_map(30,80,'block23','23','left',40,30)
-            self.add_block_to_map(60,130,'block24','24','left',30,80)
-            self.add_block_to_map(105,140,'block25','25','top',60,130)
-            self.add_block_to_map(150,150,'block26','26','top',105,140)
-            self.add_block_to_map(195,160,'block27','27','top',150,150)
-            self.add_block_to_map(240,170,'block28','28','top',195,160)
-            self.add_block_to_map(285,180,'block29','29','top',240,170)
-            self.add_block_to_map(330,190,'block30','30','top',285,180)
-            self.add_block_to_map(375,200,'block31','31','top',330,190)
-            self.add_block_to_map(420,210,'block32','32','top',375,200)
-            self.add_block_to_map(465,220,'block33','33','top',420,210)
-            self.add_block_to_map(510,220,'block34','34','top',465,220)
-            self.add_block_to_map(555,220,'block35','35','top',510,220)
-            self.add_block_to_map(600,220,'block36','36','top',555,220)
-            self.add_block_to_map(645,220,'block37','37','top',600,220)
-            self.add_block_to_map(690,220,'block38','38','top',645,220)
-            self.add_block_to_map(735,220,'block39','39','top',690,220)
-            self.add_block_to_map(780,220,'block40','40','top',735,220)
-            self.add_block_to_map(825,220,'block41','41','top',780,220)
-            self.add_block_to_map(870,265,'block42','42','right',825,220)
-            self.add_block_to_map(915,310,'block43','43','right',870,265)
+            self.add_block_to_map(330,-30,40,'block17','17','top',390,-30)
+            self.add_block_to_map(270,-30,40,'block18','18','top',330,-30)
+            self.add_block_to_map(210,-30,40,'block19','19','top',270,-30)
+            self.add_block_to_map(150,-30,40,'block20','20','top',210,-30)
+            self.add_block_to_map(90,-20,40,'block21','21','top',150,-30)
+            self.add_block_to_map(40,30,40,'block22','22','left',90,-20)
+            self.add_block_to_map(30,80,40,'block23','23','left',40,30)
+            self.add_block_to_map(60,130,40,'block24','24','left',30,80)
+            self.add_block_to_map(105,140,40,'block25','25','top',60,130)
+            self.add_block_to_map(150,150,40,'block26','26','top',105,140)
+            self.add_block_to_map(195,160,40,'block27','27','top',150,150)
+            self.add_block_to_map(240,170,40,'block28','28','top',195,160)
+            self.add_block_to_map(285,180,40,'block29','29','top',240,170)
+            self.add_block_to_map(330,190,40,'block30','30','top',285,180)
+            self.add_block_to_map(375,200,40,'block31','31','top',330,190)
+            self.add_block_to_map(420,210,40,'block32','32','top',375,200)
+            self.add_block_to_map(465,220,40,'block33','33','top',420,210)
+            self.add_block_to_map(510,220,40,'block34','34','top',465,220)
+            self.add_block_to_map(555,220,40,'block35','35','top',510,220)
+            self.add_block_to_map(600,220,40,'block36','36','top',555,220)
+            self.add_block_to_map(645,220,40,'block37','37','top',600,220)
+            self.add_block_to_map(690,220,40,'block38','38','top',645,220)
+            self.add_block_to_map(735,220,40,'block39','39','top',690,220)
+            self.add_block_to_map(780,220,40,'block40','40','top',735,220)
+            self.add_block_to_map(825,220,40,'block41','41','top',780,220)
+            self.add_block_to_map(870,265,40,'block42','42','right',825,220)
+            self.add_block_to_map(915,310,40,'block43','43','right',870,265)
             
         elif line_name == 'Green Line':
-            data = self.green_line_data
-        
+            # place the yard block 
+            block0 = QtWidgets.QGraphicsRectItem(900,100,20,20)
+            block0.setBrush(QtGui.QColor(128,128,128)) # gray color for yard block 
+            self.graphicsView.scene().addItem(block0)
+            
+            # add label to yard 
+            text = QtWidgets.QGraphicsTextItem('Yard')
+            text.setPos(892,80)
+            self.graphicsView.scene().addItem(text)
+            
+            # continue building map using function 
+            self.add_block_to_map(900,250,20,'block63','63','right',900,100)
+            self.add_block_to_map(900,290,20,'block64','64','right',900,250)
+            self.add_block_to_map(900,330,20,'block65','65','right',900,290)
+            self.add_block_to_map(900,370,20,'block66','66','right',900,330)
+            self.add_block_to_map(900,410,20,'block67','67','right',900,370)
+            self.add_block_to_map(900,450,20,'block68','68','right',900,410)
+            self.add_block_to_map(900,490,20,'block69','69','right',900,450)
+            self.add_block_to_map(900,530,20,'block70','70','right',900,490)
+            self.add_block_to_map(900,570,20,'block71','71','right',900,530)
+            self.add_block_to_map(900,610,20,'block72','72','right',900,570)
+            self.add_block_to_map(850,640,20,'block73','73','bottom',900,610)
+            self.add_block_to_map(800,640,20,'block74','74','bottom',850,640)
+            self.add_block_to_map(750,640,20,'block75','75','bottom',800,640)
+            self.add_block_to_map(700,640,20,'block76','76','bottom',750,640)
+            self.add_block_to_map(650,640,20,'block77','77','bottom',700,640)
+            self.add_block_to_map(600,640,20,'block78','78','bottom',650,640)
+            self.add_block_to_map(550,640,20,'block79','79','bottom',600,640)
+            self.add_block_to_map(500,640,20,'block80','80','bottom',550,640)
+            self.add_block_to_map(450,640,20,'block81','81','bottom',500,640)
+            self.add_block_to_map(400,640,20,'block82','82','bottom',450,640)
+            self.add_block_to_map(350,640,20,'block83','83','bottom',400,640)
+            self.add_block_to_map(300,640,20,'block84','84','bottom',350,640)
+            self.add_block_to_map(250,640,20,'block85','85','bottom',300,640)
+            self.add_block_to_map(200,640,20,'block86','86','bottom',250,640)
+            self.add_block_to_map(150,640,20,'block87','87','bottom',200,640)
+            self.add_block_to_map(100,640,20,'block88','88','bottom',150,640)
+            self.add_block_to_map(65,620,20,'block89','89','bottom',100,640)
+            self.add_block_to_map(50,590,20,'block90','90','left',65,620)
+            self.add_block_to_map(35,560,20,'block91','91','left',50,590)
+            self.add_block_to_map(35,530,20,'block92','92','left',35,560)
+            self.add_block_to_map(35,500,20,'block93','93','left',35,530)
+            self.add_block_to_map(50,470,20,'block94','94','left',35,500)
+            self.add_block_to_map(65,440,20,'block95','95','left',50,470)
+            self.add_block_to_map(80,410,20,'block96','96','left',65,440)
+            self.add_block_to_map(120,410,20,'block97','97','top',80,410)
+            self.add_block_to_map(160,470,20,'block98','98','top',120,410)
+            self.add_block_to_map(200,530,20,'block99','99','top',160,470)
+            self.add_block_to_map(240,590,20,'block100','100','top',200,530)
+
+            # connect blocks 85 and 100
+            line = QtWidgets.QGraphicsLineItem(250,610,260,640)
+            line.setPen(QtGui.QColor(255,255,255)) # white color for lines
+            self.graphicsView.scene().addItem(line)
+            
+            # place more blocks 
+            self.add_block_to_map(680,580,20,'block101','101','left',650,640)
+            self.add_block_to_map(720,580,20,'block102','102','top',680,580)
+            self.add_block_to_map(760,580,20,'block103','103','top',720,580)
+            self.add_block_to_map(800,580,20,'block104','104','top',760,580)
+            self.add_block_to_map(840,560,20,'block105','105','bottom',800,580)
+            self.add_block_to_map(840,535,20,'block106','106','left',840,560)
+            self.add_block_to_map(840,510,20,'block107','107','left',840,535)
+            self.add_block_to_map(840,485,20,'block108','108','left',840,510)
+            self.add_block_to_map(840,460,20,'block109','109','left',840,485)
+            self.add_block_to_map(840,435,20,'block110','110','left',840,460)
+            self.add_block_to_map(840,410,20,'block111','111','left',840,435)
+            self.add_block_to_map(840,385,20,'block112','112','left',840,410)
+            self.add_block_to_map(840,360,20,'block113','113','left',840,385)
+            self.add_block_to_map(840,335,20,'block114','114','left',840,360)
+            self.add_block_to_map(840,310,20,'block115','115','left',840,335)
+            self.add_block_to_map(840,285,20,'block116','116','left',840,310)
+            self.add_block_to_map(840,260,20,'block117','117','left',840,285)
+            self.add_block_to_map(840,235,20,'block118','118','left',840,260)
+            self.add_block_to_map(820,210,20,'block119','119','left',840,235)
+            self.add_block_to_map(800,185,20,'block120','120','right',820,210)
+            self.add_block_to_map(780,160,20,'block121','121','right',800,185)
+            self.add_block_to_map(755,160,20,'block122','122','bottom',780,160)
+            self.add_block_to_map(880,225,20,'block62','62','right',900,250)
+            self.add_block_to_map(860,200,20,'block61','61','right',880,225)
+            self.add_block_to_map(845,175,20,'block60','60','right',860,200)
+            self.add_block_to_map(825,150,20,'block59','59','right',845,175)
+            self.add_block_to_map(805,125,20,'block58','58','right',825,150)
+            self.add_block_to_map(785,100,20,'block57','57','top',805,125)
+            self.add_block_to_map(760,100,20,'block56','56','top',785,100)
+            self.add_block_to_map(735,100,20,'block55','55','top',760,100)
+            self.add_block_to_map(710,100,20,'block54','54','top',735,100)
+            self.add_block_to_map(685,100,20,'block53','53','top',710,100)
+            self.add_block_to_map(660,100,20,'block52','52','top',685,100)
+            self.add_block_to_map(635,100,20,'block51','51','top',660,100)
+            self.add_block_to_map(610,100,20,'block50','50','top',635,100)
+            self.add_block_to_map(585,100,20,'block49','49','top',610,100)
+            self.add_block_to_map(560,100,20,'block48','48','top',585,100)
+            self.add_block_to_map(535,100,20,'block47','47','top',560,100)
+            self.add_block_to_map(510,100,20,'block46','46','top',535,100)
+            self.add_block_to_map(485,100,20,'block45','45','top',510,100)
+            self.add_block_to_map(460,100,20,'block44','44','top',485,100)
+            self.add_block_to_map(435,100,20,'block43','43','top',460,100)
+            self.add_block_to_map(410,100,20,'block42','42','top',435,100)
+            self.add_block_to_map(385,100,20,'block41','41','top',410,100)
+            self.add_block_to_map(360,100,20,'block40','40','top',385,100)
+            self.add_block_to_map(335,100,20,'block39','39','top',360,100)
+            self.add_block_to_map(310,100,20,'block38','38','top',335,100)
+            self.add_block_to_map(285,100,20,'block37','37','top',310,100)
+            self.add_block_to_map(260,100,20,'block36','36','top',285,100)
+            self.add_block_to_map(730,160,20,'block123','123','bottom',755,160)
+            self.add_block_to_map(705,160,20,'block124','124','bottom',730,160)
+            self.add_block_to_map(680,160,20,'block125','125','bottom',705,160)
+            self.add_block_to_map(655,160,20,'block126','126','bottom',680,160)
+            self.add_block_to_map(630,160,20,'block127','127','bottom',655,160)
+            self.add_block_to_map(605,160,20,'block128','128','bottom',630,160)
+            self.add_block_to_map(580,160,20,'block129','129','bottom',605,160)
+            self.add_block_to_map(555,160,20,'block130','130','bottom',580,160)
+            self.add_block_to_map(530,160,20,'block131','131','bottom',555,160)
+            self.add_block_to_map(505,160,20,'block132','132','bottom',530,160)
+            self.add_block_to_map(480,160,20,'block133','133','bottom',505,160)
+            self.add_block_to_map(455,160,20,'block134','134','bottom',480,160)
+            self.add_block_to_map(430,160,20,'block135','135','bottom',455,160)
+            self.add_block_to_map(405,160,20,'block136','136','bottom',430,160)
+            self.add_block_to_map(380,160,20,'block137','137','bottom',405,160)
+            self.add_block_to_map(355,160,20,'block138','138','bottom',380,160)
+            self.add_block_to_map(330,160,20,'block139','139','bottom',355,160)
+            self.add_block_to_map(305,160,20,'block140','140','bottom',330,160)
+            self.add_block_to_map(280,160,20,'block141','141','bottom',305,160)
+            self.add_block_to_map(255,160,20,'block142','142','bottom',280,160)
+            self.add_block_to_map(230,160,20,'block143','143','bottom',255,160)
+            self.add_block_to_map(205,160,20,'block144','144','bottom',230,160)
+            self.add_block_to_map(235,90,20,'block35','35','bottom',260,100)
+            self.add_block_to_map(210,80,20,'block34','34','bottom',235,90)
+            self.add_block_to_map(185,70,20,'block33','33','bottom',210,80)
+            self.add_block_to_map(160,60,20,'block32','32','bottom',185,70)
+            self.add_block_to_map(160,35,20,'block31','31','right',160,60)
+            self.add_block_to_map(160,10,20,'block30','30','right',160,35)
+            self.add_block_to_map(160,-15,20,'block29','29','right',160,10)
+            self.add_block_to_map(165,140,20,'block145','145','bottom',205,160)
+            self.add_block_to_map(125,120,20,'block146','146','bottom',165,140)
+            self.add_block_to_map(85,100,20,'block147','147','bottom',125,120)
+            self.add_block_to_map(85,60,20,'block148','148','left',85,100)
+            self.add_block_to_map(85,20,20,'block149','149','left',85,60)
+            self.add_block_to_map(85,-15,20,'block150','150','left',85,20)
+            self.add_block_to_map(122,-35,20,'block28','28','right',85,-15)
+            
+            # add both lines for junction
+            line = QtWidgets.QGraphicsLineItem(160,-5,132,-15)
+            line.setPen(QtGui.QColor(255,255,255)) # white color for lines
+            self.graphicsView.scene().addItem(line)
+            
+            line = QtWidgets.QGraphicsLineItem(105,-5,132,-15)
+            line.setPen(QtGui.QColor(255,255,255))
+            self.graphicsView.scene().addItem(line)
+            
+            # continue adding blocks
+            self.add_block_to_map(122,-56,20,'block27','27','right',122,-35)
+            self.add_block_to_map(122,-77,20,'block26','26','right',122,-56)
+            self.add_block_to_map(122,-98,20,'block25','25','right',122,-77)
+            self.add_block_to_map(122,-119,20,'block24','24','right',122,-98)
+            self.add_block_to_map(122,-140,20,'block23','23','right',122,-119) 
+            self.add_block_to_map(122,-161,20,'block22','22','right',122,-140)
+            self.add_block_to_map(122,-182,20,'block21','21','left',122,-161)
+            self.add_block_to_map(132,-203,20,'block20','20','left',122,-182)
+            self.add_block_to_map(182,-203,20,'block19','19','bottom',132,-203)
+            self.add_block_to_map(232,-203,20,'block18','18','bottom',182,-203)
+            self.add_block_to_map(282,-203,20,'block17','17','bottom',232,-203)
+            self.add_block_to_map(332,-203,20,'block16','16','bottom',282,-203)
+            self.add_block_to_map(382,-203,20,'block15','15','bottom',332,-203)
+            self.add_block_to_map(432,-203,20,'block14','14','bottom',382,-203)
+            self.add_block_to_map(482,-203,20,'block13','13','bottom',432,-203)
+            self.add_block_to_map(532,-203,20,'block12','12','bottom',482,-203)
+            self.add_block_to_map(582,-203,20,'block11','11','bottom',532,-203)
+            self.add_block_to_map(632,-203,20,'block10','10','bottom',582,-203)
+            self.add_block_to_map(682,-193,20,'block9','9','top',632,-203)
+            self.add_block_to_map(712,-173,20,'block8','8','right',682,-193)
+            self.add_block_to_map(682,-153,20,'block7','7','bottom',712,-173)
+            self.add_block_to_map(652,-133,20,'block6','6','bottom',682,-153)
+            self.add_block_to_map(622,-133,20,'block5','5','bottom',652,-133)
+            self.add_block_to_map(592,-133,20,'block4','4','bottom',622,-133)
+            self.add_block_to_map(562,-143,20,'block3','3','bottom',592,-133)
+            self.add_block_to_map(532,-153,20,'block2','2','bottom',562,-143)
+            self.add_block_to_map(502,-163,20,'block1','1','bottom',532,-153)
+            
+            # connect block 1 to 13
+            line = QtWidgets.QGraphicsLineItem(512,-163,492,-183)
+            line.setPen(QtGui.QColor(255,255,255))
+            self.graphicsView.scene().addItem(line)
+
         block0.mousePressEvent = self.show_block_info(0)
 
-    def add_block_to_map(self,x,y,block_number,block_number_2,label_pos,prev_x,prev_y):
-            block_number = QtWidgets.QGraphicsRectItem(x,y,40,40)
+    def add_block_to_map(self,x,y,block_size,block_number,block_number_2,label_pos,prev_x,prev_y):
+            block_number = QtWidgets.QGraphicsRectItem(x,y,block_size,block_size)
             block_number.setBrush(QtGui.QColor(0,128,0)) # gray color for yard block 
             self.graphicsView.scene().addItem(block_number)
             
             # handle different positions for the block label
             if label_pos == 'top' and y<0:
                 text = QtWidgets.QGraphicsTextItem(block_number_2)
-                text.setPos(x+10,y-20)
+                text.setPos(x+5,y-(block_size))
                 self.graphicsView.scene().addItem(text)
             
             if label_pos == 'top' and y>=0:
                 text = QtWidgets.QGraphicsTextItem(block_number_2)
-                text.setPos(x+10,y-20)
+                text.setPos(x-5,y-(block_size))
                 self.graphicsView.scene().addItem(text)
             
             if label_pos == 'right':
                 text = QtWidgets.QGraphicsTextItem(block_number_2)
-                text.setPos(x+40,y+10)
+                text.setPos(x+block_size,y)
                 self.graphicsView.scene().addItem(text)
             
             if label_pos == 'left':
                 text = QtWidgets.QGraphicsTextItem(block_number_2)
-                text.setPos(x-20,y+10)
+                text.setPos(x-(block_size*1.4),y)
                 self.graphicsView.scene().addItem(text)
             
             if label_pos == 'bottom' and y<0:
                 text = QtWidgets.QGraphicsTextItem(block_number_2)
-                text.setPos(x+12,y+40)
+                text.setPos(x-5,y+block_size)
                 self.graphicsView.scene().addItem(text)
             
             if label_pos == 'bottom' and y>=0:
                 text = QtWidgets.QGraphicsTextItem(block_number_2)
-                text.setPos(x+11 ,y+40)
+                text.setPos(x-5,y+block_size)
                 self.graphicsView.scene().addItem(text)
             
             # draw line to connect blocks with handling for different orientations 
+            if(block_number_2 == '28'):
+                return
+            
             # vertically aligned (negative)
             if (abs(prev_x-x)) <= 10 and y<0: 
-                line = QtWidgets.QGraphicsLineItem(x+20,prev_y,prev_x+20,prev_y-30)
+                line = QtWidgets.QGraphicsLineItem(prev_x+(block_size/2),prev_y,x+(block_size/2),y+block_size)
                 line.setPen(QtGui.QColor(255,255,255)) # white color for lines
                 self.graphicsView.scene().addItem(line)
+                return
             
-            # vertically aligned (positive)
-            if (abs(prev_x-x)) <= 30 and y>=0: 
-                line = QtWidgets.QGraphicsLineItem(x+15,y,prev_x+25,prev_y+40)
+            # vertically aligned moving down (positive)
+            if (abs(prev_x-x)) <= 10 and y>=0 and y > prev_y: 
+                line = QtWidgets.QGraphicsLineItem((x+(block_size/2)),y,prev_x+(block_size/2),prev_y+block_size)
                 line.setPen(QtGui.QColor(255,255,255)) # white color for lines
                 self.graphicsView.scene().addItem(line)
                 return 
             
+            # vertically aligned moving upwards
+            if (abs(prev_x-x)) <= 10 and y>=0 and prev_y > y:
+                line = QtWidgets.QGraphicsLineItem(x+(block_size/2),prev_y,prev_x+(block_size/2),y+block_size)
+                line.setPen(QtGui.QColor(255,255,255)) # white color for lines
+                self.graphicsView.scene().addItem(line)
+                return
+            
             if x == prev_x and y>=0:
-                line = QtWidgets.QGraphicsLineItem(x+20,prev_y,prev_x+20,prev_y+30)
+                line = QtWidgets.QGraphicsLineItem(x+(block_size*(8/3)),y,prev_x+(block_size/2),prev_y+block_size)
                 line.setPen(QtGui.QColor(255,255,255))
                 self.graphicsView.scene().addItem(line)
             
-            # blocks in line horizontally
-            if y == prev_y and y<0:
-                line = QtWidgets.QGraphicsLineItem(x+40,prev_y+20,prev_x,prev_y+20)
+            # blocks in line horizontally (right to left)
+            if (abs(prev_y-y)) <= 10 and x < prev_x and y<0:
+                line = QtWidgets.QGraphicsLineItem(prev_x,prev_y+(block_size/2),x+block_size,y+(block_size/2))
                 line.setPen(QtGui.QColor(255,255,255))
                 self.graphicsView.scene().addItem(line)
+                print(block_number_2)
+                return
             
-            if y == prev_y and y>=0:
-                line = QtWidgets.QGraphicsLineItem(x,prev_y+20,prev_x+40,prev_y+20)
+            # left to right negative y-axis
+            if (abs(prev_y-y)) <= 10 and x > prev_x and y<0:
+                line = QtWidgets.QGraphicsLineItem(prev_x+block_size,prev_y+(block_size/2),x,y+(block_size/2))
                 line.setPen(QtGui.QColor(255,255,255))
                 self.graphicsView.scene().addItem(line)
                 return
              
-            if (abs(prev_y-y)) <= 20 and y>=0:
-                line = QtWidgets.QGraphicsLineItem(x,y+20,prev_x+40,prev_y+25)
+            if (abs(prev_y-y)) <= 20 and y>=0 and x < prev_x:
+                line = QtWidgets.QGraphicsLineItem(x+block_size,y+(block_size/2),prev_x,prev_y+(block_size/2))
+                line.setPen(QtGui.QColor(255,255,255))
+                self.graphicsView.scene().addItem(line)
+                return
+            
+            # blocks in line horizontally going left to right 
+            if (abs(prev_y-y)) <= 20 and y>=0 and x > prev_x:
+                line = QtWidgets.QGraphicsLineItem(prev_x+block_size,prev_y+(block_size/2),x,y+(block_size/2))
                 line.setPen(QtGui.QColor(255,255,255))
                 self.graphicsView.scene().addItem(line)
                 return
             
             # diagonal cases
             # up to the left
-            elif x != prev_x and y != prev_y and x<prev_x and y<prev_y and y<0:
-                line = QtWidgets.QGraphicsLineItem(x+30,y+40,prev_x+10,prev_y)
+            elif x != prev_x and y != prev_y and x<prev_x and y<prev_y:
+                line = QtWidgets.QGraphicsLineItem(x+(block_size/2),y+block_size,prev_x,prev_y+(block_size/2))
                 line.setPen(QtGui.QColor(255,255,255))
                 self.graphicsView.scene().addItem(line)
             
             # down to the left
             elif x != prev_x and y != prev_y and x<prev_x and y>prev_y:
-                line = QtWidgets.QGraphicsLineItem(prev_x,prev_y+26,x+40,y+18)
+                line = QtWidgets.QGraphicsLineItem(prev_x,prev_y+(block_size/2),x+block_size,y+(block_size/2))
                 line.setPen(QtGui.QColor(255,255,255))
                 self.graphicsView.scene().addItem(line)
             
             # down to the right
             elif x != prev_x and y != prev_y and prev_x<x and y>prev_y:
-                line = QtWidgets.QGraphicsLineItem(prev_x+40,prev_y+20,x,y+20)
+                line = QtWidgets.QGraphicsLineItem(prev_x+block_size,prev_y+(block_size/2),x,y+(block_size/2))
                 line.setPen(QtGui.QColor(255,255,255))
                 self.graphicsView.scene().addItem(line)
             
             # up to the right (negative y-axis)
             elif x != prev_x and y != prev_y and x>prev_x and y<prev_y and y<0:
-                line = QtWidgets.QGraphicsLineItem(prev_x+40,prev_y+20,x,y+21)
+                line = QtWidgets.QGraphicsLineItem(prev_x+block_size,prev_y+(block_size/2),x,y+(block_size/2))
+                line.setPen(QtGui.QColor(255,255,255))
+                self.graphicsView.scene().addItem(line)
+              
+            # up to the right (positive y)    
+            elif x != prev_x and y != prev_y and x>prev_x and y<prev_y and y>=0:
+                line = QtWidgets.QGraphicsLineItem(prev_x+(block_size/2),prev_y,x+(block_size/2),y+block_size)
                 line.setPen(QtGui.QColor(255,255,255))
                 self.graphicsView.scene().addItem(line)
             

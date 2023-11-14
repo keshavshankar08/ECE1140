@@ -159,10 +159,10 @@
      <widget class="QPushButton" name="pushButton">
       <property name="geometry">
        <rect>
-        <x>290</x>
-        <y>30</y>
-        <width>40</width>
-        <height>40</height>
+        <x>530</x>
+        <y>-10</y>
+        <width>21</width>
+        <height>21</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -172,61 +172,13 @@
        <string/>
       </property>
      </widget>
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>340</x>
-        <y>40</y>
-        <width>91</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: #008000</string>
-      </property>
-      <property name="text">
-       <string>= Empty Block</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_2">
-      <property name="geometry">
-       <rect>
-        <x>480</x>
-        <y>30</y>
-        <width>40</width>
-        <height>40</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: #FF0000</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_2">
-      <property name="geometry">
-       <rect>
-        <x>530</x>
-        <y>40</y>
-        <width>111</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: #FF0000</string>
-      </property>
-      <property name="text">
-       <string>= Occupied Block</string>
-      </property>
-     </widget>
      <widget class="QWidget" name="formLayoutWidget_2">
       <property name="geometry">
        <rect>
         <x>939</x>
         <y>57</y>
         <width>271</width>
-        <height>391</height>
+        <height>404</height>
        </rect>
       </property>
       <layout class="QFormLayout" name="formLayout">
@@ -395,6 +347,16 @@
        <item row="11" column="1">
         <widget class="QLineEdit" name="cum_elevation_display"/>
        </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_27">
+         <property name="text">
+          <string>Block Number</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QLabel" name="label_13">
@@ -528,8 +490,8 @@
      <widget class="QWidget" name="formLayoutWidget_4">
       <property name="geometry">
        <rect>
-        <x>940</x>
-        <y>750</y>
+        <x>950</x>
+        <y>780</y>
         <width>271</width>
         <height>131</height>
        </rect>
@@ -601,7 +563,7 @@
       <property name="geometry">
        <rect>
         <x>1000</x>
-        <y>720</y>
+        <y>750</y>
         <width>153</width>
         <height>22</height>
        </rect>
@@ -615,6 +577,14 @@
        <string>Station Information</string>
       </property>
      </widget>
+     <zorder>graphicsView</zorder>
+     <zorder>formLayoutWidget_2</zorder>
+     <zorder>label_13</zorder>
+     <zorder>formLayoutWidget_3</zorder>
+     <zorder>label_20</zorder>
+     <zorder>formLayoutWidget_4</zorder>
+     <zorder>label_21</zorder>
+     <zorder>pushButton</zorder>
     </widget>
     <widget class="QSpinBox" name="SetEnvironmentTemperatureInputBox">
      <property name="geometry">
@@ -676,9 +646,9 @@
      <property name="geometry">
       <rect>
        <x>570</x>
-       <y>10</y>
+       <y>0</y>
        <width>221</width>
-       <height>51</height>
+       <height>41</height>
       </rect>
      </property>
      <property name="sizePolicy">
@@ -843,6 +813,54 @@
       <string>Failure Modes</string>
      </property>
     </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>730</x>
+       <y>50</y>
+       <width>111</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #FF0000</string>
+     </property>
+     <property name="text">
+      <string>= Occupied Block</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="geometry">
+      <rect>
+       <x>700</x>
+       <y>50</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: #FF0000</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>580</x>
+       <y>50</y>
+       <width>91</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: #008000</string>
+     </property>
+     <property name="text">
+      <string>= Empty Block</string>
+     </property>
+    </widget>
     <zorder>TrackModelBox</zorder>
     <zorder>SetEnvironmentTemperatureInputBox</zorder>
     <zorder>EnvironmentTemperatureLabel</zorder>
@@ -851,6 +869,9 @@
     <zorder>TrackLineColorValue</zorder>
     <zorder>LineSelectHint</zorder>
     <zorder>FailureModesBoxLabel</zorder>
+    <zorder>label_2</zorder>
+    <zorder>pushButton_2</zorder>
+    <zorder>label</zorder>
    </widget>
   </widget>
  </widget>

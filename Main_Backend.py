@@ -3,13 +3,15 @@ sys.path.append(".")
 from PyQt6.QtCore import QTimer, QThread, QCoreApplication, QObject, QDateTime
 from signals import signals
 from Track_Resources.Track import *
+from Train_Resources.CTC_Train import *
+from Modules.CTC.Backend.CTC_Backend import *
 from Modules.SW_Wayside.Backend.SW_Wayside_Backend import *
 from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
 from Main_UI import *
 
 # System clock constants
 INTERVAL = 50
-SYSTEM_SPEED = 5
+SYSTEM_SPEED = 1
 TIME_DELTA = INTERVAL * SYSTEM_SPEED
 START_YEAR = 2023
 START_MONTH = 1
@@ -39,12 +41,15 @@ class SystemTime(QObject):
     def timerHandler(self):
         self.current_time = self.current_time.addMSecs(TIME_DELTA)
         signals.current_system_time.emit(self.current_time) #Y:M:D:h:m:s
-        signals.main_backend_update_track.emit(self.track_instance) #sends current state of track out
-        signals.main_backend_update_values.emit() #tells modules to refresh
+        signals.sw_wayside_update_backend.emit(self.track_instance) #sends current state of track out
         
 
     def stopTimer(self):
         self.system_timer.stop()
+
+    #CTC Office Instance Updaters
+    def updateActiveTrains(self, updatedActiveTrains):
+        self.activeTrains = updatedActiveTrains
 
     # SW Wayside Instance Updaters
     def updateTrackInstance(self, updatedTrack):
