@@ -1,10 +1,9 @@
 import sys
 sys.path.append(".")
-import os
+import os, openpyxl
 from PyQt6 import QtWidgets, QtGui, uic
-from PyQt6.QtCore import Qt, QEvent
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFileDialog
-import openpyxl, re
         
 class TrackModelModule(QtWidgets.QMainWindow):
     def __init__(self):
@@ -29,6 +28,9 @@ class TrackModelModule(QtWidgets.QMainWindow):
         # build track in graphics view
         self.TrackLineColorValue.currentTextChanged.connect(self.build_track_map)
         
+        # connect mouse event to a function 
+        self.graphicsView.mousePressEvent = self.mousePressEvent
+        
     # functions 
     
     def track_layout(self):
@@ -42,8 +44,8 @@ class TrackModelModule(QtWidgets.QMainWindow):
         )
         
         # parse layout file
-        file_name = os.path.basename(response) # extract the filename from the path
-        layout_data = openpyxl.load_workbook(file_name, data_only=True) # open workbook and extract data only (take result from cells with formulas)
+        #file_name = os.path.basename(response)  extract the filename from the path
+        layout_data = openpyxl.load_workbook(response, data_only=True) # open workbook and extract data only (take result from cells with formulas)
         
         # get assign sheets to sheet names from the file
         sheet3 = layout_data['Red Line']
@@ -54,13 +56,13 @@ class TrackModelModule(QtWidgets.QMainWindow):
         self.green_line_data = []
         
         # iterate through to extract data
-        for row in sheet3.iter_rows(min_row=2, max_row=77, values_only=True):
+        for row in sheet3.iter_rows(min_row=2, max_row=78, values_only=True):
             line, section, block_number, block_length, block_grade, speed_limit, infrastructure, station_side, elevation, cumulative_elevation, traversal_time = row[:11]
             
             self.red_line_data.append((line, section, block_number, block_length, block_grade, speed_limit, infrastructure, station_side, elevation, cumulative_elevation, traversal_time))
             
         
-        for row in sheet4.iter_rows(min_row=2,max_row=151, values_only=True):
+        for row in sheet4.iter_rows(min_row=2,max_row=152, values_only=True):
             line, section, block_number, block_length, block_grade, speed_limit, infrastructure, station_side, elevation, cumulative_elevation, traversal_time = row[:11]
             
             self.green_line_data.append((line, section, block_number, block_length, block_grade, speed_limit, infrastructure, station_side, elevation, cumulative_elevation, traversal_time))
@@ -69,21 +71,58 @@ class TrackModelModule(QtWidgets.QMainWindow):
         self.LineSelectHint.setVisible(False)
         self.TrackLineColorValue.setEnabled(True)
         
-        
-        #TODO return lists from this function 
     
-    def show_block_info(self,block_number):
-        self.block_length_display.setText(str(self.red_line_data[block_number][3]))
-            
+    def mousePressEvent(self,e: QtGui.QMouseEvent):
+        if e.button() == Qt.MouseButton.LeftButton:
+            pos = e.pos()
+            items = self.graphicsView.items(pos)
+            for item in items:
+                if isinstance(item,QtWidgets.QGraphicsRectItem):
+                    block_number = str(item.toolTip())
+                    self.display_block_info(block_number)
+                    break
+                
+    def display_block_info(self, block_number):
+        for data in self.green_line_data:
+            if data[2] == int(block_number):  
+                self.block_number_display.setText(str(data[2]))
+                self.block_length_display.setText(str(data[3]))
+                self.block_grade_display.setText(str(data[4]))
+                self.speed_limit_display.setText(str(data[5]))
+                # TODO display status of traffic light (if applicable): get signal from wayside
+                if data[6] is not None:
+                    self.infrastructure_display.setText(str(data[6][0:7]))
+                    if str(data[6][0:7]) == 'STATION':
+                        self.station_name_display.setText(str(data[6][9:20]))
+                    if str(data[6][0:6]) == 'SWITCH' or str(data[6]) == 'UNDERGROUND':
+                        self.infrastructure_display.setText(str(data[6]))
+                        self.station_name_display.setText('')
+                    if str(data[6][0:20]) == 'UNDERGROUND; STATION':
+                        self.infrastructure_display.setText(str(data[6][0:20]))
+                        self.station_name_display.setText(str(data[6][22:40]))
+                    if str(data[6]) == 'RAILWAY CROSSING':
+                        self.infrastructure_display.setText(str(data[6]))
+                else:
+                    self.infrastructure_display.setText(str(data[6]))
+                    self.station_name_display.setText(str(data[6]))
+                # TODO display active switch direction (if applicable): get signal from wayside
+                # TODO display crossing status (if applicable): get signal from wayside 
+                self.elevation_display.setText(str(data[8]))
+                self.cum_elevation_display.setText(str(data[9]))
+                # TODO display beacon data (if applicable)
+                # TODO display track heater status
+                # TODO display train info (only if block is occupied)
+                # TODO display remainder of station info (tickets sold, passengers boarding and disembarking)
         
     def build_track_map(self):
         line_name = self.TrackLineColorValue.currentText()
     
         if line_name == 'Red Line':
+            
             # place the yard block and go from there
-            block0 = QtWidgets.QGraphicsRectItem(800,0,40,40)
-            block0.setBrush(QtGui.QColor(128,128,128)) # gray color for yard block 
-            self.graphicsView.scene().addItem(block0)
+            self.block0 = QtWidgets.QGraphicsRectItem(800,0,40,40)
+            self.block0.setBrush(QtGui.QColor(128,128,128)) # gray color for yard block 
+            self.graphicsView.scene().addItem(self.block0)
             
             # add label to yard 
             text = QtWidgets.QGraphicsTextItem('Yard')
@@ -144,9 +183,10 @@ class TrackModelModule(QtWidgets.QMainWindow):
             
         elif line_name == 'Green Line':
             # place the yard block 
-            block0 = QtWidgets.QGraphicsRectItem(900,100,20,20)
-            block0.setBrush(QtGui.QColor(128,128,128)) # gray color for yard block 
-            self.graphicsView.scene().addItem(block0)
+            self.block0 = QtWidgets.QGraphicsRectItem(900,100,20,20)
+            self.block0.setBrush(QtGui.QColor(128,128,128)) # gray color for yard block 
+            self.block0.setToolTip(str(0))
+            self.graphicsView.scene().addItem(self.block0)
             
             # add label to yard 
             text = QtWidgets.QGraphicsTextItem('Yard')
@@ -327,12 +367,16 @@ class TrackModelModule(QtWidgets.QMainWindow):
             line = QtWidgets.QGraphicsLineItem(512,-163,492,-183)
             line.setPen(QtGui.QColor(255,255,255))
             self.graphicsView.scene().addItem(line)
-
-        block0.mousePressEvent = self.show_block_info(0)
+            
+            # connect yard to block 57
+            line = QtWidgets.QGraphicsLineItem(900,110,805,110)
+            line.setPen(QtGui.QColor(255,255,255))
+            self.graphicsView.scene().addItem(line)
 
     def add_block_to_map(self,x,y,block_size,block_number,block_number_2,label_pos,prev_x,prev_y):
             block_number = QtWidgets.QGraphicsRectItem(x,y,block_size,block_size)
             block_number.setBrush(QtGui.QColor(0,128,0)) # gray color for yard block 
+            block_number.setToolTip(str(block_number_2))
             self.graphicsView.scene().addItem(block_number)
             
             # handle different positions for the block label
@@ -401,7 +445,6 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 line = QtWidgets.QGraphicsLineItem(prev_x,prev_y+(block_size/2),x+block_size,y+(block_size/2))
                 line.setPen(QtGui.QColor(255,255,255))
                 self.graphicsView.scene().addItem(line)
-                print(block_number_2)
                 return
             
             # left to right negative y-axis

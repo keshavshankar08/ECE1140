@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import *
 sys.path.append(".")
 #from Modules.CTC.Frontend.frontend import *
 from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
-from Modules.HW_Wayside.Frontend.frontend import *
+from Modules.HW_Wayside.Frontend.HW_Wayside_UI import *
 from Modules.Track_Model.Frontend.Track_Model_UI import *
 #from Modules.Train_Model.Frontend.train_model_test_bench_ui import *
 from Modules.Train_Controller.Frontend.TrainController import *
@@ -50,8 +50,8 @@ class Mainmenu(QtWidgets.QMainWindow):
 
     #window for the hw wayside controller
     def hw_wayside_clicked(self):
-        #self.hwWaysideWindow = HWWaysideModuleUI()
-        #self.hwWaysideWindow.show()
+        self.hwWaysideWindow = HWWaysideFrontend()
+        self.hwWaysideWindow.show()
         pass
 
     #window for the train controller

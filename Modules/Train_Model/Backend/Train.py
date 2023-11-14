@@ -6,7 +6,7 @@ from PyQt6.QtCore import QObject, QDateTime, pyqtSignal
 import sys
 sys.path.append(".")
 from signals import signals
-from Main_Backend import START_YEAR, START_MONTH, START_DAY, START_HOUR, START_MIN, START_SEC, TIME_DELTA
+from CONSTANTS import START_YEAR, START_MONTH, START_DAY, START_HOUR, START_MIN, START_SEC, TIME_DELTA
 
 import math
 
@@ -30,8 +30,20 @@ class Train(QObject):
         super().__init__()
         #### Signals
         signals.current_system_time.connect(self.setCurrentTime)
-        signals.main_backend_update_values.connect(self.TrainModelUpdateValues)
-        signals.trainController_send_power_command.connect(self.setPowerCommand)
+        signals.trainModel_backend_update.connect(self.TrainModelUpdateValues)
+        signals.train_controller_send_power_command.connect(self.setPowerCommand)
+        signals.train_controller_emergency_brake_off.connect(self.offEmergencyBrake)
+        signals.train_controller_emergency_brake_on.connect(self.onEmergencyBrake)
+        signals.train_controller_ext_lights_off.connect(self.offExteriorLights)
+        signals.train_controller_ext_lights_on.connect(self.onExteriorLights)
+        signals.train_controller_int_lights_off.connect(self.offInteriorLights)
+        signals.train_controller_int_lights_on.connect(self.onInteriorLights)
+        signals.train_controller_left_door_closed.connect(self.closeLeftDoors)
+        signals.train_controller_right_door_closed.connect(self.closeRightDoors)
+        signals.train_controller_left_door_open.connect(self.openLeftDoors)
+        signals.train_controller_right_door_open.connect(self.openRightDoors)
+        signals.train_controller_service_brake.connect(self.serviceBrakeReceive)
+        signals.train_controller_temperature_value.connect(self.receiveTemperature)
         #### Train ID
         self.train_id = 0
         #### Number of Passengers
@@ -87,7 +99,7 @@ class Train(QObject):
         #### Advertisements
         # not implemented haha hahahaha
         #### Passthroughs
-        self.speedLimit = 0.0
+        self.speedLimit = 70.0
         
         
 
@@ -127,6 +139,9 @@ class Train(QObject):
             
         if (self.currentSpeed > MAX_SPEED):
             self.currentSpeed = MAX_SPEED
+            
+        if (self.currentSpeed > self.speedLimit):
+            self.currentSpeed = self.speedLimit
         
             
         # Signals to Train Controller
@@ -145,6 +160,12 @@ class Train(QObject):
         
     def offEmergencyBrake(self):
         self.emergencyBrake = False
+    
+    def serviceBrakeReceive(self, value):
+        if (value == 1):
+            self.serviceBrake = True
+        else:
+            self.serviceBrake = False
 
     def onInteriorLights(self):
         self.interiorLight = True
@@ -167,8 +188,8 @@ class Train(QObject):
     def openRightDoors(self):
         self.rightDoor = False
     
-    def closeLeftDoors(self):
-        self.leftDoor = True
+    def closeRightDoors(self):
+        self.rightDoor = True
 
     def receiveTemperature(self, value):
         self.temperatureCommand = value
