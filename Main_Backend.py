@@ -9,6 +9,7 @@ from Modules.SW_Wayside.Backend.SW_Wayside_Backend import *
 from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
 from Modules.Track_Model.Backend.Track_Model_Backend import *
 from Modules.Track_Model.Frontend.Track_Model_UI import *
+from Track_Resources.PLC import *
 from Main_UI import *
 from CONSTANTS import *
 
@@ -22,51 +23,48 @@ class SystemTime(QObject):
         signals.stop_timer.connect(self.stopTimer)
         self.system_timer.start(INTERVAL)
         
+        # CTC Instances
+        self.active_trains_instance = ActiveTrains()
+
         # SW Wayside Instances
         self.sw_wayside_backend_instance = WaysideBackend()
+        self.plc_instance = PLC()
         self.track_instance = Track()
-        signals.sw_wayside_backend_update.connect(self.updateTrackInstance)
-<<<<<<< HEAD
+        signals.sw_wayside_backend_update.connect(self.sw_wayside_backend_update)
 
-        self.menu_instance = Mainmenu()
-
-=======
-        
         # Track Model Instances
         self.track_model_backend_instance = TrackModelModule()     
         self.track_instance = Track()
         signals.track_model_backend_update.connect(self.updateTrackInstance)
         
-        self.menu_instance = Mainmenu()  
+        self.menu_instance = Mainmenu()
         self.menu_instance.show()
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
 
     def timerHandler(self):
         self.current_time = self.current_time.addMSecs(TIME_DELTA)
         signals.current_system_time.emit(self.current_time) #Y:M:D:h:m:s
-        signals.sw_wayside_update_backend.emit(self.track_instance) #sends current state of track out
+        signals.sw_wayside_update_backend.emit(self.track_instance, self.active_trains_instance)
         signals.trainModel_backend_update.emit()
-        
 
     def stopTimer(self):
         self.system_timer.stop()
 
-    #CTC Office Instance Updaters
-    def updateActiveTrains(self, updatedActiveTrains):
-        self.activeTrains = updatedActiveTrains
+    # Handler for update from SW Wayside
+    def sw_wayside_backend_update(self, updated_track, updated_active_trains):
+        self.update_active_trains(updated_active_trains)
+        self.update_track_instance(updated_track)
 
-    # SW Wayside Instance Updaters
-    def updateTrackInstance(self, updatedTrack):
-        self.track_instance = updatedTrack
-    
-<<<<<<< HEAD
-    def updateMainMenu(self):
-         pass
-   
+    # Active trains instance updater
+    def update_active_trains(self, updated_active_trains):
+        self.active_trains_instance = updated_active_trains
+
+    # Track instance updater
+    def update_track_instance(self, updated_track):
+        self.track_instance = updated_track
         
-=======
+    def updateMainMenu(self):
+        pass
 
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
 if __name__ == '__main__':
         app = QApplication([])
         thread = QThread() 
