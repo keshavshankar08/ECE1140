@@ -1,12 +1,2 @@
 .DS_Store
-Track_Resources/__pycache__/Track.cpython-37.pyc
-__pycache__/Main_Backend.cpython-37.pyc
-__pycache__/signals.cpython-37.pyc
-Modules/SW_Wayside/Frontend/__pycache__/
-Modules/SW_Wayside/Backend/__pycache__/SW_Wayside_Backend.cpython-37.pyc
-Modules/CTC/Frontend/__pycache__/
-Modules/HW_Wayside/Frontend/__pycache__/
-Modules/Track_Model/Frontend/__pycache__/
-Modules/Train_Model/Backend/__pycache__/
-Modules/Train_Model/Frontend/__pycache__/
-__pycache__/
+*.pyc

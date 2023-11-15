@@ -1,16 +1,40 @@
 import sys
 sys.path.append(".")
-import os
+import os, openpyxl
 from PyQt6 import QtWidgets, QtGui, uic
-from PyQt6.QtCore import Qt, QEvent
+from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import QFileDialog
-import openpyxl, re
+from signals import signals
+from Track_Resources.Track import *
         
 class TrackModelModule(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
 
         uic.loadUi('Modules/Track_Model/Frontend/Track_Model_UI.ui',self)
+        
+        # instantiate copy of track class object 
+        self.track_instance_copy = Track()
+        
+        # member variable to hold selected block 
+        self.clicked_block = 0
+        
+        # declare list to store line data
+        self.red_line_data = []
+        self.green_line_data = []
+        
+        # receives updates from main backend
+        signals.track_model_update_backend.connect(self.backend_update_backend)
+        
+        # Receiving signals from train model
+        self.trainModel_receive_train_length = pyqtSignal(int)
+        self.trainModel_receive_distance_from_block_start = pyqtSignal(float)
+        self.trainModel_receive_distance_from_yard = pyqtSignal(float)
+
+        # function slots for train model signals 
+        signals.trainModel_send_train_length.connect(self.receive_train_length)
+        signals.trainModel_send_distance_from_block_start.connect(self.receive_distance_from_block_start)
+        signals.trainModel_send_distance_from_yard.connect(self.receive_distance_from_yard)
         
         # disable line selector until track is loaded to avoid undefined behavior
         self.TrackLineColorValue.setEnabled(False)
@@ -29,7 +53,51 @@ class TrackModelModule(QtWidgets.QMainWindow):
         # build track in graphics view
         self.TrackLineColorValue.currentTextChanged.connect(self.build_track_map)
         
+        # connect mouse event to a function 
+        self.graphicsView.mousePressEvent = self.mousePressEvent
+        
     # functions 
+    
+    # send updates from track model backend to main backend
+    def send_main_backend_update(self):
+        signals.track_model_backend_update.emit(self.track_instance_copy)
+    
+    # Update local instance of track 
+    def update_copy_track(self,updated_track):
+        self.track_instance_copy = updated_track
+        
+    # main function to carry out all functions in a cycle
+    def backend_update_backend(self,track_instance):
+        # update local instance of track
+        self.update_copy_track(track_instance)
+        
+        # update frontend 
+        self.display_block_info()
+        
+        # send updated signals to main backend
+        self.send_main_backend_update()
+        
+    
+    # train model signal slots 
+    def receive_train_length(self, length):
+        # Handle the received train length signal
+        print(f"Received train length: {length}")
+
+    def receive_distance_from_block_start(self, distance):
+        # Handle the received distance from block start signal
+        print(f"Received distance from block start: {distance}")
+
+    def receive_distance_from_yard(self, distance):
+        # Handle the received distance from yard signal
+        print(f"Received distance from yard: {distance}")
+        
+    # sends updates from track model backend to main backend
+    def send_main_backend_update(self):
+        signals.track_model_backend_update.emit(self.track_instance_copy)
+    
+    # calculates block occupancy
+    #def block_occupancy(self):
+
     
     def track_layout(self):
         file_filter = 'Excel File (*.xlsx)'
@@ -42,25 +110,21 @@ class TrackModelModule(QtWidgets.QMainWindow):
         )
         
         # parse layout file
-        file_name = os.path.basename(response) # extract the filename from the path
-        layout_data = openpyxl.load_workbook(file_name, data_only=True) # open workbook and extract data only (take result from cells with formulas)
+        layout_data = openpyxl.load_workbook(response, data_only=True) # open workbook and extract data only (take result from cells with formulas)
         
-        # get assign sheets to sheet names from the file
+        # assign sheets to sheet names from the file
         sheet3 = layout_data['Red Line']
         sheet4 = layout_data['Green Line']
         
-        # declare list to store line data
-        self.red_line_data = []
-        self.green_line_data = []
         
         # iterate through to extract data
-        for row in sheet3.iter_rows(min_row=2, max_row=77, values_only=True):
+        for row in sheet3.iter_rows(min_row=2, max_row=78, values_only=True):
             line, section, block_number, block_length, block_grade, speed_limit, infrastructure, station_side, elevation, cumulative_elevation, traversal_time = row[:11]
             
             self.red_line_data.append((line, section, block_number, block_length, block_grade, speed_limit, infrastructure, station_side, elevation, cumulative_elevation, traversal_time))
             
         
-        for row in sheet4.iter_rows(min_row=2,max_row=151, values_only=True):
+        for row in sheet4.iter_rows(min_row=2,max_row=152, values_only=True):
             line, section, block_number, block_length, block_grade, speed_limit, infrastructure, station_side, elevation, cumulative_elevation, traversal_time = row[:11]
             
             self.green_line_data.append((line, section, block_number, block_length, block_grade, speed_limit, infrastructure, station_side, elevation, cumulative_elevation, traversal_time))
@@ -69,17 +133,57 @@ class TrackModelModule(QtWidgets.QMainWindow):
         self.LineSelectHint.setVisible(False)
         self.TrackLineColorValue.setEnabled(True)
         
-        
-        #TODO return lists from this function 
     
-    def show_block_info(self,block_number):
-        self.block_length_display.setText(str(self.red_line_data[block_number][3]))
-            
+    def mousePressEvent(self,e: QtGui.QMouseEvent):
+        if e.button() == Qt.MouseButton.LeftButton:
+            pos = e.pos()
+            items = self.graphicsView.items(pos)
+            for item in items:
+                if isinstance(item,QtWidgets.QGraphicsRectItem):
+                    block_number = str(item.toolTip())
+                    self.clicked_block = block_number
+                    self.display_block_info()
+                    break
+                
+    def display_block_info(self):
+        block_number = self.clicked_block
+        for data in self.green_line_data:
+            if data[2] == int(block_number):  
+                self.block_number_display.setText(str(data[2]))
+                self.block_length_display.setText(str(data[3]))
+                self.block_grade_display.setText(str(data[4]))
+                self.speed_limit_display.setText(str(data[5]))
+                # TODO display status of traffic light (if applicable): get signal from wayside
+                self.traffic_light_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_traffic_light_color_string())
+                if data[6] is not None:
+                    self.infrastructure_display.setText(str(data[6][0:7]))
+                    if str(data[6][0:7]) == 'STATION':
+                        self.station_name_display.setText(str(data[6][9:20]))
+                    if str(data[6][0:6]) == 'SWITCH' or str(data[6]) == 'UNDERGROUND':
+                        self.infrastructure_display.setText(str(data[6]))
+                        self.station_name_display.setText('')
+                    if str(data[6][0:20]) == 'UNDERGROUND; STATION':
+                        self.infrastructure_display.setText(str(data[6][0:20]))
+                        self.station_name_display.setText(str(data[6][22:40]))
+                    if str(data[6]) == 'RAILWAY CROSSING':
+                        self.infrastructure_display.setText(str(data[6]))
+                else:
+                    self.infrastructure_display.setText(str(data[6]))
+                    self.station_name_display.setText(str(data[6]))
+                # TODO display active switch direction (if applicable): get signal from wayside
+                # TODO display crossing status (if applicable): get signal from wayside 
+                self.elevation_display.setText(str(data[8]))
+                self.cum_elevation_display.setText(str(data[9]))
+                # TODO display beacon data (if applicable)
+                # TODO display track heater status
+                # TODO display train info (only if block is occupied)
+                # TODO display remainder of station info (tickets sold, passengers boarding and disembarking)
         
     def build_track_map(self):
         line_name = self.TrackLineColorValue.currentText()
     
         if line_name == 'Red Line':
+            
             # place the yard block and go from there
             block0 = QtWidgets.QGraphicsRectItem(800,0,40,40)
             block0.setBrush(QtGui.QColor(128,128,128)) # gray color for yard block 
@@ -146,6 +250,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
             # place the yard block 
             block0 = QtWidgets.QGraphicsRectItem(900,100,20,20)
             block0.setBrush(QtGui.QColor(128,128,128)) # gray color for yard block 
+            block0.setToolTip(str(0))
             self.graphicsView.scene().addItem(block0)
             
             # add label to yard 
@@ -327,12 +432,16 @@ class TrackModelModule(QtWidgets.QMainWindow):
             line = QtWidgets.QGraphicsLineItem(512,-163,492,-183)
             line.setPen(QtGui.QColor(255,255,255))
             self.graphicsView.scene().addItem(line)
-
-        block0.mousePressEvent = self.show_block_info(0)
+            
+            # connect yard to block 57
+            line = QtWidgets.QGraphicsLineItem(900,110,805,110)
+            line.setPen(QtGui.QColor(255,255,255))
+            self.graphicsView.scene().addItem(line)
 
     def add_block_to_map(self,x,y,block_size,block_number,block_number_2,label_pos,prev_x,prev_y):
             block_number = QtWidgets.QGraphicsRectItem(x,y,block_size,block_size)
             block_number.setBrush(QtGui.QColor(0,128,0)) # gray color for yard block 
+            block_number.setToolTip(str(block_number_2))
             self.graphicsView.scene().addItem(block_number)
             
             # handle different positions for the block label
@@ -401,7 +510,6 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 line = QtWidgets.QGraphicsLineItem(prev_x,prev_y+(block_size/2),x+block_size,y+(block_size/2))
                 line.setPen(QtGui.QColor(255,255,255))
                 self.graphicsView.scene().addItem(line)
-                print(block_number_2)
                 return
             
             # left to right negative y-axis

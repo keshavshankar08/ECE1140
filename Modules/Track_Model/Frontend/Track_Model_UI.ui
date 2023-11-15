@@ -156,29 +156,13 @@
        <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton">
-      <property name="geometry">
-       <rect>
-        <x>530</x>
-        <y>-10</y>
-        <width>21</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: #008000</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
      <widget class="QWidget" name="formLayoutWidget_2">
       <property name="geometry">
        <rect>
-        <x>939</x>
-        <y>57</y>
+        <x>940</x>
+        <y>40</y>
         <width>271</width>
-        <height>404</height>
+        <height>451</height>
        </rect>
       </property>
       <layout class="QFormLayout" name="formLayout">
@@ -227,22 +211,7 @@
        <item row="5" column="1">
         <widget class="QLineEdit" name="traffic_light_display"/>
        </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label_6">
-         <property name="font">
-          <font>
-           <pointsize>14</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Infrastructure</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QLineEdit" name="infrastructure_display"/>
-       </item>
-       <item row="7" column="0">
+       <item row="10" column="0">
         <widget class="QLabel" name="label_9">
          <property name="font">
           <font>
@@ -254,10 +223,10 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
+       <item row="10" column="1">
         <widget class="QLineEdit" name="switch_direction_display"/>
        </item>
-       <item row="10" column="0">
+       <item row="13" column="0">
         <widget class="QLabel" name="label_5">
          <property name="font">
           <font>
@@ -269,10 +238,10 @@
          </property>
         </widget>
        </item>
-       <item row="10" column="1">
+       <item row="13" column="1">
         <widget class="QLineEdit" name="elevation_display"/>
        </item>
-       <item row="11" column="0">
+       <item row="14" column="0">
         <widget class="QLabel" name="label_8">
          <property name="font">
           <font>
@@ -284,7 +253,7 @@
          </property>
         </widget>
        </item>
-       <item row="14" column="0">
+       <item row="17" column="0">
         <widget class="QLabel" name="label_11">
          <property name="font">
           <font>
@@ -296,10 +265,10 @@
          </property>
         </widget>
        </item>
-       <item row="14" column="1">
+       <item row="17" column="1">
         <widget class="QLineEdit" name="beacon_display"/>
        </item>
-       <item row="15" column="0">
+       <item row="18" column="0">
         <widget class="QLabel" name="label_12">
          <property name="font">
           <font>
@@ -311,7 +280,7 @@
          </property>
         </widget>
        </item>
-       <item row="15" column="1">
+       <item row="18" column="1">
         <widget class="QLineEdit" name="track_heater_display"/>
        </item>
        <item row="1" column="0">
@@ -329,7 +298,7 @@
        <item row="1" column="1">
         <widget class="QLineEdit" name="block_length_display"/>
        </item>
-       <item row="8" column="0">
+       <item row="11" column="0">
         <widget class="QLabel" name="label_10">
          <property name="font">
           <font>
@@ -341,19 +310,34 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="1">
+       <item row="11" column="1">
         <widget class="QLineEdit" name="crossing_status_display"/>
        </item>
-       <item row="11" column="1">
+       <item row="14" column="1">
         <widget class="QLineEdit" name="cum_elevation_display"/>
        </item>
        <item row="0" column="1">
-        <widget class="QLineEdit" name="lineEdit"/>
+        <widget class="QLineEdit" name="block_number_display"/>
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_27">
          <property name="text">
           <string>Block Number</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0" colspan="2">
+        <widget class="QLineEdit" name="infrastructure_display"/>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Infrastructure</string>
          </property>
         </widget>
        </item>
@@ -363,7 +347,7 @@
       <property name="geometry">
        <rect>
         <x>1010</x>
-        <y>480</y>
+        <y>500</y>
         <width>141</width>
         <height>16</height>
        </rect>
@@ -381,7 +365,7 @@
       <property name="geometry">
        <rect>
         <x>940</x>
-        <y>510</y>
+        <y>520</y>
         <width>271</width>
         <height>215</height>
        </rect>
@@ -473,7 +457,7 @@
       <property name="geometry">
        <rect>
         <x>1010</x>
-        <y>30</y>
+        <y>20</y>
         <width>141</width>
         <height>20</height>
        </rect>
@@ -490,26 +474,14 @@
      <widget class="QWidget" name="formLayoutWidget_4">
       <property name="geometry">
        <rect>
-        <x>950</x>
+        <x>940</x>
         <y>780</y>
         <width>271</width>
-        <height>131</height>
+        <height>153</height>
        </rect>
       </property>
       <layout class="QFormLayout" name="formLayout_3">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_22">
-         <property name="font">
-          <font>
-           <pointsize>14</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Station Name</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
+       <item row="3" column="0">
         <widget class="QLabel" name="label_23">
          <property name="font">
           <font>
@@ -521,10 +493,10 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="3" column="1">
         <widget class="QLineEdit" name="tickets_sold_display"/>
        </item>
-       <item row="2" column="0">
+       <item row="4" column="0">
         <widget class="QLabel" name="label_24">
          <property name="font">
           <font>
@@ -536,10 +508,10 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="4" column="1">
         <widget class="QLineEdit" name="passengers_boarding_display"/>
        </item>
-       <item row="3" column="0">
+       <item row="5" column="0">
         <widget class="QLabel" name="label_25">
          <property name="font">
           <font>
@@ -551,11 +523,23 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="5" column="1">
         <widget class="QLineEdit" name="passengers_disembarking_display"/>
        </item>
-       <item row="0" column="1">
+       <item row="1" column="0" colspan="2">
         <widget class="QLineEdit" name="station_name_display"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_22">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Station Name</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -577,14 +561,6 @@
        <string>Station Information</string>
       </property>
      </widget>
-     <zorder>graphicsView</zorder>
-     <zorder>formLayoutWidget_2</zorder>
-     <zorder>label_13</zorder>
-     <zorder>formLayoutWidget_3</zorder>
-     <zorder>label_20</zorder>
-     <zorder>formLayoutWidget_4</zorder>
-     <zorder>label_21</zorder>
-     <zorder>pushButton</zorder>
     </widget>
     <widget class="QSpinBox" name="SetEnvironmentTemperatureInputBox">
      <property name="geometry">
@@ -861,6 +837,22 @@
       <string>= Empty Block</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="pushButton">
+     <property name="geometry">
+      <rect>
+       <x>550</x>
+       <y>50</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: #008000</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
     <zorder>TrackModelBox</zorder>
     <zorder>SetEnvironmentTemperatureInputBox</zorder>
     <zorder>EnvironmentTemperatureLabel</zorder>
@@ -872,6 +864,7 @@
     <zorder>label_2</zorder>
     <zorder>pushButton_2</zorder>
     <zorder>label</zorder>
+    <zorder>pushButton</zorder>
    </widget>
   </widget>
  </widget>
