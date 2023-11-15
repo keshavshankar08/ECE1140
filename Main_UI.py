@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import *
 sys.path.append(".")
 from Modules.CTC.Frontend.CTC_UI import *
 from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
-from Modules.HW_Wayside.Frontend.frontend import *
+from Modules.HW_Wayside.Frontend.HW_Wayside_UI import *
 from Modules.Track_Model.Backend.Track_Model_Backend import *
 #from Modules.CTC.Frontend.frontend import *
 from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *

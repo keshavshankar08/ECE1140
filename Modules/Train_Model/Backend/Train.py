@@ -2,7 +2,7 @@
 # Constants reflect the properties of the Alstom/Bombardier Flexity 2.
 # Written by Alex Ivensky for ECE 1140
 
-from PyQt6.QtCore import QObject, QDateTime, pyqtSignal
+from PyQt6.QtCore import QObject, QDateTime
 import sys
 
 sys.path.append(".")
@@ -32,6 +32,7 @@ class Train(QObject):
         #### Signals
         signals.current_system_time.connect(self.setCurrentTime)
         signals.trainModel_backend_update.connect(self.TrainModelUpdateValues)
+        # Train Controller
         signals.train_controller_send_power_command.connect(self.setPowerCommand)
         signals.train_controller_emergency_brake_off.connect(self.offEmergencyBrake)
         signals.train_controller_emergency_brake_on.connect(self.onEmergencyBrake)
@@ -45,13 +46,20 @@ class Train(QObject):
         signals.train_controller_right_door_open.connect(self.openRightDoors)
         signals.train_controller_service_brake.connect(self.serviceBrakeReceive)
         signals.train_controller_temperature_value.connect(self.receiveTemperature)
+        # Track Model
+        signals.track_model_speed_limit.connect(self.receiveSpeedLimit)
+        signals.track_model_authority.connect(self.receiveAuthority)
+        signals.track_model_track_circuit_polarity.connect(self.receivePolarity)
+        signals.track_model_beacon.connect(self.receiveBeacon)
+        signals.track_model_suggested_speed.connect(self.receiveSuggestedSpeed)
         signals.current_system_time.connect(self.setCurrentTime)
         #### Train ID
         self.train_id = 0
         #### Number of Passengers
+        self.numCrew = 2
         self.numPassengers = 0
         #### Intrinsic Properties
-        self.mass = CAR_WEIGHT_EMPTY  # kg
+        self.mass = CAR_WEIGHT_EMPTY + self.numCrew * 70  # kg
         self.length = CAR_LENGTH  # m
         self.height = CAR_HEIGHT  # m
         self.width = CAR_WIDTH  # m
@@ -83,6 +91,7 @@ class Train(QObject):
         self.brakeForce = 0.0  # N
         self.frictionForce = 0.0  # N
         ## Track
+        self.suggestedSpeed = 0.0  # m/s
         self.currentAuthority = 0.0  # m
         self.currentBlock = 0  # dimensionless
         self.trackPolarity = 1  # or -1
@@ -91,7 +100,6 @@ class Train(QObject):
         self.distanceFromYard = 0.0
         self.distanceFromBlockStart = 0.0
         self.currentBeacon = None
-        self.beaconList = []  # list of all beacons received
         #### Time
         self.current_time = QDateTime(START_YEAR, START_MONTH, START_MONTH, START_DAY, START_HOUR, START_MIN, START_SEC)
         #### Failure
@@ -128,10 +136,11 @@ class Train(QObject):
         self.slopeForce = self.mass * GRAVITY * math.sin(self.currentAngle)
         ### FRICTION
         self.frictionForce = self.mass * GRAVITY * FRICTION_COEFF * math.cos(self.currentAngle)
-
+        ### NET FORCE
         self.netForce = self.engineForce - self.slopeForce - self.brakeForce - self.frictionForce
         if (self.netForce > MAX_ENGINE_FORCE):
             self.netForce = MAX_ENGINE_FORCE
+        
         self.currentAccel = self.netForce / self.mass
 
         if (self.commandedPower <= MAX_MOTOR_POWER):
@@ -145,6 +154,11 @@ class Train(QObject):
 
         if (self.currentSpeed > self.speedLimit):
             self.currentSpeed = self.speedLimit
+            
+        ## Position Calculation
+        
+        self.distanceFromYard += self.currentSpeed * (TIME_DELTA * 0.001)
+        self.distanceFromBlockStart += self.currentSpeed * (TIME_DELTA * 0.001)
 
         # Signals to Train Controller
         signals.trainModel_send_engine_failure.emit(self.engineFail)
@@ -152,6 +166,10 @@ class Train(QObject):
         signals.trainModel_send_brake_failure.emit(self.brakeFail)
         signals.trainModel_send_actual_velocity.emit(self.currentSpeed)
         signals.trainModel_send_emergency_brake.emit(self.emergencyBrake)
+        signals.trainModel_send_authority.emit(self.currentAuthority)
+        signals.trainModel_send_beacon.emit(self.currentBeacon)
+        signals.trainModel_send_speed_limit.emit(self.speedLimit)
+        signals.trainModel_send_suggested_speed.emit(self.suggestedSpeed)
         # Signals to Track Model
         signals.trainModel_send_train_length.emit(self.length)
         signals.trainModel_send_distance_from_block_start.emit(self.distanceFromBlockStart)
@@ -203,12 +221,33 @@ class Train(QObject):
         self.commandedPower = value
 
     def receiveBeacon(self, beacon):
-        self.beaconList.append(beacon)
+        self.currentBeacon = beacon
+        self.updateUIBeacon.emit(beacon)
+        
+    def receiveSpeedLimit(self, value):
+        self.speedLimit = value
+        
+    def receiveAuthority(self, value):
+        self.currentAuthority = value
+    
+    def receivePolarity(self, value):
+        if (value != self.trackPolarity):
+            self.distanceFromBlockStart = 0
+        self.trackPolarity = value
+        
+    def receiveSuggestedSpeed(self, value):
+        self.suggestedSpeed = value
 
     def showAdvertisement(self):
         pass
+    
+    def receivePassengers(self, value):
+        self.numPassengers += value
+        self.mass += ((self.numPassengers) * 70) # average human weighs 70 kg.
+
+train = Train()
 
 
 trains = {
-    1: Train()
+    0: train
 }

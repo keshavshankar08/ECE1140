@@ -96,13 +96,7 @@
                </layout>
               </item>
               <item row="0" column="0">
-               <widget class="QComboBox" name="trainSelectComboBox">
-                <item>
-                 <property name="text">
-                  <string>&lt; select train &gt;</string>
-                 </property>
-                </item>
-               </widget>
+               <widget class="QComboBox" name="trainSelectComboBox"/>
               </item>
              </layout>
             </item>
@@ -337,17 +331,10 @@
                        </widget>
                       </item>
                       <item alignment="Qt::AlignRight">
-                       <widget class="QComboBox" name="sBrakeSelect">
-                        <item>
-                         <property name="text">
-                          <string>off</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>on</string>
-                         </property>
-                        </item>
+                       <widget class="QLineEdit" name="sBrakeDisplay">
+                        <property name="text">
+                         <string>off</string>
+                        </property>
                        </widget>
                       </item>
                      </layout>

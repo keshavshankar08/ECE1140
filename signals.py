@@ -53,6 +53,7 @@ class signalsList(QObject):
     trainModel_send_engine_failure = pyqtSignal(bool)
     trainModel_send_brake_failure = pyqtSignal(bool)
     trainModel_send_signal_failure = pyqtSignal(bool)
+    trainModel_update_beacon_UI = pyqtSignal(str)
     
     #Train Controller Signals
     #lights

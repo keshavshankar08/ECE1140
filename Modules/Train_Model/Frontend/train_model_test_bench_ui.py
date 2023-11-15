@@ -56,14 +56,15 @@ class TrainModelTestBenchUI(QtWidgets.QMainWindow):
         else:
             self.testTrain.serviceBrake = False
         if (self.tb_polarity.currentText() == "1"):
-            self.testTrain.trackPolarity = 1
+            signals.track_model_track_circuit_polarity.emit(1)
         else:
-            self.testTrain.trackPolarity = -1
+            signals.track_model_track_circuit_polarity.emit(-1)
         self.testTrain.commandedPower = self.tb_power.value()
         self.testTrain.currentGradient = self.tb_gradient.value()
         self.testTrain.speedLimit = self.tb_speedLimitSelect.value()
-        self.testTrain.beaconList.append(self.tb_beaconEntry.text())
+        self.testTrain.currentBeacon = self.tb_beaconEntry.text()
         self.testTrain.numPassengers += self.tb_psgr.value()
+        
 
     def engineFailCheckBoxReceive(self, value):
         self.testTrain.engineFail = value
@@ -128,13 +129,13 @@ class TrainModelTestBenchUI(QtWidgets.QMainWindow):
             self.eBrakeDisplay.setText("off")
 
     def DFBSDisplay(self, value):
-        self.tb_DFBS.setText(str(value))
+        self.tb_DFBS.setText(format(value * 3.281, '.2f'))
 
     def SDFYDisplay(self, value):
-        self.tb_DFY.setText(str(value))
+        self.tb_DFY.setText(format(value * 3.281, '.2f'))
 
     def lenDisplay(self, value):
-        self.tb_lenDisplay.setText(str(value))
+        self.tb_lenDisplay.setText(format(value * 3.281, '.2f'))
 
 
 if __name__ == "__main__":
