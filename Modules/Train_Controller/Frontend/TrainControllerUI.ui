@@ -66,8 +66,13 @@
     <widget class="QTextEdit" name="comPowerVal">
      <property name="geometry">
       <rect>
+<<<<<<< HEAD
        <x>180</x>
        <y>110</y>
+=======
+       <x>210</x>
+       <y>80</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>41</width>
        <height>21</height>
       </rect>
@@ -127,8 +132,13 @@ p, li { white-space: pre-wrap; }
     <widget class="QTextEdit" name="authorityVal">
      <property name="geometry">
       <rect>
+<<<<<<< HEAD
        <x>180</x>
        <y>170</y>
+=======
+       <x>210</x>
+       <y>140</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>41</width>
        <height>21</height>
       </rect>
@@ -177,8 +187,13 @@ p, li { white-space: pre-wrap; }
     <widget class="QLabel" name="CommandedPower">
      <property name="geometry">
       <rect>
+<<<<<<< HEAD
        <x>180</x>
        <y>90</y>
+=======
+       <x>210</x>
+       <y>60</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>71</width>
        <height>21</height>
       </rect>
@@ -220,8 +235,13 @@ p, li { white-space: pre-wrap; }
     <widget class="QLabel" name="authority">
      <property name="geometry">
       <rect>
+<<<<<<< HEAD
        <x>180</x>
        <y>150</y>
+=======
+       <x>210</x>
+       <y>120</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>71</width>
        <height>20</height>
       </rect>
@@ -239,7 +259,11 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>310</x>
+<<<<<<< HEAD
        <y>220</y>
+=======
+       <y>240</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>81</width>
        <height>20</height>
       </rect>
@@ -257,7 +281,11 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>410</x>
+<<<<<<< HEAD
        <y>260</y>
+=======
+       <y>280</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>31</width>
        <height>20</height>
       </rect>
@@ -275,7 +303,11 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>410</x>
+<<<<<<< HEAD
        <y>310</y>
+=======
+       <y>330</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>31</width>
        <height>20</height>
       </rect>
@@ -293,7 +325,11 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>240</x>
+<<<<<<< HEAD
        <y>340</y>
+=======
+       <y>360</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>61</width>
        <height>20</height>
       </rect>
@@ -311,7 +347,11 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>220</x>
+<<<<<<< HEAD
        <y>260</y>
+=======
+       <y>280</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>31</width>
        <height>21</height>
       </rect>
@@ -329,7 +369,11 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>220</x>
+<<<<<<< HEAD
        <y>310</y>
+=======
+       <y>330</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>31</width>
        <height>21</height>
       </rect>
@@ -347,7 +391,11 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>370</x>
+<<<<<<< HEAD
        <y>310</y>
+=======
+       <y>330</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>31</width>
        <height>21</height>
       </rect>
@@ -365,7 +413,11 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>260</x>
+<<<<<<< HEAD
        <y>260</y>
+=======
+       <y>280</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>31</width>
        <height>21</height>
       </rect>
@@ -383,7 +435,11 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>380</x>
+<<<<<<< HEAD
        <y>240</y>
+=======
+       <y>260</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>61</width>
        <height>20</height>
       </rect>
@@ -401,7 +457,11 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>260</x>
+<<<<<<< HEAD
        <y>310</y>
+=======
+       <y>330</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>31</width>
        <height>21</height>
       </rect>
@@ -419,7 +479,11 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>380</x>
+<<<<<<< HEAD
        <y>290</y>
+=======
+       <y>310</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>61</width>
        <height>20</height>
       </rect>
@@ -437,7 +501,11 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>240</x>
+<<<<<<< HEAD
        <y>290</y>
+=======
+       <y>310</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>51</width>
        <height>20</height>
       </rect>
@@ -455,7 +523,11 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>310</x>
+<<<<<<< HEAD
        <y>340</y>
+=======
+       <y>360</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>41</width>
        <height>21</height>
       </rect>
@@ -470,7 +542,11 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>370</x>
+<<<<<<< HEAD
        <y>260</y>
+=======
+       <y>280</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>31</width>
        <height>21</height>
       </rect>
@@ -488,7 +564,11 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>240</x>
+<<<<<<< HEAD
        <y>240</y>
+=======
+       <y>260</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>51</width>
        <height>20</height>
       </rect>
@@ -517,14 +597,23 @@ p, li { white-space: pre-wrap; }
       </font>
      </property>
      <property name="text">
+<<<<<<< HEAD
       <string>Emergency Button</string>
+=======
+      <string>Deactivated</string>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
      </property>
     </widget>
     <widget class="QLabel" name="commandedspeed">
      <property name="geometry">
       <rect>
+<<<<<<< HEAD
        <x>440</x>
        <y>150</y>
+=======
+       <x>380</x>
+       <y>120</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>151</width>
        <height>20</height>
       </rect>
@@ -541,8 +630,13 @@ p, li { white-space: pre-wrap; }
     <widget class="QLabel" name="Traincontrols">
      <property name="geometry">
       <rect>
+<<<<<<< HEAD
        <x>290</x>
        <y>30</y>
+=======
+       <x>280</x>
+       <y>0</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>121</width>
        <height>31</height>
       </rect>
@@ -559,8 +653,13 @@ p, li { white-space: pre-wrap; }
     <widget class="QTextEdit" name="curSpeedVal">
      <property name="geometry">
       <rect>
+<<<<<<< HEAD
        <x>440</x>
        <y>110</y>
+=======
+       <x>380</x>
+       <y>80</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>41</width>
        <height>21</height>
       </rect>
@@ -584,8 +683,13 @@ p, li { white-space: pre-wrap; }
     <widget class="QTextEdit" name="comSpeedVal">
      <property name="geometry">
       <rect>
+<<<<<<< HEAD
        <x>440</x>
        <y>170</y>
+=======
+       <x>380</x>
+       <y>140</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>41</width>
        <height>21</height>
       </rect>
@@ -610,9 +714,15 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>299</x>
+<<<<<<< HEAD
        <y>70</y>
        <width>71</width>
        <height>131</height>
+=======
+       <y>40</y>
+       <width>71</width>
+       <height>191</height>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
       </rect>
      </property>
      <property name="font">
@@ -621,7 +731,11 @@ p, li { white-space: pre-wrap; }
       </font>
      </property>
      <property name="maximum">
+<<<<<<< HEAD
       <number>25</number>
+=======
+      <number>44</number>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
      </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -633,8 +747,13 @@ p, li { white-space: pre-wrap; }
     <widget class="QLabel" name="currentspeed">
      <property name="geometry">
       <rect>
+<<<<<<< HEAD
        <x>440</x>
        <y>90</y>
+=======
+       <x>380</x>
+       <y>60</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>101</width>
        <height>20</height>
       </rect>
@@ -678,9 +797,15 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>530</x>
+<<<<<<< HEAD
        <y>260</y>
        <width>31</width>
        <height>101</height>
+=======
+       <y>290</y>
+       <width>31</width>
+       <height>71</height>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
       </rect>
      </property>
      <property name="font">
@@ -689,7 +814,11 @@ p, li { white-space: pre-wrap; }
       </font>
      </property>
      <property name="maximum">
+<<<<<<< HEAD
       <number>10</number>
+=======
+      <number>1</number>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
      </property>
      <property name="singleStep">
       <number>1</number>
@@ -711,7 +840,11 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>510</x>
+<<<<<<< HEAD
        <y>230</y>
+=======
+       <y>260</y>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>91</width>
        <height>20</height>
       </rect>
@@ -744,6 +877,27 @@ p, li { white-space: pre-wrap; }
       <string extracomment="Train">Train</string>
      </property>
     </widget>
+<<<<<<< HEAD
+=======
+    <widget class="QLabel" name="utilities_7">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>260</y>
+       <width>111</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Emergency Brake</string>
+     </property>
+    </widget>
+>>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
    </widget>
    <widget class="QFrame" name="MenuSection">
     <property name="geometry">
