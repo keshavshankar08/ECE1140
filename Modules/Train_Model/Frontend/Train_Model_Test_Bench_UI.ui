@@ -264,7 +264,14 @@
            </widget>
           </item>
           <item alignment="Qt::AlignRight">
-           <widget class="QDoubleSpinBox" name="tb_speedLimitSelect"/>
+           <widget class="QDoubleSpinBox" name="tb_speedLimitSelect">
+            <property name="maximum">
+             <double>70.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>70.000000000000000</double>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -530,7 +537,11 @@
            </widget>
           </item>
           <item alignment="Qt::AlignRight">
-           <widget class="QDoubleSpinBox" name="tb_temperatureSelect"/>
+           <widget class="QDoubleSpinBox" name="tb_temperatureSelect">
+            <property name="value">
+             <double>60.000000000000000</double>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>

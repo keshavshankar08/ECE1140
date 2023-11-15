@@ -15,17 +15,12 @@ class signalsList(QObject):
     ctc_office_frontend_update = pyqtSignal(Track)
 
     # SW Wayside Signals
-    sw_wayside_update_backend = pyqtSignal(Track) # update from main backend to sw wayside backend
+    sw_wayside_update_backend = pyqtSignal(Track, ActiveTrains) # update from main backend to sw wayside backend
+    sw_wayside_update_plc = pyqtSignal(Track, ActiveTrains, str, int, int) # update from sw wayside backend to plc
     sw_wayside_update_frontend = pyqtSignal(Track) # update from sw wayside backend to sw wayside frontend
-    sw_wayside_frontend_update = pyqtSignal(Track) # update from sw wayside frontend to sw wayside backend
-    sw_wayside_backend_update = pyqtSignal(Track) # update from sw wayside backend to main backend
-    '''
-    Main Backend    ->  SW Wayside Backend  ->  SW Wayside Frontend
-                                                        |
-                                                        ▼
-                        Main Backend    <-      SW Wayside Backend             
-    '''
-    
+    sw_wayside_frontend_update = pyqtSignal(Track, str, int, int, str) # update from sw wayside frontend to sw wayside backend
+    sw_wayside_plc_update = pyqtSignal(Track, ActiveTrains) # update from plc to sw wayside backend
+    sw_wayside_backend_update = pyqtSignal(Track, ActiveTrains) # update from sw wayside backend to main backend
     
     # Track Model
     track_model_update_backend = pyqtSignal(Track)
@@ -40,6 +35,7 @@ class signalsList(QObject):
     track_model_beacon = pyqtSignal(str)
     
     # Train Model Signals
+    trainModel_backend_update = pyqtSignal()
     trainModel_send_actual_velocity = pyqtSignal(float)
     trainModel_send_emergency_brake = pyqtSignal(bool)
     trainModel_send_suggested_speed = pyqtSignal(float)
@@ -52,7 +48,8 @@ class signalsList(QObject):
     trainModel_send_engine_failure = pyqtSignal(bool)
     trainModel_send_brake_failure = pyqtSignal(bool)
     trainModel_send_signal_failure = pyqtSignal(bool)
-
+    trainModel_update_beacon_UI = pyqtSignal(str)
+    
     #Train Controller Signals
     #lights
     train_controller_int_lights_on = pyqtSignal(bool)

@@ -9,18 +9,10 @@ from Modules.SW_Wayside.Backend.SW_Wayside_Backend import *
 from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
 from Modules.Track_Model.Backend.Track_Model_Backend import *
 from Modules.Track_Model.Frontend.Track_Model_UI import *
+from Track_Resources.PLC import *
 from Main_UI import *
+from CONSTANTS import *
 
-# System clock constants
-INTERVAL = 50
-SYSTEM_SPEED = 1
-TIME_DELTA = INTERVAL * SYSTEM_SPEED
-START_YEAR = 2023
-START_MONTH = 1
-START_DAY = 1
-START_HOUR = 12
-START_MIN = 0
-START_SEC = 0
 
 class SystemTime(QObject):
     def __init__(self):
@@ -31,36 +23,47 @@ class SystemTime(QObject):
         signals.stop_timer.connect(self.stopTimer)
         self.system_timer.start(INTERVAL)
         
+        # CTC Instances
+        self.active_trains_instance = ActiveTrains()
+
         # SW Wayside Instances
         self.sw_wayside_backend_instance = WaysideBackend()
+        self.plc_instance = PLC()
         self.track_instance = Track()
-        signals.sw_wayside_backend_update.connect(self.updateTrackInstance)
-        
+        signals.sw_wayside_backend_update.connect(self.sw_wayside_backend_update)
+
         # Track Model Instances
         self.track_model_backend_instance = TrackModelModule()     
         self.track_instance = Track()
         signals.track_model_backend_update.connect(self.updateTrackInstance)
         
-        self.menu_instance = Mainmenu()  
+        self.menu_instance = Mainmenu()
         self.menu_instance.show()
 
     def timerHandler(self):
         self.current_time = self.current_time.addMSecs(TIME_DELTA)
         signals.current_system_time.emit(self.current_time) #Y:M:D:h:m:s
-        signals.sw_wayside_update_backend.emit(self.track_instance) #sends current state of track out
-        signals.track_model_update_backend.emit(self.track_instance)
+        signals.sw_wayside_update_backend.emit(self.track_instance, self.active_trains_instance)
+        signals.trainModel_backend_update.emit()
 
     def stopTimer(self):
         self.system_timer.stop()
 
-    #CTC Office Instance Updaters
-    def updateActiveTrains(self, updatedActiveTrains):
-        self.activeTrains = updatedActiveTrains
+    # Handler for update from SW Wayside
+    def sw_wayside_backend_update(self, updated_track, updated_active_trains):
+        self.update_active_trains(updated_active_trains)
+        self.update_track_instance(updated_track)
 
-    # SW Wayside Instance Updaters
-    def updateTrackInstance(self, updatedTrack):
-        self.track_instance = updatedTrack
-    
+    # Active trains instance updater
+    def update_active_trains(self, updated_active_trains):
+        self.active_trains_instance = updated_active_trains
+
+    # Track instance updater
+    def update_track_instance(self, updated_track):
+        self.track_instance = updated_track
+        
+    def updateMainMenu(self):
+        pass
 
 if __name__ == '__main__':
         app = QApplication([])
