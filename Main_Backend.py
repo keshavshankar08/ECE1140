@@ -14,14 +14,14 @@ from Main_UI import *
 from CONSTANTS import *
 
 
-class SystemTime(QObject):
+class MainBackend(QObject):
     def __init__(self):
         super().__init__()
-        self.current_time = QDateTime(START_YEAR, START_MONTH, START_DAY, START_HOUR, START_MIN, START_SEC)
+        self.current_time = QDateTime(constants.START_YEAR, constants.START_MONTH, constants.START_DAY, constants.START_HOUR, constants.START_MIN, constants.START_SEC)
         self.system_timer = QTimer()
         self.system_timer.timeout.connect(self.timerHandler)
         signals.stop_timer.connect(self.stopTimer)
-        self.system_timer.start(INTERVAL)
+        self.system_timer.start(constants.INTERVAL)
         
         # CTC Instances
         self.active_trains_instance = ActiveTrains()
@@ -41,7 +41,7 @@ class SystemTime(QObject):
         self.menu_instance.show()
 
     def timerHandler(self):
-        self.current_time = self.current_time.addMSecs(TIME_DELTA)
+        self.current_time = self.current_time.addMSecs(int(constants.TIME_DELTA))
         signals.current_system_time.emit(self.current_time) #Y:M:D:h:m:s
         signals.sw_wayside_update_backend.emit(self.track_instance, self.active_trains_instance)
         signals.trainModel_backend_update.emit()
@@ -68,8 +68,8 @@ class SystemTime(QObject):
 if __name__ == '__main__':
         app = QApplication([])
         thread = QThread() 
-        system_time = SystemTime()
-        system_time.moveToThread(thread) 
+        backend = MainBackend()
+        backend.moveToThread(thread) 
         thread.start()
         sys.exit(app.exec())
 
