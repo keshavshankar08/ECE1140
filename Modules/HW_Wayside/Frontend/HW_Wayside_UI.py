@@ -29,9 +29,11 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 self.last_line_state = ""
                 self.last_wayside_state = ""
                 self.last_block_state = ""
-                self.last_switch_state = ""
-                self.last_light_state = ""
-                self.last_crossing_state = ""
+
+                self.plc_file_name = ""
+                self.plc_line_number = -1
+                self.plc_wayside_number = -1
+                self.operation_mode = ""
         
         # Handles all frontend updates
         def update_frontend(self, track_instance):
@@ -44,6 +46,9 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 # send updated signals to wayside backend
                 self.send_backend_update()
 
+        def send_frontend_update(self):
+                signals.hw_wayside_frontend_update.emit(self.track_instance_copy, self.plc_file_name,self.plc_line_number,self.plc_wayside_number,self.operation_mode)
+
         # Sends updates from wayside frontend to wayside backend
         def send_backend_update(self):
                 signals.sw_wayside_frontend_update.emit(self.track_instance_copy)
@@ -54,6 +59,8 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 self.update_line_dropdown()
                 self.update_wayside_dropdown()
                 self.update_block_dropdown()
+
+                # in future, send signals Arduino as well
 
         # Updates local instance of track
         def update_copy_track(self, updated_track):
@@ -186,10 +193,15 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 elif(curr_line == "Red Line"):
                         return 0
                 
+        # return integer of current line
+        def get_current_wayside_displayed_int():
+                pass
+                
         # Gets the integer representation of the current block chosen
         def get_current_block_displayed_int(self):
-                curr_block = self.block_selection_dropdown.currentText()
-                return int(curr_block[6:])
+                # curr_block = self.block_selection_dropdown.currentText()
+                # return int(curr_block[6:])
+                pass
                         
         # Updates display block information
         def update_block_information(self):
@@ -212,11 +224,9 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
 
         # Handles upload plc program button clicked
         def uploadPLCClicked(self):
-                fileName = QtWidgets.QFileDialog.getOpenFileName(self, "Open File", "", "Text Files (*.txt)")
-                # this will get fed into the interpreter
-                # the interpreter will spit back a wayside logic object
-                # this gets added to a copy of the wayside controller object, which contains the logic and info from the track for each wayside
-                # most importantly, it has a wayside logic object for each controller
+                self.plc_file_name = QtWidgets.QFileDialog.getOpenFileName(self, "Open File", "", "Text Files (*.txt)")
+                self.plc_line_number = self.get_current_line_displayed_int()
+                self.plc_wayside_number = self.get_current_wayside_displayed_int()
         
         # Handles switch toggle in manual mode
         def manual_switch_toggled(self):
