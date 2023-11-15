@@ -71,7 +71,6 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         self.trainController.engineFail = self.engineFailure.isChecked()
         self.trainController.brakeFail = self.brakeFailure.isChecked()
         self.trainController.signalFail = self.signalFaiure.isChecked()
-        self.trainController.trainTemp = self.tempVal
         self.trainController.KP = self.KpVal
         self.trainController.KI = self.KiVal
         # self.trainController.Rdoor =
@@ -138,30 +137,30 @@ class TrainControllerUI(QtWidgets.QMainWindow):
     #function will toggle int lights
     def updateIntLights(self, value):
         if value:
-            self.intLightButton.changeEvent(True)
+            self.intLightButton.accepted()
         else:
-            self.intLightButton.changeEvent(False)
+            self.intLightButton.rejected()
 
     #function will toggle ext lights
     def updateExtLights(self, value):
         if value:
-            self.extLightButton.changeEvent(True)
+            self.extLightButton.accepted()
         else:
-            self.extLightButton.changeEvent(False)
+            self.extLightButton.rejected()
 
     #function - right doors closed
     def updateRDoors(self, value):
         if value:
-            self.rightDoorButton.changeEvent(True)
+            self.rightDoorButton.accpeted()
         else:
-            self.rightDoorButton.changeEvent(False)
+            self.rightDoorButton.rejected()
 
     #function - left doors closed
     def updateLDoors(self, value):
         if value:
-            self.leftDoorButton.changeEvent(True)
+            self.leftDoorButton.accepted()
         else:
-            self.leftDoorButton.changeEvent(False)
+            self.leftDoorButton.rejected()
 
     #function updates temp
     def updateTemp(self, temp):
