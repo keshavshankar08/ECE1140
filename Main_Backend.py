@@ -37,7 +37,7 @@ class SystemTime(QObject):
         self.sw_wayside_backend_instance = WaysideBackend()
         self.plc_instance = PLC()
         self.track_instance = Track()
-        signals.sw_wayside_backend_update.connect(self.updateTrackInstance)      
+        signals.sw_wayside_backend_update.connect(self.sw_wayside_backend_update)      
         
         self.menu_instance = Mainmenu()
         self.menu_instance.show()
@@ -50,12 +50,17 @@ class SystemTime(QObject):
     def stopTimer(self):
         self.system_timer.stop()
 
-    #CTC Office Instance Updaters
-    def updateActiveTrains(self, updated_active_trains):
+    # Handler for update from SW Wayside
+    def sw_wayside_backend_update(self, updated_track, updated_active_trains):
+        self.update_active_trains(updated_active_trains)
+        self.update_track_instance(updated_track)
+
+    # Active trains instance updater
+    def update_active_trains(self, updated_active_trains):
         self.active_trains_instance = updated_active_trains
 
-    # SW Wayside Instance Updaters
-    def updateTrackInstance(self, updated_track):
+    # Track instance updater
+    def update_track_instance(self, updated_track):
         self.track_instance = updated_track
 
 if __name__ == '__main__':
