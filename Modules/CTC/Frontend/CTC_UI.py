@@ -14,7 +14,7 @@ class CTCFrontend(QtWidgets.QMainWindow):
     def __init__(self):
         #setup
         super().__init__()
-        uic.loadUi("Modules\CTC\Frontend\CTC_UI.ui", self)
+        uic.loadUi("Modules/CTC/Frontend/CTC_UI.ui", self)
 
         #CONFIGURATION
         #Create objects
@@ -22,6 +22,7 @@ class CTCFrontend(QtWidgets.QMainWindow):
         self.active_trains_copy = ActiveTrains()
         self.queue_trains_copy = QueueTrains()
         self.route_queue_copy = RouteQueue()
+        self.ticket_sales_copy = 0
 
         #Table Space
         manual_table_header = self.manual_table.horizontalHeader()
@@ -62,6 +63,7 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #Top Bar Signals
         self.open_schedule_builder_button.clicked.connect(self.schedule_builder_clicked)
         self.line_value_box.currentTextChanged.connect(self.line_value_box_changed)
+        self.maintenance_update_button.clicked.connect(self.toggle_maintenance_button_clicked)
 
         #Manual Scheduling Signals
         self.manual_add_stop_button.clicked.connect(self.add_stop_button_clicked)
@@ -90,22 +92,18 @@ class CTCFrontend(QtWidgets.QMainWindow):
 
     #Update Current Time
     def update_current_time(self, time):
-        #self.current_time.setText(time.toString('HH:mm:ss'))
-        pass
-
+        self.current_time.setPlainText(time.toString('HH:mm:ss'))
+        
     #Update Frontend Functions
     def update_frontend(self, track_instance):
-        #update local instance of track
-        self.update_copy_track(track_instance)
-
         #update the ui information
         self.update_display()
 
         #send update signals to ctc backend
-        self.send_backend_update()
+        self.send_frontend_update()
 
-    def send_backend_update(self):
-        signals.ctc_office_frontend_update.emit(self.track_instance_copy)
+    def send_frontend_update(self):
+        signals.ctc_office_frontend_update.emit(self.track_instance_copy, self.active_trains_copy, self.ticket_sales_copy)
 
     def update_display(self):
         #clear tables
@@ -138,15 +136,70 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #update track statuses
         #check what block it is
         status_block = int(self.set_block_maintenance_value.currentText())
-        print(status_block)
+
+        #reset all indicators
+        self.block_status_indicator.setStyleSheet("background-color: rgb(255, 255, 255)")
+        self.block_occupancy_indicator.setStyleSheet("background-color: rgb(255, 255, 255)")
+
+        self.track_instance_copy.red_line.blocks[7].block_occupancy = True
+        self.track_instance_copy.red_line.blocks[7].track_fault_status = True
+
+        #if red line
         if (str(self.line_value_box.currentText()) == 'Red Line'):
             #check block occupancy
             if(self.track_instance_copy.red_line.blocks[status_block].block_occupancy == True):
-                self.block_occupancy_indicator.setStyleSheet("background-color: rgb(255, 255, 255)")
-                print("test")
-            else:
                 self.block_occupancy_indicator.setStyleSheet("background-color: rgb(167, 255, 167)")
-                print("test1")
+            #check block status
+            if(self.track_instance_copy.red_line.blocks[status_block].track_fault_status == True):
+                self.block_status_indicator.setStyleSheet("background-color: rgb(255, 167, 167)")
+            #check maintenance status
+            if(self.track_instance_copy.red_line.blocks[status_block].maintenance_status == True):
+                self.block_status_indicator.setStyleSheet("background-color: rgb(255, 255, 167)")
+
+            #compile list of notable blocks
+            maintenance_list = ""
+            fault_list = ""
+            occupied_list = ""
+            for block in self.track_instance_copy.red_line.blocks:
+                if(block.block_occupancy == True):
+                    occupied_list = occupied_list + str(block.block_number)
+                if(block.track_fault_status == True):
+                    fault_list = fault_list + str(block.block_number)
+                if(block.maintenance_status == True):
+                    maintenance_list = maintenance_list + str(block.block_number)
+            
+            #display to notable blocks output TODO
+            self.notable_blocks_output.setPlainText("The occupied blocks are: " + occupied_list + "\n\nThe faulty blocks are: " + fault_list + "\n\nThe maintenance blocks are: " + maintenance_list)
+
+        #if green line
+        if (str(self.line_value_box.currentText()) == 'Green Line'):
+            #check block occupancy
+            if(self.track_instance_copy.green_line.blocks[status_block].block_occupancy == True):
+                self.block_occupancy_indicator.setStyleSheet("background-color: rgb(167, 255, 167)")
+            #check block status
+            if(self.track_instance_copy.green_line.blocks[status_block].track_fault_status == True):
+                self.block_status_indicator.setStyleSheet("background-color: rgb(167, 255, 255)")
+            #check maintenance status
+            if(self.track_instance_copy.green_line.blocks[status_block].maintenance_status == True):
+                self.block_status_indicator.setStyleSheet("background-color: rgb(255, 255, 167)")
+
+            #compile list of notable blocks
+            maintenance_list = ""
+            fault_list = ""
+            occupied_list = ""
+            for block in self.track_instance_copy.green_line.blocks:
+                if(block.block_occupancy == True):
+                    occupied_list = occupied_list + " " + str(block.block_number)
+                if(block.track_fault_status == True):
+                    fault_list = fault_list + " " + str(block.block_number)
+                if(block.maintenance_status == True):
+                    maintenance_list = maintenance_list + " " + str(block.block_number)
+            
+            #display to notable blocks output TODO
+            self.notable_blocks_output.setPlainText("The occupied blocks are: " + occupied_list + "\n\nThe faulty blocks are: " + fault_list + "\n\nThe maintenance blocks are: " + maintenance_list)
+
+        #update ticket sales
+        self.hourly_ticket_sales_output.setPlainText(str(self.ticket_sales_copy))
 
     def update_copy_track(self, updated_track):
         self.track_instance_copy = updated_track
@@ -155,6 +208,20 @@ class CTCFrontend(QtWidgets.QMainWindow):
     def schedule_builder_clicked(self):
         os.system("start EXCEL.EXE")
     
+    def toggle_maintenance_button_clicked(self):
+        #get block to toggle maintenance
+        maintenance_block = int(self.set_block_maintenance_value.currentText())
+
+        if (str(self.line_value_box.currentText()) == 'Red Line'):
+            for block in self.track_instance_copy.red_line.blocks:
+                if(block.block_number == maintenance_block):
+                    block.maintenance_status = not block.maintenance_status
+
+        if (str(self.line_value_box.currentText()) == 'Green Line'):
+            for block in self.track_instance_copy.green_line.blocks:
+                if(block.block_number == maintenance_block):
+                    block.maintenance_status = not block.maintenance_status
+
     def line_value_box_changed(self):
         #reset scheduling
         self.manual_table.setRowCount(0)
@@ -280,10 +347,6 @@ class CTCFrontend(QtWidgets.QMainWindow):
 
     #Active Trains Tab Functions
     def dispatch_trains_table_selection_changed(self):
-        pass
-
-    #Maintenance Mode Functions
-    def toggle_maintenance_button_clicked(self):
         pass
     
 '''

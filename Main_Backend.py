@@ -11,7 +11,7 @@ from Main_UI import *
 
 # System clock constants
 INTERVAL = 50
-SYSTEM_SPEED = 5
+SYSTEM_SPEED = 1
 TIME_DELTA = INTERVAL * SYSTEM_SPEED
 START_YEAR = 2023
 START_MONTH = 1
@@ -29,11 +29,16 @@ class SystemTime(QObject):
         signals.stop_timer.connect(self.stopTimer)
         self.system_timer.start(INTERVAL)
         
+        # CTC Office Instances
+        self.ctc_office_backend_instance = CTCBackend()
+        self.active_trains_instance = ActiveTrains()
+        self.ticket_sales_instance = 0
+        signals.ctc_office_backend_update.connect(self.ctc_office_backend_update)
+
         # SW Wayside Instances
         self.sw_wayside_backend_instance = WaysideBackend()
         self.track_instance = Track()
-        signals.sw_wayside_backend_update.connect(self.updateTrackInstance)      
-        
+        signals.sw_wayside_backend_update.connect(self.update_track_instance)      
         
         self.menu_instance = Mainmenu()  
         self.menu_instance.show()
@@ -41,19 +46,28 @@ class SystemTime(QObject):
     def timerHandler(self):
         self.current_time = self.current_time.addMSecs(TIME_DELTA)
         signals.current_system_time.emit(self.current_time) #Y:M:D:h:m:s
+        signals.ctc_office_update_backend.emit(self.track_instance, self.active_trains_instance, self.ticket_sales_instance)
         signals.sw_wayside_update_backend.emit(self.track_instance) #sends current state of track out
-        
 
     def stopTimer(self):
         self.system_timer.stop()
 
+    #Handler for uppdate from CTC Office
+    def ctc_office_backend_update(self, updated_track, updated_active_trains, updated_ticket_sales):
+        self.update_track_instance(updated_track)
+        self.update_active_trains(updated_active_trains)
+        self.update_ticket_sales(updated_ticket_sales)
+        
     #CTC Office Instance Updaters
-    def updateActiveTrains(self, updatedActiveTrains):
-        self.activeTrains = updatedActiveTrains
+    def update_active_trains(self, updated_active_trains):
+        self.active_trains_instance = updated_active_trains
+
+    def update_ticket_sales(self, updated_ticket_sales):
+         self.ticket_sales_instance = updated_ticket_sales
 
     # SW Wayside Instance Updaters
-    def updateTrackInstance(self, updatedTrack):
-        self.track_instance = updatedTrack
+    def update_track_instance(self, updated_track):
+        self.track_instance = updated_track
 
 if __name__ == '__main__':
         app = QApplication([])

@@ -11,35 +11,52 @@ from Train_Resources.CTC_Train import *
 
 class CTCBackend():
     def __init__(self):
-        signals.ctc_office_backend_update.connect(self.backend_update)
-        signals.ctc_office_frontend_update.connect(self.backend_update)
-
         self.track_instance_copy = Track()
-        self.active_trains = ActiveTrains()
+        self.active_trains_instance_copy = ActiveTrains()
         self.queue_trains = QueueTrains()
         self.route_queue = RouteQueue()
+        self.hourly_ticket_sales = 0
 
+        #receive update from main backend
+        signals.ctc_office_update_backend.connect(self.backend_update_backend)
+
+        #receive updates from ctc frontend
+        signals.ctc_office_frontend_update.connect(self.frontend_update_backend)
+
+    #sends updates from ctc backend to ctc frontend
     def send_frontend_update(self):
-        signals.ctc_office_frontend_update.emit(self.track_instance_copy)
+        signals.ctc_office_frontend_update.emit(self.track_instance_copy, self.active_trains_instance_copy, self.hourly_ticket_sales)
 
-    def send_frontend_update(self):
-        signals.ctc_office_frontend_update(self.track_instance_copy)
-
+    #sends update to main backend
     def send_main_backend_update(self):
-        signals.ctc_office_backend_update(self.track_instance_copy)
+        signals.ctc_office_backend_update.emit(self.track_instance_copy, self.active_trains_instance_copy, self.hourly_ticket_sales)
 
-    #main function to carry out all necessary functions in a cycle
-    def backend_update(self, updated_track):
-        #update local instance of track
-        self.track_instance_copy = updated_track
+    #updates active trains instance
+    def update_copy_active_trains(self, updated_active_trains):
+        self.active_trains_instance_copy = updated_active_trains
 
-        #send updated signals to wayside frontend
+    #updates track instance
+    def update_copy_track_instance(self, updated_track_instance):
+        self.track_instance_copy = updated_track_instance
+
+    #updates ticket sales
+    def update_ticket_sales(self, updated_ticket_sales):
+        self.hourly_ticket_sales = updated_ticket_sales
+
+    #Main backend handler
+    def backend_update_backend(self, track_instance, active_trains, ticket_sales):
+        self.update_copy_active_trains(active_trains)
+        self.update_copy_track_instance(track_instance)
+        self.update_ticket_sales(ticket_sales)
         self.send_frontend_update()
-
-        #all the backend logic function calls
-
-        #updates main instance at end of cycle
         self.send_main_backend_update()
+
+    #Handler for update from ctc frontend
+    def frontend_update_backend(self, track_instance, active_trains, ticket_sales):
+        #update local instance variables
+        self.update_copy_track_instance(track_instance)
+        self.update_copy_active_trains(active_trains)
+        self.update_ticket_sales(ticket_sales)
 
     def verify_schedule(route_schedule):
         pass

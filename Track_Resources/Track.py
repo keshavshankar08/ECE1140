@@ -557,7 +557,3 @@ class Block:
             return "Active" if(self.crossing_status == True) else "Inactive"
         else:
             return ""
-        
-track = Track()
-print(track.red_line.get_shortest_path(0, 20))
-print(track.green_line.get_shortest_path(0, 16))
