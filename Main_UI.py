@@ -6,7 +6,7 @@ sys.path.append(".")
 from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
 from Modules.HW_Wayside.Frontend.frontend import *
 from Modules.Track_Model.Frontend.Track_Model_UI import *
-#from Modules.Train_Model.Frontend.train_model_test_bench_ui import *
+from Modules.Train_Model.Frontend.Train_Model import *
 from Modules.Train_Controller.Frontend.TrainController import *
 
 class Mainmenu(QtWidgets.QMainWindow):
@@ -39,8 +39,8 @@ class Mainmenu(QtWidgets.QMainWindow):
 
     #window for the train model 
     def train_model_clicked(self):
-        #self.trainModelWindow = TrainModelUI()
-        #self.trainModelWindow.show()
+        self.trainModelWindow = TrainModel()
+        self.trainModelWindow.show()
         pass
 
     #window for the se wayside controller

@@ -44,6 +44,7 @@ class Train(QObject):
         signals.train_controller_right_door_open.connect(self.openRightDoors)
         signals.train_controller_service_brake.connect(self.serviceBrakeReceive)
         signals.train_controller_temperature_value.connect(self.receiveTemperature)
+        signals.current_system_time.connect(self.setCurrentTime)
         #### Train ID
         self.train_id = 0
         #### Number of Passengers
@@ -100,7 +101,10 @@ class Train(QObject):
         # not implemented haha hahahaha
         #### Passthroughs
         self.speedLimit = 70.0
+        self.currentTime = QDateTime()
         
+    def updateCurrentTime(self, value):
+        self.currentTime = value
         
 
     def TrainModelUpdateValues(self):
@@ -207,6 +211,9 @@ class Train(QObject):
         pass
     
     
+trains = {
+    1: Train()
+}
         
 
     
