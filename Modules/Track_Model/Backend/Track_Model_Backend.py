@@ -81,15 +81,18 @@ class TrackModelModule(QtWidgets.QMainWindow):
     # train model signal slots 
     def receive_train_length(self, length):
         # Handle the received train length signal
-        print(f"Received train length: {length}")
+        #print(f"Received train length: {length}")
+        pass
 
     def receive_distance_from_block_start(self, distance):
         # Handle the received distance from block start signal
-        print(f"Received distance from block start: {distance}")
+        #print(f"Received distance from block start: {distance}")
+        pass
 
     def receive_distance_from_yard(self, distance):
         # Handle the received distance from yard signal
-        print(f"Received distance from yard: {distance}")
+        #print(f"Received distance from yard: {distance}")
+        pass
         
     # sends updates from track model backend to main backend
     def send_main_backend_update(self):
