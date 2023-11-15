@@ -10,17 +10,8 @@ from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
 from Modules.Track_Model.Backend.Track_Model_Backend import *
 from Modules.Track_Model.Frontend.Track_Model_UI import *
 from Main_UI import *
+from CONSTANTS import *
 
-# System clock constants
-INTERVAL = 50
-SYSTEM_SPEED = 1
-TIME_DELTA = INTERVAL * SYSTEM_SPEED
-START_YEAR = 2023
-START_MONTH = 1
-START_DAY = 1
-START_HOUR = 12
-START_MIN = 0
-START_SEC = 0
 
 class SystemTime(QObject):
     def __init__(self):
