@@ -8,15 +8,12 @@ class signalsList(QObject):
     current_system_time = pyqtSignal(QDateTime)
     stop_timer = pyqtSignal()
 
-<<<<<<< HEAD
     #CTC Office Signals
     ctc_office_active_trains_update = pyqtSignal(ActiveTrains)
     ctc_office_track_update = pyqtSignal(Track)
     ctc_office_backend_update = pyqtSignal(Track)
     ctc_office_frontend_update = pyqtSignal(Track)
 
-=======
->>>>>>> main
     # SW Wayside Signals
     sw_wayside_update_backend = pyqtSignal(Track) # update from main backend to sw wayside backend
     sw_wayside_update_frontend = pyqtSignal(Track) # update from sw wayside backend to sw wayside frontend

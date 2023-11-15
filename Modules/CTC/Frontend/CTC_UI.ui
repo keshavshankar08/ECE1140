@@ -51,9 +51,9 @@
     <widget class="QPushButton" name="open_schedule_builder_button">
      <property name="geometry">
       <rect>
-       <x>210</x>
+       <x>420</x>
        <y>10</y>
-       <width>141</width>
+       <width>131</width>
        <height>41</height>
       </rect>
      </property>
@@ -478,6 +478,9 @@ p, li { white-space: pre-wrap; }
          <pointsize>7</pointsize>
         </font>
        </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
        <attribute name="verticalHeaderCascadingSectionResizes">
         <bool>true</bool>
        </attribute>
@@ -549,6 +552,9 @@ p, li { white-space: pre-wrap; }
         <font>
          <pointsize>7</pointsize>
         </font>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
        </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
@@ -647,6 +653,9 @@ p, li { white-space: pre-wrap; }
          <pointsize>7</pointsize>
         </font>
        </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
        <attribute name="verticalHeaderCascadingSectionResizes">
         <bool>true</bool>
        </attribute>
@@ -679,6 +688,9 @@ p, li { white-space: pre-wrap; }
         <font>
          <pointsize>7</pointsize>
         </font>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
        </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
@@ -1085,9 +1097,9 @@ p, li { white-space: pre-wrap; }
     <widget class="QPushButton" name="upload_schedule_button">
      <property name="geometry">
       <rect>
-       <x>370</x>
+       <x>320</x>
        <y>10</y>
-       <width>161</width>
+       <width>91</width>
        <height>41</height>
       </rect>
      </property>
@@ -1099,6 +1111,22 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="text">
       <string>Upload Schedule</string>
+     </property>
+    </widget>
+    <widget class="QPlainTextEdit" name="current_time">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>10</y>
+       <width>101</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+     <property name="plainText">
+      <string/>
      </property>
     </widget>
    </widget>

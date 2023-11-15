@@ -56,6 +56,9 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #Update Entire Frontend
         signals.ctc_office_frontend_update.connect(self.update_frontend)
 
+        #Update system time
+        signals.current_system_time.connect(self.update_current_time)
+
         #Top Bar Signals
         self.open_schedule_builder_button.clicked.connect(self.schedule_builder_clicked)
         self.line_value_box.currentTextChanged.connect(self.line_value_box_changed)
@@ -69,6 +72,9 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #Automatic Scheduling Signals
         self.upload_schedule_button.clicked.connect(self.upload_schedule_button_clicked)
 
+        #Queue Table Signals
+        self.queue_table.itemSelectionChanged.connect(self.queue_table_selection_changed)
+
         #Maintenance Mode Signals
         
         #Test Bench Signals
@@ -81,6 +87,11 @@ class CTCFrontend(QtWidgets.QMainWindow):
 
         #end with showing main window
         self.show()
+
+    #Update Current Time
+    def update_current_time(self, time):
+        #self.current_time.setText(time.toString('HH:mm:ss'))
+        pass
 
     #Update Frontend Functions
     def update_frontend(self, track_instance):
@@ -97,8 +108,45 @@ class CTCFrontend(QtWidgets.QMainWindow):
         signals.ctc_office_frontend_update.emit(self.track_instance_copy)
 
     def update_display(self):
-        #update functions
-        pass
+        #clear tables
+        self.queue_table.setRowCount(0)
+        self.dispatched_trains_table.setRowCount(0)
+
+        #update queue trains
+        for train in self.queue_trains_copy.queue_trains:
+            #Add train ID and Departure Time
+            self.queue_table.insertRow(0)
+            train_id = QTableWidgetItem(str(train.train_ID))
+            self.queue_table.setItem(0, 0, train_id)
+            departure_time = QTableWidgetItem(str(train.departure_time))
+            self.queue_table.setItem(0, 1, departure_time)
+
+        #update active trains
+        for train in self.active_trains_copy.active_trains:
+            #Add train ID and Departure Time
+            self.dispatched_trains_table.insertRow(0)
+            train_id = QTableWidgetItem(str(train.train_ID))
+            self.dispatched_trains_table.setItem(0, 0, train_id)
+            suggested_speed = QTableWidgetItem(str(train.current_suggested_speed))
+            self.dispatched_trains_table.setItem(0, 1, suggested_speed)
+            current_authority = QTableWidgetItem(str(train.current_authority))
+            self.dispatched_trains_table.setItem(0, 2, current_authority)
+
+        #update timer
+        #TODO get timer value
+
+        #update track statuses
+        #check what block it is
+        status_block = int(self.set_block_maintenance_value.currentText())
+        print(status_block)
+        if (str(self.line_value_box.currentText()) == 'Red Line'):
+            #check block occupancy
+            if(self.track_instance_copy.red_line.blocks[status_block].block_occupancy == True):
+                self.block_occupancy_indicator.setStyleSheet("background-color: rgb(255, 255, 255)")
+                print("test")
+            else:
+                self.block_occupancy_indicator.setStyleSheet("background-color: rgb(167, 255, 167)")
+                print("test1")
 
     def update_copy_track(self, updated_track):
         self.track_instance_copy = updated_track
@@ -181,17 +229,51 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #add new route to the route queue
         self.route_queue_copy.add_route(new_route)
 
-        testTrain = Train(new_route)
-        #print(testTrain)
-
         #make a train in the train queue
-        #self.queue_trains_copy.add_train(Train(new_route))
+        if(str(self.line_value_box.currentText()) == 'Green Line'):
+            self.queue_trains_copy.add_train(Train(new_route, "Green"))
+        if (str(self.line_value_box.currentText()) == 'Red Line'):
+            self.queue_trains_copy.add_train(Train(new_route, "Red"))
 
+        #clear the table
         self.manual_table.setRowCount(0)
+
+        #TEMP -- UPDATE UI
+        self.update_display()
 
     #Queue Tab Functions
     def queue_table_selection_changed(self):
-        pass
+        #get selection
+        cur_index = self.queue_table.currentRow()
+        train_id = str(self.queue_table.item(cur_index, 0).text())
+        
+        #fill schedule, clear table first
+        self.queue_selected_schedule_table.setRowCount(0)
+
+        #check line
+        if(str(self.line_value_box.currentText()) == 'Green Line'):
+            #add each stop
+            for i in reversed(range(len(self.route_queue_copy.routes[int(train_id[3])].stops))):
+                #Add Stop, Station, and Dwell
+                self.queue_selected_schedule_table.insertRow(0)
+                station = QTableWidgetItem(str(self.track_instance_copy.green_line_block_to_station(self.route_queue_copy.routes[int(train_id[3])].stops[i])))
+                self.queue_selected_schedule_table.setItem(0, 0, station)
+                arrival = QTableWidgetItem(str(self.route_queue_copy.routes[int(train_id[3])].stop_time[i]))
+                self.queue_selected_schedule_table.setItem(0, 1, arrival)
+                dwell = QTableWidgetItem(str(self.route_queue_copy.routes[int(train_id[3])].dwell_time[i]))
+                self.queue_selected_schedule_table.setItem(0, 2, dwell)
+        
+        if(str(self.line_value_box.currentText()) == 'Red Line'):
+            #add each stop
+            for i in reversed(range(len(self.route_queue_copy.routes[int(train_id[3])].stops))):
+                #Add Stop, Station, and Dwell
+                self.queue_selected_schedule_table.insertRow(0)
+                station = QTableWidgetItem(str(self.track_instance_copy.red_line_block_to_station(self.route_queue_copy.routes[int(train_id[3])].stops[i])))
+                self.queue_selected_schedule_table.setItem(0, 0, station)
+                arrival = QTableWidgetItem(str(self.route_queue_copy.routes[int(train_id[3])].stop_time[i]))
+                self.queue_selected_schedule_table.setItem(0, 1, arrival)
+                dwell = QTableWidgetItem(str(self.route_queue_copy.routes[int(train_id[3])].dwell_time[i]))
+                self.queue_selected_schedule_table.setItem(0, 2, dwell)
 
     def remove_selected_train_button_clicked(self):
         pass

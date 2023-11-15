@@ -1,7 +1,7 @@
+import sys
 sys.path.append(".")
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import *
-import sys
 from signals import *
 
 class SWWaysideFrontend(QtWidgets.QMainWindow):

@@ -2,6 +2,7 @@
 
 import sys
 import itertools
+from PyQt6.QtCore import QTime
 sys.path.append(".")
 from Track_Resources.Track import *
 
@@ -26,7 +27,7 @@ class Train:
     #keep train IDs
     id_obj = itertools.count()
 
-    def __init__(self, route):
+    def __init__(self, route, line):
         #set train ID
         self.train_ID = str(next(Train.id_obj))
         while(len(self.train_ID) != 4):
@@ -38,19 +39,24 @@ class Train:
         #create track/line object to call function from
         track = Track()
         
-        block_stops = track.red_line_station_to_block(route.stops)
-        print(block_stops)
+        if line == "Red":
+            block_stops = track.red_line_station_to_block(route.stops)
+        elif line == "Green":
+            block_stops = track.green_line_station_to_block(route.stops)
         
         for i in range(len(route.stops)):
             #if it's the last stop, return to yard at -1
-            if(i == (len(route.stops) - 1)):
-                self.authority_list.append(-1)
-                print(self.authority_list)
-
+            if(i == 0):
+                #for first stop, get authority from yard
+                self.authority_list.append(len(track.lines[0].get_shortest_path(0, block_stops[i], [])))
             else:
                 #otherwise, get the length of the shortest path between the stops
-                self.authority_list.append(len(track.lines[0].get_shortest_path(block_stops[i], block_stops[i+1], [])))
-                print(self.authority_list)
+                self.authority_list.append(len(track.lines[0].get_shortest_path(block_stops[i-1], block_stops[i], [])))
+
+            #set authority to go back to the yard
+            self.authority_list.append(-1)
+
+        print("Authority list is: " + str(self.authority_list))
 
         #the current authority
         self.current_authority = 0
@@ -61,7 +67,18 @@ class Train:
         #the current suggested speed
         self.current_suggested_speed = 0
         
-        self.departure_time = ""
+        #set departure time
+        self.departure_time = QTime.fromString(route.stop_time[0], "hh:mm:ss")
+        if line == "Red":
+            time_between = track.red_line.get_time_between(0, route.stops[0])
+            self.departure_time = self.departure_time.addSecs(time_between * -1).toString()
+
+        elif line == "Green":
+            time_between = track.green_line.get_time_between(0, route.stops[0])
+            self.departure_time = self.departure_time.addSecs(time_between * -1).toString()
+
+        else:
+            self.departure_time = "0"
 
 class ActiveTrains:
     def __init__(self):
