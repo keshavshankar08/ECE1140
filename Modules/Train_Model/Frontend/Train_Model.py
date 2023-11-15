@@ -2,17 +2,22 @@ from PyQt6 import QtWidgets, uic
 from PyQt6.QtCore import QTimer
 import sys
 sys.path.append(".")
-from Modules.Train_Model.Backend.Train import Train
+from Modules.Train_Model.Backend.Train import Train, trains
 from signals import signals
 
 class TrainModel(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("Modules/Train_Model/Frontend/Train_Model_UI.ui", self)
-        signals.current_system_time.connect(self.displayTime)
+        signals.trainModel_backend_update.connect(self.UIUpdate)
+        self.trainSelectUpdate()
 
-    def displayTime(self, value):
-        self.velocityDisplay.setText(value.toString('yyyy-MM-dd HH:mm:ss'))
+    def UIUpdate(self):
+        pass
+    
+    def trainSelectUpdate(self):
+        for key, value in trains.items():
+            self.trainSelectComboBox.addItem(f"ID: {key}")
         
         
 if __name__ == "__main__":
