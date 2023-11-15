@@ -450,7 +450,7 @@ p, li { white-space: pre-wrap; }
        </column>
        <column>
         <property name="text">
-         <string>Time To Station w/ Dwell (mm:ss)</string>
+         <string>Dwell Time (mm:ss)</string>
         </property>
         <property name="font">
          <font>
@@ -584,7 +584,7 @@ p, li { white-space: pre-wrap; }
        </column>
        <column>
         <property name="text">
-         <string>Time To Station w/ Dwell (mm:ss)</string>
+         <string>Dwell Time (mm:ss)</string>
         </property>
         <property name="font">
          <font>
@@ -720,7 +720,7 @@ p, li { white-space: pre-wrap; }
        </column>
        <column>
         <property name="text">
-         <string>Time To Station w/ Dwell (mm:ss)</string>
+         <string>Dwell Time (mm:ss)</string>
         </property>
         <property name="font">
          <font>

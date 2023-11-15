@@ -38,9 +38,9 @@ class SystemTime(QObject):
         # SW Wayside Instances
         self.sw_wayside_backend_instance = WaysideBackend()
         self.track_instance = Track()
-        signals.sw_wayside_backend_update.connect(self.update_track_instance)      
+        signals.sw_wayside_backend_update.connect(self.update_track_instance)
         
-        self.menu_instance = Mainmenu()  
+        self.menu_instance = Mainmenu()
         self.menu_instance.show()
 
     def timerHandler(self):

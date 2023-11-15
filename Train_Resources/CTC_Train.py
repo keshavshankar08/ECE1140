@@ -39,11 +39,14 @@ class Train:
         #create track/line object to call function from
         track = Track()
         
+        #get all stops in block number form
         if line == "Red":
             block_stops = track.red_line_station_to_block(route.stops)
         elif line == "Green":
             block_stops = track.green_line_station_to_block(route.stops)
         
+        #make the authority list
+        self.authority_list.append(0)
         for i in range(len(route.stops)):
             #if it's the last stop, return to yard at -1
             if(i == 0):
@@ -56,16 +59,17 @@ class Train:
             #set authority to go back to the yard
             self.authority_list.append(-1)
 
-        print("Authority list is: " + str(self.authority_list))
-
-        #the current authority
-        self.current_authority = 0
-
         #the suggested speed inbetween each station
         self.suggested_speed_list = [20] * len(self.authority_list)
+        self.suggested_speed_list[0] = 0
+
+        self.stop_index = 0
+
+        #set the current authority
+        self.current_authority = self.authority_list[self.stop_index]
 
         #the current suggested speed
-        self.current_suggested_speed = 0
+        self.current_suggested_speed = self.suggested_speed_list[self.stop_index]
         
         #set departure time
         self.departure_time = QTime.fromString(route.stop_time[0], "hh:mm:ss")
@@ -79,6 +83,15 @@ class Train:
 
         else:
             self.departure_time = "0"
+
+    #function to get the train to the next stop
+    def next_stop(self):
+        #iterate the stop index by 1
+        self.stop_index += 1
+
+        #update the current authority and speed
+        self.current_authority = self.authority_list[self.stop_index]
+        self.current_suggested_speed = self.suggested_speed_list[self.stop_index]
 
 class ActiveTrains:
     def __init__(self):

@@ -11,7 +11,7 @@ class signalsList(QObject):
     #CTC Office Signals
     ctc_office_update_backend = pyqtSignal(Track, ActiveTrains, int) # update from main backend to ctc office backend
     ctc_office_update_frontend = pyqtSignal(Track, ActiveTrains, int) # update from ctc office backend to ctc office frontend
-    ctc_office_frontend_update = pyqtSignal(Track, ActiveTrains, int) # update from ctc office frontend to ctc office backend
+    ctc_office_frontend_update = pyqtSignal(Track, ActiveTrains, int, QueueTrains) # update from ctc office frontend to ctc office backend
     ctc_office_backend_update = pyqtSignal(Track, ActiveTrains, int) # update from ctc office backend to main backend
 
     # SW Wayside Signals
