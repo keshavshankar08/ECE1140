@@ -35,7 +35,7 @@ class SystemTime(QObject):
         # Track Model Instances
         self.track_model_backend_instance = TrackModelModule()     
         self.track_instance = Track()
-        signals.track_model_backend_update.connect(self.updateTrackInstance)
+        signals.track_model_backend_update.connect(self.update_track_instance)
         
         self.menu_instance = Mainmenu()
         self.menu_instance.show()
