@@ -31,6 +31,7 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
                 self.plc_file_name = ""
                 self.plc_line_number = -1
                 self.plc_wayside_number = -1
+                self.operation_mode = ""
         
         # Handles all frontend updates
         def update_frontend(self, track_instance):
@@ -45,7 +46,7 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
 
         # Sends updates from wayside frontend to wayside backend
         def send_frontend_update(self):
-                signals.sw_wayside_frontend_update.emit(self.track_instance_copy, self.plc_file_name, self.plc_line_number, self.plc_wayside_number)
+                signals.sw_wayside_frontend_update.emit(self.track_instance_copy, self.plc_file_name, self.plc_line_number, self.plc_wayside_number, self.operation_mode)
 
         # Updates all UI display information
         def update_display(self):
@@ -60,6 +61,7 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
         
         # Updates elements shown once mode chosen
         def update_opeartion_dropdown(self):
+                self.operation_mode = self.mode_selection_dropdown.currentText()
                 if(self.mode_selection_dropdown.currentText() == "Select Mode..."):
                         self.line_selection_dropdown.setEnabled(False)
                         self.line_box.setEnabled(False)

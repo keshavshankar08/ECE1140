@@ -11,6 +11,7 @@ class WaysideBackend():
         self.plc_file_name = ""
         self.plc_line_number = -1
         self.plc_wayside_number = -1
+        self.operation_mode = ""
 
         # receive update from main backend
         signals.sw_wayside_update_backend.connect(self.backend_update_backend)
@@ -45,17 +46,20 @@ class WaysideBackend():
     def backend_update_backend(self, track_instance, active_trains):
         self.update_copy_track(track_instance)
         self.update_copy_active_trains(active_trains)
+        self.track_instance_copy.lines[1].blocks[13].block_occupancy = True
         self.send_frontend_update()
-        self.send_plc_update()
+        if(self.operation_mode == "Automatic"):
+            self.send_plc_update()
         self.send_main_backend_update()
 
     # Handler for update from SW Wayside Frontend
-    def frontend_update_backend(self, track_instance, file_name, line_number, wayside_number):
+    def frontend_update_backend(self, track_instance, file_name, line_number, wayside_number, operation_mode):
         # update local instance variables
         self.update_copy_track(track_instance)
         self.plc_file_name = file_name
         self.plc_line_number = line_number
         self.plc_wayside_number = wayside_number
+        self.operation_mode = operation_mode
 
     # Handler for update from PLC
     def plc_update_backend(self, track_instance, train_instance):

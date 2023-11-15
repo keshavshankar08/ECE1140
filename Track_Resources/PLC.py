@@ -12,10 +12,10 @@ class PLC():
         # receives updates from wayside backend
         signals.sw_wayside_update_plc.connect(self.update_plc)
 
-        self.green_line_wayside1_token_list = [[]]
-        self.green_line_wayside2_token_list = [[]]
-        self.red_line_wayside1_token_list = [[]]
-        self.red_line_wayside2_token_list = [[]]
+        self.green_line_wayside1_token_list = self.tokenizer("Track_Resources/PLC_Programs/Green Line/ws1.txt")
+        self.green_line_wayside2_token_list = self.tokenizer("Track_Resources/PLC_Programs/Green Line/ws2.txt")
+        self.red_line_wayside1_token_list = self.tokenizer("Track_Resources/PLC_Programs/Red Line/ws1.txt")
+        self.red_line_wayside2_token_list = self.tokenizer("Track_Resources/PLC_Programs/Red Line/ws2.txt")
 
         self.green_line_wayside1 = []
         self.green_line_wayside2 = []
@@ -27,7 +27,8 @@ class PLC():
         self.update_copy_track(track_instance)
         self.update_copy_active_trains(active_trains_instance)
         self.update_plc_program(file_name, line_number, wayside_number)
-        self.route_verification()
+        if(len(self.green_line_wayside1_token_list) != 0 and len(self.green_line_wayside2_token_list) != 0 and len(self.red_line_wayside1_token_list) != 0 and len(self.red_line_wayside2_token_list) != 0):
+            self.route_verification()
         self.send_plc_update()
 
     # Send updates from plc to wayside backend
@@ -52,7 +53,6 @@ class PLC():
         elif(line_number == 1):
             if(wayside_number == 1):
                 self.green_line_wayside1_token_list = self.tokenizer(file_name)
-                print(self.green_line_wayside1_token_list)
             elif(wayside_number == 2):
                 self.green_line_wayside2_token_list = self.tokenizer(file_name)
 
@@ -125,7 +125,6 @@ class PLC():
                             sl_register = sl_register or self.track_instance_copy.lines[line_number].blocks[blk].block_occupancy
                         for blk in sr:
                             sr_register = sr_register or self.track_instance_copy.lines[line_number].blocks[blk].block_occupancy
-
                     # condition - get which output register
                     elif(token_line[0] == "COND"):
                         curr_device_var = token_line[1]
@@ -136,9 +135,9 @@ class PLC():
                             if(token_line[2] == "SS"):
                                 stack.append(not(ss_register))
                             elif(token_line[2] == "SL"):
-                                stack.append(not(ss_register))
+                                stack.append(not(sl_register))
                             elif(token_line[2] == "SR"):
-                                stack.append(not(ss_register))
+                                stack.append(not(sr_register))
                         # no change gate - add the variable to stack
                         elif(token_line[1] == "NC"):
                             if(token_line[2] == "SS"):
@@ -157,17 +156,16 @@ class PLC():
                         # and gate - and all elements in stack and store to designated output
                         elif(token_line[1] == "AND"):
                             if(curr_device_var == "SD"):
-                                for log in stack:
-                                    sd_register = log and sd_register
+                                sd_register = stack[0] and stack[1]
                             elif(curr_device_var == "TLS"):
-                                for log in stack:
-                                    tls_register = log and tls_register
+                                tls_register = stack[0] and stack[1]
                             elif(curr_device_var == "TLL"):
-                                for log in stack:
-                                    tll_register = log and tll_register
+                                if(line_number == 0):
+                                    tll_register = stack[0] and stack[1] and stack[2]
+                                elif(line_number == 1):
+                                    tll_register = stack[0] and stack[1]
                             elif(curr_device_var == "TLR"):
-                                for log in stack:
-                                    tlr_register = log and tlr_register
+                                tlr_register = stack[0] and stack[1]
                             stack.clear()
                 # if device is crossing
                 elif(curr_device == "CR" and self.track_instance_copy.lines[line_number].blocks[block_number].block_type == 3):
@@ -296,7 +294,7 @@ class PLC():
             self.interpreter(0, 1, device)
         for device in self.track_instance_copy.red_line_device_blocks_ws2:
             self.interpreter(0, 2, device)
-        for device in self.track_instance_copy.red_line_device_blocks_ws1:
+        for device in self.track_instance_copy.green_line_device_blocks_ws1:
             self.interpreter(1, 1, device)
-        for device in self.track_instance_copy.red_line_device_blocks_ws2:
+        for device in self.track_instance_copy.green_line_device_blocks_ws2:
             self.interpreter(1, 2, device)
