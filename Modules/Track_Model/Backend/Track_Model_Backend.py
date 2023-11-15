@@ -89,14 +89,17 @@ class TrackModelModule(QtWidgets.QMainWindow):
         
     def receive_train_length(self, length):
         # Handle the received train length signal
+        self.train_length = length
         print(f"Received train length: {length}")
 
     def receive_distance_from_block_start(self, distance_block):
         # Handle the received distance from block start signal
+        self.distance_from_block_start = distance_block
         print(f"Received distance from block start: {distance_block}")
 
     def receive_distance_from_yard(self, distance_yard):
         # Handle the received distance from yard signal
+        self.distance_from_yard = distance_yard
         print(f"Received distance from yard: {distance_yard}")
         
     # sends updates from track model backend to main backend
@@ -106,7 +109,6 @@ class TrackModelModule(QtWidgets.QMainWindow):
     # calculates block occupancy
     #def block_occupancy(self):
 
-    
     def track_layout(self):
         file_filter = 'Excel File (*.xlsx)'
         response, _ = QFileDialog.getOpenFileName(
