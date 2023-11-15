@@ -6,6 +6,8 @@ from Train_Resources.CTC_Train import *
 class signalsList(QObject):
     #Timer
     current_system_time = pyqtSignal(QDateTime)
+    current_system_speed = pyqtSignal(float)
+    change_system_speed = pyqtSignal(float)
     stop_timer = pyqtSignal()
 
     #CTC Office Signals
