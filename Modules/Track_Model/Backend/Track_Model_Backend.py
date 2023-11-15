@@ -19,19 +19,19 @@ class TrackModelModule(QtWidgets.QMainWindow):
         # member variable to hold selected block 
         self.clicked_block = 0
         
+        # train model variables
+        self.train_length = 0
+        self.distance_from_yard = 0
+        self.distance_from_block_start = 0
+        
         # declare list to store line data
         self.red_line_data = []
         self.green_line_data = []
         
         # receives updates from main backend
         signals.track_model_update_backend.connect(self.backend_update_backend)
-        
-        # Receiving signals from train model
-        self.trainModel_receive_train_length = pyqtSignal(int)
-        self.trainModel_receive_distance_from_block_start = pyqtSignal(float)
-        self.trainModel_receive_distance_from_yard = pyqtSignal(float)
 
-        # function slots for train model signals 
+        # receive updates from train model
         signals.trainModel_send_train_length.connect(self.receive_train_length)
         signals.trainModel_send_distance_from_block_start.connect(self.receive_distance_from_block_start)
         signals.trainModel_send_distance_from_yard.connect(self.receive_distance_from_yard)
@@ -74,22 +74,30 @@ class TrackModelModule(QtWidgets.QMainWindow):
         # update frontend 
         self.display_block_info()
         
+        # receive train model signals
+        self.receive_train_model_signals()
+        
         # send updated signals to main backend
         self.send_main_backend_update()
         
     
     # train model signal slots 
+    def receive_train_model_signals(self):
+        self.receive_train_length(self.train_length)
+        self.receive_distance_from_block_start(self.distance_from_block_start)
+        self.receive_distance_from_yard(self.distance_from_yard)
+        
     def receive_train_length(self, length):
         # Handle the received train length signal
         print(f"Received train length: {length}")
 
-    def receive_distance_from_block_start(self, distance):
+    def receive_distance_from_block_start(self, distance_block):
         # Handle the received distance from block start signal
-        print(f"Received distance from block start: {distance}")
+        print(f"Received distance from block start: {distance_block}")
 
-    def receive_distance_from_yard(self, distance):
+    def receive_distance_from_yard(self, distance_yard):
         # Handle the received distance from yard signal
-        print(f"Received distance from yard: {distance}")
+        print(f"Received distance from yard: {distance_yard}")
         
     # sends updates from track model backend to main backend
     def send_main_backend_update(self):
@@ -153,7 +161,6 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 self.block_length_display.setText(str(data[3]))
                 self.block_grade_display.setText(str(data[4]))
                 self.speed_limit_display.setText(str(data[5]))
-                # TODO display status of traffic light (if applicable): get signal from wayside
                 self.traffic_light_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_traffic_light_color_string())
                 if data[6] is not None:
                     self.infrastructure_display.setText(str(data[6][0:7]))
@@ -171,7 +178,9 @@ class TrackModelModule(QtWidgets.QMainWindow):
                     self.infrastructure_display.setText(str(data[6]))
                     self.station_name_display.setText(str(data[6]))
                 # TODO display active switch direction (if applicable): get signal from wayside
-                # TODO display crossing status (if applicable): get signal from wayside 
+                self.switch_direction_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_switch_direction_string(1))
+                # TODO display crossing status (if applicable): get signal from wayside
+                self.crossing_status_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_crossing_status_string()) 
                 self.elevation_display.setText(str(data[8]))
                 self.cum_elevation_display.setText(str(data[9]))
                 # TODO display beacon data (if applicable)
