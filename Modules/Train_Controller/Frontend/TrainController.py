@@ -18,35 +18,34 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         uic.loadUi("Modules/Train_Controller/Frontend/TrainControllerUI.ui", self)
         self.trainController = trainController()
         self.Timer = QTimer()
-        #self.Timer.timeout.connect(signals.main_backend_update_values)
-        #self.Timer.timeout.connect(self.TimerHandler)
-        # self.testingTimer.start(INTERVAL)
-
+        self.Timer.timeout.connect(signals.train_controller_update_backend)
+        self.Timer.timeout.connect(self.timerHandler)
+        self.Timer.start(INTERVAL)
 
         #Train Controller Signals
         #lights
-        # train_controller_int_lights_on.connect()
-        # train_controller_int_lights_off.connect()
-        # train_controller_ext_lights_on.connect()
-        # train_controller_ext_lights_off.connect()
+        signals.train_controller_int_lights_on.connect(self.updateIntLights)
+        signals.train_controller_int_lights_off.connect(self.updateIntLights)
+        signals.train_controller_ext_lights_on.connect(self.updateExtLights)
+        signals.train_controller_ext_lights_off.connect(self.updateExtLights)
         # #doors
-        # train_controller_right_door_closed.connect()
-        # train_controller_right_door_open.connect()
-        # train_controller_left_door_closed.connect()
-        # train_controller_left_door_open.connect()
+        signals.train_controller_right_door_closed.connect(self.updateRDoors)
+        signals.train_controller_right_door_open.connect(self.updateRDoors)
+        signals.train_controller_left_door_closed.connect(self.updateLDoors)
+        signals.train_controller_left_door_open.connect(self.updateLDoors)
         # #Bower
-        # train_controller_send_power_command.connect()
+        signals.train_controller_send_power_command.connect(self.updatePower)
         # #Temperature
-        # train_controller_temperature_value.connect()
+        signals.train_controller_temperature_value.connect(self.updateTemp)
         # #Braking
-        # train_controller_service_brake.connect()
-        # train_controller_emergency_brake_on.connect()
-        # train_controller_emergency_brake_off.connect()
+        signals.train_controller_service_brake.connect(self.updateServiceBrake)
+        signals.train_controller_emergency_brake_on.connect(self.updateEBrake)
+        signals.train_controller_emergency_brake_off.connect(self.updateEBrake)
 
         #train model signals
-        # signals.trainModel_send_engine_failure.connect(self.engineFailCheckBoxDisplay)
-        # signals.trainModel_send_signal_failure.connect(self.signalFailCheckBoxDisplay)
-        # signals.trainModel_send_brake_failure.connect(self.brakeFailCheckBoxDisplay)
+        signals.trainModel_send_engine_failure.connect(self.displayEngineFailure)
+        signals.trainModel_send_signal_failure.connect(self.displaySignalFailure)
+        signals.trainModel_send_brake_failure.connect(self.displayBrakeFailure)
         signals.trainModel_send_actual_velocity.connect(self.displayCurrentSpeed)
         signals.trainModel_send_emergency_brake.connect(self.updateEBrake)
 
@@ -54,29 +53,31 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         #inputs for test bench
         self.automaticButton.clicked.connect(self.automaticButtonClicked)
         self.manualButton.clicked.connect(self.manaulButtonClicked)
-        self.leftDoorClosed.clicked.connect(self.closeLDoors)
-        self.rightDoorClosed.clicked.connect(self.closeRDoors)
-        # self.engineFailure.stateChanged.connect(self.displayEngineFailure)
-        # self.signalFailure.stateChanged.connect(self.displaySignalFailure)
-        # self.brakeFailure.stateChanged.connect(self.displayBrakeFailure)
-        
+        self.driverThrottle.valueChanged.connect(self.updateCommandedSpeed)
+        self.emergencyBrake.valueChanged.connect(self.updateEBrake)
+        self.serviceBrake.valueChanged.connect(self.updateServiceBrake)
+        self.curSpeedVal.textChanged.connect(self.displayCurrentSpeed)
 
-
-        #self.driverSpeedChanged.valueChanged.connect()
-        #self.serviceBrakeChanged.valueChanged.connect()
     
         self.show()
 
-    def timeHandler(self):
-        pass
+    def timerHandler(self):
+        self.comPowerVal.setText(format(self.trainController.commandedPower, '.2f'))
+        self.authorityVal.setText(format(self.trainController.authority, '.2f'))
+        self.curSpeedVal.setText(format(self.trainController.currentSpeed, '.2f'))
 
     #function send values to backend
     def sendValues(self):
         self.trainController.engineFail = self.engineFailure.isChecked()
         self.trainController.brakeFail = self.brakeFailure.isChecked()
         self.trainController.signalFail = self.signalFaiure.isChecked()
-        self.trainController.commandedSpeed = self.driverThrottle.value()
         self.trainController.trainTemp = self.tempVal
+        self.trainController.KP = self.KpVal
+        self.trainController.KI = self.KiVal
+        # self.trainController.Rdoor =
+        # self.trainController.Ldoor = 
+        # self.trainController.intLights = 
+        # self.trainController.extLights =
 
         if self.serviceBrake.value() == 1:
             self.trainController.serviceBrake = True
@@ -92,6 +93,7 @@ class TrainControllerUI(QtWidgets.QMainWindow):
     def automaticButtonClicked(self):
         self.automaticButton.setStyleSheet("background-color: rgb(199, 199, 199)")
         self.manualButton.setStyleSheet("background-color: rgb(255, 255, 255)")
+        
 
     #function for manual mode
     def manaulButtonClicked(self):
@@ -114,57 +116,68 @@ class TrainControllerUI(QtWidgets.QMainWindow):
             
     #function will display the current speed
     def displayCurrentSpeed(self, speed):
-        self.curSpeedVal.setText(str(speed))
+        self.trainController.currentSpeed = speed
+
+    #function will update commanded speed
+    def updateCommandedSpeed(self, value):
+        self.trainController.commandedSpeed = value
 
     #function will display Kp and Ki
     def displayKPKI(self, kp, ki):
-        self.KPVal.value()
-        self.KIVal.value()
+        self.KPVal.setValue(kp)
+        self.KIVal.setValue(ki)
 
     #function display power
     def updatePower(self, power):
-        self.comPowerVal.setText(str(self.trainController.commandedPower))
+        self.comPowerVal.setText(str(power))
 
     #function displays authority
     def updateAuthority(self, authority):
-        pass
+        self.authorityVal.setText(str(authority))
 
     #function will toggle int lights
     def updateIntLights(self, value):
         if value:
-            self.intLightOn.setStyleSheet("background-color: green")
-            self.intLightOff.setStyleSheet("background-color: white")
+            self.intLightButton.changeEvent(True)
         else:
-            self.intLightOn.setStyleSheet("background-color: white")
-            self.intLightOff.setStyleSheet("background-color: green")
+            self.intLightButton.changeEvent(False)
 
     #function will toggle ext lights
     def updateExtLights(self, value):
-        pass
+        if value:
+            self.extLightButton.changeEvent(True)
+        else:
+            self.extLightButton.changeEvent(False)
 
     #function - right doors closed
-    def closeRDoors(self, value):
-        pass
+    def updateRDoors(self, value):
+        if value:
+            self.rightDoorButton.changeEvent(True)
+        else:
+            self.rightDoorButton.changeEvent(False)
 
     #function - left doors closed
-    def closeLDoors(self, value):
-        pass
+    def updateLDoors(self, value):
+        if value:
+            self.leftDoorButton.changeEvent(True)
+        else:
+            self.leftDoorButton.changeEvent(False)
 
     #function updates temp
     def updateTemp(self, temp):
-        pass
+        self.tempVal.setValue(temp)
 
-    # #function will display engine failure
-    # def displayEngineFailure(self, value):
-    #     self.engineFailure.setChecked(value)
+    #function will display engine failure
+    def displayEngineFailure(self, value):
+        self.engineFailure.setChecked(value)
 
-    # #function will display brake failure
-    # def displayBrakeFailure(self, value):
-    #     self.brakeFailure.setChecked(value)
+    #function will display brake failure
+    def displayBrakeFailure(self, value):
+        self.brakeFailure.setChecked(value)
 
-    # #function will display signal failure
-    # def displaySignalFailure(self, value):
-    #     self.signalFailure.setChecked(value)
+    #function will display signal failure
+    def displaySignalFailure(self, value):
+        self.signalFailure.setChecked(value)
     
 
     #functions for Qspinbox to text
