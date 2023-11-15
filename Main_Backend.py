@@ -7,6 +7,8 @@ from Train_Resources.CTC_Train import *
 from Modules.CTC.Backend.CTC_Backend import *
 from Modules.SW_Wayside.Backend.SW_Wayside_Backend import *
 from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
+from Modules.Track_Model.Backend.Track_Model_Backend import *
+from Modules.Track_Model.Frontend.Track_Model_UI import *
 from Main_UI import *
 
 # System clock constants
@@ -32,8 +34,12 @@ class SystemTime(QObject):
         # SW Wayside Instances
         self.sw_wayside_backend_instance = WaysideBackend()
         self.track_instance = Track()
-        signals.sw_wayside_backend_update.connect(self.updateTrackInstance)      
+        signals.sw_wayside_backend_update.connect(self.updateTrackInstance)
         
+        # Track Model Instances
+        self.track_model_backend_instance = TrackModelModule()     
+        self.track_instance = Track()
+        signals.track_model_backend_update.connect(self.updateTrackInstance)
         
         self.menu_instance = Mainmenu()  
         self.menu_instance.show()
@@ -42,7 +48,7 @@ class SystemTime(QObject):
         self.current_time = self.current_time.addMSecs(TIME_DELTA)
         signals.current_system_time.emit(self.current_time) #Y:M:D:h:m:s
         signals.sw_wayside_update_backend.emit(self.track_instance) #sends current state of track out
-        
+        signals.track_model_update_backend.emit(self.track_instance)
 
     def stopTimer(self):
         self.system_timer.stop()
@@ -54,6 +60,7 @@ class SystemTime(QObject):
     # SW Wayside Instance Updaters
     def updateTrackInstance(self, updatedTrack):
         self.track_instance = updatedTrack
+    
 
 if __name__ == '__main__':
         app = QApplication([])

@@ -2,10 +2,10 @@ import sys
 from PyQt6 import QtCore, QtGui, QtWidgets, uic
 from PyQt6.QtWidgets import *
 sys.path.append(".")
-from Modules.CTC.Frontend.frontend import *
+from Modules.CTC.Frontend.CTC_UI import *
 from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
 from Modules.HW_Wayside.Frontend.frontend import *
-from Modules.Track_Model.Frontend.Track_Model_UI import *
+from Modules.Track_Model.Backend.Track_Model_Backend import *
 #from Modules.Train_Model.Frontend.train_model_test_bench_ui import *
 from Modules.Train_Controller.Frontend.TrainController import *
 
@@ -32,9 +32,7 @@ class Mainmenu(QtWidgets.QMainWindow):
 
     #window for the track model
     def track_model_clicked(self):
-        self.trackModelWindow = QtWidgets.QMainWindow()
-        ui = Ui_TrackModelModule()
-        ui.setupUi(self.trackModelWindow)
+        self.trackModelWindow = TrackModelModule()
         self.trackModelWindow.show()
 
     #window for the train model 
