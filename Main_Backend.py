@@ -21,7 +21,7 @@ class SystemTime(QObject):
         self.system_timer.timeout.connect(self.timerHandler)
         signals.stop_timer.connect(self.stopTimer)
         self.system_timer.start(INTERVAL)
-
+        
         # SW Wayside Instances
         self.sw_wayside_backend_instance = WaysideBackend()
         self.track_instance = Track()
@@ -45,7 +45,8 @@ class SystemTime(QObject):
         self.current_time = self.current_time.addMSecs(TIME_DELTA)
         signals.current_system_time.emit(self.current_time) #Y:M:D:h:m:s
         signals.sw_wayside_update_backend.emit(self.track_instance) #sends current state of track out
-        signals.track_model_update_backend.emit(self.track_instance)
+        signals.trainModel_backend_update.emit()
+        
 
     def stopTimer(self):
         self.system_timer.stop()
