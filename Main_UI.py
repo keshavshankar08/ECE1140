@@ -13,18 +13,19 @@ from Modules.Track_Model.Frontend.Track_Model_UI import *
 from Modules.Train_Model.Frontend.Train_Model import *
 from Modules.Train_Controller.Frontend.TrainController import *
 
+
 class Mainmenu(QtWidgets.QMainWindow):
     def __init__(self):
         #setup
         super().__init__()
         uic.loadUi("MainLauncherUI.ui", self)
 
-        self.ctcOfficeButt.clicked.connect(self.ctc_office_clicked)
-        self.trackModelButt.clicked.connect(self.track_model_clicked)
-        self.trainModelButt.clicked.connect(self.train_model_clicked)
-        self.swWaysideButt.clicked.connect(self.sw_wayside_clicked)
-        self.hwWaysideButt.clicked.connect(self.hw_wayside_clicked)
-        self.trainControllerButt.clicked.connect(self.train_controller_clicked)
+        self.ctc_office_button.clicked.connect(self.ctc_office_clicked)
+        self.track_model_button.clicked.connect(self.track_model_clicked)
+        self.train_model_button.clicked.connect(self.train_model_clicked)
+        self.sw_wayside_button.clicked.connect(self.sw_wayside_clicked)
+        self.hw_wayside_button.clicked.connect(self.hw_wayside_clicked)
+        self.train_controller_button.clicked.connect(self.train_controller_clicked)
             
         self.show()
 
