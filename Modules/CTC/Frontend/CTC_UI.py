@@ -15,6 +15,8 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #setup
         super().__init__()
         uic.loadUi("Modules\CTC\Frontend\CTC_UI.ui", self)
+        
+        
 
         #CONFIGURATION
         #Create objects
