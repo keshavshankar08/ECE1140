@@ -18,7 +18,8 @@ class TrainModel(QtWidgets.QMainWindow):
         self.ad2 = QtGui.QPixmap("Modules/Train_Model/Frontend/hooverad.jpeg")
         self.ad3 = QtGui.QPixmap("Modules/Train_Model/Frontend/bbad.jpeg")
         self.ad4 = QtGui.QPixmap("Modules/Train_Model/Frontend/oldspicead.png")
-        self.adList = [self.ad1, self.ad2, self.ad3, self.ad4]
+        self.ad5 = QtGui.QPixmap("Modules/Train_Model/Frontend/docad.jpeg")
+        self.adList = [self.ad1, self.ad2, self.ad3, self.ad4, self.ad5]
         self.adIdx = 0
         self.adDisplay.setScaledContents(True)
         self.adDisplay.setPixmap(self.ad1)

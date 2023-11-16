@@ -34,13 +34,27 @@ class Mainmenu(QtWidgets.QMainWindow):
         signals.current_system_time.connect(self.display_time)
         self.system_speed_select.valueChanged.connect(self.set_speed)
         
+        self.adminButton.setEnabled(False)
+        self.passwordBox.textChanged.connect(self.checkPassword)
+        self.adminButton.clicked.connect(self.launchGOD)
+        
         
         self.ctcWindow = CTCFrontend()
         self.trackModelWindow = TrackModelModule()
         self.trainModelWindow = TrainModel()
         self.swWaysideWindow = SWWaysideFrontend()
+        #self.admin = Admin()
         #self.hwWaysideWindow = HWWaysideFrontend()
         self.show()
+        
+    def checkPassword(self, text):
+        if (text == "1234"):
+            self.adminButton.setEnabled(True)
+        else:
+            self.adminButton.setEnabled(False)
+            
+    def launchGOD(self):
+        pass
         
     def pauseTimer(self):
         signals.pause_timer.emit()
