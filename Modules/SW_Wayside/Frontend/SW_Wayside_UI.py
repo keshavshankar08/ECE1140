@@ -3,6 +3,7 @@ sys.path.append(".")
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import *
 from signals import *
+import subprocess
 
 class SWWaysideFrontend(QtWidgets.QMainWindow):
         def __init__(self):
@@ -55,9 +56,9 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
                 self.update_wayside_dropdown()
                 self.update_block_dropdown()
 
-        # Updates local instance of track
+        # Updates track instance
         def update_copy_track(self, updated_track):
-                self.trackInstanceCopy = updated_track
+                self.track_instance_copy = updated_track
         
         # Updates elements shown once mode chosen
         def update_opeartion_dropdown(self):
@@ -208,6 +209,10 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
                 self.block_occupancy_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_occupancy_string())
                 self.track_fault_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_track_fault_status_string())
                 self.maintenance_active_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_maintenance_status_string())
+                if(curr_block_int == 0):
+                        self.switch_direction_value.setEnabled(False)
+                else:
+                        self.switch_direction_value.setEnabled(True)
                 self.switch_direction_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_switch_direction_string(curr_line_int))
                 self.traffic_light_color_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_traffic_light_color_string())
                 self.station_name_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].station_name)
@@ -215,9 +220,12 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
 
         # Handles view track map button clicked
         def view_track_map_clicked(self):
-                # figure out alternative to opencv to open up the map pictures
-                # need to make a good map with devices to show
-                pass
+                curr_line_int = self.get_current_line_displayed_int()
+                image_viewer = {'linux':'xdg-open',
+                                  'win32':'explorer',
+                                  'darwin':'open'}[sys.platform]
+                if(curr_line_int == 1):
+                        subprocess.Popen([image_viewer, "Modules/SW_Wayside/Frontend/GreenLineMap.png"])
 
         # Handles upload plc program button clicked
         def uploadPLCClicked(self):

@@ -44,7 +44,7 @@ class trainController():
         self.ek1 = 0
 
         #authority and stupid things that i need
-        self.authority = 0.0
+        self.authority = 100000.0
         self.station = None
         self.trainID = None
 
@@ -53,6 +53,7 @@ class trainController():
         '''
         self.emergencyBrake = False
         self.pEBrake = False
+        self.serviceBrake = False
         self.serviceBrake = False
 
         #failures
@@ -118,7 +119,8 @@ class trainController():
         self.current_time = time
 
     def tc_update_values(self):
-        pass
+        self.calculatePower()
+        #signals.train_controller_send_power_command.emit(self.commandedPower)
 
     #this function will calculate power, uks = m, eks = m/s, speeds = m/s
     def calculatePower(self):
@@ -154,7 +156,7 @@ class trainController():
         # if (power1 != power2) or (power1 != power3) or (power2 != power3):
         #     self.emergencyBrake = True
         
-        signals.train_controller_send_power_command.emit(self.commandedPower)
+        #signals.train_controller_send_power_command.emit(self.commandedPower)
         
         #now we set uk1 to uk and ek1 to ek, since they be past values now homie
         self.uk1 = self.uk
@@ -163,10 +165,12 @@ class trainController():
     #this function will set the kp and ki by the engineer
     def setKPKI(self, kp, ki):
         self.KP = kp
+        
+        
         self.KI = ki
         #make sure service brake is off to start moving
         self.serviceBrake = False
-        signals.train_controller_service_brake.emit(self.serviceBrake)
+        #signals.train_controller_service_brake.emit(self.serviceBrake)
 
     #this function updates the setpoint speed
     def updateSetPointSpeed(self, setPointSpeed):
@@ -223,18 +227,18 @@ class trainController():
                     pass
                 else:
                     self.serviceBrake = False
-                    signals.train_controller_service_brake.emit(self.serviceBrake)
+                    #signals.train_controller_service_brake.emit(self.serviceBrake)
             else:
                 if self.KP == 0 or self.KI == 0:
                     pass
                 else:
                     self.authority = newAuthority
                     self.serviceBrake = False
-                    signals.train_controller_service_brake.emit(self.serviceBrake)
+                    #signals.train_controller_service_brake.emit(self.serviceBrake)
         else:
             self.authority = newAuthority
             self.serviceBrake = True
-            signals.train_controller_service_brake.emit(self.serviceBrake)
+            #signals.train_controller_service_brake.emit(self.serviceBrake)
 
     #this function updates the temp
     def updateTempValue(self, temperature):
@@ -254,20 +258,19 @@ class trainController():
 
     #this function report E brake on
     def emergencyBrakeOn(self):
-        if self.emergencyBrake == True or self.pEBrake == True:
-            signals.train_controller_emergency_brake_on.emit(self.emergencyBrake)
+        self.emergencyBrake = True
+        signals.train_controller_emergency_brake_on.emit(True)
+        print("tc backend e brake on")
 
     #this function will report e brake off
     def emergencyBrakeOff(self):
         self.emergencyBrake = False
-        signals.train_controller_emergency_brake_off.emit(self.emergencyBrake)
+        signals.train_controller_emergency_brake_off.emit(True)
+        print("tc backend ebrake off")
 
     #this function will report if passenger e brake status
     def passengerEBrake(self, value):
-        if value == True:
-            self.pEBrake = True
-        else:
-            self.pEBrake = False
+        self.emergencyBrake = value
 
     #this function will toggle modes
     def toggleModes(self):

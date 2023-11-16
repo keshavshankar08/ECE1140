@@ -9,8 +9,6 @@ from signals import *
 from Modules.Train_Controller.Backend.Train_Controller import *
 
 
-INTERVAL = 50
-
 ##main module setup
 class TrainControllerUI(QtWidgets.QMainWindow):
     def __init__(self):
@@ -18,10 +16,8 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         super().__init__()
         uic.loadUi("Modules/Train_Controller/Frontend/TrainControllerUI.ui", self)
         self.trainController = trainController()
-        self.testingTimer = QTimer()
-        self.testingTimer.timeout.connect(signals.train_controller_update_backend)
-        self.testingTimer.timeout.connect(self.timerHandler)
-        self.testingTimer.start(INTERVAL)
+        signals.train_controller_update_backend.connect(self.timerHandler)
+
 
         #signals.train_controller_update_frontend.connect(self.update_frontend)
         
@@ -35,35 +31,27 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         self.rightDoorOpen.clicked.connect(self.rDoorsOpen)
         self.leftDoorClosed.clicked.connect(self.lDoorsClosed)
         self.leftDoorOpen.clicked.connect(self.lDoorsOpen)
-        self.emergencyBrake.valueChanged.connect(self.updateEBrake)
-        self.driverThrottle.valueChanged.connect(self.driverThrottleUpdate)
-
-
-        # signals.train_controller_ext_lights_on.connect(self.extLightsOn)
-        # signals.train_controller_ext_lights_off.connect(self.extLightsOff)
-        # signals.train_controller_int_lights_on.connect(self.intLightsOn)
-        # signals.train_controller_int_lights_off.connect(self.intLightsOff)
-        # signals.train_controller_right_door_closed.connect(self.rDoorsClosed)
-        # signals.train_controller_right_door_open.connect(self.rDoorsOpen)
-        # signals.train_controller_left_door_closed.connect(self.lDoorsClosed)
-        # signals.train_controller_left_door_open.connect(self.lDoorsOpen)
+        '''
         #Bower
         signals.train_controller_send_power_command.connect(self.updatePower)
         #Temperature
         signals.train_controller_temperature_value.connect(self.updateTemp)
         #Braking
         signals.train_controller_service_brake.connect(self.updateServiceBrake)
-        signals.train_controller_emergency_brake_on.connect(self.updateEBrake)
-        #signals.train_controller_emergency_brake_off.connect(self.updateEBrake)
-        signals.train_controller_commanded_speed.connect(self.updateCommandedSpeed)
-        signals.trainModel_send_authority.connect(self.updateAuthority)
-        signals.trainModel_send_actual_velocity.connect(self.displayCurrentSpeed)
-    
+        signals.train_controller_emergency_brake_on.connect(self.eBrakeOn)
+        signals.train_controller_emergency_brake_off.connect(self.eBrakeOff)
+        '''
+        self.emergencyBrake.valueChanged.connect(self.eBrake)
+        self.driverThrottle.valueChanged.connect(self.receiveDriverThrottle)
     
     def timerHandler(self):
         self.comPowerVal.setText(format(self.trainController.commandedPower, '.2f'))
         self.authorityVal.setText(format(self.trainController.authority, '.2f'))
         self.curSpeedVal.setText(format(self.trainController.currentSpeed, '.2f'))
+        if (self.trainController.emergencyBrake):
+            self.emergencyBrake.setValue(1)
+        else:
+            self.emergencyBrake.setValue(0)
 
     # def update_frontend(self):
     #     self.trainController.KP = self.tb_KP
@@ -94,6 +82,17 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         self.automaticButton.setStyleSheet("background-color: rgb(255, 255, 255)")
         self.manualButton.setStyleSheet("background-color: rgb(199, 199, 199)")    
 
+    def receiveDriverThrottle(self, value):
+        self.trainController.commandedSpeed = value
+
+    #function for emergency brakes
+    def eBrake(self, value):
+        if (value == 1):
+            self.trainController.emergencyBrakeOn()
+            
+        else:
+            self.trainController.emergencyBrakeOff()
+            
     def driverThrottleUpdate(self):
         self.comSpeedVal.setText(str(self.driverThrottle.value()))
 

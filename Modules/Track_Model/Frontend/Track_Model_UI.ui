@@ -234,7 +234,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Elevation (m)</string>
+          <string>Elevation (ft)</string>
          </property>
         </widget>
        </item>
@@ -249,7 +249,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Cumulative Elevation (m)</string>
+          <string>Cumulative Elevation (ft)</string>
          </property>
         </widget>
        </item>
@@ -291,7 +291,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Block Length (m)</string>
+          <string>Block Length (ft)</string>
          </property>
         </widget>
        </item>
