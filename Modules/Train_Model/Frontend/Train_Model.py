@@ -83,7 +83,7 @@ class TrainModel(QtWidgets.QMainWindow):
             self.massDisplay.setText(format(self.currentTrain.mass * 2.205, '.2f')) # kg * 2.205 = lb
             self.velocityDisplay.setText(format(self.currentTrain.currentSpeed * 2.237, '.2f')) # m/s * 2.237 = mph
             self.accelDisplay.setText(format(self.currentTrain.currentAccel * 3.281, '.2f')) # m/s^2 * 3.281 = ft/s^2
-            self.powerDisplay.setText(format(self.currentTrain.commandedPower, '.0f')) # W
+            self.powerDisplay.setText(format(self.currentTrain.commandedPower / 745.7, '.0f')) # hp
             
         self.crewDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
         self.passDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
