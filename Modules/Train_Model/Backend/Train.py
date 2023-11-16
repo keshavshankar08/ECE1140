@@ -233,7 +233,6 @@ class Train(QObject):
 
     def receiveBeacon(self, beacon):
         self.currentBeacon = beacon
-        self.updateUIBeacon.emit(beacon)
         
     def receiveSpeedLimit(self, value):
         self.speedLimit = value
