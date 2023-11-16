@@ -149,7 +149,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
             block = obj[2]
             while count < 11:
                 block_length_sum += int(self.green_line_data[block][3])
-                if(self.distance_from_yard-block_length_sum <= 30):
+                if(self.distance_from_yard-block_length_sum <= 30 and self.distance_from_yard != 0):
                     # position found
                     self.set_block_color(path[count])
                     self.track_instance_copy.lines[1].blocks[path[count]].block_occupancy = True
@@ -173,6 +173,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 # put prev block back to green 
                 if str(item.toolTip()) == str(occupied_block-1):
                     item.setBrush(QtGui.QColor(0,128,0))
+                    self.track_instance_copy.lines[1].blocks[occupied_block-1].block_occupancy = False
         
     def track_layout(self):
         file_filter = 'Excel File (*.xlsx)'
