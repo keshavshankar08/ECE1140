@@ -77,6 +77,7 @@ class TrainModel(QtWidgets.QMainWindow):
             else:
                 self.eBrakeSelect.setCurrentIndex(0)
                 
+            self.trainTempDisplay.setText(format(self.currentTrain.temperatureActual, '.0f')) # F
             self.lengthDisplay.setText(format(self.currentTrain.length * 3.281, '.2f')) # m * 3.281 = ft
             self.widthDisplay.setText(format(self.currentTrain.width * 3.281, '.2f')) # m * 3.281 = ft
             self.heightDisplay.setText(format(self.currentTrain.height * 3.281, '.2f')) # m * 3.281 = ft
