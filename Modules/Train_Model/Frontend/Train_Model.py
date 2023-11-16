@@ -10,7 +10,6 @@ class TrainModel(QtWidgets.QMainWindow):
         super().__init__()
         uic.loadUi("Modules/Train_Model/Frontend/Train_Model_UI.ui", self)
         signals.trainModel_backend_update.connect(self.UIUpdate)
-        signals.trainModel_update_beacon_UI.connect(self.updateBeacon)
         self.trainSelectComboBox.currentIndexChanged.connect(self.trainSelect)
         self.eBrakeSelect.currentIndexChanged.connect(self.setEBrake)
         self.signalFail.stateChanged.connect(self.sendSignalFail)

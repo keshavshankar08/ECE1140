@@ -243,9 +243,6 @@ class Train(QObject):
         
     def receiveSuggestedSpeed(self, value):
         self.suggestedSpeed = value
-
-    def showAdvertisement(self):
-        pass
     
     def receivePassengers(self, value):
         self.numPassengers += value
