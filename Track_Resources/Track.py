@@ -122,7 +122,7 @@ class Track:
         self.green_line_station_blocks = [2,9,16,22,31,39,48,56,65,73,88,96,105,114,123,132,141]
         self.green_line_station_names = ["Pioneer", "Edgebrook", "Jalappa", "Whited", "South Bank", "Central", "Inglewood", "Overbrook", "Glenbury", "Dormont", "Mt Lebanon", "Poplar", "Castle Shannon", "Dormont", "Glenbury", "Overbrook", "Inglewood", "Central"]
         green_line_crossing_blocks = [19]
-        green_line_junction_blocks = [13,12,1,28,29,150,57,0,58,65,62,0,77,101,76,85,86,100]
+        green_line_junction_blocks = [13,12,1,28,29,150,57,0,58,63,62,0,77,101,76,85,86,100]
         self.green_line_device_blocks_ws1 = [13,19,28,57,63]
         self.green_line_device_blocks_ws2 = [77,85]
         self.green_line.graph = {
@@ -384,7 +384,6 @@ class Line:
 
         #multiply each block by time
         return len(path)*15
-
 
 # Block Object - A single block linked to a single Track
 class Block:

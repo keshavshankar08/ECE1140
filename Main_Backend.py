@@ -17,12 +17,15 @@ from CONSTANTS import *
 class MainBackend(QObject):
     def __init__(self):
         super().__init__()
-        self.current_time = QDateTime(constants.START_YEAR, constants.START_MONTH, constants.START_DAY, constants.START_HOUR, constants.START_MIN, constants.START_SEC)
+        self.current_time = QDateTime(constants.START_YEAR, constants.START_MONTH, constants.START_DAY,
+                                      constants.START_HOUR, constants.START_MIN, constants.START_SEC)
         self.system_timer = QTimer()
         self.system_timer.timeout.connect(self.timerHandler)
         signals.stop_timer.connect(self.stopTimer)
+        signals.pause_timer.connect(self.pauseTimer)
+        signals.resume_timer.connect(self.resumeTimer)
         self.system_timer.start(constants.INTERVAL)
-        
+
         # CTC Office Instances
         self.ctc_office_backend_instance = CTCBackend()
         self.active_trains_instance = ActiveTrains()
@@ -34,56 +37,78 @@ class MainBackend(QObject):
         self.plc_instance = PLC()
         self.track_instance = Track()
         signals.sw_wayside_backend_update.connect(self.sw_wayside_backend_update)
+        signals.admin_update.connect(self.admin_update)
 
         # Track Model Instances
         self.track_model_backend_instance = TrackModelModule()     
-        self.track_instance = Track()
-        signals.track_model_backend_update.connect(self.update_track_instance)
+        signals.track_model_backend_update.connect(self.track_model_backend_update)
         
+
         self.menu_instance = Mainmenu()
         self.menu_instance.show()
 
     def timerHandler(self):
         self.current_time = self.current_time.addMSecs(int(constants.TIME_DELTA))
-        signals.current_system_time.emit(self.current_time) #Y:M:D:h:m:s
-        signals.ctc_office_update_backend.emit(self.track_instance, self.active_trains_instance, self.ticket_sales_instance)
+        signals.current_system_time.emit(self.current_time)  # Y:M:D:h:m:s
+        signals.ctc_office_update_backend.emit(self.track_instance, self.active_trains_instance,
+                                               self.ticket_sales_instance)
         signals.sw_wayside_update_backend.emit(self.track_instance, self.active_trains_instance)
+        signals.track_model_update_backend.emit(self.track_instance, self.active_trains_instance)
+        signals.update_admin.emit(self.track_instance, self.active_trains_instance)
         signals.trainModel_backend_update.emit()
         signals.train_controller_update_backend.emit()
 
     def stopTimer(self):
         self.system_timer.stop()
+        
+    def pauseTimer(self):
+        self.system_timer.stop()
+        
+    def resumeTimer(self):
+        self.system_timer.start()
 
-    #Handler for uppdate from CTC Office
+    # Handler for uppdate from CTC Office
     def ctc_office_backend_update(self, updated_track, updated_active_trains, updated_ticket_sales):
         self.update_track_instance(updated_track)
         self.update_active_trains(updated_active_trains)
         self.update_ticket_sales(updated_ticket_sales)
-        
+
     # Handler for update from SW Wayside
     def sw_wayside_backend_update(self, updated_track, updated_active_trains):
         self.update_active_trains(updated_active_trains)
         self.update_track_instance(updated_track)
 
-    # Active trains instance updater
-    def update_active_trains(self, updated_active_trains):
-        self.active_trains_instance = updated_active_trains
-
-    def update_ticket_sales(self, updated_ticket_sales):
-         self.ticket_sales_instance = updated_ticket_sales
-
+    # Handler for update from SW Wayside
+    def admin_update(self, updated_track, updated_active_trains, updated_ticket_sales):
+        self.update_active_trains(updated_active_trains)
+        self.update_track_instance(updated_track)
+        self.update_ticket_sales(updated_ticket_sales)
+        
     # Track instance updater
     def update_track_instance(self, updated_track):
         self.track_instance = updated_track
 
+    # Active trains instance updater
+    def update_active_trains(self, updated_active_trains):
+        self.active_trains_instance = updated_active_trains
+
+    # Handler for update from track model
+    def track_model_backend_update(self, updated_track, updated_active_trains):
+        self.update_track_instance(updated_track)
+        self.update_active_trains(updated_active_trains)
+        
+    def update_ticket_sales(self, updated_ticket_sales):
+        self.ticket_sales_instance = updated_ticket_sales
+
+
     def updateMainMenu(self):
         pass
 
-if __name__ == '__main__':
-        app = QApplication([])
-        thread = QThread() 
-        backend = MainBackend()
-        backend.moveToThread(thread) 
-        thread.start()
-        sys.exit(app.exec())
 
+if __name__ == '__main__':
+    app = QApplication([])
+    thread = QThread()
+    backend = MainBackend()
+    backend.moveToThread(thread)
+    thread.start()
+    sys.exit(app.exec())
