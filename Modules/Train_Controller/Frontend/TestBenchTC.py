@@ -22,18 +22,33 @@ class TestBenchTrainControllerUI(QtWidgets.QMainWindow):
         self.testingTimer.start(INTERVAL)
 
         #signals.train_controller_update_frontend.connect(self.update_frontend)
+        self.intLightsButton.clicked.connect(self.displayIntLightsOn)
+
+        self.intLightsButton.clicked.connect(self.displayIntLightsOff)
+
+        self.extLightsButton.accepted.connect(self.displayExtLightsOn)
+
+        self.extLightsButton.rejected.connect(self.displayExtLightsOff)
+
+        self.rightDoorButton.accepted.connect(self.displayRDoorsClosed)
+
+        self.rightDoorButton.rejected.connect(self.displayRDoorsOpen)
+
+        self.leftDoorButton.accepted.connect(self.displayLDoorsClosed)
+        
+        self.leftDoorButton.rejected.connect(self.displayLDoorsOpen)
 
         self.send_button.clicked.connect(self.sendValues)
 
-        # signals.train_controller_int_lights_on.connect(self.displayIntLightsOn)
-        # signals.train_controller_int_lights_off.connect(self.displayIntLightsOff)
-        # signals.train_controller_ext_lights_on.connect(self.displayExtLightsOn)
-        # signals.train_controller_ext_lights_off.connect(self.displayExtLightsOff)
-        # #doors
-        # signals.train_controller_right_door_closed.connect(self.displayRDoorsClosed)
-        # signals.train_controller_right_door_open.connect(self.displayRDoorsOpen)
-        # signals.train_controller_left_door_closed.connect(self.displayLDoorsClosed)
-        # signals.train_controller_left_door_open.connect(self.displayLDoorsOpen)
+        signals.train_controller_int_lights_on.connect(self.displayIntLightsOn)
+        signals.train_controller_int_lights_off.connect(self.displayIntLightsOff)
+        signals.train_controller_ext_lights_on.connect(self.displayExtLightsOn)
+        signals.train_controller_ext_lights_off.connect(self.displayExtLightsOff)
+        #doors
+        signals.train_controller_right_door_closed.connect(self.displayRDoorsClosed)
+        signals.train_controller_right_door_open.connect(self.displayRDoorsOpen)
+        signals.train_controller_left_door_closed.connect(self.displayLDoorsClosed)
+        signals.train_controller_left_door_open.connect(self.displayLDoorsOpen)
         #Bower
         signals.train_controller_send_power_command.connect(self.powerDisplay)
         #Temperature
@@ -52,9 +67,9 @@ class TestBenchTrainControllerUI(QtWidgets.QMainWindow):
         self.trainController.engineFail = self.tb_engineFail.isChecked()
         self.trainController.brakeFail = self.tb_brakeFail.isChecked()
         self.trainController.signalFail = self.tb_signalFail.isChecked()
-        self.trainController.commandedPower = self.comPowerVal
-        self.trainController.currentSpeed = self.curSpeedVal
-        self.trainController.authority = self.authorityVal
+        self.trainController.commandedPower = float(self.comPowerVal.text())
+        self.trainController.currentSpeed = float(self.curSpeedVal.text())
+        self.trainController.authority = float(self.authorityVal.text())
         self.trainController.emergencyBrake = self.tb_eBrake
         self.trainController.serviceBrake = self.tb_serviceBrake
         
@@ -117,40 +132,64 @@ class TestBenchTrainControllerUI(QtWidgets.QMainWindow):
         self.tb_KI.setValue(ki)
 
     def displayEBrakeOn(self, value):
-        self.emergencyBrake.valueChanged(value)
+        self.emergencyBrake.setTickInterval(int(value))
 
     def displayEBrakeOff(self, value):
-        self.emergencyBrake.valueChanged(value)
+        self.emergencyBrake.setTickInterval(int(value))
 
     def displayServiceBrake(self, value):
         if value:
-            self.serviceBrake.valueChanged(1)
+            self.serviceBrake.setTickInterval(int(value))
         else:
-            self.serviceBrake.valueChanged(0)
+            self.serviceBrake.setTickInterval(int(value))
 
     def displayIntLightsOn(self):
-        self.intLightsButton.accepted()
+        rejectButton = self.intLightsButton
+        acceptButton = self.intLightsButton
+        rejectButton.setStyleSheet(("background-color: white;"))
+        acceptButton.setStyleSheet("background-color: green;")
 
     def displayIntLightsOff(self):
-        self.intLightsButton.rejected()
+        acceptButton = self.intLightsButton
+        rejectButton = self.intLightsButton
+        acceptButton.setStyleSheet(("background-color: white;"))
+        rejectButton.setStyleSheet("background-color: green;")
 
     def displayExtLightsOn(self):
-        self.extLightButton.accepted()
+        rejectButton = self.extLightsButton
+        acceptButton = self.extLightsButton
+        rejectButton.setStyleSheet(("background-color: white;"))
+        acceptButton.setStyleSheet("background-color: green;")
 
     def displayExtLightsOff(self):
-        self.extLightButton.rejected()
+        acceptButton = self.extLightsButton
+        rejectButton = self.extLightsButton
+        acceptButton.setStyleSheet(("background-color: white;"))
+        rejectButton.setStyleSheet("background-color: green;")
 
     def displayRDoorsClosed(self):
-        self.rightDoorButton.accepted()
+        rejectButton = self.rightDoorButton
+        acceptButton = self.rightDoorButton
+        rejectButton.setStyleSheet(("background-color: white;"))
+        acceptButton.setStyleSheet("background-color: green;")
 
     def displayRDoorsOpen(self):
-        self.rightDoorButton.rejected()
+        acceptButton = self.rightDoorButton
+        rejectButton = self.rightDoorButton
+        acceptButton.setStyleSheet(("background-color: white;"))
+        rejectButton.setStyleSheet("background-color: green;")
 
     def displayLDoorsClosed(self):
-        self.leftDoorButton.accepted()
+        rejectButton = self.leftDoorButton
+        acceptButton = self.leftDoorButton
+        rejectButton.setStyleSheet(("background-color: white;"))
+        acceptButton.setStyleSheet("background-color: green;")
 
     def displayLDoorsOpen(self):
-        self.leftDoorButton.rejected()
+        acceptButton = self.leftDoorButton
+        rejectButton = self.leftDoorButton
+        acceptButton.setStyleSheet(("background-color: white;"))
+        rejectButton.setStyleSheet("background-color: red;")
 
 #Main
 if __name__ == "__main__":
