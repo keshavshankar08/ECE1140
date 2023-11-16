@@ -6,7 +6,7 @@ class Track:
         # ----- Initializing with preload data -----
         # Create red line
         self.red_line = Line()
-        self.self.red_line.lineColor = 0
+        self.red_line.lineColor = 0
 
         # Red line block information
         red_line_default_blocks = [2,3,4,5,6,8,11,12,13,14,18,19,20,22,23,24,26,29,30,31,34,36,37,40,41,42,46,49,50,54,55,56,57,58,59,61,62,63,64,65,68,69,70,73,74,75]
@@ -14,6 +14,8 @@ class Track:
         self.red_line_station_names = ["Shadyside", "Herron Ave", "Swissville", "Penn Station", "Steel Plaza", "First Ave", "Station Square", "South Hills Junction"]
         red_line_crossing_blocks = [47]
         red_line_junction_blocks = [9,0,10,16,1,15,27,28,76,33,72,32,38,39,71,44,67,43,52,53,66]
+        self.red_line_device_blocks_ws1 = [9,16]
+        self.red_line_device_blocks_ws2 = [27,33,38,44,47,52]
         self.red_line.graph = {
             0:[9],
             1:[16,2],
@@ -121,6 +123,8 @@ class Track:
         self.green_line_station_names = ["Pioneer", "Edgebrook", "Jalappa", "Whited", "South Bank", "Central", "Inglewood", "Overbrook", "Glenbury", "Dormont", "Mt Lebanon", "Poplar", "Castle Shannon", "Dormont", "Glenbury", "Overbrook", "Inglewood", "Central"]
         green_line_crossing_blocks = [19]
         green_line_junction_blocks = [13,12,1,28,29,150,57,0,58,65,62,0,77,101,76,85,86,100]
+        self.green_line_device_blocks_ws1 = [13,19,28,57,63]
+        self.green_line_device_blocks_ws2 = [77,85]
         self.green_line.graph = {
             0:[63],
             1:[13],
@@ -178,6 +182,7 @@ class Track:
             53:[54],
             54:[55],
             55:[56],
+            56:[57],
             57:[0,58],
             58:[59],
             59:[60],
@@ -296,7 +301,6 @@ class Track:
         self.lines.insert(0, self.red_line)
         self.lines.insert(1, self.green_line)
 
-
     #Function to swap between station names and block number
     def red_line_station_to_block (self, swap_stations):
         #loop through stations to get swapped
@@ -308,6 +312,22 @@ class Track:
         #return the block numbers
         return swap_stations
 
+    def red_line_block_to_station (self, swap_blocks):
+        #check if the variable is just 'int'
+        if type(swap_blocks) is int:
+            for j in range(len(self.red_line_station_blocks)):
+                if swap_blocks == self.red_line_station_blocks[j]:
+                    return self.red_line_station_names[j]
+
+        #otherwise loop through blocks to get swapped
+        for i in range(len(swap_blocks)):
+            for j in range(len(self.red_line_station_blocks)):
+                if swap_blocks[i] == self.red_line_station_blocks[j]:
+                    swap_blocks[i] = self.red_line_station_names[j]
+
+        #return the station names
+        return swap_blocks
+
     #Function to swap between station names and block number
     def green_line_station_to_block (self, swap_stations):
         #loop through stations to get swapped
@@ -318,7 +338,22 @@ class Track:
         
         #return the block numbers
         return swap_stations
+    
+    def green_line_block_to_station (self, swap_blocks):
+        #check if the variable is just 'int'
+        if type(swap_blocks) is int:
+            for j in range(len(self.green_line_station_blocks)):
+                if swap_blocks == self.green_line_station_blocks[j]:
+                    return self.green_line_station_names[j]
 
+        #otherwise loop through blocks to get swapped
+        for i in range(len(swap_blocks)):
+            for j in range(len(self.green_line_station_blocks)):
+                if swap_blocks[i] == self.green_line_station_blocks[j]:
+                    swap_blocks[i] = self.green_line_station_names[j]
+
+        #return the station names
+        return swap_blocks
 
 # Line Object - A single line from the entire track network
 class Line:
@@ -334,6 +369,7 @@ class Line:
             return path
         shortest = None
         for node in self.graph[start]:
+            #print("current node is " + str(node))
             if node not in path:
                 newpath = self.get_shortest_path(node, end, path)
                 if newpath:
@@ -456,7 +492,20 @@ class Block:
                 return [str(green_line_junction_switch_ends[list_pos]) + "-" + str(green_line_junction_receiver_ends[list_pos][0]), str(green_line_junction_switch_ends[list_pos]) + "-" + str(green_line_junction_receiver_ends[list_pos][1])]
             else:
                 return [str(green_line_junction_switch_ends[list_pos]) + "-" + str(green_line_junction_receiver_ends[list_pos][1]), str(green_line_junction_switch_ends[list_pos]) + "-" + str(green_line_junction_receiver_ends[list_pos][0])]
-            
+    
+    # Get list of 3 blocks in a junction
+    def get_tri_junction_blocks(self, line_int):
+        red_line_junction_switch_ends = [9,16,27,33,38,44,52]
+        red_line_junction_receiver_ends = [[0,10],[1,15],[28,76],[72,32],[39,71],[67,43],[53,66]]
+        green_line_junction_switch_ends = [13,28,57,63,77,85]
+        green_line_junction_receiver_ends = [[12,1],[29,150],[0,58],[62,0],[101,76],[86,100]]
+        if(line_int == 0):
+            list_pos = red_line_junction_switch_ends.index(self.block_number)
+            return red_line_junction_switch_ends[list_pos],red_line_junction_receiver_ends[list_pos][0],red_line_junction_receiver_ends[list_pos][1]
+        elif(line_int == 1):
+            list_pos = green_line_junction_switch_ends.index(self.block_number)
+            return green_line_junction_switch_ends[list_pos],green_line_junction_receiver_ends[list_pos][0],green_line_junction_receiver_ends[list_pos][1]
+
     # Get switch direction boolean
     def get_switch_direction_bool(self, direction, line_int):
         if(direction == ""):
