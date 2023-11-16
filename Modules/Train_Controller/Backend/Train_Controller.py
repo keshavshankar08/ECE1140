@@ -3,7 +3,6 @@ import sys
 from PyQt6.QtCore import QObject, QDateTime, pyqtSignal
 sys.path.append(".")
 from signals import signals
-from Modules.Train_Controller.Frontend.TrainController import *
 from CONSTANTS import START_YEAR, START_MONTH, START_DAY, START_HOUR, START_MIN, START_SEC, TIME_DELTA
 
 #This class represents the train controller
@@ -16,7 +15,6 @@ MAX_POWER = 120000
 
 class trainController():
     def __init__(self):
-
         signals.current_system_time.connect(self.setCurrentTime)
         signals.train_controller_backend_update.connect(self.updateValuesTC)
         #KP and KI values I also amded the mode so we chillin hom slice btw false = manuel, true = autobots assemble

@@ -19,7 +19,7 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         uic.loadUi("Modules/Train_Controller/Frontend/TrainControllerUI.ui", self)
         self.trainController = trainController()
         self.Timer = QTimer()
-        self.Timer.timeout.connect(signals.train_controller_update_backend)
+        self.Timer.timeout.connect(signals.train_controller_backend_update)
         self.Timer.timeout.connect(self.timerHandler)
         self.Timer.start(INTERVAL)
 
