@@ -42,7 +42,7 @@ class Mainmenu(QtWidgets.QMainWindow):
         self.trainModelWindow = TrainModel()
         self.swWaysideWindow = SWWaysideFrontend()
         self.adminWindow = ADMIN()
-        #self.hwWaysideWindow = HWWaysideFrontend()
+        self.hwWaysideWindow = HWWaysideFrontend()
         self.show()
         
     def checkPassword(self, text):
@@ -88,8 +88,7 @@ class Mainmenu(QtWidgets.QMainWindow):
 
     #window for the hw wayside controller
     def hw_wayside_clicked(self):
-        #self.hwWaysideWindow.show()
-        pass
+        self.hwWaysideWindow.show()
 
     #window for the train controller
     def train_controller_clicked(self):
