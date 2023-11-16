@@ -3,6 +3,7 @@ sys.path.append(".")
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import *
 from signals import *
+import subprocess
 
 class SWWaysideFrontend(QtWidgets.QMainWindow):
         def __init__(self):
@@ -215,9 +216,12 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
 
         # Handles view track map button clicked
         def view_track_map_clicked(self):
-                # figure out alternative to opencv to open up the map pictures
-                # need to make a good map with devices to show
-                pass
+                curr_line_int = self.get_current_line_displayed_int()
+                image_viewer = {'linux':'xdg-open',
+                                  'win32':'explorer',
+                                  'darwin':'open'}[sys.platform]
+                if(curr_line_int == 1):
+                        subprocess.Popen([image_viewer, "Modules/SW_Wayside/Frontend/GreenLineMap.png"])
 
         # Handles upload plc program button clicked
         def uploadPLCClicked(self):
