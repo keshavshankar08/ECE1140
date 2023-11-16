@@ -5,7 +5,11 @@ sys.path.append(".")
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import *
 from signals import *
-SER = serial.Serial('COM3', 9600)
+
+try:
+        SER = serial.Serial('COM3', 9600)
+except: 
+        exit
 
 # send data to Arduino to display
 def display(data):
@@ -57,11 +61,11 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 self.update_display()
 
                 # send updated signals to wayside backend
-                self.send_backend_update()
+                self.send_frontend_update()
 
         # Sends updates from wayside frontend to wayside backend
-        def send_backend_update(self):
-                signals.sw_wayside_frontend_update.emit(self.track_instance_copy)
+        def send_frontend_update(self):
+                signals.hw_wayside_frontend_update.emit(self.track_instance_copy)
 
         # Updates all UI display information
         def update_display(self):
