@@ -6,7 +6,7 @@ from Modules.CTC.Frontend.CTC_UI import *
 from Modules.Track_Model.Backend.Track_Model_Backend import *
 #from Modules.CTC.Frontend.frontend import *
 from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
-#from Modules.HW_Wayside.Frontend.HW_Wayside_UI import *
+from Modules.HW_Wayside.Frontend.HW_Wayside_UI import *
 from Modules.Track_Model.Frontend.Track_Model_UI import *
 from Modules.Train_Model.Frontend.Train_Model import *
 from Modules.Train_Controller.Frontend.TrainController import *

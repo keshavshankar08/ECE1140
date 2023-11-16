@@ -114,6 +114,10 @@ class Train(QObject):
         self.currentTime = value
 
     def TrainModelUpdateValues(self):
+        ### MASS
+        self.mass = CAR_WEIGHT_EMPTY + (self.numPassengers * 70)
+        if (self.mass >= CAR_WEIGHT_LOADED):
+            self.mass = CAR_WEIGHT_LOADED
         ### FAILURE MODES
         if (self.engineFail):
             self.commandedPower = 0
@@ -141,7 +145,8 @@ class Train(QObject):
         self.currentAngle = math.atan(self.currentGradient / 100)
         self.slopeForce = self.mass * GRAVITY * math.sin(self.currentAngle)
         ### FRICTION
-        self.frictionForce = self.mass * GRAVITY * FRICTION_COEFF * math.cos(self.currentAngle)
+        #self.frictionForce = self.mass * GRAVITY * FRICTION_COEFF * math.cos(self.currentAngle)
+        self.frictionForce = 1000
         ### NET FORCE
         self.netForce = self.engineForce - self.slopeForce - self.brakeForce - self.frictionForce
         if (self.netForce > MAX_ENGINE_FORCE):
