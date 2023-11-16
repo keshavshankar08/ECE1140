@@ -9,6 +9,8 @@ from Modules.SW_Wayside.Backend.SW_Wayside_Backend import *
 from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
 from Modules.Track_Model.Backend.Track_Model_Backend import *
 from Modules.Track_Model.Frontend.Track_Model_UI import *
+from Modules.HW_Wayside.Backend.backend import *
+from Modules.HW_Wayside.Frontend.HW_Wayside_UI import *
 from Track_Resources.PLC import *
 from Main_UI import *
 from CONSTANTS import *
@@ -78,6 +80,11 @@ class MainBackend(QObject):
 
     # Handler for update from SW Wayside
     def admin_update(self, updated_track, updated_active_trains):
+        self.update_active_trains(updated_active_trains)
+        self.update_track_instance(updated_track)
+
+    # Handler for hardware wayside
+    def hw_wayside_backend_update(self, updated_track, updated_active_trains):
         self.update_active_trains(updated_active_trains)
         self.update_track_instance(updated_track)
 

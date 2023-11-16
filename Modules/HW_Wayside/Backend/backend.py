@@ -4,14 +4,17 @@ import time
 sys.path.append(".")
 from signals import signals
 from Track_Resources.Track import *
+from Train_Resources.CTC_Train import *
 
 class WaysideBackend():
     def __init__(self):
         self.trackInstanceCopy = Track()
+        self.activeTrainsCopy = ActiveTrains()
+
 
         # receives updates from main backend
         signals.sw_wayside_update_backend.connect(self.backend_update_backend)
-        
+
         # receives updates from wayside frontend
         signals.sw_wayside_frontend_update.connect(self.frontend_update_backend)
 
@@ -21,7 +24,7 @@ class WaysideBackend():
 
     # Sends updates from wayside backend to main backend
     def send_main_backend_update(self):
-        signals.sw_wayside_backend_update.emit(self.trackInstanceCopy)
+        signals.sw_wayside_backend_update.emit(self.trackInstanceCopy, self.activeTrainsCopy)
 
     # Updates local instance of track
     def update_copy_track(self, updated_track):
