@@ -27,14 +27,44 @@ class Mainmenu(QtWidgets.QMainWindow):
         self.hw_wayside_button.clicked.connect(self.hw_wayside_clicked)
         self.train_controller_button.clicked.connect(self.train_controller_clicked)
         
+        self.resumeButton.setEnabled(False)
+        self.pauseButton.clicked.connect(self.pauseTimer)
+        self.resumeButton.clicked.connect(self.resumeTimer)
+        
         signals.current_system_time.connect(self.display_time)
         self.system_speed_select.valueChanged.connect(self.set_speed)
         
+        self.adminButton.setEnabled(False)
+        self.passwordBox.textChanged.connect(self.checkPassword)
+        self.adminButton.clicked.connect(self.launchGOD)
+        
+        
+        self.ctcWindow = CTCFrontend()
         self.trackModelWindow = TrackModelModule()
         self.trainModelWindow = TrainModel()
         self.swWaysideWindow = SWWaysideFrontend()
+        #self.admin = Admin()
         #self.hwWaysideWindow = HWWaysideFrontend()
         self.show()
+        
+    def checkPassword(self, text):
+        if (text == "1234"):
+            self.adminButton.setEnabled(True)
+        else:
+            self.adminButton.setEnabled(False)
+            
+    def launchGOD(self):
+        pass
+        
+    def pauseTimer(self):
+        signals.pause_timer.emit()
+        self.pauseButton.setEnabled(False)
+        self.resumeButton.setEnabled(True)
+        
+    def resumeTimer(self):
+        signals.resume_timer.emit()
+        self.resumeButton.setEnabled(False)
+        self.pauseButton.setEnabled(True)
         
     def display_time(self, value):
         self.system_time_select.setDateTime(value)
@@ -44,7 +74,6 @@ class Mainmenu(QtWidgets.QMainWindow):
 
     #window for the ctc office
     def ctc_office_clicked(self):
-        self.ctcWindow = CTCFrontend()
         self.ctcWindow.show()
 
     #window for the track model
@@ -54,7 +83,6 @@ class Mainmenu(QtWidgets.QMainWindow):
     #window for the train model 
     def train_model_clicked(self):
         self.trainModelWindow.show()
-        pass
 
     #window for the se wayside controller
     def sw_wayside_clicked(self):

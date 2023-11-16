@@ -23,7 +23,7 @@ E_BRAKE_FORCE = 140404  # N
 MAX_MOTOR_POWER = 120000  # Watts
 GRAVITY = 9.8  # m/s^2
 MAX_ENGINE_FORCE = 40000  # N
-FRICTION_COEFF = 0  # dimensionless
+FRICTION_COEFF = 0.0  # dimensionless
 
 
 class Train(QObject):

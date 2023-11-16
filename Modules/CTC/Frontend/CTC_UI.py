@@ -63,8 +63,6 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #Deactivate Test Bench On Startup
         #self.test_bench_deactivate_button_clicked()
 
-        #end with showing main window
-        self.show()
 
     #Update Current Time
     def update_current_time(self, time):

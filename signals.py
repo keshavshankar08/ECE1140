@@ -9,6 +9,8 @@ class signalsList(QObject):
     current_system_speed = pyqtSignal(float)
     change_system_speed = pyqtSignal(float)
     stop_timer = pyqtSignal()
+    pause_timer = pyqtSignal()
+    resume_timer = pyqtSignal()
 
     #CTC Office Signals
     ctc_office_update_backend = pyqtSignal(Track, ActiveTrains, int) # update from main backend to ctc office backend
