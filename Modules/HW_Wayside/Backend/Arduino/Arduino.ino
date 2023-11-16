@@ -25,33 +25,18 @@ void loop() {
 
   // READ PLC PROGRAM - convert to string
   if (Serial.available() > 0) {
-    // read data
+
+    // read display
     display();
 
-/*
-    while (Serial.available() > 0)
-    {
-      incomingByte = Serial.read(); // read byte
-      digitalWrite(LED_BUILTIN, HIGH);
+    //ReadPLC();
 
-      lcd.print(incomingByte); 
-      Data += incomingByte;
-    }
-*/
-    // PERFORM LOGIC WITH PLC PROGRAM
-    //
-    //
-    //
-    //
-    //
 
-    Serial.write("Received Display");
-    /*
+    Serial.write("Received: ");
     for (int i = 0; i < Data.length(); i++)
     {
       Serial.write(Data[i]);
     }
-    */
     Serial.write("\n");
     }
   }
@@ -66,6 +51,7 @@ void LCD_setup(){
 
 void display(){
   LCD_setup();
+  Data = "";
   char incoming = "";
   while (Serial.available() > 0)
     {
@@ -84,4 +70,41 @@ void display(){
       }
     }
 
+}
+
+void ReadPLC(){
+  while (Serial.available() > 0){
+    Data = "";
+    incomingByte = Serial.read(); // read byte
+    digitalWrite(LED_BUILTIN, HIGH);
+
+    if (incomingByte != '\t')
+      Data += incomingByte;
+  }
+
+  String line = "";
+  for (int i = 0; i < Data.length(); i++)
+  {
+    if (Data[i] != '\n')
+      if (line == "SW")
+        // SW information
+        return;
+        
+      else if (line == "COND")
+        // Condition info
+        return;
+      else if (line == "READ")
+        // save information on variables
+        return;
+      else if (line == "CR")
+        return;
+      else if (line == "OPP")
+        return;
+      line += Data;
+    if (Data[i] == '\n')
+      return;
+
+
+  }
+  
 }

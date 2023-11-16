@@ -9,10 +9,15 @@ SER = serial.Serial('COM3', 9600)
 
 # send data to Arduino to display
 def display(data):
+        # send data to arduino
         SER.write(data.encode('ascii'))
         time.sleep(1)
+
+        # read in serial output
         response = SER.readline().decode('ascii').strip()
         print("Arduino output: \n", response)
+
+        
 
 class HWWaysideFrontend(QtWidgets.QMainWindow):
         def __init__(self):
@@ -204,6 +209,7 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                         
         # Updates display block information
         def update_block_information(self):
+                counter = 0
                 curr_line_int = self.get_current_line_displayed_int()
                 curr_block_int = self.get_current_block_displayed_int()
                 self.block_type_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_type_string())
@@ -228,7 +234,14 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_traffic_light_color_string() + "."
 
                 ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_crossing_status_string() + "."
-                display(ArduinoString)
+                if (counter == 0):
+                        display(ArduinoString)
+                        counter += 1
+                if (counter < 500):
+                        counter += 1
+                if (counter == 500):
+                        counter = 0
+
 
         # Handles view track map button clicked
         def view_track_map_clicked(self):
