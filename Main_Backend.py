@@ -13,6 +13,7 @@ from Track_Resources.PLC import *
 from Main_UI import *
 from CONSTANTS import *
 
+
 class MainBackend(QObject):
     def __init__(self):
         super().__init__()
@@ -39,9 +40,9 @@ class MainBackend(QObject):
         signals.admin_update.connect(self.admin_update)
 
         # Track Model Instances
-        self.track_model_backend_instance = TrackModelModule()
-        self.track_instance = Track()
-        signals.track_model_backend_update.connect(self.update_track_instance)
+        self.track_model_backend_instance = TrackModelModule()     
+        signals.track_model_backend_update.connect(self.track_model_backend_update)
+        
 
         self.menu_instance = Mainmenu()
         self.menu_instance.show()
@@ -52,6 +53,7 @@ class MainBackend(QObject):
         signals.ctc_office_update_backend.emit(self.track_instance, self.active_trains_instance,
                                                self.ticket_sales_instance)
         signals.sw_wayside_update_backend.emit(self.track_instance, self.active_trains_instance)
+        signals.track_model_update_backend.emit(self.track_instance, self.active_trains_instance)
         signals.update_admin.emit(self.track_instance, self.active_trains_instance)
         signals.trainModel_backend_update.emit()
 
@@ -80,20 +82,28 @@ class MainBackend(QObject):
         self.update_active_trains(updated_active_trains)
         self.update_track_instance(updated_track)
         self.update_ticket_sales(updated_ticket_sales)
+        
+    # Track instance updater
+    def update_track_instance(self, updated_track):
+        self.track_instance = updated_track
 
     # Active trains instance updater
     def update_active_trains(self, updated_active_trains):
         self.active_trains_instance = updated_active_trains
 
+
+    # Handler for update from track model
+    def track_model_backend_update(self, updated_track, updated_active_trains):
+        self.update_track_instance(updated_track)
+        self.update_active_trains(updated_active_trains)
+        
     def update_ticket_sales(self, updated_ticket_sales):
         self.ticket_sales_instance = updated_ticket_sales
 
-    # Track instance updater
-    def update_track_instance(self, updated_track):
-        self.track_instance = updated_track
 
     def updateMainMenu(self):
         pass
+
 
 if __name__ == '__main__':
     app = QApplication([])
