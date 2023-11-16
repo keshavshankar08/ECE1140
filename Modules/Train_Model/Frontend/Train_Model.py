@@ -78,8 +78,8 @@ class TrainModel(QtWidgets.QMainWindow):
                 self.eBrakeSelect.setCurrentIndex(0)
                 
             self.lengthDisplay.setText(format(self.currentTrain.length * 3.281, '.2f')) # m * 3.281 = ft
-            self.widthDisplay.setText(format(self.currentTrain.width * 3.281, '.2f'))
-            self.heightDisplay.setText(format(self.currentTrain.height * 3.281, '.2f'))
+            self.widthDisplay.setText(format(self.currentTrain.width * 3.281, '.2f')) # m * 3.281 = ft
+            self.heightDisplay.setText(format(self.currentTrain.height * 3.281, '.2f')) # m * 3.281 = ft
             self.massDisplay.setText(format(self.currentTrain.mass * 2.205, '.2f')) # kg * 2.205 = lb
             self.velocityDisplay.setText(format(self.currentTrain.currentSpeed * 2.237, '.2f')) # m/s * 2.237 = mph
             self.accelDisplay.setText(format(self.currentTrain.currentAccel * 3.281, '.2f')) # m/s^2 * 3.281 = ft/s^2
