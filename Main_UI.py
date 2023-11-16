@@ -90,8 +90,7 @@ class Mainmenu(QtWidgets.QMainWindow):
 
     #window for the hw wayside controller
     def hw_wayside_clicked(self):
-        #self.hwWaysideWindow.show()
-        pass
+        self.hwWaysideWindow.show()
 
     #window for the train controller
     def train_controller_clicked(self):
