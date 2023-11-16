@@ -22,9 +22,9 @@ class TestBenchTrainControllerUI(QtWidgets.QMainWindow):
         self.testingTimer.start(INTERVAL)
 
         #signals.train_controller_update_frontend.connect(self.update_frontend)
-        self.intLightsButton.clicked.connect(self.displayIntLightsOn)
+        self.intLightsButton.accepted.connect(self.displayIntLightsOn)
 
-        self.intLightsButton.clicked.connect(self.displayIntLightsOff)
+        self.intLightsButton.rejected.connect(self.displayIntLightsOff)
 
         self.extLightsButton.accepted.connect(self.displayExtLightsOn)
 
@@ -165,7 +165,7 @@ class TestBenchTrainControllerUI(QtWidgets.QMainWindow):
         acceptButton = self.extLightsButton
         rejectButton = self.extLightsButton
         acceptButton.setStyleSheet(("background-color: white;"))
-        rejectButton.setStyleSheet("background-color: green;")
+        rejectButton.setStyleSheet("background-color: red;")
 
     def displayRDoorsClosed(self):
         rejectButton = self.rightDoorButton
@@ -177,7 +177,7 @@ class TestBenchTrainControllerUI(QtWidgets.QMainWindow):
         acceptButton = self.rightDoorButton
         rejectButton = self.rightDoorButton
         acceptButton.setStyleSheet(("background-color: white;"))
-        rejectButton.setStyleSheet("background-color: green;")
+        rejectButton.setStyleSheet("background-color: red;")
 
     def displayLDoorsClosed(self):
         rejectButton = self.leftDoorButton

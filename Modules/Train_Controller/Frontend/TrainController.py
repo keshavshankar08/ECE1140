@@ -18,52 +18,53 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         super().__init__()
         uic.loadUi("Modules/Train_Controller/Frontend/TrainControllerUI.ui", self)
         self.trainController = trainController()
-        self.Timer = QTimer()
-        self.Timer.timeout.connect(signals.train_controller_backend_update)
-        self.Timer.timeout.connect(self.timerHandler)
-        self.Timer.start(INTERVAL)
+        self.testingTimer = QTimer()
+        self.testingTimer.timeout.connect(signals.train_controller_update_backend)
+        self.testingTimer.timeout.connect(self.timerHandler)
+        self.testingTimer.start(INTERVAL)
 
-        #signals.train_controller_update_frontend.connect(self.update_frontend) 
+        #signals.train_controller_update_frontend.connect(self.update_frontend)
+        self.intLightsButton.accepted.connect(self.displayIntLightsOn)
+
+        self.intLightsButton.rejected.connect(self.displayIntLightsOff)
+
+        self.extLightsButton.accepted.connect(self.displayExtLightsOn)
+
+        self.extLightsButton.rejected.connect(self.displayExtLightsOff)
+
+        self.rightDoorButton.accepted.connect(self.displayRDoorsClosed)
+
+        self.rightDoorButton.rejected.connect(self.displayRDoorsOpen)
+
+        self.leftDoorButton.accepted.connect(self.displayLDoorsClosed)
         
-        #Train Controller Signals
-        #lights
-        signals.train_controller_int_lights_on.connect(self.updateIntLights)
-        signals.train_controller_int_lights_off.connect(self.updateIntLights)
-        signals.train_controller_ext_lights_on.connect(self.updateExtLights)
-        signals.train_controller_ext_lights_off.connect(self.updateExtLights)
-        # #doors
-        signals.train_controller_right_door_closed.connect(self.updateRDoors)
-        signals.train_controller_right_door_open.connect(self.updateRDoors)
-        signals.train_controller_left_door_closed.connect(self.updateLDoors)
-        signals.train_controller_left_door_open.connect(self.updateLDoors)
-        # #Bower
-        signals.train_controller_send_power_command.connect(self.updatePower)
-        # #Temperature
-        signals.train_controller_temperature_value.connect(self.updateTemp)
-        # #Braking
-        signals.train_controller_service_brake.connect(self.updateServiceBrake)
-        signals.train_controller_emergency_brake_on.connect(self.updateEBrake)
-        signals.train_controller_emergency_brake_off.connect(self.updateEBrake)
+        self.leftDoorButton.rejected.connect(self.displayLDoorsOpen)
 
-        #train model signals
-        signals.trainModel_send_engine_failure.connect(self.displayEngineFailure)
-        signals.trainModel_send_signal_failure.connect(self.displaySignalFailure)
-        signals.trainModel_send_brake_failure.connect(self.displayBrakeFailure)
-        signals.trainModel_send_actual_velocity.connect(self.displayCurrentSpeed)
-        signals.trainModel_send_emergency_brake.connect(self.updateEBrake)
+        self.send_button.clicked.connect(self.sendValues)
 
-
-        #inputs for test bench
-        self.automaticButton.clicked.connect(self.automaticButtonClicked)
-        self.manualButton.clicked.connect(self.manaulButtonClicked)
-        self.driverThrottle.valueChanged.connect(self.updateCommandedSpeed)
-        self.emergencyBrake.valueChanged.connect(self.updateEBrake)
-        self.serviceBrake.valueChanged.connect(self.updateServiceBrake)
-        self.curSpeedVal.textChanged.connect(self.displayCurrentSpeed)
-
+        signals.train_controller_int_lights_on.connect(self.displayIntLightsOn)
+        signals.train_controller_int_lights_off.connect(self.displayIntLightsOff)
+        signals.train_controller_ext_lights_on.connect(self.displayExtLightsOn)
+        signals.train_controller_ext_lights_off.connect(self.displayExtLightsOff)
+        #doors
+        signals.train_controller_right_door_closed.connect(self.displayRDoorsClosed)
+        signals.train_controller_right_door_open.connect(self.displayRDoorsOpen)
+        signals.train_controller_left_door_closed.connect(self.displayLDoorsClosed)
+        signals.train_controller_left_door_open.connect(self.displayLDoorsOpen)
+        #Bower
+        signals.train_controller_send_power_command.connect(self.powerDisplay)
+        #Temperature
+        signals.train_controller_temperature_value.connect(self.tempDisplay)
+        #Braking
+        signals.train_controller_service_brake.connect(self.displayServiceBrake)
+        signals.train_controller_emergency_brake_on.connect(self.displayEBrakeOn)
+        signals.train_controller_emergency_brake_off.connect(self.displayEBrakeOff)
     
-        self.show()
-
+    def timerHandler(self):
+        self.comPowerVal.setText(format(self.trainController.commandedPower, '.2f'))
+        self.authorityVal.setText(format(self.trainController.authority, '.2f'))
+        self.curSpeedVal.setText(format(self.trainController.currentSpeed, '.2f'))
+        
     # def update_frontend(self):
     #     self.trainController.KP = self.tb_KP
     #     self.trainController.KI = self.tb_KI
