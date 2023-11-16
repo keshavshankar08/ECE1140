@@ -66,6 +66,8 @@ class signalsList(QObject):
     train_controller_service_brake = pyqtSignal(float)
     train_controller_emergency_brake_on = pyqtSignal(bool)
     train_controller_emergency_brake_off = pyqtSignal(bool)
+    #updates
+    train_controller_backend_update = pyqtSignal()
 
 
 signals = signalsList()

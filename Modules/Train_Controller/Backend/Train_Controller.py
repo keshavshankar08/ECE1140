@@ -16,6 +16,9 @@ MAX_POWER = 120000
 
 class trainController():
     def __init__(self):
+
+        signals.current_system_time.connect(self.setCurrentTime)
+        signals.train_controller_backend_update.connect(self.updateValuesTC)
         #KP and KI values I also amded the mode so we chillin hom slice btw false = manuel, true = autobots assemble
         self.KP = 0
         self.KI = 0
@@ -61,6 +64,9 @@ class trainController():
         self.previousPowerCommand = 0.0
         self.previousCurrentSpeed = 0.0
 
+        self.speedLimit = 70.0
+        self.currentTime = QDateTime()
+
         #Signals
         signals.trainModel_send_actual_velocity.connect(self.updateCurrentSpeed)
         signals.trainModel_send_authority.connect(self.updateAuthority)
@@ -71,6 +77,31 @@ class trainController():
         signals.trainModel_send_engine_failure.connect(self.engineFailure)
         signals.trainModel_send_brake_failure.connect(self.brakeFailure)
         signals.trainModel_send_signal_failure.connect(self.signalFailure)
+
+
+    #updating values function
+    def updateValuesTC(self):
+
+        #Train Controller Signals
+        #lights
+        signals.train_controller_int_lights_on.emit(self.toggleLightsInt)
+        signals.train_controller_int_lights_off.emit(self.toggleLightsInt)
+        signals.train_controller_ext_lights_on.emit(self.toggleLightsExt)
+        signals.train_controller_ext_lights_off.emit(self.toggleLightsExt)
+        #doors
+        signals.train_controller_right_door_closed.emit(self.toggleDoorsRight)
+        signals.train_controller_right_door_open.emit(self.toggleDoorsRight)
+        signals.train_controller_left_door_closed.emit(self.toggleDoorsLeft)
+        signals.train_controller_left_door_open.emit(self.toggleDoorsLeft)
+        #Bower
+        signals.train_controller_send_power_command.emit(self.calculatePower)
+        #Temperature
+        signals.train_controller_temperature_value.emit(self.updateTempValue)
+        #Braking
+        signals.train_controller_service_brake.emit(self.toggleServiceBrake)
+        signals.train_controller_emergency_brake_on.emit(self.emergencyBrakeOn)
+        signals.train_controller_emergency_brake_off.emit(self.emergencyBrakeOff)
+
 
 
     #this function will calculate power, uks = m, eks = m/s, speeds = m/s
@@ -290,7 +321,14 @@ class trainController():
         else:
             self.emergencyBrake = False
 
+    #timing functions
+    def updateCurrentTime(self, value):
+        self.currentTime = value
 
+    def setCurrentTime(self, time):
+        self.current_time = time
+
+traincontroller = trainController()
 
 
 
