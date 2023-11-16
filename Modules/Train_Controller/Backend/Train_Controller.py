@@ -53,7 +53,7 @@ class trainController():
         '''
         self.emergencyBrake = False
         self.pEBrake = False
-        self.serviceBrake = True
+        self.serviceBrake = False
 
         #failures
         self.engineFail = False
@@ -118,18 +118,7 @@ class trainController():
         self.current_time = time
 
     def tc_update_values(self):
-        self.onExteriorLights()
-        self.offExteriorLights()
-        self.onInteriorLights()
-        self.offInteriorLights()
-        self.closeLeftDoors()
-        self.openLeftDoors()
-        self.closeRightDoors()
-        self.openRightDoors()
-        self.calculatePower()
-        self.toggleServiceBrake()
-        self.emergencyBrakeOn()
-        self.emergencyBrakeOff()
+        pass
 
     #this function will calculate power, uks = m, eks = m/s, speeds = m/s
     def calculatePower(self):

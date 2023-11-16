@@ -25,6 +25,8 @@ class TrainControllerUI(QtWidgets.QMainWindow):
 
         #signals.train_controller_update_frontend.connect(self.update_frontend)
         
+        self.automaticButton.clicked.connect(self.automaticButtonClicked)
+        self.manualButton.clicked.connect(self.manaulButtonClicked)
         self.intLightOn.clicked.connect(self.intLightsOn)
         self.intLightOff.clicked.connect(self.intLightsOff)
         self.extLightOn.clicked.connect(self.extLightsOn)
@@ -33,15 +35,30 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         self.rightDoorOpen.clicked.connect(self.rDoorsOpen)
         self.leftDoorClosed.clicked.connect(self.lDoorsClosed)
         self.leftDoorOpen.clicked.connect(self.lDoorsOpen)
+        self.emergencyBrake.valueChanged.connect(self.updateEBrake)
+        self.driverThrottle.valueChanged.connect(self.driverThrottleUpdate)
 
+
+        # signals.train_controller_ext_lights_on.connect(self.extLightsOn)
+        # signals.train_controller_ext_lights_off.connect(self.extLightsOff)
+        # signals.train_controller_int_lights_on.connect(self.intLightsOn)
+        # signals.train_controller_int_lights_off.connect(self.intLightsOff)
+        # signals.train_controller_right_door_closed.connect(self.rDoorsClosed)
+        # signals.train_controller_right_door_open.connect(self.rDoorsOpen)
+        # signals.train_controller_left_door_closed.connect(self.lDoorsClosed)
+        # signals.train_controller_left_door_open.connect(self.lDoorsOpen)
         #Bower
         signals.train_controller_send_power_command.connect(self.updatePower)
         #Temperature
         signals.train_controller_temperature_value.connect(self.updateTemp)
         #Braking
         signals.train_controller_service_brake.connect(self.updateServiceBrake)
-        signals.train_controller_emergency_brake_on.connect(self.eBrakeOn)
-        signals.train_controller_emergency_brake_off.connect(self.eBrakeOff)
+        signals.train_controller_emergency_brake_on.connect(self.updateEBrake)
+        #signals.train_controller_emergency_brake_off.connect(self.updateEBrake)
+        signals.train_controller_commanded_speed.connect(self.updateCommandedSpeed)
+        signals.trainModel_send_authority.connect(self.updateAuthority)
+        signals.trainModel_send_actual_velocity.connect(self.displayCurrentSpeed)
+    
     
     def timerHandler(self):
         self.comPowerVal.setText(format(self.trainController.commandedPower, '.2f'))
@@ -72,18 +89,25 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         self.automaticButton.setStyleSheet("background-color: rgb(199, 199, 199)")
         self.manualButton.setStyleSheet("background-color: rgb(255, 255, 255)")
         
-
     #function for manual mode
     def manaulButtonClicked(self):
         self.automaticButton.setStyleSheet("background-color: rgb(255, 255, 255)")
         self.manualButton.setStyleSheet("background-color: rgb(199, 199, 199)")    
 
-    #function for emergency brakes
-    def eBrakeOn(self):
-        self.emergencyBrake.setValue(1)
+    def driverThrottleUpdate(self):
+        self.comSpeedVal.setText(str(self.driverThrottle.value()))
 
-    def eBrakeOff(self):
-        self.emergencyBrake.setValue(0)
+    def updateEBrake(self, value):
+        if value:
+            self.emergencyBrake.setValue(1)
+        else:
+            self.emergencyBrake.setValue(0)
+
+    # def eBrakeOn(self):
+    #     self.emergencyBrake.setValue(1)
+
+    # def eBrakeOff(self):
+    #     self.emergencyBrake.setValue(0)
  
     #function for service brakes
     def updateServiceBrake(self, value):
@@ -117,37 +141,45 @@ class TrainControllerUI(QtWidgets.QMainWindow):
     def intLightsOn(self):
             self.intLightOn.setStyleSheet("background-color: green;")
             self.intLightOff.setStyleSheet("background-color: white;")
+            self.trainController.intLights = True
 
     def intLightsOff(self):
             self.intLightOn.setStyleSheet("background-color: white;")
             self.intLightOff.setStyleSheet("background-color: green;")
+            self.trainController.intLights = False
 
     #function will toggle ext lights
     def extLightsOn(self):
         self.extLightOn.setStyleSheet("background-color: green;")
         self.extLightOff.setStyleSheet("background-color: white;")
+        self.trainController.extLights = True
 
     def extLightsOff(self):
         self.extLightOn.setStyleSheet("background-color: white;")
         self.extLightOff.setStyleSheet("background-color: green;")
+        self.trainController.extLights = False
 
     #function - right doors closed
     def rDoorsClosed(self):
         self.rightDoorClosed.setStyleSheet("background-color: green;")
         self.rightDoorOpen.setStyleSheet("background-color: white;")
+        self.trainController.Rdoor = True
 
     def rDoorsOpen(self):
         self.rightDoorClosed.setStyleSheet("background-color: white;")
         self.rightDoorOpen.setStyleSheet("background-color: green;")
+        self.trainController.Rdoor = False
 
     #function - left doors closed
     def lDoorsClosed(self):
         self.leftDoorClosed.setStyleSheet("background-color: green;")
         self.leftDoorOpen.setStyleSheet("background-color: white;")
+        self.trainController.Ldoor = True
 
     def lDoorsOpen(self):
         self.leftDoorClosed.setStyleSheet("background-color: white;")
         self.leftDoorOpen.setStyleSheet("background-color: green;")
+        self.trainController.Ldoor = False
 
     #function updates temp
     def updateTemp(self, temp):
