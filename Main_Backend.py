@@ -1,5 +1,4 @@
 import sys
-
 sys.path.append(".")
 from PyQt6.QtCore import QTimer, QThread, QCoreApplication, QObject, QDateTime
 from signals import signals
@@ -38,6 +37,7 @@ class MainBackend(QObject):
         self.plc_instance = PLC()
         self.track_instance = Track()
         signals.sw_wayside_backend_update.connect(self.sw_wayside_backend_update)
+        signals.admin_update.connect(self.admin_update)
 
         # Track Model Instances
         self.track_model_backend_instance = TrackModelModule()
@@ -53,6 +53,7 @@ class MainBackend(QObject):
         signals.ctc_office_update_backend.emit(self.track_instance, self.active_trains_instance,
                                                self.ticket_sales_instance)
         signals.sw_wayside_update_backend.emit(self.track_instance, self.active_trains_instance)
+        signals.update_admin.emit(self.track_instance, self.active_trains_instance)
         signals.trainModel_backend_update.emit()
 
     def stopTimer(self):
@@ -72,6 +73,11 @@ class MainBackend(QObject):
 
     # Handler for update from SW Wayside
     def sw_wayside_backend_update(self, updated_track, updated_active_trains):
+        self.update_active_trains(updated_active_trains)
+        self.update_track_instance(updated_track)
+
+    # Handler for update from SW Wayside
+    def admin_update(self, updated_track, updated_active_trains):
         self.update_active_trains(updated_active_trains)
         self.update_track_instance(updated_track)
 

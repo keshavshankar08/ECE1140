@@ -55,9 +55,9 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
                 self.update_wayside_dropdown()
                 self.update_block_dropdown()
 
-        # Updates local instance of track
+        # Updates track instance
         def update_copy_track(self, updated_track):
-                self.trackInstanceCopy = updated_track
+                self.track_instance_copy = updated_track
         
         # Updates elements shown once mode chosen
         def update_opeartion_dropdown(self):

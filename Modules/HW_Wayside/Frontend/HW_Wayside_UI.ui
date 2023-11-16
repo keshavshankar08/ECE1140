@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SWWaysideModule</class>
- <widget class="QMainWindow" name="SWWaysideModule">
+ <class>HWWaysideModule</class>
+ <widget class="QMainWindow" name="HWWaysideModule">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -22,7 +22,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>SW Wayside</string>
+   <string>HW Wayside</string>
   </property>
   <widget class="QWidget" name="main_widget">
    <widget class="QFrame" name="line_box">
