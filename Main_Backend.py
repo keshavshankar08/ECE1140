@@ -13,7 +13,6 @@ from Track_Resources.PLC import *
 from Main_UI import *
 from CONSTANTS import *
 
-
 class MainBackend(QObject):
     def __init__(self):
         super().__init__()
@@ -94,7 +93,6 @@ class MainBackend(QObject):
 
     def updateMainMenu(self):
         pass
-
 
 if __name__ == '__main__':
     app = QApplication([])
