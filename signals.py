@@ -53,6 +53,7 @@ class signalsList(QObject):
     trainModel_update_beacon_UI = pyqtSignal(str)
     
     #Train Controller Signals
+    train_controller_update_backend = pyqtSignal()
     #lights
     train_controller_int_lights_on = pyqtSignal(bool)
     train_controller_int_lights_off = pyqtSignal(bool)
