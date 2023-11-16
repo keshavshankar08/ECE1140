@@ -106,8 +106,6 @@ class Train(QObject):
         self.engineFail = False
         self.brakeFail = False
         self.signalFail = False
-        #### Advertisements
-        # not implemented haha hahahaha
         #### Passthroughs
         self.speedLimit = 70.0
         self.currentTime = QDateTime()
