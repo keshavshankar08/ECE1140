@@ -119,7 +119,7 @@ class trainController():
 
     def tc_update_values(self):
         self.calculatePower()
-        signals.train_controller_send_power_command.emit(self.commandedPower)
+        #signals.train_controller_send_power_command.emit(self.commandedPower)
 
     #this function will calculate power, uks = m, eks = m/s, speeds = m/s
     def calculatePower(self):
@@ -155,7 +155,7 @@ class trainController():
         # if (power1 != power2) or (power1 != power3) or (power2 != power3):
         #     self.emergencyBrake = True
         
-        signals.train_controller_send_power_command.emit(self.commandedPower)
+        #signals.train_controller_send_power_command.emit(self.commandedPower)
         
         #now we set uk1 to uk and ek1 to ek, since they be past values now homie
         self.uk1 = self.uk
@@ -169,7 +169,7 @@ class trainController():
         self.KI = ki
         #make sure service brake is off to start moving
         self.serviceBrake = False
-        signals.train_controller_service_brake.emit(self.serviceBrake)
+        #signals.train_controller_service_brake.emit(self.serviceBrake)
 
     #this function updates the setpoint speed
     def updateSetPointSpeed(self, setPointSpeed):
@@ -226,18 +226,18 @@ class trainController():
                     pass
                 else:
                     self.serviceBrake = False
-                    signals.train_controller_service_brake.emit(self.serviceBrake)
+                    #signals.train_controller_service_brake.emit(self.serviceBrake)
             else:
                 if self.KP == 0 or self.KI == 0:
                     pass
                 else:
                     self.authority = newAuthority
                     self.serviceBrake = False
-                    signals.train_controller_service_brake.emit(self.serviceBrake)
+                    #signals.train_controller_service_brake.emit(self.serviceBrake)
         else:
             self.authority = newAuthority
             self.serviceBrake = True
-            signals.train_controller_service_brake.emit(self.serviceBrake)
+            #signals.train_controller_service_brake.emit(self.serviceBrake)
 
     #this function updates the temp
     def updateTempValue(self, temperature):

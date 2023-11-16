@@ -21,6 +21,7 @@ class ADMIN(QtWidgets.QMainWindow):
                 self.maintenance_active_button.clicked.connect(self.maintenance_active_clicked)
                 self.maintenance_inactive_button.clicked.connect(self.maintenance_inactive_clicked)
                 self.ticket_sales_input.textChanged.connect(self.update_ticket_sales_changed)
+                self.adminPower.valueChanged.connect(self.admin_force_power)
 
                 self.last_line_state = ""
                 self.last_wayside_state = ""
@@ -179,3 +180,6 @@ class ADMIN(QtWidgets.QMainWindow):
                 curr_line_int = self.get_current_line_displayed_int()
                 curr_block_int = self.get_current_block_displayed_int()
                 self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].maintenance_status = False
+                
+        def admin_force_power(self, value):
+                signals.train_controller_send_power_command.emit(value)
