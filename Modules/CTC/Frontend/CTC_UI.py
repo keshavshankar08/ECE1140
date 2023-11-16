@@ -53,9 +53,6 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #Dispatched Table Signals
         self.dispatched_trains_table.itemSelectionChanged.connect(self.dispatched_trains_table_selection_changed)
 
-        #Test Bench Signals
-        self.set_ticket_sales.textChanged.connect(self.set_ticket_sales_changed)
-
     #Update Current Time
     def update_current_time(self, time):
         self.current_time.setPlainText(time.toString('HH:mm:ss'))
@@ -409,11 +406,7 @@ class CTCFrontend(QtWidgets.QMainWindow):
     #Active Trains Tab Functions
     def dispatch_trains_table_selection_changed(self):
         pass
-    
-    #Test Bench Handlers
-    def set_ticket_sales_changed(self):
-        #self.ticket_sales_copy = int(self.set_ticket_sales.text())
-        pass
+
 
 #Main
 if __name__ == "__main__":
