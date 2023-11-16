@@ -4,7 +4,10 @@ from PyQt6 import QtCore, QtGui, QtWidgets, uic
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import QTimer
 import sys
+sys.path.append(".")
 from signals import *
+from Modules.Train_Controller.Backend.Train_Controller import *
+
 
 INTERVAL = 50
 
