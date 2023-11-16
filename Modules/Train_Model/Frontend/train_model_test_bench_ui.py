@@ -30,6 +30,10 @@ class TrainModelTestBenchUI(QtWidgets.QMainWindow):
         signals.trainModel_send_distance_from_block_start.connect(self.DFBSDisplay)
         signals.trainModel_send_distance_from_yard.connect(self.SDFYDisplay)
         signals.trainModel_send_train_length.connect(self.lenDisplay)
+        signals.trainModel_send_beacon.connect(self.beaconDisplay)
+        signals.trainModel_send_authority.connect(self.authorityDisplay)
+        signals.trainModel_send_speed_limit.connect(self.speedLimitDisplay)
+        signals.trainModel_send_suggested_speed.connect(self.suggestedSpeedDisplay)
 
     def testTimerHandler(self):  # WORKS
         self.engForceDisplay.setText(format(self.testTrain.engineForce, '.2f'))
@@ -47,6 +51,9 @@ class TrainModelTestBenchUI(QtWidgets.QMainWindow):
         self.testTrain.engineFail = self.tb_engFail.isChecked()
         self.testTrain.brakeFail = self.tb_brakeFail.isChecked()
         self.testTrain.signalFail = self.tb_sigFail.isChecked()
+        self.testTrain.currentAuthority = self.authoritySelect.value()
+        self.testTrain.speedLimit = self.tb_speedLimitSelect.value()
+        self.testTrain.currentBeacon = self.tb_beaconEntry.text()
         if (self.tb_eBrakeToggle.currentText() == "on"):
             self.testTrain.emergencyBrake = True
         else:
@@ -120,7 +127,7 @@ class TrainModelTestBenchUI(QtWidgets.QMainWindow):
         self.tb_brakeFailDisplay.setChecked(value)
 
     def currentSpeedDisplay(self, value):
-        self.tb_curSpeedDisplay.setText(format(value * 2.237, '.2f'))  # m/s * 2.237 = mph
+        self.tb_curSpeedDisplay.setText(format(value, '.2f')) 
 
     def emergencyBrakeDisplay(self, value):
         if (value):
@@ -129,13 +136,26 @@ class TrainModelTestBenchUI(QtWidgets.QMainWindow):
             self.eBrakeDisplay.setText("off")
 
     def DFBSDisplay(self, value):
-        self.tb_DFBS.setText(format(value * 3.281, '.2f'))
+        self.tb_DFBS.setText(format(value, '.2f'))
 
     def SDFYDisplay(self, value):
-        self.tb_DFY.setText(format(value * 3.281, '.2f'))
+        self.tb_DFY.setText(format(value, '.2f'))
 
     def lenDisplay(self, value):
-        self.tb_lenDisplay.setText(format(value * 3.281, '.2f'))
+        self.tb_lenDisplay.setText(format(value, '.2f'))
+        
+    def beaconDisplay(self, value):
+        self.tb_beaconDisplay.setText(value)
+        
+    def authorityDisplay(self, value):
+        self.tb_authorityDisplay.setText(format(value, '.2f'))
+        
+    def speedLimitDisplay(self, value):
+        self.tb_speedLimit.setText(format(value, '.2f'))
+        
+    def suggestedSpeedDisplay(self, value):
+        self.tb_suggestedSpeed.setText(format(value, '.2f'))
+    
 
 
 if __name__ == "__main__":
