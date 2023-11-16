@@ -116,6 +116,14 @@ class Train(QObject):
         self.currentTime = value
 
     def TrainModelUpdateValues(self):
+        ### FAILURE MODES
+        if (self.engineFail):
+            self.commandedPower = 0
+        if (self.brakeFail):
+            self.serviceBrake = 0
+        if (self.signalFail):
+            self.currentBeacon = ""
+        ### ACCELERATION SUM
         self.previousAccel = self.currentAccel
         ### BRAKE
         if (self.serviceBrake and not self.emergencyBrake):
@@ -140,7 +148,7 @@ class Train(QObject):
         self.netForce = self.engineForce - self.slopeForce - self.brakeForce - self.frictionForce
         if (self.netForce > MAX_ENGINE_FORCE):
             self.netForce = MAX_ENGINE_FORCE
-        
+        ### F -> a
         self.currentAccel = self.netForce / self.mass
 
         if (self.commandedPower <= MAX_MOTOR_POWER):
