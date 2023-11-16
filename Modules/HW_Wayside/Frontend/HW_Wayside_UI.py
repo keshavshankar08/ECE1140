@@ -7,8 +7,8 @@ from PyQt6.QtWidgets import *
 from signals import *
 SER = serial.Serial('COM3', 9600)
 
-# send PLC program serially
-def send_PLC(data):
+# send data to Arduino to display
+def display(data):
         SER.write(data.encode('ascii'))
         time.sleep(1)
         response = SER.readline().decode('ascii').strip()
@@ -224,10 +224,11 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_track_fault_status_string() + "."
                 ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_maintenance_status_string() + "."
 
-                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_switch_direction_string(curr_line_int) + "."
+                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_switch_direction_string(curr_line_int) + " "
+                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_traffic_light_color_string() + "."
 
                 ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_crossing_status_string() + "."
-                send_PLC(ArduinoString)
+                display(ArduinoString)
 
         # Handles view track map button clicked
         def view_track_map_clicked(self):

@@ -45,11 +45,13 @@ void loop() {
     //
     //
 
-    Serial.write("Received: ");
+    Serial.write("Received Display");
+    /*
     for (int i = 0; i < Data.length(); i++)
     {
       Serial.write(Data[i]);
     }
+    */
     Serial.write("\n");
     }
   }
