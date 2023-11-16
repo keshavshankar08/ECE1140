@@ -14,7 +14,7 @@ class signalsList(QObject):
 
     # ADMIN Signals
     update_admin = pyqtSignal(Track, ActiveTrains) # update from main backend to admin
-    admin_update = pyqtSignal(Track, ActiveTrains) # update from admin to main backend
+    admin_update = pyqtSignal(Track, ActiveTrains, int) # update from admin to main backend
 
     #CTC Office Signals
     ctc_office_update_backend = pyqtSignal(Track, ActiveTrains, int) # update from main backend to ctc office backend

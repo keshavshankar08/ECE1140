@@ -76,9 +76,10 @@ class MainBackend(QObject):
         self.update_track_instance(updated_track)
 
     # Handler for update from SW Wayside
-    def admin_update(self, updated_track, updated_active_trains):
+    def admin_update(self, updated_track, updated_active_trains, updated_ticket_sales):
         self.update_active_trains(updated_active_trains)
         self.update_track_instance(updated_track)
+        self.update_ticket_sales(updated_ticket_sales)
 
     # Active trains instance updater
     def update_active_trains(self, updated_active_trains):

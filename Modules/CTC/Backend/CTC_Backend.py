@@ -99,7 +99,6 @@ class CTCBackend():
     def verify_route_order(route_stops):
         pass
 
-
 #Helper Functions
 def validate_time_hours(input_time):
     regex = "^(?:[01]?[0-9]|2[0-3]):[0-5]?[0-9](?::[0-5]?[0-9])?$"
