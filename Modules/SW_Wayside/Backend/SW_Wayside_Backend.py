@@ -46,7 +46,7 @@ class WaysideBackend():
     def backend_update_backend(self, track_instance, active_trains):
         self.update_copy_track(track_instance)
         self.update_copy_active_trains(active_trains)
-        self.track_instance_copy.lines[1].blocks[13].block_occupancy = True
+        self.track_instance_copy.lines[1].blocks[0].block_occupancy = True
         self.send_frontend_update()
         if(self.operation_mode == "Automatic"):
             self.send_plc_update()
