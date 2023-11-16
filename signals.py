@@ -23,7 +23,7 @@ class signalsList(QObject):
     sw_wayside_backend_update = pyqtSignal(Track, ActiveTrains) # update from sw wayside backend to main backend
     
     # Track Model
-    track_model_update_backend = pyqtSignal(Track)
+    track_model_update_backend = pyqtSignal(Track,ActiveTrains)
     track_model_backend_update = pyqtSignal(Track)
     track_model_block_occupancy = pyqtSignal(int)
     track_model_ticket_sales = pyqtSignal(int)
@@ -32,6 +32,7 @@ class signalsList(QObject):
     track_model_track_circuit_polarity = pyqtSignal(int)
     track_model_track_fault = pyqtSignal(bool)
     track_model_authority = pyqtSignal(float)
+    track_model_block_grade = pyqtSignal(float)
     track_model_beacon = pyqtSignal(str)
     
     # Train Model Signals

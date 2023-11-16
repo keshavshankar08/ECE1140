@@ -2,10 +2,11 @@ import sys
 sys.path.append(".")
 import os, openpyxl
 from PyQt6 import QtWidgets, QtGui, uic
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFileDialog
 from signals import signals
 from Track_Resources.Track import *
+from Train_Resources.CTC_Train import * 
         
 class TrackModelModule(QtWidgets.QMainWindow):
     def __init__(self):
@@ -16,12 +17,15 @@ class TrackModelModule(QtWidgets.QMainWindow):
         # instantiate copy of track class object 
         self.track_instance_copy = Track()
         
+        # instantiate copy of active trains class object
+        self.active_trains_instance_copy = ActiveTrains()
+        
         # member variable to hold selected block 
         self.clicked_block = 0
         
         # train model variables
         self.train_length = 0
-        self.distance_from_yard = 0
+        self.distance_from_yard = 100
         self.distance_from_block_start = 0
         
         # declare list to store line data
@@ -45,6 +49,11 @@ class TrackModelModule(QtWidgets.QMainWindow):
         
         # load track model button
         self.LoadTrackModelButton.clicked.connect(self.track_layout)
+        
+        # failure mode handler
+        self.TrackCircuitFailureToggleButton.toggled.connect(self.failure_mode)
+        self.BrokenRailToggleButton.toggled.connect(self.failure_mode)
+        self.PowerFailureToggleButton.toggled.connect(self.failure_mode)
 
         # set up scene for graphics view and set scene size to widget size 
         self.graphicsView.setScene(QtWidgets.QGraphicsScene())
@@ -60,16 +69,23 @@ class TrackModelModule(QtWidgets.QMainWindow):
     
     # send updates from track model backend to main backend
     def send_main_backend_update(self):
-        signals.track_model_backend_update.emit(self.track_instance_copy)
+        signals.track_model_backend_update.emit(self.track_instance_copy, self.active_trains_instance_copy)
     
     # Update local instance of track 
     def update_copy_track(self,updated_track):
         self.track_instance_copy = updated_track
+    
+    # Update local instance of active trains
+    def update_copy_active_trains(self,updated_active_trains):
+        self.active_trains_instance_copy = updated_active_trains
         
     # main function to carry out all functions in a cycle
-    def backend_update_backend(self,track_instance):
+    def backend_update_backend(self,track_instance,active_trains):
         # update local instance of track
         self.update_copy_track(track_instance)
+        
+        # update local instance of active trains
+        self.update_copy_active_trains(active_trains)
         
         # update frontend 
         self.display_block_info()
@@ -77,9 +93,18 @@ class TrackModelModule(QtWidgets.QMainWindow):
         # receive train model signals
         self.receive_train_model_signals()
         
+        # update block occupancies
+        self.block_occupancy()
+        
         # send updated signals to main backend
         self.send_main_backend_update()
         
+    # failure mode handler
+    def failure_mode(self):
+        if self.TrackCircuitFailureToggleButton.isChecked() or self.BrokenRailToggleButton.isChecked() or self.PowerFailureToggleButton.isChecked():
+            self.track_instance_copy.lines[1].blocks[int(self.clicked_block)].track_fault_status = True
+        else: 
+            self.track_instance_copy.lines[1].blocks[int(self.clicked_block)].track_fault_status = False
     
     # train model signal slots 
     def receive_train_model_signals(self):
@@ -90,25 +115,43 @@ class TrackModelModule(QtWidgets.QMainWindow):
     def receive_train_length(self, length):
         # Handle the received train length signal
         self.train_length = length
-        print(f"Received train length: {length}")
 
     def receive_distance_from_block_start(self, distance_block):
         # Handle the received distance from block start signal
         self.distance_from_block_start = distance_block
-        print(f"Received distance from block start: {distance_block}")
 
     def receive_distance_from_yard(self, distance_yard):
         # Handle the received distance from yard signal
         self.distance_from_yard = distance_yard
-        print(f"Received distance from yard: {distance_yard}")
         
     # sends updates from track model backend to main backend
     def send_main_backend_update(self):
         signals.track_model_backend_update.emit(self.track_instance_copy)
     
-    # calculates block occupancy
-    #def block_occupancy(self):
+   # Calculates block occupancy
+    def block_occupancy(self):
+        block_length_sum = 0
+        for data in self.green_line_data:
+            block_count = 63  # Reset block_count for each data entry
+            while block_count <= 150:
+                if data[3] is not None:  # Check if the data contains a block length
+                    block_length_sum += int(data[3])
+                    if (self.distance_from_yard - block_length_sum) <= 30:
+                        # Position of train found, now get precise position using length
+                        occupied_block = block_count
+                        self.set_block_color(occupied_block)
+                        print(occupied_block)
+                        self.track_instance_copy.lines[1].blocks[occupied_block].block_occupancy = True
+                block_count += 1
 
+            
+    def set_block_color(self,occupied_block):
+        scene = self.graphicsView.scene()
+        for item in scene.items():
+            if isinstance(item,QtWidgets.QGraphicsRectItem):
+                if str(item.toolTip()) == str(occupied_block):
+                    item.setBrush(QtGui.QColor(255,0,0))
+        
     def track_layout(self):
         file_filter = 'Excel File (*.xlsx)'
         response, _ = QFileDialog.getOpenFileName(

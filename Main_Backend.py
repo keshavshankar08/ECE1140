@@ -34,8 +34,7 @@ class SystemTime(QObject):
 
         # Track Model Instances
         self.track_model_backend_instance = TrackModelModule()     
-        self.track_instance = Track()
-        signals.track_model_backend_update.connect(self.update_track_instance)
+        signals.track_model_backend_update.connect(self.track_model_backend_update)
         
         self.menu_instance = Mainmenu()
         self.menu_instance.show()
@@ -44,6 +43,7 @@ class SystemTime(QObject):
         self.current_time = self.current_time.addMSecs(TIME_DELTA)
         signals.current_system_time.emit(self.current_time) #Y:M:D:h:m:s
         signals.sw_wayside_update_backend.emit(self.track_instance, self.active_trains_instance)
+        signals.track_model_update_backend.emit(self.track_instance, self.active_trains_instance)
         signals.trainModel_backend_update.emit()
 
     def stopTimer(self):
@@ -54,13 +54,19 @@ class SystemTime(QObject):
         self.update_active_trains(updated_active_trains)
         self.update_track_instance(updated_track)
 
+    # track instance updater
+    def update_track_instance(self,updated_track):
+        self.track_instance = updated_track
+    
     # Active trains instance updater
     def update_active_trains(self, updated_active_trains):
         self.active_trains_instance = updated_active_trains
 
-    # Track instance updater
-    def update_track_instance(self, updated_track):
-        self.track_instance = updated_track
+    # Handler for update from track model
+    def track_model_backend_update(self, updated_track, updated_active_trains=None):
+        self.update_track_instance(updated_track)
+        if updated_active_trains is not None:
+            self.update_active_trains(updated_active_trains)
         
     def updateMainMenu(self):
         pass
