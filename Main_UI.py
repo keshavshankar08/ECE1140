@@ -44,9 +44,8 @@ class Mainmenu(QtWidgets.QMainWindow):
 
     #window for the ctc office
     def ctc_office_clicked(self):
-        #self.ctcWindow = CTCUI()
-        #self.ctcWindow.show()
-        pass
+        self.ctcWindow = CTCFrontend()
+        self.ctcWindow.show()
 
     #window for the track model
     def track_model_clicked(self):
