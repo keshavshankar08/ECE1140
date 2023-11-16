@@ -2,6 +2,7 @@ import sys
 from PyQt6 import QtCore, QtGui, QtWidgets, uic
 from PyQt6.QtWidgets import *
 sys.path.append(".")
+
 from Modules.CTC.Frontend.CTC_UI import *
 from Modules.Track_Model.Backend.Track_Model_Backend import *
 #from Modules.CTC.Frontend.frontend import *
@@ -11,6 +12,7 @@ from Modules.Track_Model.Frontend.Track_Model_UI import *
 from Modules.Train_Model.Frontend.Train_Model import *
 from Modules.Train_Controller.Frontend.TrainController import *
 from Admin_UI import *
+
 
 class Mainmenu(QtWidgets.QMainWindow):
     def __init__(self):
@@ -41,6 +43,8 @@ class Mainmenu(QtWidgets.QMainWindow):
         self.trackModelWindow = TrackModelModule()
         self.trainModelWindow = TrainModel()
         self.swWaysideWindow = SWWaysideFrontend()
+        #self.hwWaysideWindow = HWWaysideFrontend()
+        self.trainControllerWindow = TestBenchTrainControllerUI()
         self.adminWindow = ADMIN()
         self.hwWaysideWindow = HWWaysideFrontend()
         self.show()
@@ -92,7 +96,7 @@ class Mainmenu(QtWidgets.QMainWindow):
 
     #window for the train controller
     def train_controller_clicked(self):
-        pass
+        self.trainControllerWindow.show()
     
     
 

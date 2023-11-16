@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
+    <width>656</width>
     <height>480</height>
    </rect>
   </property>
@@ -29,9 +29,9 @@
     <property name="geometry">
      <rect>
       <x>12</x>
-      <y>90</y>
+      <y>27</y>
       <width>1256</width>
-      <height>618</height>
+      <height>681</height>
      </rect>
     </property>
     <property name="font">
@@ -63,41 +63,11 @@
       <string>Engineer</string>
      </property>
     </widget>
-    <widget class="QTextEdit" name="comPowerVal">
-     <property name="geometry">
-      <rect>
-<<<<<<< HEAD
-       <x>180</x>
-       <y>110</y>
-=======
-       <x>210</x>
-       <y>80</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
-       <width>41</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>28</pointsize>
-      </font>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:28pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="KP">
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>100</y>
+       <y>90</y>
        <width>35</width>
        <height>20</height>
       </rect>
@@ -129,71 +99,11 @@ p, li { white-space: pre-wrap; }
       <string>KI</string>
      </property>
     </widget>
-    <widget class="QTextEdit" name="authorityVal">
-     <property name="geometry">
-      <rect>
-<<<<<<< HEAD
-       <x>180</x>
-       <y>170</y>
-=======
-       <x>210</x>
-       <y>140</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
-       <width>41</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>28</pointsize>
-      </font>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:28pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QTextEdit" name="KPVal">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>120</y>
-       <width>41</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>5</pointsize>
-      </font>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:5pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="CommandedPower">
      <property name="geometry">
       <rect>
-<<<<<<< HEAD
-       <x>180</x>
-       <y>90</y>
-=======
        <x>210</x>
        <y>60</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>71</width>
        <height>21</height>
       </rect>
@@ -207,41 +117,11 @@ p, li { white-space: pre-wrap; }
       <string>Power</string>
      </property>
     </widget>
-    <widget class="QTextEdit" name="KIVal">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>180</y>
-       <width>41</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>28</pointsize>
-      </font>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:28pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="authority">
      <property name="geometry">
       <rect>
-<<<<<<< HEAD
-       <x>180</x>
-       <y>150</y>
-=======
        <x>210</x>
        <y>120</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>71</width>
        <height>20</height>
       </rect>
@@ -259,11 +139,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>310</x>
-<<<<<<< HEAD
-       <y>220</y>
-=======
        <y>240</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>81</width>
        <height>20</height>
       </rect>
@@ -281,11 +157,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>410</x>
-<<<<<<< HEAD
-       <y>260</y>
-=======
        <y>280</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>31</width>
        <height>20</height>
       </rect>
@@ -303,11 +175,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>410</x>
-<<<<<<< HEAD
-       <y>310</y>
-=======
        <y>330</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>31</width>
        <height>20</height>
       </rect>
@@ -325,11 +193,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>240</x>
-<<<<<<< HEAD
-       <y>340</y>
-=======
        <y>360</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>61</width>
        <height>20</height>
       </rect>
@@ -347,11 +211,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>220</x>
-<<<<<<< HEAD
-       <y>260</y>
-=======
        <y>280</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>31</width>
        <height>21</height>
       </rect>
@@ -369,11 +229,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>220</x>
-<<<<<<< HEAD
-       <y>310</y>
-=======
        <y>330</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>31</width>
        <height>21</height>
       </rect>
@@ -391,11 +247,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>370</x>
-<<<<<<< HEAD
-       <y>310</y>
-=======
        <y>330</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>31</width>
        <height>21</height>
       </rect>
@@ -413,11 +265,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>260</x>
-<<<<<<< HEAD
-       <y>260</y>
-=======
        <y>280</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>31</width>
        <height>21</height>
       </rect>
@@ -435,11 +283,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>380</x>
-<<<<<<< HEAD
-       <y>240</y>
-=======
        <y>260</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>61</width>
        <height>20</height>
       </rect>
@@ -457,11 +301,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>260</x>
-<<<<<<< HEAD
-       <y>310</y>
-=======
        <y>330</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>31</width>
        <height>21</height>
       </rect>
@@ -479,11 +319,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>380</x>
-<<<<<<< HEAD
-       <y>290</y>
-=======
        <y>310</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>61</width>
        <height>20</height>
       </rect>
@@ -501,11 +337,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>240</x>
-<<<<<<< HEAD
-       <y>290</y>
-=======
        <y>310</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>51</width>
        <height>20</height>
       </rect>
@@ -523,11 +355,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>310</x>
-<<<<<<< HEAD
-       <y>340</y>
-=======
        <y>360</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>41</width>
        <height>21</height>
       </rect>
@@ -542,33 +370,26 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>370</x>
-<<<<<<< HEAD
-       <y>260</y>
-=======
        <y>280</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>31</width>
        <height>21</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
      <property name="text">
       <string>On</string>
+     </property>
+     <property name="maximum" stdset="0">
+      <number>82</number>
+     </property>
+     <property name="value" stdset="0">
+      <number>70</number>
      </property>
     </widget>
     <widget class="QLabel" name="utilities_2">
      <property name="geometry">
       <rect>
        <x>240</x>
-<<<<<<< HEAD
-       <y>240</y>
-=======
        <y>260</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>51</width>
        <height>20</height>
       </rect>
@@ -582,38 +403,11 @@ p, li { white-space: pre-wrap; }
       <string>Int Lights</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="emergencyButton">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>290</y>
-       <width>111</width>
-       <height>61</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="text">
-<<<<<<< HEAD
-      <string>Emergency Button</string>
-=======
-      <string>Deactivated</string>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
-     </property>
-    </widget>
     <widget class="QLabel" name="commandedspeed">
      <property name="geometry">
       <rect>
-<<<<<<< HEAD
-       <x>440</x>
-       <y>150</y>
-=======
        <x>380</x>
        <y>120</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>151</width>
        <height>20</height>
       </rect>
@@ -630,13 +424,8 @@ p, li { white-space: pre-wrap; }
     <widget class="QLabel" name="Traincontrols">
      <property name="geometry">
       <rect>
-<<<<<<< HEAD
-       <x>290</x>
-       <y>30</y>
-=======
        <x>280</x>
        <y>0</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>121</width>
        <height>31</height>
       </rect>
@@ -650,79 +439,13 @@ p, li { white-space: pre-wrap; }
       <string>Train Controls</string>
      </property>
     </widget>
-    <widget class="QTextEdit" name="curSpeedVal">
-     <property name="geometry">
-      <rect>
-<<<<<<< HEAD
-       <x>440</x>
-       <y>110</y>
-=======
-       <x>380</x>
-       <y>80</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
-       <width>41</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>28</pointsize>
-      </font>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:28pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QTextEdit" name="comSpeedVal">
-     <property name="geometry">
-      <rect>
-<<<<<<< HEAD
-       <x>440</x>
-       <y>170</y>
-=======
-       <x>380</x>
-       <y>140</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
-       <width>41</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>28</pointsize>
-      </font>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:28pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
     <widget class="QSlider" name="driverThrottle">
      <property name="geometry">
       <rect>
        <x>299</x>
-<<<<<<< HEAD
-       <y>70</y>
-       <width>71</width>
-       <height>131</height>
-=======
        <y>40</y>
        <width>71</width>
        <height>191</height>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
       </rect>
      </property>
      <property name="font">
@@ -731,11 +454,7 @@ p, li { white-space: pre-wrap; }
       </font>
      </property>
      <property name="maximum">
-<<<<<<< HEAD
-      <number>25</number>
-=======
       <number>44</number>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
      </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -747,13 +466,8 @@ p, li { white-space: pre-wrap; }
     <widget class="QLabel" name="currentspeed">
      <property name="geometry">
       <rect>
-<<<<<<< HEAD
-       <x>440</x>
-       <y>90</y>
-=======
        <x>380</x>
        <y>60</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>101</width>
        <height>20</height>
       </rect>
@@ -797,15 +511,9 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>530</x>
-<<<<<<< HEAD
-       <y>260</y>
-       <width>31</width>
-       <height>101</height>
-=======
        <y>290</y>
        <width>31</width>
        <height>71</height>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
       </rect>
      </property>
      <property name="font">
@@ -814,11 +522,7 @@ p, li { white-space: pre-wrap; }
       </font>
      </property>
      <property name="maximum">
-<<<<<<< HEAD
-      <number>10</number>
-=======
       <number>1</number>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
      </property>
      <property name="singleStep">
       <number>1</number>
@@ -840,11 +544,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>510</x>
-<<<<<<< HEAD
-       <y>230</y>
-=======
        <y>260</y>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
        <width>91</width>
        <height>20</height>
       </rect>
@@ -877,8 +577,6 @@ p, li { white-space: pre-wrap; }
       <string extracomment="Train">Train</string>
      </property>
     </widget>
-<<<<<<< HEAD
-=======
     <widget class="QLabel" name="utilities_7">
      <property name="geometry">
       <rect>
@@ -897,181 +595,163 @@ p, li { white-space: pre-wrap; }
       <string>Emergency Brake</string>
      </property>
     </widget>
->>>>>>> 68b5169297a5bb6494a92c5d6c36b8828044f972
-   </widget>
-   <widget class="QFrame" name="MenuSection">
-    <property name="geometry">
-     <rect>
-      <x>12</x>
-      <y>12</y>
-      <width>620</width>
-      <height>75</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Arial</family>
-     </font>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
-    </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(21, 175, 255)</string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QPushButton" name="SystemInfoButton">
+    <widget class="QSlider" name="emergencyBrake">
      <property name="geometry">
       <rect>
-       <x>470</x>
-       <y>20</y>
-       <width>131</width>
-       <height>41</height>
+       <x>60</x>
+       <y>290</y>
+       <width>31</width>
+       <height>71</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <family>Arial</family>
+       <pointsize>10</pointsize>
       </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(211, 215, 215)</string>
-     </property>
-     <property name="text">
-      <string>System Info</string>
-     </property>
-    </widget>
-    <widget class="QDoubleSpinBox" name="SystemSpeedValue">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>20</y>
-       <width>71</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(211, 215, 215)</string>
-     </property>
-     <property name="suffix">
-      <string> x</string>
-     </property>
-     <property name="decimals">
-      <number>1</number>
-     </property>
-     <property name="minimum">
-      <double>1.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>50.000000000000000</double>
+      <number>1</number>
      </property>
      <property name="singleStep">
-      <double>0.100000000000000</double>
+      <number>1</number>
      </property>
-    </widget>
-    <widget class="QTimeEdit" name="SystemClockValue">
-     <property name="geometry">
-      <rect>
-       <x>300</x>
-       <y>20</y>
-       <width>91</width>
-       <height>41</height>
-      </rect>
+     <property name="pageStep">
+      <number>1</number>
      </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-      </font>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(211, 215, 215)</string>
+     <property name="tickPosition">
+      <enum>QSlider::TicksBelow</enum>
      </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-     <property name="dateTime">
-      <datetime>
-       <hour>1</hour>
-       <minute>0</minute>
-       <second>0</second>
-       <year>2000</year>
-       <month>1</month>
-       <day>1</day>
-      </datetime>
-     </property>
-     <property name="maximumTime">
-      <time>
-       <hour>13</hour>
-       <minute>56</minute>
-       <second>59</second>
-      </time>
-     </property>
-     <property name="minimumTime">
-      <time>
-       <hour>0</hour>
-       <minute>0</minute>
-       <second>0</second>
-      </time>
-     </property>
-     <property name="currentSection">
-      <enum>QDateTimeEdit::HourSection</enum>
-     </property>
-     <property name="displayFormat">
-      <string>h:mm</string>
-     </property>
-     <property name="currentSectionIndex">
+     <property name="tickInterval">
       <number>0</number>
      </property>
     </widget>
-    <widget class="QLabel" name="SystemSpeedLabel">
+    <widget class="QLineEdit" name="authorityVal">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>30</y>
+       <x>190</x>
+       <y>150</y>
        <width>81</width>
        <height>20</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>System Speed:</string>
-     </property>
     </widget>
-    <widget class="QLabel" name="SystemClockLabel">
+    <widget class="QLineEdit" name="comPowerVal">
      <property name="geometry">
       <rect>
-       <x>220</x>
-       <y>30</y>
+       <x>190</x>
+       <y>80</y>
        <width>71</width>
        <height>20</height>
       </rect>
      </property>
+    </widget>
+    <widget class="QLineEdit" name="curSpeedVal">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>80</y>
+       <width>71</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="comSpeedVal">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>150</y>
+       <width>61</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="brakeFailure">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>520</x>
+       <y>140</y>
+       <width>61</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Brake</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="engineFailure">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>520</x>
+       <y>110</y>
+       <width>61</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Engine</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="Traincontrols_2">
+     <property name="geometry">
+      <rect>
+       <x>520</x>
+       <y>70</y>
+       <width>81</width>
+       <height>31</height>
+      </rect>
+     </property>
      <property name="font">
       <font>
-       <family>Arial</family>
-       <pointsize>10</pointsize>
+       <pointsize>12</pointsize>
       </font>
      </property>
      <property name="text">
-      <string>System Clock:</string>
+      <string>Failures</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="signalFailure">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>520</x>
+       <y>170</y>
+       <width>61</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Signal</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="KPVal">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>110</y>
+       <width>42</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="KIVal">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>180</y>
+       <width>42</width>
+       <height>22</height>
+      </rect>
      </property>
     </widget>
    </widget>

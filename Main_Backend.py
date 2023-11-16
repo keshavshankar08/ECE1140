@@ -56,6 +56,7 @@ class MainBackend(QObject):
         signals.track_model_update_backend.emit(self.track_instance, self.active_trains_instance)
         signals.update_admin.emit(self.track_instance, self.active_trains_instance)
         signals.trainModel_backend_update.emit()
+        signals.train_controller_update_backend.emit()
 
     def stopTimer(self):
         self.system_timer.stop()
@@ -90,7 +91,6 @@ class MainBackend(QObject):
     # Active trains instance updater
     def update_active_trains(self, updated_active_trains):
         self.active_trains_instance = updated_active_trains
-
 
     # Handler for update from track model
     def track_model_backend_update(self, updated_track, updated_active_trains):
