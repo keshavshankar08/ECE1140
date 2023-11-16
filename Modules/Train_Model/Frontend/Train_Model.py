@@ -1,4 +1,4 @@
-from PyQt6 import QtWidgets, uic
+from PyQt6 import QtWidgets, uic, QtGui
 from PyQt6.QtCore import QTimer
 import sys
 sys.path.append(".")
@@ -12,6 +12,18 @@ class TrainModel(QtWidgets.QMainWindow):
         signals.trainModel_backend_update.connect(self.UIUpdate)
         signals.trainModel_update_beacon_UI.connect(self.updateBeacon)
         self.trainSelectComboBox.currentIndexChanged.connect(self.trainSelect)
+        self.eBrakeSelect.currentIndexChanged.connect(self.setEBrake)
+        
+        self.ad1 = QtGui.QPixmap("Modules/Train_Model/Frontend/cokead.jpg")
+        self.ad2 = QtGui.QPixmap("Modules/Train_Model/Frontend/hooverad.jpeg")
+        self.ad3 = QtGui.QPixmap("Modules/Train_Model/Frontend/bbad.jpeg")
+        self.ad4 = QtGui.QPixmap("Modules/Train_Model/Frontend/oldspicead.png")
+        self.adList = [self.ad1, self.ad2, self.ad3, self.ad4]
+        self.adIdx = 0
+        self.adDisplay.setScaledContents(True)
+        self.adDisplay.setPixmap(self.ad1)
+        
+        self.adCounter = 40
         
         self.currentTrain = None
         self.trainSelectComboBox.addItem("< select train >")
@@ -21,25 +33,12 @@ class TrainModel(QtWidgets.QMainWindow):
         
 
     def UIUpdate(self):
-        self.crewDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.passDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.signalFail.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.brakeFail.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.engineFail.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.intLightDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.extLightDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.leftDoorDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.rightDoorDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.trainTempDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.eBrakeSelect.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.sBrakeDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.lengthDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.widthDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.heightDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.massDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.velocityDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.accelDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.beaconDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.adCounter -= 1
+        if (self.adCounter == 0):
+            self.adIdx = (self.adIdx + 1) % len(self.adList)
+            self.adDisplay.setPixmap(self.adList[self.adIdx])
+            self.adCounter = 60
+        
         if (self.currentTrain is not None):
             self.crewDisplay.setText(format(self.currentTrain.numCrew, '.0f'))
             self.passDisplay.setText(format(self.currentTrain.numPassengers, '.0f'))
@@ -81,12 +80,33 @@ class TrainModel(QtWidgets.QMainWindow):
             self.velocityDisplay.setText(format(self.currentTrain.currentSpeed * 2.237, '.2f')) # m/s * 2.237 = mph
             self.accelDisplay.setText(format(self.currentTrain.currentAccel * 3.281, '.2f')) # m/s^2 * 3.281 = ft/s^2
             
-            
+        self.crewDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.passDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.signalFail.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.brakeFail.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.engineFail.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.intLightDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.extLightDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.leftDoorDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.rightDoorDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.trainTempDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.eBrakeSelect.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.sBrakeDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.lengthDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.widthDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.heightDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.massDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.velocityDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.accelDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.beaconDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
     def updateBeacon(self, value):
         self.beaconDisplay.append(value)
         
     def trainSelect(self, idx):
         self.currentTrain = self.trainSelectComboBox.itemData(idx)
+        
+    def setEBrake(self, idx):
+        self.currentTrain.emergencyBrake = idx
         
         
         
