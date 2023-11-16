@@ -13,6 +13,9 @@ class TrainModel(QtWidgets.QMainWindow):
         signals.trainModel_update_beacon_UI.connect(self.updateBeacon)
         self.trainSelectComboBox.currentIndexChanged.connect(self.trainSelect)
         self.eBrakeSelect.currentIndexChanged.connect(self.setEBrake)
+        self.signalFail.stateChanged.connect(self.sendSignalFail)
+        self.brakeFail.stateChanged.connect(self.sendBrakeFail)
+        self.engineFail.stateChanged.connect(self.sendEngineFail)
         
         self.ad1 = QtGui.QPixmap("Modules/Train_Model/Frontend/cokead.jpg")
         self.ad2 = QtGui.QPixmap("Modules/Train_Model/Frontend/hooverad.jpeg")
@@ -80,6 +83,7 @@ class TrainModel(QtWidgets.QMainWindow):
             self.massDisplay.setText(format(self.currentTrain.mass * 2.205, '.2f')) # kg * 2.205 = lb
             self.velocityDisplay.setText(format(self.currentTrain.currentSpeed * 2.237, '.2f')) # m/s * 2.237 = mph
             self.accelDisplay.setText(format(self.currentTrain.currentAccel * 3.281, '.2f')) # m/s^2 * 3.281 = ft/s^2
+            self.powerDisplay.setText(format(self.currentTrain.commandedPower, '.0f')) # W
             
         self.crewDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
         self.passDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
@@ -99,6 +103,7 @@ class TrainModel(QtWidgets.QMainWindow):
         self.massDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
         self.velocityDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
         self.accelDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
+        self.powerDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
         self.beaconDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
     def updateBeacon(self, value):
         self.beaconDisplay.append(value)
@@ -108,6 +113,24 @@ class TrainModel(QtWidgets.QMainWindow):
         
     def setEBrake(self, idx):
         self.currentTrain.emergencyBrake = idx
+        
+    def sendSignalFail(self, value):
+        if (value):
+            self.currentTrain.signalFail = True
+        else:
+            self.currentTrain.signalFail = False
+            
+    def sendBrakeFail(self, value):
+        if (value):
+            self.currentTrain.brakeFail = True
+        else:
+            self.currentTrain.brakeFail = False
+            
+    def sendEngineFail(self, value):
+        if (value):
+            self.currentTrain.engineFail = True
+        else:
+            self.currentTrain.engineFail = False
         
         
         
