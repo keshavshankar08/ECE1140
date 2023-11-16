@@ -44,7 +44,7 @@ class trainController():
         self.ek1 = 0
 
         #authority and stupid things that i need
-        self.authority = 0.0
+        self.authority = 100000.0
         self.station = None
         self.trainID = None
 
@@ -53,7 +53,7 @@ class trainController():
         '''
         self.emergencyBrake = False
         self.pEBrake = False
-        self.serviceBrake = True
+        self.serviceBrake = False
 
         #failures
         self.engineFail = False
@@ -118,18 +118,8 @@ class trainController():
         self.current_time = time
 
     def tc_update_values(self):
-        self.onExteriorLights()
-        self.offExteriorLights()
-        self.onInteriorLights()
-        self.offInteriorLights()
-        self.closeLeftDoors()
-        self.openLeftDoors()
-        self.closeRightDoors()
-        self.openRightDoors()
         self.calculatePower()
-        self.toggleServiceBrake()
-        self.emergencyBrakeOn()
-        self.emergencyBrakeOff()
+        signals.train_controller_send_power_command.emit(self.commandedPower)
 
     #this function will calculate power, uks = m, eks = m/s, speeds = m/s
     def calculatePower(self):
@@ -174,6 +164,8 @@ class trainController():
     #this function will set the kp and ki by the engineer
     def setKPKI(self, kp, ki):
         self.KP = kp
+        
+        
         self.KI = ki
         #make sure service brake is off to start moving
         self.serviceBrake = False
@@ -265,20 +257,19 @@ class trainController():
 
     #this function report E brake on
     def emergencyBrakeOn(self):
-        if self.emergencyBrake == True or self.pEBrake == True:
-            signals.train_controller_emergency_brake_on.emit(self.emergencyBrake)
+        self.emergencyBrake = True
+        signals.train_controller_emergency_brake_on.emit(True)
+        print("tc backend e brake on")
 
     #this function will report e brake off
     def emergencyBrakeOff(self):
         self.emergencyBrake = False
-        signals.train_controller_emergency_brake_off.emit(self.emergencyBrake)
+        signals.train_controller_emergency_brake_off.emit(True)
+        print("tc backend ebrake off")
 
     #this function will report if passenger e brake status
     def passengerEBrake(self, value):
-        if value == True:
-            self.pEBrake = True
-        else:
-            self.pEBrake = False
+        self.emergencyBrake = value
 
     #this function will toggle modes
     def toggleModes(self):
