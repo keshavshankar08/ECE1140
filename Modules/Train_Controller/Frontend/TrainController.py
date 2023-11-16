@@ -23,6 +23,8 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         self.Timer.timeout.connect(self.timerHandler)
         self.Timer.start(INTERVAL)
 
+        #signals.train_controller_update_frontend.connect(self.update_frontend) 
+        
         #Train Controller Signals
         #lights
         signals.train_controller_int_lights_on.connect(self.updateIntLights)
@@ -62,32 +64,24 @@ class TrainControllerUI(QtWidgets.QMainWindow):
     
         self.show()
 
-    def timerHandler(self):
-        self.comPowerVal.setText(format(self.trainController.commandedPower, '.2f'))
-        self.authorityVal.setText(format(self.trainController.authority, '.2f'))
-        self.curSpeedVal.setText(format(self.trainController.currentSpeed, '.2f'))
-
-    #function send values to backend
-    def sendValues(self):
-        self.trainController.engineFail = self.engineFailure.isChecked()
-        self.trainController.brakeFail = self.brakeFailure.isChecked()
-        self.trainController.signalFail = self.signalFaiure.isChecked()
-        self.trainController.KP = self.KpVal
-        self.trainController.KI = self.KiVal
-        # self.trainController.Rdoor =
-        # self.trainController.Ldoor = 
-        # self.trainController.intLights = 
-        # self.trainController.extLights =
-
-        if self.serviceBrake.value() == 1:
-            self.trainController.serviceBrake = True
-        else:
-            self.trainController.serviceBrake = False
-
-        if self.emergencyBrake.value() == 1:
-            self.trainController.emergencyBrake = True
-        else:
-            self.trainController.emergencyBrake = False
+    # def update_frontend(self):
+    #     self.trainController.KP = self.tb_KP
+    #     self.trainController.KI = self.tb_KI
+    #     self.trainController.trainTemp = self.tb_tempVal
+    #     self.trainController.commandedSpeed = self.tb_comSpeed
+    #     self.trainController.emergencyBrake = self.tb_eBrake
+    #     self.trainController.serviceBrake = self.tb_serviceBrake
+    #     self.trainController.mode = True
+    #     self.trainController.Rdoor = self.tb_RDoorClosed
+    #     self.trainController.Ldoor = self.tb_LDoorClosed
+    #     self.trainController.intLights = self.tb_intLightsOn
+    #     self.trainController.extLights = self.tb_extLightOn
+        
+    # def send_frontend_update(self):
+    #     signals.train_controller_update_frontend.emit(self.trainController.KP, self.trainController.KI, self.trainController.trainTemp, 
+    #                                                   self.trainController.commandedSpeed, self.trainController.emergencyBrake, self.trainController.serviceBrake, 
+    #                                                   self.trainController.mode, self.trainController.Rdoor, self.trainController.Ldoor, 
+    #                                                     self.trainController.intLights, self.trainController.extLights)
 
     #function for automatic mode
     def automaticButtonClicked(self):

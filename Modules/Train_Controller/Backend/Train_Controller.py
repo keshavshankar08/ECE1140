@@ -52,6 +52,7 @@ class trainController():
         da SeRvIcE bRaKe is from range 0.0 to 1.0 (no to full brake), btw angry no green comment
         '''
         self.emergencyBrake = False
+        self.pEBrake = False
         self.serviceBrake = True
 
         #failures
@@ -79,15 +80,15 @@ class trainController():
         signals.trainModel_send_signal_failure.connect(self.signalFailure)
 
         #controller signals
-        signals.train_controller_int_lights_on.connect(self.onInteriorLights)
-        signals.train_controller_int_lights_off.connect(self.offInteriorLights)
-        signals.train_controller_ext_lights_on.connect(self.onExteriorLights)
-        signals.train_controller_ext_lights_off.connect(self.offExteriorLights)
-        #doors
-        signals.train_controller_right_door_closed.connect(self.closeRightDoors)
-        signals.train_controller_right_door_open.connect(self.openRightDoors)
-        signals.train_controller_left_door_closed.connect(self.closeLeftDoors)
-        signals.train_controller_left_door_open.connect(self.openLeftDoors)
+        # signals.train_controller_int_lights_on.connect(self.onInteriorLights)
+        # signals.train_controller_int_lights_off.connect(self.offInteriorLights)
+        # signals.train_controller_ext_lights_on.connect(self.onExteriorLights)
+        # signals.train_controller_ext_lights_off.connect(self.offExteriorLights)
+        # #doors
+        # signals.train_controller_right_door_closed.connect(self.closeRightDoors)
+        # signals.train_controller_right_door_open.connect(self.openRightDoors)
+        # signals.train_controller_left_door_closed.connect(self.closeLeftDoors)
+        # signals.train_controller_left_door_open.connect(self.openLeftDoors)
         #Bower
         signals.train_controller_send_power_command.connect(self.calculatePower)
         #Temperature
@@ -135,19 +136,18 @@ class trainController():
         self.current_time = time
 
     def tc_update_values(self):
-        self.onExteriorLights()
-        self.offExteriorLights()
-        self.onInteriorLights()
-        self.offInteriorLights()
-        self.closeLeftDoors()
-        self.openLeftDoors()
-        self.closeRightDoors()
-        self.openRightDoors()
+        # self.onExteriorLights()
+        # self.offExteriorLights()
+        # self.onInteriorLights()
+        # self.offInteriorLights()
+        # self.closeLeftDoors()
+        # self.openLeftDoors()
+        # self.closeRightDoors()
+        # self.openRightDoors()
         self.calculatePower()
         self.toggleServiceBrake()
         self.emergencyBrakeOn()
         self.emergencyBrakeOff()
-
 
     #this function will calculate power, uks = m, eks = m/s, speeds = m/s
     def calculatePower(self):
@@ -174,9 +174,10 @@ class trainController():
             self.ek = 0
         else:
             #use triple redundancy to get power
-            power1 = (self.KP*self.ek) + (self.KI*self.uk)
-            power2 = (self.KP*self.ek) + (self.KI*self.uk)
-            power3 = (self.KP*self.ek) + (self.KI*self.uk)
+            # power1 = (self.KP*self.ek) + (self.KI*self.uk)
+            # power2 = (self.KP*self.ek) + (self.KI*self.uk)
+            # power3 = (self.KP*self.ek) + (self.KI*self.uk)
+            pass
 
         #if any of the powers do not equal one another apply emergency brake
         # if (power1 != power2) or (power1 != power3) or (power2 != power3):
@@ -282,8 +283,8 @@ class trainController():
 
     #this function report E brake on
     def emergencyBrakeOn(self):
-        self.emergencyBrake = True
-        signals.train_controller_emergency_brake_on.emit(self.emergencyBrake)
+        if self.emergencyBrake == True or self.pEBrake == True:
+            signals.train_controller_emergency_brake_on.emit(self.emergencyBrake)
 
     #this function will report e brake off
     def emergencyBrakeOff(self):
@@ -291,45 +292,47 @@ class trainController():
         signals.train_controller_emergency_brake_off.emit(self.emergencyBrake)
 
     #this function will report if passenger e brake status
-    def passengerEBrake(self, status):
-        if status == True:
-            self.emergencyBrakeOn()
+    def passengerEBrake(self, value):
+        if value == True:
+            self.pEBrake = True
+        else:
+            self.pEBrake = False
 
     #this function will toggle modes
     def toggleModes(self):
         self.mode = not self.mode
 
-    def onInteriorLights(self):
-        self.interiorLight = True
-        signals.train_controller_int_lights_on.emit(self.intLights)
+    # def onInteriorLights(self):
+    #     self.intLights = True
+    #     signals.train_controller_int_lights_on.emit(self.intLights)
 
-    def offInteriorLights(self):
-        self.interiorLight = False
-        signals.train_controller_int_lights_off.emit(self.intLights)
+    # def offInteriorLights(self):
+    #     self.intLights = False
+    #     signals.train_controller_int_lights_off.emit(self.intLights)
 
-    def onExteriorLights(self):
-        self.exteriorLight = True
-        signals.train_controller_ext_lights_on.emit(self.extLights)
+    # def onExteriorLights(self):
+    #     self.extLights = True
+    #     signals.train_controller_ext_lights_on.emit(self.extLights)
 
-    def offExteriorLights(self):
-        self.exteriorLight = False
-        signals.train_controller_ext_lights_off.emit(self.extLights)
+    # def offExteriorLights(self):
+    #     self.extLights = False
+    #     signals.train_controller_ext_lights_off.emit(self.extLights)
 
-    def openLeftDoors(self):
-        self.leftDoor = False
-        signals.train_controller_left_door_open.emit(self.Ldoor)
+    # def openLeftDoors(self):
+    #     self.Ldoor = False
+    #     signals.train_controller_left_door_open.emit(self.Ldoor)
 
-    def closeLeftDoors(self):
-        self.leftDoor = True
-        signals.train_controller_left_door_closed.emit(self.Ldoor)
+    # def closeLeftDoors(self):
+    #     self.Ldoor = True
+    #     signals.train_controller_left_door_closed.emit(self.Ldoor)
 
-    def openRightDoors(self):
-        self.rightDoor = False
-        signals.train_controller_right_door_open.emit(self.Rdoor)
+    # def openRightDoors(self):
+    #     self.Rdoor = False
+    #     signals.train_controller_right_door_open.emit(self.Rdoor)
 
-    def closeRightDoors(self):
-        self.rightDoor = True
-        signals.train_controller_right_door_closed.emit(self.Rdoor)
+    # def closeRightDoors(self):
+    #     self.Rdoor = True
+    #     signals.train_controller_right_door_closed.emit(self.Rdoor)
 
     #this function is for announcements
     def announceStation(self, beacon):
@@ -350,7 +353,7 @@ class trainController():
         self.brakeFail = failure
 
         #activate emergency brake
-        if self.engineFail == True :
+        if self.brakeFail == True :
             self.emergencyBrake = True
         else:
             self.emergencyBrake = False
@@ -360,10 +363,11 @@ class trainController():
         self.signalFail = failure
 
         #activate emergency brake
-        if self.engineFail == True :
+        if self.signalFail == True :
             self.emergencyBrake = True
         else:
             self.emergencyBrake = False
+
 
 
 
