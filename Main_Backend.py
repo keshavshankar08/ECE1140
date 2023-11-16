@@ -47,9 +47,8 @@ class MainBackend(QObject):
         self.current_time = self.current_time.addMSecs(int(constants.TIME_DELTA))
         signals.current_system_time.emit(self.current_time) #Y:M:D:h:m:s
         signals.ctc_office_update_backend.emit(self.track_instance, self.active_trains_instance, self.ticket_sales_instance)
-        signals.sw_wayside_update_backend.emit(self.track_instance) #sends current state of track out
+        signals.sw_wayside_update_backend.emit(self.track_instance, self.active_trains_instance)
         signals.trainModel_backend_update.emit()
-
 
     def stopTimer(self):
         self.system_timer.stop()
@@ -65,7 +64,7 @@ class MainBackend(QObject):
         self.update_active_trains(updated_active_trains)
         self.update_track_instance(updated_track)
 
-    #CTC Office Instance Updaters
+    # Active trains instance updater
     def update_active_trains(self, updated_active_trains):
         self.active_trains_instance = updated_active_trains
 
