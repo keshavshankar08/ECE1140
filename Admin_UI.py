@@ -13,7 +13,15 @@ class ADMIN(QtWidgets.QMainWindow):
                 self.track_instance_copy = Track()
                 self.active_trains_instance_copy = ActiveTrains()
                 signals.update_admin.connect(self.update_admin)
-                self.block_occupancy_occupied_button.clicked()
+                self.block_occupancy_occupied_button.clicked.connect(self.block_occupied_clicked)
+                self.block_occupancy_unoccupied_button.clicked.connect(self.block_unoccupied_clicked)
+                self.track_fault_detected_button.clicked.connect(self.track_fault_detected_clicked)
+                self.track_fault_undetected_button.clicked.connect(self.track_fault_undetected_clicked)
+                self.maintenance_active_button.clicked.connect(self.maintenance_active_clicked)
+                self.maintenance_inactive_button.clicked.connect(self.maintenance_inactive_clicked)
+
+                self.last_line_state = ""
+                self.last_wayside_state = ""
 
         # Handles all admin updates
         def update_admin(self, track_instance, active_trains_instance):
@@ -38,7 +46,7 @@ class ADMIN(QtWidgets.QMainWindow):
 
         # Updates local instance of track
         def update_copy_track(self, updated_track):
-                self.trackInstanceCopy = updated_track
+                self.track_instance_copy = updated_track
 
         # Updates active trains instance
         def update_copy_active_trains(self, updated_active_trains):
@@ -96,15 +104,15 @@ class ADMIN(QtWidgets.QMainWindow):
                         self.maintenance_value.setEnabled(False)
 
                 else:
-                        self.block_occupancy_occupied_button.setEnabled(False)
-                        self.block_occupancy_unoccupied_button.setEnabled(False)
-                        self.block_occupancy_value.setEnabled(False)
-                        self.track_fault_detected_button.setEnabled(False)
-                        self.track_fault_undetected_button.setEnabled(False)
-                        self.track_fault_value.setEnabled(False)
-                        self.maintenance_active_button.setEnabled(False)
-                        self.maintenance_inactive_button.setEnabled(False)
-                        self.maintenance_value.setEnabled(False)
+                        self.block_occupancy_occupied_button.setEnabled(True)
+                        self.block_occupancy_unoccupied_button.setEnabled(True)
+                        self.block_occupancy_value.setEnabled(True)
+                        self.track_fault_detected_button.setEnabled(True)
+                        self.track_fault_undetected_button.setEnabled(True)
+                        self.track_fault_value.setEnabled(True)
+                        self.maintenance_active_button.setEnabled(True)
+                        self.maintenance_inactive_button.setEnabled(True)
+                        self.maintenance_value.setEnabled(True)
                         curr_line_int = self.get_current_line_displayed_int()
                         curr_block_int = self.get_current_block_displayed_int()
                         self.update_block_information()
@@ -128,7 +136,7 @@ class ADMIN(QtWidgets.QMainWindow):
                 curr_block_int = self.get_current_block_displayed_int()
                 self.block_occupancy_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_occupancy_string())
                 self.track_fault_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_track_fault_status_string())
-                self.maintenance__value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_maintenance_status_string())
+                self.maintenance_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_maintenance_status_string())
 
         def block_occupied_clicked(self):
                 curr_line_int = self.get_current_line_displayed_int()

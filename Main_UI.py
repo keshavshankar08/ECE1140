@@ -12,7 +12,7 @@ from Modules.HW_Wayside.Frontend.HW_Wayside_UI import *
 from Modules.Track_Model.Frontend.Track_Model_UI import *
 from Modules.Train_Model.Frontend.Train_Model import *
 from Modules.Train_Controller.Frontend.TrainController import *
-
+from Admin_UI import *
 
 class Mainmenu(QtWidgets.QMainWindow):
     def __init__(self):
@@ -36,14 +36,14 @@ class Mainmenu(QtWidgets.QMainWindow):
         
         self.adminButton.setEnabled(False)
         self.passwordBox.textChanged.connect(self.checkPassword)
-        self.adminButton.clicked.connect(self.launchGOD)
+        self.adminButton.clicked.connect(self.admin_clicked)
         
         
         self.ctcWindow = CTCFrontend()
         self.trackModelWindow = TrackModelModule()
         self.trainModelWindow = TrainModel()
         self.swWaysideWindow = SWWaysideFrontend()
-        #self.admin = Admin()
+        self.adminWindow = ADMIN()
         #self.hwWaysideWindow = HWWaysideFrontend()
         self.show()
         
@@ -53,8 +53,8 @@ class Mainmenu(QtWidgets.QMainWindow):
         else:
             self.adminButton.setEnabled(False)
             
-    def launchGOD(self):
-        pass
+    def admin_clicked(self):
+        self.adminWindow.show()
         
     def pauseTimer(self):
         signals.pause_timer.emit()
