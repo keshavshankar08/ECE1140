@@ -10,6 +10,10 @@ class signalsList(QObject):
     change_system_speed = pyqtSignal(float)
     stop_timer = pyqtSignal()
 
+    # ADMIN Signals
+    update_admin = pyqtSignal(Track, ActiveTrains) # update from main backend to admin
+    admin_update = pyqtSignal(Track, ActiveTrains) # update from admin to main backend
+
     #CTC Office Signals
     ctc_office_active_trains_update = pyqtSignal(ActiveTrains)
     ctc_office_track_update = pyqtSignal(Track)
