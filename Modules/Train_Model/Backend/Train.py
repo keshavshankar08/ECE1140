@@ -186,10 +186,10 @@ class Train(QObject):
         signals.trainModel_send_distance_from_block_start.emit(self.distanceFromBlockStart)
         signals.trainModel_send_distance_from_yard.emit(self.distanceFromYard)
 
-    def onEmergencyBrake(self):
+    def onEmergencyBrake(self, value):
         self.emergencyBrake = True
 
-    def offEmergencyBrake(self):
+    def offEmergencyBrake(self, value):
         self.emergencyBrake = False
 
     def serviceBrakeReceive(self, value):

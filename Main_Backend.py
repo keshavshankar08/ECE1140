@@ -93,9 +93,10 @@ class MainBackend(QObject):
         self.active_trains_instance = updated_active_trains
 
     # Handler for update from track model
-    def track_model_backend_update(self, updated_track, updated_active_trains):
+    def track_model_backend_update(self, updated_track, updated_active_trains=None):
         self.update_track_instance(updated_track)
-        self.update_active_trains(updated_active_trains)
+        if (updated_active_trains is not None):
+            self.update_active_trains(updated_active_trains)
         
     def update_ticket_sales(self, updated_ticket_sales):
         self.ticket_sales_instance = updated_ticket_sales

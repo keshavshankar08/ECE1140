@@ -43,10 +43,9 @@ class Mainmenu(QtWidgets.QMainWindow):
         self.trackModelWindow = TrackModelModule()
         self.trainModelWindow = TrainModel()
         self.swWaysideWindow = SWWaysideFrontend()
-        #self.hwWaysideWindow = HWWaysideFrontend()
-        self.trainControllerWindow = TestBenchTrainControllerUI()
-        self.adminWindow = ADMIN()
         self.hwWaysideWindow = HWWaysideFrontend()
+        self.trainControllerWindow = TrainControllerUI()
+        self.adminWindow = ADMIN()
         self.show()
         
     def checkPassword(self, text):
