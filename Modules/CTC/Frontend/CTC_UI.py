@@ -53,16 +53,8 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #Dispatched Table Signals
         self.dispatched_trains_table.itemSelectionChanged.connect(self.dispatched_trains_table_selection_changed)
 
-        #Maintenance Mode Signals
-        
         #Test Bench Signals
-        #self.TestBenchActivateButton.clicked.connect(self.test_bench_activate_button_clicked)
-        #self.TestBenchDeactivateButton.clicked.connect(self.test_bench_deactivate_button_clicked)
-        #self.TestUpdateButton.clicked.connect(self.test_bench_update_button_clicked)
-
-        #Deactivate Test Bench On Startup
-        #self.test_bench_deactivate_button_clicked()
-
+        self.set_ticket_sales.textChanged.connect(self.set_ticket_sales_changed)
 
     #Update Current Time
     def update_current_time(self, time):
@@ -196,7 +188,7 @@ class CTCFrontend(QtWidgets.QMainWindow):
                 self.block_occupancy_indicator.setStyleSheet("background-color: rgb(167, 255, 167)")
             #check block status
             if(self.track_instance_copy.green_line.blocks[status_block].track_fault_status == True):
-                self.block_status_indicator.setStyleSheet("background-color: rgb(167, 255, 255)")
+                self.block_status_indicator.setStyleSheet("background-color: rgb(255, 167, 167)")
             #check maintenance status
             if(self.track_instance_copy.green_line.blocks[status_block].maintenance_status == True):
                 self.block_status_indicator.setStyleSheet("background-color: rgb(255, 255, 167)")
@@ -418,34 +410,10 @@ class CTCFrontend(QtWidgets.QMainWindow):
     def dispatch_trains_table_selection_changed(self):
         pass
     
-'''
     #Test Bench Handlers
-    def update_maintenance_line_status(self):
+    def set_ticket_sales_changed(self):
+        #self.ticket_sales_copy = int(self.set_ticket_sales.text())
         pass
-    
-    def test_bench_activate_button_clicked(self):
-        self.TestSetBlockOccupancyValue.setEnabled(True)
-        self.TestSetBlockCrossingStatusValue.setEnabled(True)
-        self.TestSetSwitchStatusValue.setEnabled(True)
-        self.TestSetLineSalesInput.setEnabled(True)
-        self.TestSetTrafficLightValue.setEnabled(True)
-        self.TestUpdateButton.setEnabled(True)
-        self.TestBenchActivateButton.setStyleSheet("background-color: rgb(199, 199, 199)")
-        self.TestBenchDeactivateButton.setStyleSheet("background-color: rgb(255, 255, 255)")
-    
-    def test_bench_deactivate_button_clicked(self):
-        self.TestSetBlockOccupancyValue.setEnabled(False)
-        self.TestSetBlockCrossingStatusValue.setEnabled(False)
-        self.TestSetSwitchStatusValue.setEnabled(False)
-        self.TestSetLineSalesInput.setEnabled(False)
-        self.TestSetTrafficLightValue.setEnabled(False)
-        self.TestUpdateButton.setEnabled(False)
-        self.TestBenchActivateButton.setStyleSheet("background-color: rgb(255, 255, 255)")
-        self.TestBenchDeactivateButton.setStyleSheet("background-color: rgb(199, 199, 199)")
-    
-    def test_bench_update_button_clicked(self):
-        pass
-'''
 
 #Main
 if __name__ == "__main__":

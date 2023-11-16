@@ -385,7 +385,6 @@ class Line:
         #multiply each block by time
         return len(path)*15
 
-
 # Block Object - A single block linked to a single Track
 class Block:
     def __init__(self):
