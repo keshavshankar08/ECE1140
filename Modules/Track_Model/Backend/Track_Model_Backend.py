@@ -132,6 +132,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
     def receive_distance_from_yard(self, distance_yard):
         # Handle the received distance from yard signal
         self.distance_from_yard = distance_yard
+
         
     # sends updates from track model backend to main backend
     def send_main_backend_update(self):

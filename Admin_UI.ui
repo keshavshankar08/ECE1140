@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AdminModule</class>
+ <widget class="QMainWindow" name="AdminModule">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>526</height>
+   </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1280</width>
+    <height>720</height>
+   </size>
+  </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+   </font>
+  </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
+  <property name="windowTitle">
+   <string>Admin</string>
+  </property>
+  <widget class="QWidget" name="main_widget">
+   <widget class="QFrame" name="line_box">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>621</width>
+      <height>511</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+     </font>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QComboBox" name="line_selection_dropdown">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>141</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+      </font>
+     </property>
+     <property name="maxVisibleItems">
+      <number>10</number>
+     </property>
+     <property name="maxCount">
+      <number>4</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>Select Line...</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Red Line</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Green Line</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QGroupBox" name="wayside_box">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>40</y>
+       <width>621</width>
+       <height>251</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+      </font>
+     </property>
+     <property name="title">
+      <string>Wayside Controller</string>
+     </property>
+     <widget class="QComboBox" name="wayside_selection_dropdown">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>150</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+       </font>
+      </property>
+      <property name="maxCount">
+       <number>50</number>
+      </property>
+      <item>
+       <property name="text">
+        <string>Select Wayside...</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Wayside 1</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Wayside 2</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QGroupBox" name="block_box">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>60</y>
+        <width>621</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+       </font>
+      </property>
+      <property name="title">
+       <string>Block Status</string>
+      </property>
+      <widget class="QLabel" name="block_occupancy_label">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>71</y>
+         <width>131</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Block Occupancy:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="track_fault_label">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>110</y>
+         <width>131</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Track Fault:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="maintenance_label">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>152</y>
+         <width>131</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Maintenance:</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="block_occupancy_occupied_button">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>65</y>
+         <width>91</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Occupied</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="block_occupancy_value">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>70</y>
+         <width>91</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="maxLength">
+        <number>10</number>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="block_occupancy_unoccupied_button">
+       <property name="geometry">
+        <rect>
+         <x>230</x>
+         <y>65</y>
+         <width>101</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Unoccupied</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="track_fault_undetected_button">
+       <property name="geometry">
+        <rect>
+         <x>230</x>
+         <y>104</y>
+         <width>101</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Undetected</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="track_fault_value">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>109</y>
+         <width>91</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="maxLength">
+        <number>10</number>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="track_fault_detected_button">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>104</y>
+         <width>91</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Detected</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="maintenance_inactive_button">
+       <property name="geometry">
+        <rect>
+         <x>230</x>
+         <y>147</y>
+         <width>101</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Inactive</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="maintenance_value">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>152</y>
+         <width>91</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="maxLength">
+        <number>10</number>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="maintenance_active_button">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>147</y>
+         <width>91</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Active</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="block_selection_dropdown">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>150</width>
+         <height>26</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+        </font>
+       </property>
+       <property name="maxCount">
+        <number>200</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>Select Block...</string>
+        </property>
+       </item>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="train_box">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>300</y>
+       <width>621</width>
+       <height>131</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+      </font>
+     </property>
+     <property name="title">
+      <string>Train Status</string>
+     </property>
+     <widget class="QPushButton" name="create_train_button">
+      <property name="geometry">
+       <rect>
+        <x>490</x>
+        <y>50</y>
+        <width>111</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Create Train</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="speed_value">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>69</y>
+        <width>113</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="speed_label">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>70</y>
+        <width>131</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Suggested Speed:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="authority_label">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>100</y>
+        <width>131</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Suggested Authority:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="train_id_value">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>38</y>
+        <width>113</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="authority_value">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>100</y>
+        <width>113</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="train_id_label">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>40</y>
+        <width>131</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Train ID:</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="train_selection_dropdown">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>150</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+       </font>
+      </property>
+      <property name="maxCount">
+       <number>200</number>
+      </property>
+      <item>
+       <property name="text">
+        <string>Select Train...</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QPushButton" name="update_train_button">
+      <property name="geometry">
+       <rect>
+        <x>490</x>
+        <y>90</y>
+        <width>111</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Update Train</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="ticket_sales">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>440</y>
+       <width>621</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Hourly Ticket Sales</string>
+     </property>
+     <widget class="QLineEdit" name="ticket_sales_input">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>28</y>
+        <width>113</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ticket_sales_label">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>30</y>
+        <width>131</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Ticket Sales:</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

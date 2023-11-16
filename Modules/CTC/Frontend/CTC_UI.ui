@@ -51,9 +51,9 @@
     <widget class="QPushButton" name="open_schedule_builder_button">
      <property name="geometry">
       <rect>
-       <x>210</x>
+       <x>420</x>
        <y>10</y>
-       <width>141</width>
+       <width>131</width>
        <height>41</height>
       </rect>
      </property>
@@ -143,7 +143,7 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Block&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="MaintenanceUpdateButton">
+     <widget class="QPushButton" name="maintenance_update_button">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -181,8 +181,8 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Block&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Status&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Track Fault/&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Maintenance Status&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="QTextBrowser" name="block_occupancy_indicator">
@@ -450,7 +450,7 @@ p, li { white-space: pre-wrap; }
        </column>
        <column>
         <property name="text">
-         <string>Time To Station w/ Dwell (mm:ss)</string>
+         <string>Dwell Time (mm:ss)</string>
         </property>
         <property name="font">
          <font>
@@ -477,6 +477,9 @@ p, li { white-space: pre-wrap; }
         <font>
          <pointsize>7</pointsize>
         </font>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
        </property>
        <attribute name="verticalHeaderCascadingSectionResizes">
         <bool>true</bool>
@@ -550,6 +553,9 @@ p, li { white-space: pre-wrap; }
          <pointsize>7</pointsize>
         </font>
        </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
@@ -578,7 +584,7 @@ p, li { white-space: pre-wrap; }
        </column>
        <column>
         <property name="text">
-         <string>Time To Station w/ Dwell (mm:ss)</string>
+         <string>Dwell Time (mm:ss)</string>
         </property>
         <property name="font">
          <font>
@@ -647,6 +653,9 @@ p, li { white-space: pre-wrap; }
          <pointsize>7</pointsize>
         </font>
        </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
        <attribute name="verticalHeaderCascadingSectionResizes">
         <bool>true</bool>
        </attribute>
@@ -680,6 +689,9 @@ p, li { white-space: pre-wrap; }
          <pointsize>7</pointsize>
         </font>
        </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
@@ -708,7 +720,7 @@ p, li { white-space: pre-wrap; }
        </column>
        <column>
         <property name="text">
-         <string>Time To Station w/ Dwell (mm:ss)</string>
+         <string>Dwell Time (mm:ss)</string>
         </property>
         <property name="font">
          <font>
@@ -751,160 +763,19 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>50</y>
+         <y>10</y>
          <width>331</width>
-         <height>291</height>
+         <height>71</height>
         </rect>
        </property>
        <property name="title">
         <string>Inputs</string>
        </property>
-       <widget class="QTextBrowser" name="TestSetBlockCrossingStatusLabel">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>60</y>
-          <width>181</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Arial</family>
-         </font>
-        </property>
-        <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="horizontalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="html">
-         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont'; font-size:11pt;&quot;&gt;Set Block Crossing Status&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-       <widget class="QTextBrowser" name="TestSetBlockOccupancyLabel">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>20</y>
-          <width>181</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Arial</family>
-         </font>
-        </property>
-        <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="horizontalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="html">
-         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont'; font-size:12pt;&quot;&gt;Set Block Occupancy&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-       <widget class="QTextBrowser" name="TestSetSwitchStatusLabel">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>100</y>
-          <width>181</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Arial</family>
-         </font>
-        </property>
-        <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="horizontalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="html">
-         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont'; font-size:12pt;&quot;&gt;Toggle Switch Status&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="TestSetSwitchStatusValue">
-        <property name="geometry">
-         <rect>
-          <x>210</x>
-          <y>100</y>
-          <width>104</width>
-          <height>26</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Arial</family>
-         </font>
-        </property>
-        <property name="maxCount">
-         <number>100</number>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="TestSetBlockCrossingStatusValue">
-        <property name="geometry">
-         <rect>
-          <x>210</x>
-          <y>60</y>
-          <width>104</width>
-          <height>26</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Arial</family>
-         </font>
-        </property>
-        <property name="maxCount">
-         <number>2</number>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="TestSetBlockOccupancyValue">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>210</x>
-          <y>20</y>
-          <width>104</width>
-          <height>26</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Arial</family>
-         </font>
-        </property>
-        <property name="maxCount">
-         <number>100</number>
-        </property>
-       </widget>
        <widget class="QTextBrowser" name="TestSetSalesPerLineLabel">
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>140</y>
+          <y>20</y>
           <width>181</width>
           <height>31</height>
          </rect>
@@ -925,141 +796,19 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont'; font-size:12pt;&quot;&gt;Set Sales Per Line&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont';&quot;&gt;Hourly Ticket Sales&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
-       <widget class="QTextBrowser" name="TestSetTrafficLightColorLabel">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>180</y>
-          <width>181</width>
-          <height>51</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Arial</family>
-         </font>
-        </property>
-        <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="horizontalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="html">
-         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Arial'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'.AppleSystemUIFont'; font-size:12pt;&quot;&gt;Toggle Traffic Light Color&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="TestUpdateButton">
-        <property name="geometry">
-         <rect>
-          <x>160</x>
-          <y>240</y>
-          <width>161</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Arial</family>
-         </font>
-        </property>
-        <property name="text">
-         <string>Update</string>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="TestSetLineSalesInput">
+       <widget class="QLineEdit" name="set_ticket_sales">
         <property name="geometry">
          <rect>
           <x>210</x>
-          <y>140</y>
-          <width>101</width>
-          <height>21</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="TestSetTrafficLightValue">
-        <property name="geometry">
-         <rect>
-          <x>210</x>
-          <y>190</y>
-          <width>104</width>
-          <height>26</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Arial</family>
-         </font>
-        </property>
-        <property name="maxCount">
-         <number>100</number>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QGroupBox" name="TestBenchOutputs">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>350</y>
-         <width>331</width>
-         <height>131</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Outputs</string>
-       </property>
-       <widget class="QPlainTextEdit" name="TestOutputsView">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
           <y>20</y>
-          <width>311</width>
-          <height>101</height>
+          <width>101</width>
+          <height>31</height>
          </rect>
         </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="plainText">
-         <string/>
-        </property>
        </widget>
-      </widget>
-      <widget class="QPushButton" name="TestBenchActivateButton">
-       <property name="geometry">
-        <rect>
-         <x>40</x>
-         <y>10</y>
-         <width>121</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string>Activate</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="TestBenchDeactivateButton">
-       <property name="geometry">
-        <rect>
-         <x>190</x>
-         <y>10</y>
-         <width>121</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Deactivate</string>
-       </property>
       </widget>
      </widget>
     </widget>
@@ -1085,9 +834,9 @@ p, li { white-space: pre-wrap; }
     <widget class="QPushButton" name="upload_schedule_button">
      <property name="geometry">
       <rect>
-       <x>370</x>
+       <x>320</x>
        <y>10</y>
-       <width>161</width>
+       <width>91</width>
        <height>41</height>
       </rect>
      </property>
@@ -1099,6 +848,22 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="text">
       <string>Upload Schedule</string>
+     </property>
+    </widget>
+    <widget class="QPlainTextEdit" name="current_time">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>10</y>
+       <width>101</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+     <property name="plainText">
+      <string/>
      </property>
     </widget>
    </widget>

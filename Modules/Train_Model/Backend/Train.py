@@ -23,7 +23,7 @@ E_BRAKE_FORCE = 140404  # N
 MAX_MOTOR_POWER = 120000  # Watts
 GRAVITY = 9.8  # m/s^2
 MAX_ENGINE_FORCE = 40000  # N
-FRICTION_COEFF = 0  # dimensionless
+FRICTION_COEFF = 0.0  # dimensionless
 
 
 class Train(QObject):
@@ -106,8 +106,6 @@ class Train(QObject):
         self.engineFail = False
         self.brakeFail = False
         self.signalFail = False
-        #### Advertisements
-        # not implemented haha hahahaha
         #### Passthroughs
         self.speedLimit = 70.0
         self.currentTime = QDateTime()
@@ -116,6 +114,18 @@ class Train(QObject):
         self.currentTime = value
 
     def TrainModelUpdateValues(self):
+        ### MASS
+        self.mass = CAR_WEIGHT_EMPTY + (self.numPassengers * 70)
+        if (self.mass >= CAR_WEIGHT_LOADED):
+            self.mass = CAR_WEIGHT_LOADED
+        ### FAILURE MODES
+        if (self.engineFail):
+            self.commandedPower = 0
+        if (self.brakeFail):
+            self.serviceBrake = 0
+        if (self.signalFail):
+            self.currentBeacon = ""
+        ### ACCELERATION SUM
         self.previousAccel = self.currentAccel
         ### BRAKE
         if (self.serviceBrake and not self.emergencyBrake):
@@ -135,12 +145,13 @@ class Train(QObject):
         self.currentAngle = math.atan(self.currentGradient / 100)
         self.slopeForce = self.mass * GRAVITY * math.sin(self.currentAngle)
         ### FRICTION
-        self.frictionForce = self.mass * GRAVITY * FRICTION_COEFF * math.cos(self.currentAngle)
+        #self.frictionForce = self.mass * GRAVITY * FRICTION_COEFF * math.cos(self.currentAngle)
+        self.frictionForce = 1000
         ### NET FORCE
         self.netForce = self.engineForce - self.slopeForce - self.brakeForce - self.frictionForce
         if (self.netForce > MAX_ENGINE_FORCE):
             self.netForce = MAX_ENGINE_FORCE
-        
+        ### F -> a
         self.currentAccel = self.netForce / self.mass
 
         if (self.commandedPower <= MAX_MOTOR_POWER):
@@ -237,9 +248,6 @@ class Train(QObject):
         
     def receiveSuggestedSpeed(self, value):
         self.suggestedSpeed = value
-
-    def showAdvertisement(self):
-        pass
     
     def receivePassengers(self, value):
         self.numPassengers += value

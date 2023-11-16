@@ -1,8 +1,27 @@
 import sys
+import serial
+import time
 sys.path.append(".")
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import *
 from signals import *
+
+try:
+        SER = serial.Serial('COM3', 9600)
+except: 
+        exit
+
+# send data to Arduino to display
+def display(data):
+        # send data to arduino
+        SER.write(data.encode('ascii'))
+        time.sleep(1)
+
+        # read in serial output
+        response = SER.readline().decode('ascii').strip()
+        print("Arduino output: \n", response)
+
+        
 
 class HWWaysideFrontend(QtWidgets.QMainWindow):
         def __init__(self):
@@ -10,8 +29,8 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 uic.loadUi("Modules/HW_Wayside/Frontend/HW_Wayside_UI.ui", self)
                 # set title
                 self.setWindowTitle("HW Wayside")
-
                 self.track_instance_copy = Track()
+
                 # receives updates from wayside backend
                 signals.sw_wayside_update_frontend.connect(self.update_frontend)
 
@@ -42,11 +61,11 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 self.update_display()
 
                 # send updated signals to wayside backend
-                self.send_backend_update()
+                self.send_frontend_update()
 
         # Sends updates from wayside frontend to wayside backend
-        def send_backend_update(self):
-                signals.sw_wayside_frontend_update.emit(self.track_instance_copy)
+        def send_frontend_update(self):
+                signals.hw_wayside_frontend_update.emit(self.track_instance_copy)
 
         # Updates all UI display information
         def update_display(self):
@@ -135,6 +154,7 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
 
         # Updates elements shown once block chosen
         def update_block_dropdown(self):
+
                 if(self.block_selection_dropdown.currentText() == "Select Block..."):
                         self.general_box.setEnabled(False)
                         self.maintenance_box.setEnabled(False)
@@ -193,6 +213,7 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                         
         # Updates display block information
         def update_block_information(self):
+                counter = 0
                 curr_line_int = self.get_current_line_displayed_int()
                 curr_block_int = self.get_current_block_displayed_int()
                 self.block_type_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_type_string())
@@ -203,6 +224,28 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 self.traffic_light_color_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_traffic_light_color_string())
                 self.station_name_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].station_name)
                 self.crossing_status_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_crossing_status_string())
+
+
+                # Arduino Display
+                ArduinoString = ""
+                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_type_string() + " "
+                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_occupancy_string() + "."
+
+                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_track_fault_status_string() + "."
+                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_maintenance_status_string() + "."
+
+                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_switch_direction_string(curr_line_int) + " "
+                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_traffic_light_color_string() + "."
+
+                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_crossing_status_string() + "."
+                if (counter == 0):
+                        display(ArduinoString)
+                        counter += 1
+                if (counter < 500):
+                        counter += 1
+                if (counter == 500):
+                        counter = 0
+
 
         # Handles view track map button clicked
         def view_track_map_clicked(self):

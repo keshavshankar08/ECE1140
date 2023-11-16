@@ -122,7 +122,7 @@ class Track:
         self.green_line_station_blocks = [2,9,16,22,31,39,48,56,65,73,88,96,105,114,123,132,141]
         self.green_line_station_names = ["Pioneer", "Edgebrook", "Jalappa", "Whited", "South Bank", "Central", "Inglewood", "Overbrook", "Glenbury", "Dormont", "Mt Lebanon", "Poplar", "Castle Shannon", "Dormont", "Glenbury", "Overbrook", "Inglewood", "Central"]
         green_line_crossing_blocks = [19]
-        green_line_junction_blocks = [13,12,1,28,29,150,57,0,58,65,62,0,77,101,76,85,86,100]
+        green_line_junction_blocks = [13,12,1,28,29,150,57,0,58,63,62,0,77,101,76,85,86,100]
         self.green_line_device_blocks_ws1 = [13,19,28,57,63]
         self.green_line_device_blocks_ws2 = [77,85]
         self.green_line.graph = {
@@ -182,6 +182,7 @@ class Track:
             53:[54],
             54:[55],
             55:[56],
+            56:[57],
             57:[0,58],
             58:[59],
             59:[60],
@@ -300,7 +301,6 @@ class Track:
         self.lines.insert(0, self.red_line)
         self.lines.insert(1, self.green_line)
 
-
     #Function to swap between station names and block number
     def red_line_station_to_block (self, swap_stations):
         #loop through stations to get swapped
@@ -312,6 +312,22 @@ class Track:
         #return the block numbers
         return swap_stations
 
+    def red_line_block_to_station (self, swap_blocks):
+        #check if the variable is just 'int'
+        if type(swap_blocks) is int:
+            for j in range(len(self.red_line_station_blocks)):
+                if swap_blocks == self.red_line_station_blocks[j]:
+                    return self.red_line_station_names[j]
+
+        #otherwise loop through blocks to get swapped
+        for i in range(len(swap_blocks)):
+            for j in range(len(self.red_line_station_blocks)):
+                if swap_blocks[i] == self.red_line_station_blocks[j]:
+                    swap_blocks[i] = self.red_line_station_names[j]
+
+        #return the station names
+        return swap_blocks
+
     #Function to swap between station names and block number
     def green_line_station_to_block (self, swap_stations):
         #loop through stations to get swapped
@@ -322,7 +338,22 @@ class Track:
         
         #return the block numbers
         return swap_stations
+    
+    def green_line_block_to_station (self, swap_blocks):
+        #check if the variable is just 'int'
+        if type(swap_blocks) is int:
+            for j in range(len(self.green_line_station_blocks)):
+                if swap_blocks == self.green_line_station_blocks[j]:
+                    return self.green_line_station_names[j]
 
+        #otherwise loop through blocks to get swapped
+        for i in range(len(swap_blocks)):
+            for j in range(len(self.green_line_station_blocks)):
+                if swap_blocks[i] == self.green_line_station_blocks[j]:
+                    swap_blocks[i] = self.green_line_station_names[j]
+
+        #return the station names
+        return swap_blocks
 
 # Line Object - A single line from the entire track network
 class Line:
@@ -338,6 +369,7 @@ class Line:
             return path
         shortest = None
         for node in self.graph[start]:
+            #print("current node is " + str(node))
             if node not in path:
                 newpath = self.get_shortest_path(node, end, path)
                 if newpath:
@@ -352,7 +384,6 @@ class Line:
 
         #multiply each block by time
         return len(path)*15
-
 
 # Block Object - A single block linked to a single Track
 class Block:

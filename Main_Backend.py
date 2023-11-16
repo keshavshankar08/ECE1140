@@ -43,6 +43,7 @@ class MainBackend(QObject):
         self.track_model_backend_instance = TrackModelModule()     
         signals.track_model_backend_update.connect(self.track_model_backend_update)
         
+
         self.menu_instance = Mainmenu()
         self.menu_instance.show()
 
@@ -76,27 +77,29 @@ class MainBackend(QObject):
         self.update_active_trains(updated_active_trains)
         self.update_track_instance(updated_track)
 
-    # track instance updater
-    def update_track_instance(self,updated_track):
-        self.track_instance = updated_track
-    
     # Handler for update from SW Wayside
-    def admin_update(self, updated_track, updated_active_trains):
+    def admin_update(self, updated_track, updated_active_trains, updated_ticket_sales):
         self.update_active_trains(updated_active_trains)
         self.update_track_instance(updated_track)
+        self.update_ticket_sales(updated_ticket_sales)
+        
+    # Track instance updater
+    def update_track_instance(self, updated_track):
+        self.track_instance = updated_track
 
     # Active trains instance updater
     def update_active_trains(self, updated_active_trains):
         self.active_trains_instance = updated_active_trains
 
+
     # Handler for update from track model
-    def track_model_backend_update(self, updated_track, updated_active_trains=None):
+    def track_model_backend_update(self, updated_track, updated_active_trains):
         self.update_track_instance(updated_track)
-        if updated_active_trains is not None:
-            self.update_active_trains(updated_active_trains)
+        self.update_active_trains(updated_active_trains)
         
     def update_ticket_sales(self, updated_ticket_sales):
         self.ticket_sales_instance = updated_ticket_sales
+
 
     def updateMainMenu(self):
         pass
