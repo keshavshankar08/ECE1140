@@ -6,13 +6,21 @@ from Train_Resources.CTC_Train import *
 class signalsList(QObject):
     #Timer
     current_system_time = pyqtSignal(QDateTime)
+    current_system_speed = pyqtSignal(float)
+    change_system_speed = pyqtSignal(float)
     stop_timer = pyqtSignal()
+    pause_timer = pyqtSignal()
+    resume_timer = pyqtSignal()
+
+    # ADMIN Signals
+    update_admin = pyqtSignal(Track, ActiveTrains) # update from main backend to admin
+    admin_update = pyqtSignal(Track, ActiveTrains) # update from admin to main backend
 
     #CTC Office Signals
-    ctc_office_active_trains_update = pyqtSignal(ActiveTrains)
-    ctc_office_track_update = pyqtSignal(Track)
-    ctc_office_backend_update = pyqtSignal(Track)
-    ctc_office_frontend_update = pyqtSignal(Track)
+    ctc_office_update_backend = pyqtSignal(Track, ActiveTrains, int) # update from main backend to ctc office backend
+    ctc_office_update_frontend = pyqtSignal(Track, ActiveTrains, int) # update from ctc office backend to ctc office frontend
+    ctc_office_frontend_update = pyqtSignal(Track, ActiveTrains, int, QueueTrains) # update from ctc office frontend to ctc office backend
+    ctc_office_backend_update = pyqtSignal(Track, ActiveTrains, int) # update from ctc office backend to main backend
 
     # SW Wayside Signals
     sw_wayside_update_backend = pyqtSignal(Track, ActiveTrains) # update from main backend to sw wayside backend
