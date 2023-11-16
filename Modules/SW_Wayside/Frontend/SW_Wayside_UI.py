@@ -209,6 +209,10 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
                 self.block_occupancy_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_occupancy_string())
                 self.track_fault_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_track_fault_status_string())
                 self.maintenance_active_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_maintenance_status_string())
+                if(curr_block_int == 0):
+                        self.switch_direction_value.setEnabled(False)
+                else:
+                        self.switch_direction_value.setEnabled(True)
                 self.switch_direction_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_switch_direction_string(curr_line_int))
                 self.traffic_light_color_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_traffic_light_color_string())
                 self.station_name_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].station_name)
