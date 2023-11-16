@@ -49,6 +49,7 @@ class MainBackend(QObject):
         signals.ctc_office_update_backend.emit(self.track_instance, self.active_trains_instance, self.ticket_sales_instance)
         signals.sw_wayside_update_backend.emit(self.track_instance, self.active_trains_instance)
         signals.trainModel_backend_update.emit()
+        signals.train_controller_update_backend.emit()
 
     def stopTimer(self):
         self.system_timer.stop()
@@ -74,7 +75,7 @@ class MainBackend(QObject):
     # Track instance updater
     def update_track_instance(self, updated_track):
         self.track_instance = updated_track
-        
+
     def updateMainMenu(self):
         pass
 

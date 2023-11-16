@@ -53,7 +53,11 @@ class signalsList(QObject):
     trainModel_update_beacon_UI = pyqtSignal(str)
     
     #Train Controller Signals
-    train_controller_update_backend = pyqtSignal()
+    #signals
+    # train_controller_update_frontend = pyqtSignal(int, int, int, float, bool, bool, bool, bool, bool, bool, bool)#TC backend to TC frontend
+    # train_controller_frontend_update = pyqtSignal(bool,bool,bool,float, float, float) #TC frontend to TC backend
+    train_controller_update_backend = pyqtSignal() #main backend to TC backend
+    # train_controller_backend_update = pyqtSignal()#TC backend to Main backend
     #lights
     train_controller_int_lights_on = pyqtSignal(bool)
     train_controller_int_lights_off = pyqtSignal(bool)
@@ -72,9 +76,6 @@ class signalsList(QObject):
     train_controller_service_brake = pyqtSignal(float)
     train_controller_emergency_brake_on = pyqtSignal(bool)
     train_controller_emergency_brake_off = pyqtSignal(bool)
-    #updates
-    train_controller_backend_update = pyqtSignal()
-
 
 signals = signalsList()
 
