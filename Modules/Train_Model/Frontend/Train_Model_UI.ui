@@ -320,17 +320,10 @@
                        </widget>
                       </item>
                       <item>
-                       <widget class="QComboBox" name="eBrakeSelect">
-                        <item>
-                         <property name="text">
-                          <string>off</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>on</string>
-                         </property>
-                        </item>
+                       <widget class="QPushButton" name="eBrakeButton">
+                        <property name="text">
+                         <string>On</string>
+                        </property>
                        </widget>
                       </item>
                      </layout>

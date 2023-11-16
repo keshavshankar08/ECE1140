@@ -2,10 +2,11 @@ import sys
 sys.path.append(".")
 import os, openpyxl
 from PyQt6 import QtWidgets, QtGui, uic
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFileDialog
 from signals import signals
 from Track_Resources.Track import *
+from Train_Resources.CTC_Train import * 
         
 class TrackModelModule(QtWidgets.QMainWindow):
     def __init__(self):
@@ -16,12 +17,20 @@ class TrackModelModule(QtWidgets.QMainWindow):
         # instantiate copy of track class object 
         self.track_instance_copy = Track()
         
+        # instantiate copy of active trains class object
+        self.active_trains_instance_copy = ActiveTrains()
+        
         # member variable to hold selected block 
         self.clicked_block = 0
         
+        # member variable to hold occupied block
+        self.occupied_block = 0
+        self.block_grade = 0
+        self.station_name = None
+        
         # train model variables
         self.train_length = 0
-        self.distance_from_yard = 0
+        self.distance_from_yard = 100
         self.distance_from_block_start = 0
         
         # declare list to store line data
@@ -45,6 +54,11 @@ class TrackModelModule(QtWidgets.QMainWindow):
         
         # load track model button
         self.LoadTrackModelButton.clicked.connect(self.track_layout)
+        
+        # failure mode handler
+        self.TrackCircuitFailureToggleButton.toggled.connect(self.failure_mode)
+        self.BrokenRailToggleButton.toggled.connect(self.failure_mode)
+        self.PowerFailureToggleButton.toggled.connect(self.failure_mode)
 
         # set up scene for graphics view and set scene size to widget size 
         self.graphicsView.setScene(QtWidgets.QGraphicsScene())
@@ -60,16 +74,23 @@ class TrackModelModule(QtWidgets.QMainWindow):
     
     # send updates from track model backend to main backend
     def send_main_backend_update(self):
-        signals.track_model_backend_update.emit(self.track_instance_copy)
+        signals.track_model_backend_update.emit(self.track_instance_copy, self.active_trains_instance_copy)
     
     # Update local instance of track 
     def update_copy_track(self,updated_track):
         self.track_instance_copy = updated_track
+    
+    # Update local instance of active trains
+    def update_copy_active_trains(self,updated_active_trains):
+        self.active_trains_instance_copy = updated_active_trains
         
     # main function to carry out all functions in a cycle
-    def backend_update_backend(self,track_instance):
+    def backend_update_backend(self,track_instance,active_trains):
         # update local instance of track
         self.update_copy_track(track_instance)
+        
+        # update local instance of active trains
+        self.update_copy_active_trains(active_trains)
         
         # update frontend 
         self.display_block_info()
@@ -77,9 +98,22 @@ class TrackModelModule(QtWidgets.QMainWindow):
         # receive train model signals
         self.receive_train_model_signals()
         
+        # update block occupancies
+        self.occupied_block = self.block_occupancy()
+        
+        # signals to train model
+        signals.track_model_block_grade.emit(self.block_grade)
+        signals.track_model_beacon.emit(self.station_name)
+        
         # send updated signals to main backend
         self.send_main_backend_update()
         
+    # failure mode handler
+    def failure_mode(self):
+        if self.TrackCircuitFailureToggleButton.isChecked() or self.BrokenRailToggleButton.isChecked() or self.PowerFailureToggleButton.isChecked():
+            self.track_instance_copy.lines[1].blocks[int(self.clicked_block)].track_fault_status = True
+        else: 
+            self.track_instance_copy.lines[1].blocks[int(self.clicked_block)].track_fault_status = False
     
     # train model signal slots 
     def receive_train_model_signals(self):
@@ -90,25 +124,57 @@ class TrackModelModule(QtWidgets.QMainWindow):
     def receive_train_length(self, length):
         # Handle the received train length signal
         self.train_length = length
-        #print(f"Received train length: {length}")
 
     def receive_distance_from_block_start(self, distance_block):
         # Handle the received distance from block start signal
         self.distance_from_block_start = distance_block
-        #print(f"Received distance from block start: {distance_block}")
 
     def receive_distance_from_yard(self, distance_yard):
         # Handle the received distance from yard signal
         self.distance_from_yard = distance_yard
-        #print(f"Received distance from yard: {distance_yard}")
+
         
     # sends updates from track model backend to main backend
     def send_main_backend_update(self):
         signals.track_model_backend_update.emit(self.track_instance_copy)
     
-    # calculates block occupancy
-    #def block_occupancy(self):
-
+   # Calculates block occupancy
+    def block_occupancy(self):
+        if len(self.green_line_data) > 0:
+        # path to dormont
+            path = [63,64,65,66,67,68,69,70,71,72,73]
+            block_length_sum = 0
+            count = 0
+            obj = self.green_line_data[path[count]]
+            block = obj[2]
+            while count < 11:
+                block_length_sum += int(self.green_line_data[block][3])
+                if(self.distance_from_yard-block_length_sum <= 30 and self.distance_from_yard != 0):
+                    # position found
+                    self.set_block_color(path[count])
+                    self.track_instance_copy.lines[1].blocks[path[count]].block_occupancy = True
+                    for data in self.green_line_data:
+                        if data[2] == block:
+                            self.block_grade = data[4]
+                    if count == 10: 
+                        self.station_name = 'Dormont'
+                    return block
+                count += 1
+        else:
+            pass
+            
+    def set_block_color(self,occupied_block):
+        scene = self.graphicsView.scene()
+        for item in scene.items():
+            if isinstance(item,QtWidgets.QGraphicsRectItem):
+                # make occupied block red on map
+                if str(item.toolTip()) == str(occupied_block):
+                    item.setBrush(QtGui.QColor(255,0,0))
+                # put prev block back to green 
+                if str(item.toolTip()) == str(occupied_block-1):
+                    item.setBrush(QtGui.QColor(0,128,0))
+                    self.track_instance_copy.lines[1].blocks[occupied_block-1].block_occupancy = False
+        
     def track_layout(self):
         file_filter = 'Excel File (*.xlsx)'
         response, _ = QFileDialog.getOpenFileName(
@@ -160,9 +226,11 @@ class TrackModelModule(QtWidgets.QMainWindow):
         for data in self.green_line_data:
             if data[2] == int(block_number):  
                 self.block_number_display.setText(str(data[2]))
-                self.block_length_display.setText(str(data[3]))
+                if data[3] is not None:
+                    self.block_length_display.setText("{:.2f}".format(data[3] * 3.281))
                 self.block_grade_display.setText(str(data[4]))
-                self.speed_limit_display.setText(str(data[5]))
+                if data[5] is not None:
+                    self.speed_limit_display.setText("{:.2f}".format(data[5] / 1.609))
                 self.traffic_light_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_traffic_light_color_string())
                 if data[6] is not None:
                     self.infrastructure_display.setText(str(data[6][0:7]))
@@ -183,11 +251,17 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 self.switch_direction_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_switch_direction_string(1))
                 # TODO display crossing status (if applicable): get signal from wayside
                 self.crossing_status_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_crossing_status_string()) 
-                self.elevation_display.setText(str(data[8]))
-                self.cum_elevation_display.setText(str(data[9]))
+                if data[8] is not None and data[9] is not None:
+                    self.elevation_display.setText("{:.2f}".format(data[8] * 3.281))
+                    self.cum_elevation_display.setText("{:.2f}".format(data[9] * 3.281))
                 # TODO display beacon data (if applicable)
                 # TODO display track heater status
                 # TODO display train info (only if block is occupied)
+                if block_number == self.occupied_block:
+                    self.train_ID_display.setText(str(self.active_trains_instance_copy.Train[0].train_ID))
+                    self.direction_of_travel_display.setText('Traveling South')
+                    self.authority_display.setText((self.active_trains_instance_copy.Train[0].current_authority) * (3.281 * (73-self.occupied_block)))
+                    self.current_speed_display.setText(str(self.active_trains_instance_copy.Train[0].current_suggested_speed))
                 # TODO display remainder of station info (tickets sold, passengers boarding and disembarking)
         
     def build_track_map(self):
@@ -451,7 +525,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
 
     def add_block_to_map(self,x,y,block_size,block_number,block_number_2,label_pos,prev_x,prev_y):
             block_number = QtWidgets.QGraphicsRectItem(x,y,block_size,block_size)
-            block_number.setBrush(QtGui.QColor(0,128,0)) # gray color for yard block 
+            block_number.setBrush(QtGui.QColor(0,128,0)) # green color for normal block 
             block_number.setToolTip(str(block_number_2))
             self.graphicsView.scene().addItem(block_number)
             

@@ -114,6 +114,10 @@ class Train(QObject):
         self.currentTime = value
 
     def TrainModelUpdateValues(self):
+        ### MASS
+        self.mass = CAR_WEIGHT_EMPTY + (self.numPassengers * 70)
+        if (self.mass >= CAR_WEIGHT_LOADED):
+            self.mass = CAR_WEIGHT_LOADED
         ### FAILURE MODES
         if (self.engineFail):
             self.commandedPower = 0
@@ -141,7 +145,8 @@ class Train(QObject):
         self.currentAngle = math.atan(self.currentGradient / 100)
         self.slopeForce = self.mass * GRAVITY * math.sin(self.currentAngle)
         ### FRICTION
-        self.frictionForce = self.mass * GRAVITY * FRICTION_COEFF * math.cos(self.currentAngle)
+        #self.frictionForce = self.mass * GRAVITY * FRICTION_COEFF * math.cos(self.currentAngle)
+        self.frictionForce = 1000
         ### NET FORCE
         self.netForce = self.engineForce - self.slopeForce - self.brakeForce - self.frictionForce
         if (self.netForce > MAX_ENGINE_FORCE):
@@ -181,10 +186,10 @@ class Train(QObject):
         signals.trainModel_send_distance_from_block_start.emit(self.distanceFromBlockStart)
         signals.trainModel_send_distance_from_yard.emit(self.distanceFromYard)
 
-    def onEmergencyBrake(self):
+    def onEmergencyBrake(self, value):
         self.emergencyBrake = True
 
-    def offEmergencyBrake(self):
+    def offEmergencyBrake(self, value):
         self.emergencyBrake = False
 
     def serviceBrakeReceive(self, value):
@@ -228,7 +233,6 @@ class Train(QObject):
 
     def receiveBeacon(self, beacon):
         self.currentBeacon = beacon
-        self.updateUIBeacon.emit(beacon)
         
     def receiveSpeedLimit(self, value):
         self.speedLimit = value
@@ -243,9 +247,6 @@ class Train(QObject):
         
     def receiveSuggestedSpeed(self, value):
         self.suggestedSpeed = value
-
-    def showAdvertisement(self):
-        pass
     
     def receivePassengers(self, value):
         self.numPassengers += value

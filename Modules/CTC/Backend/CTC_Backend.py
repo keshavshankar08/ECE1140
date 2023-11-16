@@ -57,6 +57,7 @@ class CTCBackend():
     #Main backend handler
     def backend_update_backend(self, track_instance, active_trains, ticket_sales):
         self.update_trains()
+        self.update_train_progress(track_instance)
         self.update_copy_active_trains(active_trains)
         self.update_copy_track_instance(track_instance)
         self.update_ticket_sales(ticket_sales)
@@ -71,14 +72,23 @@ class CTCBackend():
         self.update_ticket_sales(ticket_sales)
         self.update_queue_trains(queue_trains)
 
+    #This function moves trains from the queue to active
     def update_trains(self):
+        #get system time
         system_comp_time = QTime.fromString(self.system_time.toString("hh:mm:ss"), "hh:mm:ss")
+
+        #loop through queue and check time
         for i, train in enumerate(self.queue_trains.queue_trains):
             comp_time = QTime.fromString(train.departure_time, "hh:mm:ss")
             if(system_comp_time >= comp_time):
                 self.active_trains_instance_copy.active_trains.append(train)
                 self.queue_trains.remove_train(i)
                 self.active_trains_instance_copy.active_trains[len(self.active_trains_instance_copy.active_trains) - 1].next_stop()
+
+    #This function will update active trains and update their progress
+    def update_train_progress(self, track):
+        for train in self.active_trains_instance_copy.active_trains:
+            train.update_authority(track)
             
     def verify_schedule(route_schedule):
         pass
@@ -88,7 +98,6 @@ class CTCBackend():
 
     def verify_route_order(route_stops):
         pass
-
 
 #Helper Functions
 def validate_time_hours(input_time):

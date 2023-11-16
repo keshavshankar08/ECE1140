@@ -14,7 +14,7 @@ class signalsList(QObject):
 
     # ADMIN Signals
     update_admin = pyqtSignal(Track, ActiveTrains) # update from main backend to admin
-    admin_update = pyqtSignal(Track, ActiveTrains) # update from admin to main backend
+    admin_update = pyqtSignal(Track, ActiveTrains, int) # update from admin to main backend
 
     #CTC Office Signals
     ctc_office_update_backend = pyqtSignal(Track, ActiveTrains, int) # update from main backend to ctc office backend
@@ -47,7 +47,7 @@ class signalsList(QObject):
 
     
     # Track Model
-    track_model_update_backend = pyqtSignal(Track)
+    track_model_update_backend = pyqtSignal(Track,ActiveTrains)
     track_model_backend_update = pyqtSignal(Track)
     track_model_block_occupancy = pyqtSignal(int)
     track_model_ticket_sales = pyqtSignal(int)
@@ -56,6 +56,7 @@ class signalsList(QObject):
     track_model_track_circuit_polarity = pyqtSignal(int)
     track_model_track_fault = pyqtSignal(bool)
     track_model_authority = pyqtSignal(float)
+    track_model_block_grade = pyqtSignal(float)
     track_model_beacon = pyqtSignal(str)
     
     # Train Model Signals
@@ -75,6 +76,11 @@ class signalsList(QObject):
     trainModel_update_beacon_UI = pyqtSignal(str)
     
     #Train Controller Signals
+    #signals
+    # train_controller_update_frontend = pyqtSignal(int, int, int, float, bool, bool, bool, bool, bool, bool, bool)#TC backend to TC frontend
+    # train_controller_frontend_update = pyqtSignal(bool,bool,bool,float, float, float) #TC frontend to TC backend
+    train_controller_update_backend = pyqtSignal() #main backend to TC backend
+    # train_controller_backend_update = pyqtSignal()#TC backend to Main backend
     #lights
     train_controller_int_lights_on = pyqtSignal(bool)
     train_controller_int_lights_off = pyqtSignal(bool)
@@ -93,7 +99,8 @@ class signalsList(QObject):
     train_controller_service_brake = pyqtSignal(float)
     train_controller_emergency_brake_on = pyqtSignal(bool)
     train_controller_emergency_brake_off = pyqtSignal(bool)
-
+    
+  
 
 signals = signalsList()
 

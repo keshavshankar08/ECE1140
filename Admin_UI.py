@@ -12,6 +12,7 @@ class ADMIN(QtWidgets.QMainWindow):
                 uic.loadUi("Admin_UI.ui", self)
                 self.track_instance_copy = Track()
                 self.active_trains_instance_copy = ActiveTrains()
+                self.ticket_sales_instance_copy = 0
                 signals.update_admin.connect(self.update_admin)
                 self.block_occupancy_occupied_button.clicked.connect(self.block_occupied_clicked)
                 self.block_occupancy_unoccupied_button.clicked.connect(self.block_unoccupied_clicked)
@@ -19,6 +20,8 @@ class ADMIN(QtWidgets.QMainWindow):
                 self.track_fault_undetected_button.clicked.connect(self.track_fault_undetected_clicked)
                 self.maintenance_active_button.clicked.connect(self.maintenance_active_clicked)
                 self.maintenance_inactive_button.clicked.connect(self.maintenance_inactive_clicked)
+                self.ticket_sales_input.textChanged.connect(self.update_ticket_sales_changed)
+                self.adminPower.valueChanged.connect(self.admin_force_power)
 
                 self.last_line_state = ""
                 self.last_wayside_state = ""
@@ -36,7 +39,7 @@ class ADMIN(QtWidgets.QMainWindow):
                 self.send_admin_update()
 
         def send_admin_update(self):
-                signals.admin_update.emit(self.track_instance_copy, self.active_trains_instance_copy)
+                signals.admin_update.emit(self.track_instance_copy, self.active_trains_instance_copy, self.ticket_sales_instance_copy)
 
         # Updates all UI display information
         def update_display(self):
@@ -51,6 +54,16 @@ class ADMIN(QtWidgets.QMainWindow):
         # Updates active trains instance
         def update_copy_active_trains(self, updated_active_trains):
                 self.active_trains_instance_copy = updated_active_trains
+
+        def update_copy_ticket_sales(self, updated_ticket_sales):
+                self.ticket_sales_instance_copy = updated_ticket_sales
+
+        # Updates Ticket Sales as Changed
+        def update_ticket_sales_changed(self):
+            if(self.ticket_sales_input.text() == ''):
+                self.ticket_sales_instance_copy = 0
+            else:
+                self.ticket_sales_instance_copy = int(self.ticket_sales_input.text())
 
         # Updates elements shown once line chosen
         def update_line_dropdown(self):
@@ -167,3 +180,6 @@ class ADMIN(QtWidgets.QMainWindow):
                 curr_line_int = self.get_current_line_displayed_int()
                 curr_block_int = self.get_current_block_displayed_int()
                 self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].maintenance_status = False
+                
+        def admin_force_power(self, value):
+                signals.train_controller_send_power_command.emit(value)

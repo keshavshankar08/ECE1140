@@ -10,9 +10,8 @@ class TrainModel(QtWidgets.QMainWindow):
         super().__init__()
         uic.loadUi("Modules/Train_Model/Frontend/Train_Model_UI.ui", self)
         signals.trainModel_backend_update.connect(self.UIUpdate)
-        signals.trainModel_update_beacon_UI.connect(self.updateBeacon)
         self.trainSelectComboBox.currentIndexChanged.connect(self.trainSelect)
-        self.eBrakeSelect.currentIndexChanged.connect(self.setEBrake)
+        self.eBrakeButton.clicked.connect(self.setEBrake)
         self.signalFail.stateChanged.connect(self.sendSignalFail)
         self.brakeFail.stateChanged.connect(self.sendBrakeFail)
         self.engineFail.stateChanged.connect(self.sendEngineFail)
@@ -34,6 +33,8 @@ class TrainModel(QtWidgets.QMainWindow):
         for key, value in trains.items():
             self.trainSelectComboBox.addItem(f"ID: {key}")
             self.trainSelectComboBox.setItemData(self.trainSelectComboBox.count() - 1, value)
+            
+        self.eBrakeButton.setEnabled(False)
         
 
     def UIUpdate(self):
@@ -73,10 +74,11 @@ class TrainModel(QtWidgets.QMainWindow):
                 self.sBrakeDisplay.setText("off")
                 
             if (self.currentTrain.emergencyBrake):
-                self.eBrakeSelect.setCurrentIndex(1)
+                self.eBrakeButton.setEnabled(False)
             else:
-                self.eBrakeSelect.setCurrentIndex(0)
+                self.eBrakeButton.setEnabled(True)
                 
+            self.trainTempDisplay.setText(format(self.currentTrain.temperatureActual, '.0f')) # F
             self.lengthDisplay.setText(format(self.currentTrain.length * 3.281, '.2f')) # m * 3.281 = ft
             self.widthDisplay.setText(format(self.currentTrain.width * 3.281, '.2f')) # m * 3.281 = ft
             self.heightDisplay.setText(format(self.currentTrain.height * 3.281, '.2f')) # m * 3.281 = ft
@@ -95,7 +97,6 @@ class TrainModel(QtWidgets.QMainWindow):
         self.leftDoorDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
         self.rightDoorDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
         self.trainTempDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
-        self.eBrakeSelect.setEnabled(self.trainSelectComboBox.currentIndex())
         self.sBrakeDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
         self.lengthDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
         self.widthDisplay.setEnabled(self.trainSelectComboBox.currentIndex())
@@ -111,8 +112,10 @@ class TrainModel(QtWidgets.QMainWindow):
     def trainSelect(self, idx):
         self.currentTrain = self.trainSelectComboBox.itemData(idx)
         
-    def setEBrake(self, idx):
-        self.currentTrain.emergencyBrake = idx
+    def setEBrake(self):
+        self.currentTrain.emergencyBrake = True
+        self.eBrakeButton.setEnabled(False)
+        print("button clicekd")
         
     def sendSignalFail(self, value):
         if (value):
