@@ -1,8 +1,18 @@
 import sys
+import serial
+import time
 sys.path.append(".")
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import *
 from signals import *
+SER = serial.Serial('COM3', 9600)
+
+# send PLC program serially
+def send_PLC(data):
+        SER.write(data.encode('ascii'))
+        time.sleep(1)
+        response = SER.readline().decode('ascii').strip()
+        print("Arduino output: \n", response)
 
 class HWWaysideFrontend(QtWidgets.QMainWindow):
         def __init__(self):
@@ -10,8 +20,8 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 uic.loadUi("Modules/HW_Wayside/Frontend/HW_Wayside_UI.ui", self)
                 # set title
                 self.setWindowTitle("HW Wayside")
-
                 self.track_instance_copy = Track()
+
                 # receives updates from wayside backend
                 signals.sw_wayside_update_frontend.connect(self.update_frontend)
 
@@ -29,11 +39,9 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 self.last_line_state = ""
                 self.last_wayside_state = ""
                 self.last_block_state = ""
-
-                self.plc_file_name = ""
-                self.plc_line_number = -1
-                self.plc_wayside_number = -1
-                self.operation_mode = ""
+                self.last_switch_state = ""
+                self.last_light_state = ""
+                self.last_crossing_state = ""
         
         # Handles all frontend updates
         def update_frontend(self, track_instance):
@@ -46,9 +54,6 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 # send updated signals to wayside backend
                 self.send_backend_update()
 
-        def send_frontend_update(self):
-                signals.hw_wayside_frontend_update.emit(self.track_instance_copy, self.plc_file_name,self.plc_line_number,self.plc_wayside_number,self.operation_mode)
-
         # Sends updates from wayside frontend to wayside backend
         def send_backend_update(self):
                 signals.sw_wayside_frontend_update.emit(self.track_instance_copy)
@@ -59,8 +64,6 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 self.update_line_dropdown()
                 self.update_wayside_dropdown()
                 self.update_block_dropdown()
-
-                # in future, send signals Arduino as well
 
         # Updates local instance of track
         def update_copy_track(self, updated_track):
@@ -142,6 +145,7 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
 
         # Updates elements shown once block chosen
         def update_block_dropdown(self):
+
                 if(self.block_selection_dropdown.currentText() == "Select Block..."):
                         self.general_box.setEnabled(False)
                         self.maintenance_box.setEnabled(False)
@@ -193,15 +197,10 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 elif(curr_line == "Red Line"):
                         return 0
                 
-        # return integer of current line
-        def get_current_wayside_displayed_int():
-                pass
-                
         # Gets the integer representation of the current block chosen
         def get_current_block_displayed_int(self):
-                # curr_block = self.block_selection_dropdown.currentText()
-                # return int(curr_block[6:])
-                pass
+                curr_block = self.block_selection_dropdown.currentText()
+                return int(curr_block[6:])
                         
         # Updates display block information
         def update_block_information(self):
@@ -216,6 +215,20 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 self.station_name_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].station_name)
                 self.crossing_status_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_crossing_status_string())
 
+
+                # Arduino Display
+                ArduinoString = ""
+                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_type_string() + " "
+                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_occupancy_string() + "."
+
+                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_track_fault_status_string() + "."
+                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_maintenance_status_string() + "."
+
+                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_switch_direction_string(curr_line_int) + "."
+
+                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_crossing_status_string() + "."
+                send_PLC(ArduinoString)
+
         # Handles view track map button clicked
         def view_track_map_clicked(self):
                 # figure out alternative to opencv to open up the map pictures
@@ -224,9 +237,11 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
 
         # Handles upload plc program button clicked
         def uploadPLCClicked(self):
-                self.plc_file_name = QtWidgets.QFileDialog.getOpenFileName(self, "Open File", "", "Text Files (*.txt)")
-                self.plc_line_number = self.get_current_line_displayed_int()
-                self.plc_wayside_number = self.get_current_wayside_displayed_int()
+                fileName = QtWidgets.QFileDialog.getOpenFileName(self, "Open File", "", "Text Files (*.txt)")
+                # this will get fed into the interpreter
+                # the interpreter will spit back a wayside logic object
+                # this gets added to a copy of the wayside controller object, which contains the logic and info from the track for each wayside
+                # most importantly, it has a wayside logic object for each controller
         
         # Handles switch toggle in manual mode
         def manual_switch_toggled(self):
