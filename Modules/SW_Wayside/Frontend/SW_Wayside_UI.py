@@ -27,9 +27,11 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
                 self.last_line_state = ""
                 self.last_wayside_state = ""
                 self.last_block_state = ""
-                self.last_switch_state = ""
-                self.last_light_state = ""
-                self.last_crossing_state = ""
+
+                self.plc_file_name = ""
+                self.plc_line_number = -1
+                self.plc_wayside_number = -1
+                self.operation_mode = ""
         
         # Handles all frontend updates
         def update_frontend(self, track_instance):
@@ -40,11 +42,11 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
                 self.update_display()
 
                 # send updated signals to wayside backend
-                self.send_backend_update()
+                self.send_frontend_update()
 
         # Sends updates from wayside frontend to wayside backend
-        def send_backend_update(self):
-                signals.sw_wayside_frontend_update.emit(self.track_instance_copy)
+        def send_frontend_update(self):
+                signals.sw_wayside_frontend_update.emit(self.track_instance_copy, self.plc_file_name, self.plc_line_number, self.plc_wayside_number, self.operation_mode)
 
         # Updates all UI display information
         def update_display(self):
@@ -53,12 +55,13 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
                 self.update_wayside_dropdown()
                 self.update_block_dropdown()
 
-        # Updates local instance of track
+        # Updates track instance
         def update_copy_track(self, updated_track):
-                self.trackInstanceCopy = updated_track
+                self.track_instance_copy = updated_track
         
         # Updates elements shown once mode chosen
         def update_opeartion_dropdown(self):
+                self.operation_mode = self.mode_selection_dropdown.currentText()
                 if(self.mode_selection_dropdown.currentText() == "Select Mode..."):
                         self.line_selection_dropdown.setEnabled(False)
                         self.line_box.setEnabled(False)
@@ -184,6 +187,14 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
                 elif(curr_line == "Red Line"):
                         return 0
                 
+        # Gets the integer representation of the current line chosen
+        def get_current_wayside_displayed_int(self):
+                curr_wayside = self.wayside_selection_dropdown.currentText()
+                if(curr_wayside == "Wayside 1"):
+                        return 1
+                elif(curr_wayside == "wayside 2"):
+                        return 2
+                
         # Gets the integer representation of the current block chosen
         def get_current_block_displayed_int(self):
                 curr_block = self.block_selection_dropdown.currentText()
@@ -210,11 +221,9 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
 
         # Handles upload plc program button clicked
         def uploadPLCClicked(self):
-                fileName = QtWidgets.QFileDialog.getOpenFileName(self, "Open File", "", "Text Files (*.txt)")
-                # this will get fed into the interpreter
-                # the interpreter will spit back a wayside logic object
-                # this gets added to a copy of the wayside controller object, which contains the logic and info from the track for each wayside
-                # most importantly, it has a wayside logic object for each controller
+                self.plc_file_name, _filter = QtWidgets.QFileDialog.getOpenFileName(self, "Open File", "", "Text Files (*.txt)")
+                self.plc_line_number = self.get_current_line_displayed_int()
+                self.plc_wayside_number = self.get_current_wayside_displayed_int()
         
         # Handles switch toggle in manual mode
         def manual_switch_toggled(self):

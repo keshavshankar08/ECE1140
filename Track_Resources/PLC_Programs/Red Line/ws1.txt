@@ -1,25 +1,25 @@
 SW                 
-    READ SS SL SR  
-    COND SD        
-        OPP NOT SS 
-        OPP SR     
-        OPP AND SD 
-    COND TLS       
-        OPP SS     
-        OPP NOT SL 
-        OPP AND TLS
-    COND TLL       
-        OPP NOT SS
-        OPP SL
-        OPP NOT SR
-        OPP AND TLL      
-    COND TLR       
-        OPP NOT SS 
-        OPP SR     
-        OPP AND TLR
+    READ,SS,SL,SR  
+    COND,SD        
+        OPP,NOT,SS 
+        OPP,NC,SR     
+        OPP,AND
+    COND,TLS       
+        OPP,NC,SS     
+        OPP,NOT,SL 
+        OPP,AND
+    COND,TLL       
+        OPP,NOT,SS
+        OPP,NC,SL
+        OPP,NOT,SR
+        OPP,AND   
+    COND,TLR       
+        OPP,NOT,SS 
+        OPP,NC,SR     
+        OPP,AND
 CR
-    READ CF CB     
-    COND CS        
-        OPP CF     
-        OPP CB     
-        OPP OR CS  
+    READ,CF,CB     
+    COND,CS        
+        OPP,NC,CF     
+        OPP,NC,CB     
+        OPP,OR  
