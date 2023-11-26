@@ -5,8 +5,8 @@ from Modules.SW_Wayside.Backend.SW_Wayside_Backend import *
 from Main_Backend import *
 from Track_Resources.PLC import *
 
-class test_plc_file_uploaded_updates_tokens(unittest.TestCase):
-    def test_junction_light_manual_toggle_updates_device(self):
+class automatic_mode_tests(unittest.TestCase):
+    def test_plc_file_uploaded_updates_tokens(self):
         # Arrange
         plc = PLC()
         
@@ -15,6 +15,9 @@ class test_plc_file_uploaded_updates_tokens(unittest.TestCase):
 
         # Assert
         self.assertTrue(len(plc.green_line_wayside1_token_list) > 0)
+
+class manual_mode_tests(unittest.TestCase):
+    pass
 
 if __name__ == '__main__':
     unittest.main()
