@@ -13,7 +13,6 @@ from Track_Resources.PLC import *
 from Main_UI import *
 from CONSTANTS import *
 
-
 class MainBackend(QObject):
     def __init__(self):
         super().__init__()
@@ -21,7 +20,6 @@ class MainBackend(QObject):
                                       constants.START_HOUR, constants.START_MIN, constants.START_SEC)
         self.system_timer = QTimer()
         self.system_timer.timeout.connect(self.timerHandler)
-        signals.stop_timer.connect(self.stopTimer)
         signals.pause_timer.connect(self.pauseTimer)
         signals.resume_timer.connect(self.resumeTimer)
         self.system_timer.start(constants.INTERVAL)
@@ -37,16 +35,19 @@ class MainBackend(QObject):
         self.plc_instance = PLC()
         self.track_instance = Track()
         signals.sw_wayside_backend_update.connect(self.sw_wayside_backend_update)
-        signals.admin_update.connect(self.admin_update)
 
         # Track Model Instances
         self.track_model_backend_instance = TrackModelModule()     
         signals.track_model_backend_update.connect(self.track_model_backend_update)
         
+        # Admin Instances
+        signals.admin_update.connect(self.admin_update)
 
+        # Main Instances
         self.menu_instance = Mainmenu()
         self.menu_instance.show()
 
+    # Sends updates to modules each clock cycle
     def timerHandler(self):
         self.current_time = self.current_time.addMSecs(int(constants.TIME_DELTA))
         signals.current_system_time.emit(self.current_time)  # Y:M:D:h:m:s
@@ -58,53 +59,48 @@ class MainBackend(QObject):
         signals.trainModel_backend_update.emit()
         signals.train_controller_update_backend.emit()
 
-    def stopTimer(self):
-        self.system_timer.stop()
-        
+    # Pauses system time
     def pauseTimer(self):
         self.system_timer.stop()
         
+    # Resumes system time
     def resumeTimer(self):
         self.system_timer.start()
 
-    # Handler for uppdate from CTC Office
+    # Handles update from CTC Office
     def ctc_office_backend_update(self, updated_track, updated_active_trains, updated_ticket_sales):
         self.update_track_instance(updated_track)
         self.update_active_trains(updated_active_trains)
         self.update_ticket_sales(updated_ticket_sales)
 
-    # Handler for update from SW Wayside
+    # Handles update from SW Wayside
     def sw_wayside_backend_update(self, updated_track, updated_active_trains):
         self.update_active_trains(updated_active_trains)
         self.update_track_instance(updated_track)
 
-    # Handler for update from SW Wayside
+    # Handles update from track model
+    def track_model_backend_update(self, updated_track, updated_active_trains=None):
+        self.update_track_instance(updated_track)
+        if (updated_active_trains is not None):
+            self.update_active_trains(updated_active_trains)
+
+    # Handles update from SW Wayside
     def admin_update(self, updated_track, updated_active_trains, updated_ticket_sales):
         self.update_active_trains(updated_active_trains)
         self.update_track_instance(updated_track)
         self.update_ticket_sales(updated_ticket_sales)
         
-    # Track instance updater
+    # Updates track instance
     def update_track_instance(self, updated_track):
         self.track_instance = updated_track
 
-    # Active trains instance updater
+    # Updates active trains instance
     def update_active_trains(self, updated_active_trains):
         self.active_trains_instance = updated_active_trains
 
-    # Handler for update from track model
-    def track_model_backend_update(self, updated_track, updated_active_trains=None):
-        self.update_track_instance(updated_track)
-        if (updated_active_trains is not None):
-            self.update_active_trains(updated_active_trains)
-        
+    # Updates ticket sales instance
     def update_ticket_sales(self, updated_ticket_sales):
         self.ticket_sales_instance = updated_ticket_sales
-
-
-    def updateMainMenu(self):
-        pass
-
 
 if __name__ == '__main__':
     app = QApplication([])
