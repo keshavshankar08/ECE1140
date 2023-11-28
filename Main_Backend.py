@@ -16,12 +16,14 @@ from CONSTANTS import *
 class MainBackend(QObject):
     def __init__(self):
         super().__init__()
-        self.current_time = QDateTime(constants.START_YEAR, constants.START_MONTH, constants.START_DAY, 
+        self.current_time = QDateTime(constants.START_YEAR, constants.START_MONTH, constants.START_DAY,
                                       constants.START_HOUR, constants.START_MIN, constants.START_SEC)
         self.system_timer = QTimer()
         self.system_timer.timeout.connect(self.timerHandler)
+        signals.pause_timer.connect(self.pauseTimer)
+        signals.resume_timer.connect(self.resumeTimer)
         self.system_timer.start(constants.INTERVAL)
-        
+
         # CTC Office Instances
         self.ctc_office_backend_instance = CTCBackend()
         self.active_trains_instance = ActiveTrains()
@@ -35,12 +37,12 @@ class MainBackend(QObject):
         signals.sw_wayside_backend_update.connect(self.sw_wayside_backend_update)
 
         # Track Model Instances
-        self.track_model_backend_instance = TrackModelModule() 
-        signals.track_model_backend_update.connect(self.update_track_instance)
-
+        self.track_model_backend_instance = TrackModelModule()     
+        signals.track_model_backend_update.connect(self.track_model_backend_update)
+        
         # Admin Instances
         signals.admin_update.connect(self.admin_update)
-        
+
         # Main Instances
         self.menu_instance = Mainmenu()
         self.menu_instance.show()
@@ -48,22 +50,29 @@ class MainBackend(QObject):
     # Sends updates to modules each clock cycle
     def timerHandler(self):
         self.current_time = self.current_time.addMSecs(int(constants.TIME_DELTA))
-        signals.current_system_time.emit(self.current_time) #Y:M:D:h:m:s
-        signals.ctc_office_update_backend.emit(self.track_instance, 
-                                               self.active_trains_instance, self.ticket_sales_instance)
+        signals.current_system_time.emit(self.current_time)  # Y:M:D:h:m:s
+        signals.ctc_office_update_backend.emit(self.track_instance, self.active_trains_instance,
+                                               self.ticket_sales_instance)
         signals.sw_wayside_update_backend.emit(self.track_instance, self.active_trains_instance)
+        signals.track_model_update_backend.emit(self.track_instance, self.active_trains_instance)
+        signals.update_admin.emit(self.track_instance, self.active_trains_instance)
         signals.trainModel_backend_update.emit()
         signals.train_controller_update_backend.emit()
 
-    def stopTimer(self):
+    # Pauses system time
+    def pauseTimer(self):
         self.system_timer.stop()
+        
+    # Resumes system time
+    def resumeTimer(self):
+        self.system_timer.start()
 
-    #Handler for uppdate from CTC Office
+    # Handles update from CTC Office
     def ctc_office_backend_update(self, updated_track, updated_active_trains, updated_ticket_sales):
         self.update_track_instance(updated_track)
         self.update_active_trains(updated_active_trains)
         self.update_ticket_sales(updated_ticket_sales)
-        
+
     # Handles update from SW Wayside
     def sw_wayside_backend_update(self, updated_track, updated_active_trains):
         self.update_active_trains(updated_active_trains)
@@ -86,22 +95,17 @@ class MainBackend(QObject):
         self.track_instance = updated_track
 
     # Updates active trains instance
-    # Active trains instance updater
     def update_active_trains(self, updated_active_trains):
         self.active_trains_instance = updated_active_trains
 
     # Updates ticket sales instance
     def update_ticket_sales(self, updated_ticket_sales):
-         self.ticket_sales_instance = updated_ticket_sales
-
-    def updateMainMenu(self):
-        pass
+        self.ticket_sales_instance = updated_ticket_sales
 
 if __name__ == '__main__':
-        app = QApplication([])
-        thread = QThread() 
-        backend = MainBackend()
-        backend.moveToThread(thread) 
-        thread.start()
-        sys.exit(app.exec())
-
+    app = QApplication([])
+    thread = QThread()
+    backend = MainBackend()
+    backend.moveToThread(thread)
+    thread.start()
+    sys.exit(app.exec())
