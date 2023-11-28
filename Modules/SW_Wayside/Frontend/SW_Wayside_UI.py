@@ -224,8 +224,10 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
                 image_viewer = {'linux':'xdg-open',
                                   'win32':'explorer',
                                   'darwin':'open'}[sys.platform]
-                if(curr_line_int == 1):
-                        subprocess.Popen([image_viewer, "Modules/SW_Wayside/Frontend/GreenLineMap.png"])
+                if(curr_line_int == 0):
+                        subprocess.Popen([image_viewer, "Modules/SW_Wayside/Frontend/red_line_map.png"])
+                elif(curr_line_int == 1):
+                        subprocess.Popen([image_viewer, "Modules/SW_Wayside/Frontend/green_line_map.png"])
 
         # Handles upload plc program button clicked
         def uploadPLCClicked(self):

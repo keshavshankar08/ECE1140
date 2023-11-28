@@ -45,16 +45,17 @@ class PLC():
 
     # Update PLC program for a wayside controller on a line
     def update_plc_program(self, file_name, line_number, wayside_number):
-        if(line_number == 0):
-            if(wayside_number == 1):
-                self.red_line_wayside1_token_list = self.tokenizer(file_name)
-            elif(wayside_number == 2):
-                self.red_line_wayside2_token_list = self.tokenizer(file_name)
-        elif(line_number == 1):
-            if(wayside_number == 1):
-                self.green_line_wayside1_token_list = self.tokenizer(file_name)
-            elif(wayside_number == 2):
-                self.green_line_wayside2_token_list = self.tokenizer(file_name)
+        if(file_name != ""):
+            if(line_number == 0):
+                if(wayside_number == 1):
+                    self.red_line_wayside1_token_list = self.tokenizer(file_name)
+                elif(wayside_number == 2):
+                    self.red_line_wayside2_token_list = self.tokenizer(file_name)
+            elif(line_number == 1):
+                if(wayside_number == 1):
+                    self.green_line_wayside1_token_list = self.tokenizer(file_name)
+                elif(wayside_number == 2):
+                    self.green_line_wayside2_token_list = self.tokenizer(file_name)
 
     # Converts PLC program to a list of tokens
     def tokenizer(self, file_name):

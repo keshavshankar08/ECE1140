@@ -13,14 +13,12 @@ from Track_Resources.PLC import *
 from Main_UI import *
 from CONSTANTS import *
 
-
 class MainBackend(QObject):
     def __init__(self):
         super().__init__()
         self.current_time = QDateTime(constants.START_YEAR, constants.START_MONTH, constants.START_DAY, constants.START_HOUR, constants.START_MIN, constants.START_SEC)
         self.system_timer = QTimer()
         self.system_timer.timeout.connect(self.timerHandler)
-        signals.stop_timer.connect(self.stopTimer)
         self.system_timer.start(constants.INTERVAL)
         
         # CTC Office Instances
@@ -39,10 +37,14 @@ class MainBackend(QObject):
         self.track_model_backend_instance = TrackModelModule()     
         self.track_instance = Track()
         signals.track_model_backend_update.connect(self.update_track_instance)
+        # Admin Instances
+        signals.admin_update.connect(self.admin_update)
         
+        # Main Instances
         self.menu_instance = Mainmenu()
         self.menu_instance.show()
 
+    # Sends updates to modules each clock cycle
     def timerHandler(self):
         self.current_time = self.current_time.addMSecs(int(constants.TIME_DELTA))
         signals.current_system_time.emit(self.current_time) #Y:M:D:h:m:s
@@ -60,14 +62,33 @@ class MainBackend(QObject):
         self.update_active_trains(updated_active_trains)
         self.update_ticket_sales(updated_ticket_sales)
         
-    # Handler for update from SW Wayside
+    # Handles update from SW Wayside
     def sw_wayside_backend_update(self, updated_track, updated_active_trains):
         self.update_active_trains(updated_active_trains)
         self.update_track_instance(updated_track)
 
+    # Handles update from track model
+    def track_model_backend_update(self, updated_track, updated_active_trains=None):
+        self.update_track_instance(updated_track)
+        if (updated_active_trains is not None):
+            self.update_active_trains(updated_active_trains)
+
+    # Handles update from SW Wayside
+    def admin_update(self, updated_track, updated_active_trains, updated_ticket_sales):
+        self.update_active_trains(updated_active_trains)
+        self.update_track_instance(updated_track)
+        self.update_ticket_sales(updated_ticket_sales)
+        
+    # Updates track instance
+    def update_track_instance(self, updated_track):
+        self.track_instance = updated_track
+
+    # Updates active trains instance
     # Active trains instance updater
     def update_active_trains(self, updated_active_trains):
         self.active_trains_instance = updated_active_trains
+
+    # Updates ticket sales instance
 
     def update_ticket_sales(self, updated_ticket_sales):
          self.ticket_sales_instance = updated_ticket_sales
