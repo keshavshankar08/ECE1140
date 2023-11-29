@@ -44,7 +44,8 @@ class Train(QObject):
         signals.train_controller_right_door_closed.connect(self.closeRightDoors)
         signals.train_controller_left_door_open.connect(self.openLeftDoors)
         signals.train_controller_right_door_open.connect(self.openRightDoors)
-        signals.train_controller_service_brake.connect(self.serviceBrakeReceive)
+        signals.train_controller_service_brake_on.connect(self.onServiceBrake)
+        signals.train_controller_service_brake_off.connect(self.offServiceBrake)
         signals.train_controller_temperature_value.connect(self.receiveTemperature)
         # Track Model
         signals.track_model_speed_limit.connect(self.receiveSpeedLimit)
@@ -192,11 +193,11 @@ class Train(QObject):
     def offEmergencyBrake(self, value):
         self.emergencyBrake = False
 
-    def serviceBrakeReceive(self, value):
-        if (value == 1):
-            self.serviceBrake = True
-        else:
-            self.serviceBrake = False
+    def onServiceBrake(self, value):
+        self.serviceBrake = True
+
+    def offServiceBrake(self, value):
+        self.serviceBrake = False
 
     def onInteriorLights(self):
         self.interiorLight = True
