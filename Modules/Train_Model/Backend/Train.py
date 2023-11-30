@@ -53,6 +53,7 @@ class Train(QObject):
         signals.track_model_track_circuit_polarity.connect(self.receivePolarity)
         signals.track_model_beacon.connect(self.receiveBeacon)
         signals.track_model_suggested_speed.connect(self.receiveSuggestedSpeed)
+        signals.track_model_block_grade.connect(self.receiveGradient)
         signals.current_system_time.connect(self.setCurrentTime)
         #### Train ID
         self.train_id = 0
@@ -252,6 +253,9 @@ class Train(QObject):
     def receivePassengers(self, value):
         self.numPassengers += value
         self.mass += ((self.numPassengers) * 70) # average human weighs 70 kg.
+        
+    def receiveGradient(self, value):
+        self.currentGradient = value
 
 train = Train()
 
