@@ -1,5 +1,3 @@
-#Frontend Implementation for CTC Office
-
 from PyQt6 import QtCore, QtGui, QtWidgets, uic
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import QTimer
@@ -16,165 +14,178 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         super().__init__()
         uic.loadUi("Modules/Train_Controller/Frontend/TrainControllerUI.ui", self)
         self.trainController = trainController()
-        signals.train_controller_update_backend.connect(self.timerHandler)
+        signals.train_controller_update_backend.connect(self.update_UI)
         
-        self.automaticButton.clicked.connect(self.automaticButtonClicked)
-        self.manualButton.clicked.connect(self.manaulButtonClicked)
-        self.intLightOn.clicked.connect(self.intLightsOn)
-        self.intLightOff.clicked.connect(self.intLightsOff)
-        self.extLightOn.clicked.connect(self.extLightsOn)
-        self.extLightOff.clicked.connect(self.extLightsOff)
-        self.rightDoorClosed.clicked.connect(self.rDoorsClosed)
-        self.rightDoorOpen.clicked.connect(self.rDoorsOpen)
-        self.leftDoorClosed.clicked.connect(self.lDoorsClosed)
-        self.leftDoorOpen.clicked.connect(self.lDoorsOpen)
-        self.KPVal.valueChanged.connect(self.displayKP)
-        self.KIVal.valueChanged.connect(self.displayKI)
-        
-        '''
-        #Bower
-        signals.train_controller_send_power_command.connect(self.updatePower)
-        #Temperature
-        signals.train_controller_temperature_value.connect(self.updateTemp)
-        #Braking
-        signals.train_controller_service_brake.connect(self.updateServiceBrake)
-        signals.train_controller_emergency_brake_on.connect(self.eBrakeOn)
-        signals.train_controller_emergency_brake_off.connect(self.eBrakeOff)
-        '''
-        self.emergencyBrake.valueChanged.connect(self.eBrake)
-        self.serviceBrake.valueChanged.connect(self.sBrake)
-        self.driverThrottle.valueChanged.connect(self.receiveDriverThrottle)
+        #initialize Values
+        self.com_power_val.setText(format(0, '.0f'))
+        self.authority_val.setText(format(0, '.0f'))
+        self.cur_speed_val.setText(format(0, '.0f'))
+        self.com_speed_val.setText(format(0, '.0f'))
+        self.KI_val.setEnabled(False)
+        self.KP_val.setEnabled(False)
+        self.password_val.setPlaceholderText("Enter password")
+
+        #connect functions
+        self.automatic_button.clicked.connect(self.automatic_button_clicked)
+        self.manual_button.clicked.connect(self.manaul_button_clicked)
+        self.int_light_on.clicked.connect(self.int_lights_on)
+        self.int_light_off.clicked.connect(self.int_lights_off)
+        self.ext_light_on.clicked.connect(self.ext_lights_on)
+        self.ext_light_off.clicked.connect(self.ext_lights_off)
+        self.right_door_closed.clicked.connect(self.r_doors_closed)
+        self.right_door_open.clicked.connect(self.r_doors_open)
+        self.left_door_closed.clicked.connect(self.l_doors_closed)
+        self.left_door_open.clicked.connect(self.l_doors_open)
+        self.KP_val.valueChanged.connect(self.display_KP)
+        self.KI_val.valueChanged.connect(self.display_KI)
+        self.temp_val.valueChanged.connect(self.update_temp)
+        self.emergency_brake.valueChanged.connect(self.e_brake)
+        self.service_brake.valueChanged.connect(self.s_brake)
+        self.driver_throttle.valueChanged.connect(self.receive_driver_throttle)
+        self.password_val.textChanged.connect(self.checkPassword)
     
-    def timerHandler(self):
-        self.comPowerVal.setText(format(self.trainController.commandedPower, '.2f'))
-        self.authorityVal.setText(format(self.trainController.authority, '.2f'))
-        self.curSpeedVal.setText(format(self.trainController.currentSpeed, '.2f'))
+    def update_UI(self):
+        self.com_power_val.setText(format(self.trainController.commanded_power, '.2f'))
+        self.authority_val.setText(format(self.trainController.authority, '.2f'))
+        self.cur_speed_val.setText(format(self.trainController.current_speed, '.2f'))
 
-        if (self.trainController.emergencyBrake):
-            self.emergencyBrake.setValue(1)
+        if self.trainController.emergency_brake:
+            self.emergency_brake.setValue(1)
         else:
-            self.emergencyBrake.setValue(0)
+            self.emergency_brake.setValue(0)
 
-        if (self.trainController.serviceBrake):
-            self.serviceBrake.setValue(1)
+        if self.trainController.service_brake:
+            self.service_brake.setValue(1)
         else:
-            self.serviceBrake.setValue(0)
+            self.service_brake.setValue(0)
         
-        self.KPVal.setValue(self.trainController.KP)
-        self.KIVal.setValue(self.trainController.KI)
-        self.tempVal.textFromValue(self.trainController.trainTemp)
+        self.KP_val.setValue(self.trainController.KP)
+        self.KI_val.setValue(self.trainController.KI)
+        self.temp_val.setValue(self.trainController.train_temp)
+
+        if self.trainController.engine_fail:
+            self.engine_failure.setChecked(True)
+        else:
+            self.engine_failure.setChecked(False)
+
+        if self.trainController.brake_fail:
+            self.brake_failure.setChecked(True)
+        else:
+            self.brake_failure.setChecked(False)
+
+        if self.trainController.signal_fail:
+            self.signal_failure.setChecked(True)
+        else:
+            self.signal_failure.setChecked(False)
 
     #function for automatic mode
-    def automaticButtonClicked(self):
-        self.automaticButton.setStyleSheet("background-color: rgb(199, 199, 199)")
-        self.manualButton.setStyleSheet("background-color: rgb(255, 255, 255)")
+    def automatic_button_clicked(self):
+        self.automatic_button.setStyleSheet("background-color: rgb(199, 199, 199)")
+        self.manual_button.setStyleSheet("background-color: rgb(255, 255, 255)")
         
     #function for manual mode
-    def manaulButtonClicked(self):
-        self.automaticButton.setStyleSheet("background-color: rgb(255, 255, 255)")
-        self.manualButton.setStyleSheet("background-color: rgb(199, 199, 199)")    
+    def manaul_button_clicked(self):
+        self.automatic_button.setStyleSheet("background-color: rgb(255, 255, 255)")
+        self.manual_button.setStyleSheet("background-color: rgb(199, 199, 199)")    
 
-    def receiveDriverThrottle(self, value):
-        self.trainController.commandedSpeed = value
-        self.comSpeedVal.setText(str(self.trainController.commandedSpeed))
+    def receive_driver_throttle(self, value):
+        self.trainController.commanded_speed = value
+        self.com_speed_val.setText(str(self.trainController.commanded_speed))
 
     #function for emergency brakes
-    def eBrake(self, value):
-        if (value == 1):
-            self.trainController.emergencyBrakeOn()
+    def e_brake(self, value):
+        if value:
+            self.trainController.emergency_brake = True
         else:
-            self.trainController.emergencyBrakeOff()
+            self.trainController.emergency_brake = False
 
-    def sBrake(self, value):
-        if value == 1:
-            self.trainController.serviceBrakeOn()
+    def s_brake(self, value):
+        if value:
+            self.trainController.service_brake = True
         else:
-            self.trainController.serviceBrakeOff()
+            self.trainController.service_brake = False
 
     #function will display the current speed
-    def displayCurrentSpeed(self, speed):
-        self.trainController.currentSpeed = speed
-        self.curSpeedVal.setText(format(self.trainController.currentSpeed, '.2f'))
+    def display_current_speed(self, speed):
+        self.trainController.current_speed = speed
+        self.cur_speed_val.setText(format(self.trainController.current_speed, '.2f'))
 
     #function will display Kp and Ki
-    def displayKP(self, kp):
+    def display_KP(self, kp):
         self.trainController.KP = kp
-        self.KPVal.setValue(self.trainController.KP)
+        self.KP_val.setValue(self.trainController.KP)
 
-    def displayKI(self, ki):
+    def display_KI(self, ki):
         self.trainController.KI = ki
-        self.KIVal.setValue(self.trainController.KI)
+        self.KI_val.setValue(self.trainController.KI)
 
     #function display power
-    def updatePower(self, power):
-        self.trainController.commandedPower = power
-        self.comPowerVal.setText(str(self.trainController.commandedPower))
+    def update_power(self, power):
+        self.trainController.commanded_power = power
+        self.com_power_val.setText(str(self.trainController.commanded_power))
 
     #function displays authority
-    def updateAuthority(self, authority):
+    def update_authority(self, authority):
         self.trainController.authority = authority
-        self.authorityVal.setText(str(self.trainController.authority))
+        self.authority_val.setText(str(self.trainController.authority))
 
     #function will toggle int lights
-    def intLightsOn(self):
-            self.intLightOn.setStyleSheet("background-color: green;")
-            self.intLightOff.setStyleSheet("background-color: white;")
-            self.trainController.onInteriorLights()
+    def int_lights_on(self):
+            self.int_light_on.setStyleSheet("background-color: green;")
+            self.int_light_off.setStyleSheet("background-color: white;")
+            self.trainController.int_lights = True
 
-    def intLightsOff(self):
-            self.intLightOn.setStyleSheet("background-color: white;")
-            self.intLightOff.setStyleSheet("background-color: green;")
-            self.trainController.offInteriorLights()
+    def int_lights_off(self):
+            self.int_light_on.setStyleSheet("background-color: white;")
+            self.int_light_off.setStyleSheet("background-color: green;")
+            self.trainController.int_lights = False
 
     #function will toggle ext lights
-    def extLightsOn(self):
-        self.extLightOn.setStyleSheet("background-color: green;")
-        self.extLightOff.setStyleSheet("background-color: white;")
-        self.trainController.onExteriorLights()
+    def ext_lights_on(self):
+        self.ext_light_on.setStyleSheet("background-color: green;")
+        self.ext_light_off.setStyleSheet("background-color: white;")
+        self.trainController.ext_lights = True
 
-    def extLightsOff(self):
-        self.extLightOn.setStyleSheet("background-color: white;")
-        self.extLightOff.setStyleSheet("background-color: green;")
-        self.trainController.offExteriorLights()
+    def ext_lights_off(self):
+        self.ext_light_on.setStyleSheet("background-color: white;")
+        self.ext_light_off.setStyleSheet("background-color: green;")
+        self.trainController.ext_lights = False
 
     #function - right doors closed
-    def rDoorsClosed(self):
-        self.rightDoorClosed.setStyleSheet("background-color: green;")
-        self.rightDoorOpen.setStyleSheet("background-color: white;")
-        self.trainController.closeRightDoors()
+    def r_doors_closed(self):
+        self.right_door_closed.setStyleSheet("background-color: green;")
+        self.right_door_open.setStyleSheet("background-color: white;")
+        self.trainController.R_door = True
 
-    def rDoorsOpen(self):
-        self.rightDoorClosed.setStyleSheet("background-color: white;")
-        self.rightDoorOpen.setStyleSheet("background-color: green;")
-        self.trainController.openRightDoors()
+    def r_doors_open(self):
+        self.right_door_closed.setStyleSheet("background-color: white;")
+        self.right_door_open.setStyleSheet("background-color: green;")
+        self.trainController.R_door = False
 
     #function - left doors closed
-    def lDoorsClosed(self):
-        self.leftDoorClosed.setStyleSheet("background-color: green;")
-        self.leftDoorOpen.setStyleSheet("background-color: white;")
-        self.trainController.closeLeftDoors()
+    def l_doors_closed(self):
+        self.left_door_closed.setStyleSheet("background-color: green;")
+        self.left_door_open.setStyleSheet("background-color: white;")
+        self.trainController.L_door = True
 
-    def lDoorsOpen(self):
-        self.leftDoorClosed.setStyleSheet("background-color: white;")
-        self.leftDoorOpen.setStyleSheet("background-color: green;")
-        self.trainController.openLeftDoors()
+    def l_doors_open(self):
+        self.left_door_closed.setStyleSheet("background-color: white;")
+        self.left_door_open.setStyleSheet("background-color: green;")
+        self.trainController.L_door = False
 
     #function updates temp
-    def updateTemp(self, temp):
-        self.trainController.trainTemp = temp
-        self.tempVal.textFromValue(self.trainController.trainTemp)
+    def update_temp(self, temp):
+        self.trainController.train_temp = temp
+        self.temp_val.setValue(temp)
 
-    #function will display engine failure
-    def displayEngineFailure(self, value):
-        self.engineFailure.setChecked(value)
-
-    #function will display brake failure
-    def displayBrakeFailure(self, value):
-        self.brakeFailure.setChecked(value)
-
-    #function will display signal failure
-    def displaySignalFailure(self, value):
-        self.signalFailure.setChecked(value)
+    #function for password
+    def checkPassword(self, text):
+        if (text == "2023"):
+            self.KI_val.setEnabled(True)
+            self.KP_val.setEnabled(True)
+        else:
+            self.KI_val.setEnabled(False)
+            self.KP_val.setEnabled(False)
     
             
 #Main
