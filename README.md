@@ -1,11 +1,12 @@
 # ECE1140
 [ECE 1140](https://catalog.upp.pitt.edu/preview_course_nopop.php?catoid=223&coid=1193695) is a class in the University of Pittsburgh's Electrical and Computer Engineering Department that focus' on systems and project engineering.
 
-1. Description
-2. Collaborators
-3. Licensing
-4. Installation and Setup
-5. Usage and Configuration
+1. [Description](#description)
+2. [Collaborators](#collaborators)
+3. [Licensing](#licensing)
+4. [Installation and Setup](#installation-and-setup)
+5. [Usage and Configuration](#usage-and-configuration)
+6. [Demo](#demo)
 
 ## Description
 Our main project in this class was creating a full-stack train system simulator. The main idea was to apply all systems and project engineering processes to make a emulation of the [Pittsburgh Light Rail](https://en.wikipedia.org/wiki/Pittsburgh_Light_Rail)
@@ -17,8 +18,8 @@ Our main project in this class was creating a full-stack train system simulator.
 | Keshav Shankar | [Keshav](https://github.com/keshavshankar08) | SW Track Controller |
 | Nate Ginck | [Nate](https://github.com/nateginck) | HW Track Controller |
 | Ben Shuttleworth | [Ben](https://github.com/benshuttle28) | Track Model |
-| Alex Ivensky | [Alex](https://github.com/alexivensky) | SW Train Controller |
-| John Deibert | [John](https://github.com/jdeibert17) | Train Model |
+| Alex Ivensky | [Alex](https://github.com/alexivensky) | Train Model |
+| John Deibert | [John](https://github.com/jdeibert17) | SW Train Controller |
 
 ## Licensing
 This section contains licensing information.
