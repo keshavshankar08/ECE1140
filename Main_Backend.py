@@ -6,7 +6,7 @@ from Track_Resources.Track import *
 from Train_Resources.CTC_Train import *
 from Modules.CTC.Backend.CTC_Backend import *
 from Modules.SW_Wayside.Backend.SW_Wayside_Backend import *
-from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
+from Modules.SW_Wayside.Frontend.SW_Wayside_Frontend import *
 from Modules.Track_Model.Backend.Track_Model_Backend import *
 from Modules.Track_Model.Frontend.Track_Model_UI import *
 from Track_Resources.PLC import *
@@ -31,7 +31,7 @@ class MainBackend(QObject):
         signals.ctc_office_backend_update.connect(self.ctc_office_backend_update)
 
         # SW Wayside Instances
-        self.sw_wayside_backend_instance = WaysideBackend()
+        self.sw_wayside_backend_instance = SWWaysideBackend()
         self.plc_instance = PLC()
         self.track_instance = Track()
         signals.sw_wayside_backend_update.connect(self.sw_wayside_backend_update)
