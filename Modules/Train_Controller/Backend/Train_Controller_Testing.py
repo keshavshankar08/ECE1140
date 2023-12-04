@@ -19,6 +19,7 @@ class Testing(unittest.TestCase):
     def testComSpeed(self):
         train1 = trainController()
         train1.update_commanded_speed(20)
+        train1.tc_update_values()
         self.assertEqual(train1.commanded_speed, 20)
 
     def testCurrSpeed(self):

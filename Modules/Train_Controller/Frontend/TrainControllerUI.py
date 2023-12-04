@@ -23,6 +23,11 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         self.com_speed_val.setText(format(0, '.0f'))
         self.KI_val.setEnabled(False)
         self.KP_val.setEnabled(False)
+        self.int_lights_off()
+        self.ext_lights_off()
+        self.r_doors_closed()
+        self.l_doors_closed()
+        self.automatic_button_clicked()
         self.password_val.setPlaceholderText("Enter password")
 
         #connect functions
@@ -82,11 +87,39 @@ class TrainControllerUI(QtWidgets.QMainWindow):
     def automatic_button_clicked(self):
         self.automatic_button.setStyleSheet("background-color: rgb(199, 199, 199)")
         self.manual_button.setStyleSheet("background-color: rgb(255, 255, 255)")
+        self.service_brake.setEnabled(False)
+        self.emergency_brake.setEnabled(False)
+        self.driver_throttle.setEnabled(False)
+        self.ext_light_on.setEnabled(False)
+        self.ext_light_off.setEnabled(False)
+        self.int_light_on.setEnabled(False)
+        self.int_light_off.setEnabled(False)
+        self.right_door_closed.setEnabled(False)
+        self.right_door_open.setEnabled(False)
+        self.left_door_closed.setEnabled(False)
+        self.left_door_open.setEnabled(False)
+        self.temp_val.setEnabled(False)
+        self.trainController.mode = True
+        #QMessageBox.information(self, "Alert", "The Train is in Automatic Mode.")
         
     #function for manual mode
     def manaul_button_clicked(self):
         self.automatic_button.setStyleSheet("background-color: rgb(255, 255, 255)")
-        self.manual_button.setStyleSheet("background-color: rgb(199, 199, 199)")    
+        self.manual_button.setStyleSheet("background-color: rgb(199, 199, 199)")
+        self.service_brake.setEnabled(True)
+        self.emergency_brake.setEnabled(True)
+        self.driver_throttle.setEnabled(True)
+        self.ext_light_on.setEnabled(True)
+        self.ext_light_off.setEnabled(True)
+        self.int_light_on.setEnabled(True)
+        self.int_light_off.setEnabled(True)
+        self.right_door_closed.setEnabled(True)
+        self.right_door_open.setEnabled(True)
+        self.left_door_closed.setEnabled(True)
+        self.left_door_open.setEnabled(True)
+        self.temp_val.setEnabled(True)
+        self.trainController.mode = False
+        QMessageBox.information(self, "Alert", "The Train is in Manual Mode.")
 
     def receive_driver_throttle(self, value):
         self.trainController.commanded_speed = value
