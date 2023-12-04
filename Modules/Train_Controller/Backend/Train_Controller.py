@@ -22,20 +22,20 @@ class trainController():
         self.mode = True
 
         #Door/lightbulb values, True = Closed/on, False = Open/off
-        self.Rdoor = True
-        self.Ldoor = True
-        self.intLights = True
-        self.extLights = True
+        self.R_door = True
+        self.L_door = True
+        self.int_lights = True
+        self.ext_lights = True
         #Temperature
-        self.trainTemp = 70
+        self.train_temp = 70
 
         #speed
-        self.commandedSpeed = 0.0
-        self.currentSpeed = 0.0
-        self.setpointSpeed = 0.0
+        self.commanded_speed = 0.0
+        self.current_speed = 0.0
+        self.suggested_speed = 0.0
 
         #power
-        self.commandedPower = 0
+        self.commanded_power = 0
         self.uk = 0
         self.uk1 = 0
         self.ek = 0
@@ -44,78 +44,81 @@ class trainController():
         #authority and others
         self.authority = 0.0
         self.station = None
-        self.trainID = None
-        self.trainList = []
+        self.train_ID = None
+        self.train_list = []
 
         '''Emergency button AND DA SERVY WERVY BRAKEY WAKEY, True = On, False = Off 
         da SeRvIcE bRaKe is from range 0.0 to 1.0 (no to full brake), btw angry no green comment
         '''
-        self.emergencyBrake = False
+        self.emergency_brake = False
         self.pEBrake = False
-        self.serviceBrake = False
-        self.serviceBrake = False
+        self.service_brake = False
+        self.service_brake = False
 
         #failures
-        self.engineFail = False
-        self.brakeFail = False
-        self.signalFail = False
+        self.engine_fail = False
+        self.brake_fail = False
+        self.signal_fail = False
 
         #previous values
-        self.previousPowerCommand = 0.0
-        self.previousCurrentSpeed = 0.0
+        self.previous_power_command = 0.0
+        self.previous_current_speed = 0.0
 
-        self.speedLimit = 70.0
-        self.current_time = QDateTime(START_YEAR, START_MONTH, START_MONTH, START_DAY, START_HOUR, START_MIN, START_SEC)
-        self.currentTime = QDateTime()
+        self.speed_limit = 70.0
+        self.current_time = QDateTime(START_YEAR, START_MONTH, START_MONTH, START_DAY, 
+                                      START_HOUR, START_MIN, START_SEC)
+        self.current_time = QDateTime()
 
         #Signals
-        signals.trainModel_send_actual_velocity.connect(self.updateCurrentSpeed)
-        signals.trainModel_send_authority.connect(self.updateAuthority)
+        signals.trainModel_send_actual_velocity.connect(self.update_current_speed)
+        signals.trainModel_send_authority.connect(self.update_authority)
         signals.trainModel_send_beacon.connect(self.announceStation)
-        signals.trainModel_send_emergency_brake.connect(self.passengerEBrake)
-        signals.trainModel_send_speed_limit.connect(self.updateSetPointSpeed)
-        signals.trainModel_send_suggested_speed.connect(self.updateCommandedSpeed)
-        signals.trainModel_send_engine_failure.connect(self.engineFailure)
-        signals.trainModel_send_brake_failure.connect(self.brakeFailure)
-        signals.trainModel_send_signal_failure.connect(self.signalFailure)
+        signals.trainModel_send_emergency_brake.connect(self.passenger_EBrake)
+        #signals.trainModel_send_speed_limit.connect(self.update_suggested_speed)
+        signals.trainModel_send_suggested_speed.connect(self.update_suggested_speed)
+        signals.trainModel_send_engine_failure.connect(self.engine_failure)
+        signals.trainModel_send_brake_failure.connect(self.brake_failure)
+        signals.trainModel_send_signal_failure.connect(self.signal_failure)
 
     def updateCurrentTime(self, value):
-        self.currentTime = value
+        self.current_time = value
 
     def setCurrentTime(self, time):
         self.current_time = time
 
     def tc_update_values(self):
-        signals.train_controller_send_power_command.emit(self.commandedPower)
-        signals.train_controller_emergency_brake_status.emit(self.emergencyBrake)
-        signals.train_controller_ext_lights_status.emit(self.extLights)
-        signals.train_controller_int_lights_status.emit(self.intLights)
-        signals.train_controller_left_door_status.emit(self.Ldoor)
-        signals.train_controller_right_door_status.emit(self.Rdoor)
-        signals.train_controller_service_brake_status.emit(self.serviceBrake)
-        signals.train_controller_temperature_value.emit(self.trainTemp)
+        signals.train_controller_send_power_command.emit(self.commanded_power)
+        signals.train_controller_emergency_brake_status.emit(self.emergency_brake)
+        signals.train_controller_service_brake_status.emit(self.service_brake)
+        signals.train_controller_ext_lights_status.emit(self.ext_lights)
+        signals.train_controller_int_lights_status.emit(self.int_lights)
+        signals.train_controller_left_door_status.emit(self.L_door)
+        signals.train_controller_right_door_status.emit(self.R_door)
+        signals.train_controller_temperature_value.emit(self.train_temp)
 
-    #this function will calculate power, uks = m, eks = m/s, speeds = m/s
-    def calculatePower(self):
-        vError = 0
-        if self.mode == True: #autobot mode
-            vError = self.commandedSpeed - self.currentSpeed
-        else: #manual mode
-            vError = self.setpointSpeed - self.currentSpeed
+        #convert to right metrics
+        self.commanded_speed * 0.44704
+        #vError = 0
+        vError = self.commanded_speed - self.current_speed
+        # if self.mode == True: #autobot mode
+        #     vError = self.commanded_speed - self.current_speed
+        # else: #manual mode
+        #     vError = self.suggested_speed - self.current_speed
 
         #set the ek as sample of vError
         self.ek = vError
 
-        if self.commandedPower < MAX_POWER:
+        if self.commanded_power < MAX_POWER:
             self.uk = self.uk1 + TIME_DELTA/2 *(self.ek + self.ek1)
         else: 
             self.uk = self.uk1
         
         #set previous power command
-        self.previousPowerCommand = self.commandedPower
-
-        if self.emergencyBrake == True or self.serviceBrake == True:
-            self.commandedPower = 0
+        self.previous_power_command = self.commanded_power
+        power1 = power2 = power3 = 0
+        
+        if self.emergency_brake == True or self.service_brake == True:
+            self.commanded_power = 0
             self.uk = 0
             self.ek = 0
         else:
@@ -126,112 +129,108 @@ class trainController():
 
         #if any of the powers do not equal one another apply emergency brake
         if (power1 != power2) or (power1 != power3) or (power2 != power3):
-            self.emergencyBrake = True
+            self.emergency_brake = True
         else:
-            self.commandedPower = (self.KP*self.ek) + (self.KI*self.uk)
+            self.commanded_power = (self.KP*self.ek) + (self.KI*self.uk)
 
-        
+        # cut off power at appropriate time
+        if(self.commanded_power > 120000):
+            self.commanded_power = 120000
+        elif(self.commanded_power < -120000):
+            self.commanded_power = -120000
+
         #now we set uk1 to uk and ek1 to ek, since they be past values now homie
         self.uk1 = self.uk
         self.ek1 = self.ek
 
     #this function will set the kp and ki by the engineer
-    def setKP(self, kp):
+    def set_KP(self, kp):
         self.KP = kp
 
-    def setKI(self, ki):
+    def set_KI(self, ki):
         self.KI = ki
 
     #this function updates the setpoint speed
-    def updateSetPointSpeed(self, setPointSpeed):
-        self.setpointSpeed = setPointSpeed
+    def update_suggested_speed(self, value):
+        self.suggested_speed = value
 
     #this function goes through a station stop
-    def trainStationStop(self):
-        while self.currentSpeed != 0:
+    def train_station_stop(self):
+        while self.current_speed != 0:
             pass
             #wait 1 second
 
         #activate service brake to stop moving
-        self.serviceBrake = True
+        #self.service_brake = True
         #toggle lights and doors for a station
 
 
         #wait 1 minute
 
         #deactivate the service brake to start moving again
-        self.serviceBrake = False
+        #self.service_brake = False
         #toggle lights and doors
        
 
     #this function updates the commanded speed
-    def updateCommandedSpeed(self, commandedSpeed):
-        self.commandedSpeed = commandedSpeed
+    def update_commanded_speed(self, value):
+        self.commanded_speed = value
 
-        if self.setpointSpeed > commandedSpeed:
-            self.setpointSpeed = commandedSpeed
 
     #this function updates the current speed
-    def updateCurrentSpeed(self, currSpeed):
-        self.currentSpeed = currSpeed
-
+    def update_current_speed(self, currSpeed):
+        self.previous_current_speed = self.current_speed
+        self.current_speed = currSpeed
+        
         #check for engine failure
-        if self.previousPowerCommand == self.commandedPower and\
-            self.previousCurrentSpeed > self.currentSpeed and\
-            self.engineFail:
+        if self.previous_power_command == self.commanded_power and\
+            self.previous_current_speed > self.current_speed:
 
-            #an engine failure is happening
-            self.engineFail = True
+            self.engine_fail = True
 
     #this function updates the authority
-    def updateAuthority(self, newAuthority):
+    def update_authority(self, newAuthority):
         if newAuthority:
             if self.authority:
-                if self.serviceBrake:
+                if self.service_brake:
                     pass
                 else:
-                    self.serviceBrake = False
-                    #signals.train_controller_service_brake.emit(self.serviceBrake)
+                    self.service_brake = False
+                    
             else:
                 if self.KP == 0 or self.KI == 0:
                     pass
                 else:
                     self.authority = newAuthority
-                    self.serviceBrake = False
-                    #signals.train_controller_service_brake.emit(self.serviceBrake)
+                    self.service_brake = False
         else:
             self.authority = newAuthority
-            self.serviceBrake = True
-            #signals.train_controller_service_brake.emit(self.serviceBrake)
-
+            #self.service_brake = True
+            
     #this function updates the temp
     def updateTempValue(self, temperature):
-        self.trainTemp = temperature
+        self.train_temp = temperature
 
     #this function toggles the service brake 
     def serviceBrakeStatus(self, value):
         if value:
-            self.serviceBrake = True
+            self.service_brake = True
         else:
-            self.serviceBrake = False
-
-    # def serviceBrakeOff(self):
-    #     self.serviceBrake = False
+            self.service_brake = False
 
     #this function report E brake on
     def emergencyBrakeStatus(self, value):
-        if value:
-            self.emergencyBrake = True
+        if value or self.pEBrake == True:
+            self.emergency_brake = True
         else:
-            self.emergencyBrake = False
-
-    # #this function will report e brake off
-    # def emergencyBrakeOff(self):
-    #     self.emergencyBrake = False   
+            self.emergency_brake = False
 
     #this function will report if passenger e brake status
-    def passengerEBrake(self, value):
-        self.emergencyBrake = value
+    def passenger_EBrake(self, value):
+        if value:
+            self.pEBrake = True
+        else:
+            self.pEBrake = False
 
     #this function will toggle modes
     def toggleModes(self):
@@ -239,73 +238,61 @@ class trainController():
 
     def interiorLightsStatus(self, value):
         if value:
-            self.intLights = True #on
+            self.int_lights = True #on
         else:
-            self.intLights = False #off
-
-    # def offInteriorLights(self):
-    #     self.intLights = False
+            self.int_lights = False #off
 
     def exteriorLightsStatus(self, value):
         if value:
-            self.extLights = True
+            self.ext_lights = True
         else:
-            self.extLights = False
-
-    # def offExteriorLights(self):
-    #     self.extLights = False
+            self.ext_lights = False
 
     def leftDoorsStatus(self, value):
         if value:
-            self.Ldoor = True #closed
+            self.L_door = True #closed
         else:
-            self.Ldoor = False #open
-
-    # def closeLeftDoors(self):
-    #     self.Ldoor = True
+            self.L_door = False #open
 
     def rightDoorsStatus(self, value):
         if value:
-            self.Rdoor = True
+            self.R_door = True
         else:
-            self.Rdoor = False
-
-    # def closeRightDoors(self):
-    #     self.Rdoor = True
-
+            self.R_door = False
+            
     #this function is for announcements
     def announceStation(self, beacon):
         self.station = beacon
 
     #this function is for engine failure
-    def engineFailure(self, failure):
-        self.engineFail = failure
+    def engine_failure(self, failure):
+        self.engine_fail = failure
 
-        #activate emergency brake
-        if self.engineFail == True :
-            self.emergencyBrake = True
+        if self.engine_fail:
+            self.emergency_brake = True
+            self.commanded_power = 0
         else:
-            self.emergencyBrake = False
+            self.emergency_brake = False
     
     #this function is for brake failure
-    def brakeFailure(self, failure):
-        self.brakeFail = failure
+    def brake_failure(self, failure):
+        self.brake_fail = failure
 
-        #activate emergency brake
-        if self.brakeFail == True :
-            self.emergencyBrake = True
+        if self.brake_fail:
+            self.emergency_brake = True
+            self.service_brake = False
         else:
-            self.emergencyBrake = False
+            self.emergency_brake = False
     
     #this function is for signal failure
-    def signalFailure(self, failure):
-        self.signalFail = failure
+    def signal_failure(self, failure):
+        self.signal_fail = failure
 
-        #activate emergency brake
-        if self.signalFail == True :
-            self.emergencyBrake = True
+        if self.signal_fail:
+            self.emergency_brake = True
+            #beacon will equal nothing
         else:
-            self.emergencyBrake = False
+            self.emergency_brake = False
 
 
 
