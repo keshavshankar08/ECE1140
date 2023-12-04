@@ -34,18 +34,12 @@ class Train(QObject):
         signals.trainModel_backend_update.connect(self.TrainModelUpdateValues)
         # Train Controller
         signals.train_controller_send_power_command.connect(self.setPowerCommand)
-        # signals.train_controller_emergency_brake_off.connect(self.offEmergencyBrake)
-        # signals.train_controller_emergency_brake_on.connect(self.onEmergencyBrake)
-        # signals.train_controller_ext_lights_off.connect(self.offExteriorLights)
-        # signals.train_controller_ext_lights_on.connect(self.onExteriorLights)
-        # signals.train_controller_int_lights_off.connect(self.offInteriorLights)
-        # signals.train_controller_int_lights_on.connect(self.onInteriorLights)
-        # signals.train_controller_left_door_closed.connect(self.closeLeftDoors)
-        # signals.train_controller_right_door_closed.connect(self.closeRightDoors)
-        # signals.train_controller_left_door_open.connect(self.openLeftDoors)
-        # signals.train_controller_right_door_open.connect(self.openRightDoors)
-        # signals.train_controller_service_brake_on.connect(self.onServiceBrake)
-        # signals.train_controller_service_brake_off.connect(self.offServiceBrake)
+        signals.train_controller_int_lights_status.connect(self.interiorLights)
+        signals.train_controller_ext_lights_status.connect(self.exteriorLights)
+        signals.train_controller_left_door_status.connect(self.leftDoors)
+        signals.train_controller_right_door_status.connect(self.rightDoors)
+        signals.train_controller_service_brake_status.connect(self.sBrake)
+        signals.train_controller_emergency_brake_status.connect(self.eBrake)
         signals.train_controller_temperature_value.connect(self.receiveTemperature)
         # Track Model
         signals.track_model_speed_limit.connect(self.receiveSpeedLimit)
@@ -188,41 +182,23 @@ class Train(QObject):
         signals.trainModel_send_distance_from_block_start.emit(self.distanceFromBlockStart)
         signals.trainModel_send_distance_from_yard.emit(self.distanceFromYard)
 
-    def onEmergencyBrake(self, value):
-        self.emergencyBrake = True
+    def eBrake(self, value):
+        self.emergencyBrake = value
 
-    def offEmergencyBrake(self, value):
-        self.emergencyBrake = False
+    def sBrake(self, value):
+        self.serviceBrake = value
 
-    def onServiceBrake(self, value):
-        self.serviceBrake = True
+    def interiorLights(self, value):
+        self.interiorLight = value
 
-    def offServiceBrake(self, value):
-        self.serviceBrake = False
+    def exteriorLights(self, value):
+        self.exteriorLight = value
 
-    def onInteriorLights(self):
-        self.interiorLight = True
+    def leftDoors(self, value):
+        self.leftDoor = value
 
-    def offInteriorLights(self):
-        self.interiorLight = False
-
-    def onExteriorLights(self):
-        self.exteriorLight = True
-
-    def offExteriorLights(self):
-        self.exteriorLight = False
-
-    def openLeftDoors(self):
-        self.leftDoor = False
-
-    def closeLeftDoors(self):
-        self.leftDoor = True
-
-    def openRightDoors(self):
-        self.rightDoor = False
-
-    def closeRightDoors(self):
-        self.rightDoor = True
+    def rightDoors(self, value):
+        self.rightDoor = value
 
     def receiveTemperature(self, value):
         self.temperatureCommand = value
