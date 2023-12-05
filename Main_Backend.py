@@ -10,7 +10,7 @@ from Modules.SW_Wayside.Frontend.SW_Wayside_Frontend import *
 from Modules.Track_Model.Backend.Track_Model_Backend import *
 from Modules.Track_Model.Frontend.Track_Model_UI import *
 from Track_Resources.PLC import *
-from Main_UI import *
+from Main_Frontend import *
 from CONSTANTS import *
 
 class MainBackend(QObject):
@@ -44,7 +44,7 @@ class MainBackend(QObject):
         signals.admin_update.connect(self.admin_update)
 
         # Main Instances
-        self.menu_instance = Mainmenu()
+        self.menu_instance = MainFrontend()
         self.menu_instance.show()
 
     # Sends updates to modules each clock cycle
