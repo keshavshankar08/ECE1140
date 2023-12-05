@@ -2,9 +2,8 @@ from PyQt6.QtCore import QObject, pyqtSignal, QDateTime
 from Track_Resources.Track import *
 from Train_Resources.CTC_Train import *
 
-
 class signalsList(QObject):
-    #Timer
+    # Timer signals
     current_system_time = pyqtSignal(QDateTime)
     current_system_speed = pyqtSignal(float)
     change_system_speed = pyqtSignal(float)
@@ -12,11 +11,11 @@ class signalsList(QObject):
     pause_timer = pyqtSignal()
     resume_timer = pyqtSignal()
 
-    # ADMIN Signals
+    # ADMIN signals
     update_admin = pyqtSignal(Track, ActiveTrains) # update from main backend to admin
     admin_update = pyqtSignal(Track, ActiveTrains, int) # update from admin to main backend
 
-    #CTC Office Signals
+    # CTC signals
     ctc_office_update_backend = pyqtSignal(Track, ActiveTrains, int) # update from main backend to ctc office backend
     ctc_office_update_frontend = pyqtSignal(Track, ActiveTrains, int) # update from ctc office backend to ctc office frontend
     ctc_office_frontend_update = pyqtSignal(Track, ActiveTrains, int, QueueTrains) # update from ctc office frontend to ctc office backend
@@ -32,21 +31,13 @@ class signalsList(QObject):
     sw_wayside_backend_update = pyqtSignal(Track, ActiveTrains) # update from sw wayside backend to main backend
 
 
-    # HW Wayisde Singnals
+    # HW Wayside signals
     hw_wayside_update_backend = pyqtSignal(Track)
     hw_wayside_update_frontend = pyqtSignal(Track)
     hw_wayside_frontend_update = pyqtSignal(Track)
     hw_wayside_backend_update = pyqtSignal(Track)
-    '''
-    Main Backend    ->  SW Wayside Backend  ->  SW Wayside Frontend
-                                                        |
-                                                        ▼
-                        Main Backend    <-      SW Wayside Backend             
-    '''
     
-
-    
-    # Track Model
+    # Track Model signals
     track_model_update_backend = pyqtSignal(Track,ActiveTrains)
     track_model_backend_update = pyqtSignal(Track)
     track_model_block_occupancy = pyqtSignal(int)
@@ -59,7 +50,7 @@ class signalsList(QObject):
     track_model_block_grade = pyqtSignal(float)
     track_model_beacon = pyqtSignal(str)
     
-    # Train Model Signals
+    # Train Model signals
     trainModel_backend_update = pyqtSignal()
     trainModel_send_actual_velocity = pyqtSignal(float)
     trainModel_send_emergency_brake = pyqtSignal(bool)
@@ -75,8 +66,7 @@ class signalsList(QObject):
     trainModel_send_signal_failure = pyqtSignal(bool)
     trainModel_update_beacon_UI = pyqtSignal(str)
     
-    #Train Controller Signals
-    #signals
+    # Train Controller signals
     # train_controller_update_frontend = pyqtSignal(int, int, int, float, bool, bool, bool, bool, bool, bool, bool)#TC backend to TC frontend
     # train_controller_frontend_update = pyqtSignal(bool,bool,bool,float, float, float) #TC frontend to TC backend
     train_controller_update_backend = pyqtSignal() #main backend to TC backend

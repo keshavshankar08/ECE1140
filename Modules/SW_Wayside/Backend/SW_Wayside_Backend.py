@@ -4,7 +4,7 @@ from signals import signals
 from Track_Resources.Track import *
 from Train_Resources.CTC_Train import *
 
-class WaysideBackend():
+class SWWaysideBackend():
     def __init__(self):
         self.track_instance_copy = Track()
         self.active_trains_instance_copy = ActiveTrains()
