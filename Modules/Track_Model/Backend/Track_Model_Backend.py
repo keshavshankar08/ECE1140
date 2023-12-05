@@ -20,8 +20,9 @@ class TrackModelModule(QtWidgets.QMainWindow):
         # instantiate copy of active trains class object
         self.active_trains_instance_copy = ActiveTrains()
         
-        # member variable to hold selected block 
+        # member variables to hold selected block and selected line
         self.clicked_block = 0
+        self.line_name = None
         
         # member variable to hold occupied block
         self.occupied_block = 0
@@ -223,115 +224,212 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 
     def display_block_info(self):
         block_number = self.clicked_block
-        for data in self.green_line_data:
-            if data[2] == int(block_number):  
-                self.block_number_display.setText(str(data[2]))
-                if data[3] is not None:
-                    self.block_length_display.setText("{:.2f}".format(data[3] * 3.281))
-                self.block_grade_display.setText(str(data[4]))
-                if data[5] is not None:
-                    self.speed_limit_display.setText("{:.2f}".format(data[5] / 1.609))
-                self.traffic_light_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_traffic_light_color_string())
-                if data[6] is not None:
-                    self.infrastructure_display.setText(str(data[6][0:7]))
-                    if str(data[6][0:7]) == 'STATION':
-                        self.station_name_display.setText(str(data[6][9:20]))
-                    if str(data[6][0:6]) == 'SWITCH' or str(data[6]) == 'UNDERGROUND':
+        if self.line_name == 'Green Line':
+            for data in self.green_line_data:
+                if data[2] == int(block_number):  
+                    self.block_number_display.setText(str(data[2]))
+                    if data[3] is not None:
+                        self.block_length_display.setText("{:.2f}".format(data[3] * 3.281))
+                    self.block_grade_display.setText(str(data[4]))
+                    if data[5] is not None:
+                        self.speed_limit_display.setText("{:.2f}".format(data[5] / 1.609))
+                    self.traffic_light_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_traffic_light_color_string())
+                    if data[6] is not None:
+                        self.infrastructure_display.setText(str(data[6][0:7]))
+                        if str(data[6][0:7]) == 'STATION':
+                            self.station_name_display.setText(str(data[6][9:20]))
+                        if str(data[6][0:6]) == 'SWITCH' or str(data[6]) == 'UNDERGROUND':
+                            self.infrastructure_display.setText(str(data[6]))
+                            self.station_name_display.setText('')
+                        if str(data[6][0:20]) == 'UNDERGROUND; STATION':
+                            self.infrastructure_display.setText(str(data[6][0:20]))
+                            self.station_name_display.setText(str(data[6][22:40]))
+                        if str(data[6]) == 'RAILWAY CROSSING':
+                            self.infrastructure_display.setText(str(data[6]))
+                    else:
                         self.infrastructure_display.setText(str(data[6]))
-                        self.station_name_display.setText('')
-                    if str(data[6][0:20]) == 'UNDERGROUND; STATION':
-                        self.infrastructure_display.setText(str(data[6][0:20]))
-                        self.station_name_display.setText(str(data[6][22:40]))
-                    if str(data[6]) == 'RAILWAY CROSSING':
+                        self.station_name_display.setText(str(data[6]))
+                    # TODO display active switch direction (if applicable): get signal from wayside
+                    self.switch_direction_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_switch_direction_string(1))
+                    # TODO display crossing status (if applicable): get signal from wayside
+                    self.crossing_status_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_crossing_status_string()) 
+                    if data[8] is not None and data[9] is not None:
+                        self.elevation_display.setText("{:.2f}".format(data[8] * 3.281))
+                        self.cum_elevation_display.setText("{:.2f}".format(data[9] * 3.281))
+                    # TODO display beacon data (if applicable)
+                    # TODO display track heater status
+                    # TODO display train info (only if block is occupied)
+                    if block_number == self.occupied_block:
+                        self.train_ID_display.setText(str(self.active_trains_instance_copy.Train[0].train_ID))
+                        self.direction_of_travel_display.setText('Traveling South')
+                        self.authority_display.setText((self.active_trains_instance_copy.Train[0].current_authority) * (3.281 * (73-self.occupied_block)))
+                        self.current_speed_display.setText(str(self.active_trains_instance_copy.Train[0].current_suggested_speed))
+                    # TODO display remainder of station info (tickets sold, passengers boarding and disembarking)
+                    
+        if self.line_name == 'Red Line':
+            for data in self.red_line_data:
+                if data[2] == int(block_number):  
+                    self.block_number_display.setText(str(data[2]))
+                    if data[3] is not None:
+                        self.block_length_display.setText("{:.2f}".format(data[3] * 3.281))
+                    self.block_grade_display.setText(str(data[4]))
+                    if data[5] is not None:
+                        self.speed_limit_display.setText("{:.2f}".format(data[5] / 1.609))
+                    self.traffic_light_display.setText(self.track_instance_copy.lines[0].blocks[int(block_number)].get_traffic_light_color_string())
+                    if data[6] is not None:
+                        self.infrastructure_display.setText(str(data[6][0:7]))
+                        if str(data[6][0:7]) == 'STATION':
+                            self.station_name_display.setText(str(data[6][9:20]))
+                        if str(data[6][0:6]) == 'SWITCH' or str(data[6]) == 'UNDERGROUND':
+                            self.infrastructure_display.setText(str(data[6]))
+                            self.station_name_display.setText('')
+                        if str(data[6][0:20]) == 'UNDERGROUND; STATION':
+                            self.infrastructure_display.setText(str(data[6][0:20]))
+                            self.station_name_display.setText(str(data[6][22:40]))
+                        if str(data[6]) == 'RAILWAY CROSSING':
+                            self.infrastructure_display.setText(str(data[6]))
+                    else:
                         self.infrastructure_display.setText(str(data[6]))
-                else:
-                    self.infrastructure_display.setText(str(data[6]))
-                    self.station_name_display.setText(str(data[6]))
-                # TODO display active switch direction (if applicable): get signal from wayside
-                self.switch_direction_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_switch_direction_string(1))
-                # TODO display crossing status (if applicable): get signal from wayside
-                self.crossing_status_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_crossing_status_string()) 
-                if data[8] is not None and data[9] is not None:
-                    self.elevation_display.setText("{:.2f}".format(data[8] * 3.281))
-                    self.cum_elevation_display.setText("{:.2f}".format(data[9] * 3.281))
-                # TODO display beacon data (if applicable)
-                # TODO display track heater status
-                # TODO display train info (only if block is occupied)
-                if block_number == self.occupied_block:
-                    self.train_ID_display.setText(str(self.active_trains_instance_copy.Train[0].train_ID))
-                    self.direction_of_travel_display.setText('Traveling South')
-                    self.authority_display.setText((self.active_trains_instance_copy.Train[0].current_authority) * (3.281 * (73-self.occupied_block)))
-                    self.current_speed_display.setText(str(self.active_trains_instance_copy.Train[0].current_suggested_speed))
-                # TODO display remainder of station info (tickets sold, passengers boarding and disembarking)
+                        self.station_name_display.setText(str(data[6]))
+                    # TODO display active switch direction (if applicable): get signal from wayside
+                    self.switch_direction_display.setText(self.track_instance_copy.lines[0].blocks[int(block_number)].get_switch_direction_string(1))
+                    # TODO display crossing status (if applicable): get signal from wayside
+                    self.crossing_status_display.setText(self.track_instance_copy.lines[0].blocks[int(block_number)].get_crossing_status_string()) 
+                    if data[8] is not None and data[9] is not None:
+                        self.elevation_display.setText("{:.2f}".format(data[8] * 3.281))
+                        self.cum_elevation_display.setText("{:.2f}".format(data[9] * 3.281))
+                    # TODO display beacon data (if applicable)
+                    # TODO display track heater status
+                    # TODO display train info (only if block is occupied)
+                    if block_number == self.occupied_block:
+                        self.train_ID_display.setText(str(self.active_trains_instance_copy.Train[0].train_ID))
+                        self.direction_of_travel_display.setText('Traveling South')
+                        self.authority_display.setText((self.active_trains_instance_copy.Train[0].current_authority) * (3.281 * (73-self.occupied_block)))
+                        self.current_speed_display.setText(str(self.active_trains_instance_copy.Train[0].current_suggested_speed))
+                    # TODO display remainder of station info (tickets sold, passengers boarding and disembarking)
         
     def build_track_map(self):
-        line_name = self.TrackLineColorValue.currentText()
+        self.graphicsView.scene().clear()
+        self.line_name = self.TrackLineColorValue.currentText()
     
-        if line_name == 'Red Line':
+        if self.line_name == 'Red Line':
             
             # place the yard block and go from there
-            block0 = QtWidgets.QGraphicsRectItem(800,0,40,40)
+            block0 = QtWidgets.QGraphicsRectItem(850,30,20,20)
             block0.setBrush(QtGui.QColor(128,128,128)) # gray color for yard block 
+            block0.setToolTip(str(0))
             self.graphicsView.scene().addItem(block0)
             
             # add label to yard 
             text = QtWidgets.QGraphicsTextItem('Yard')
-            text.setPos(802,40)
+            text.setPos(843,50)
             self.graphicsView.scene().addItem(text)
             
             # use function to keep building map
-            self.add_block_to_map(800,-70,40,'block9','9','right',800,0)
-            self.add_block_to_map(775,-120,40,'block8','8','right',800,-70)
-            self.add_block_to_map(740,-170,40,'block7','7','top',775,-120)
-            self.add_block_to_map(690,-170,40,'block6','6','top',740,-170)
-            self.add_block_to_map(640,-150,40,'block5','5','top',690,-170)
-            self.add_block_to_map(590,-130,40,'block4','4','top',640,-150)
-            self.add_block_to_map(540,-110,40,'block3','3','top',590,-130)
-            self.add_block_to_map(490,-90,40,'block2','2','top',540,-110)
-            self.add_block_to_map(440,-70,40,'block1','1','top',490,-90)
-            self.add_block_to_map(390,-30,40,'block16','16','top',440,-70)
-            self.add_block_to_map(460,-10,40,'block15','15','bottom',390,-30)
-            self.add_block_to_map(520,-12,40,'block14','14','bottom',460,-10)
-            self.add_block_to_map(580,-14,40,'block13','13','bottom',520,-12)
-            self.add_block_to_map(630,-16,40,'block12','12','bottom',580,-14)
-            self.add_block_to_map(680,-20,40,'block11','11','bottom',630,-16)
-            self.add_block_to_map(730,-24,40,'block10','10','bottom',680,-20)
+            self.add_block_to_map(860,-50,20,'block9','9','right',850,30)
+            self.add_block_to_map(820,-30,20,'block10','10','bottom',860,-50)
+            self.add_block_to_map(790,-30,20,'block11','11','bottom',820,-30)
+            self.add_block_to_map(750,-30,20,'block12','12','bottom',790,-30)
+            self.add_block_to_map(710,-30,20,'block13','13','bottom',750,-30)
+            self.add_block_to_map(670,-30,20,'block14','14','bottom',710,-30)
+            self.add_block_to_map(630,-30,20,'block15','15','bottom',670,-30)
+            self.add_block_to_map(590,-30,20,'block16','16','bottom',630,-30)
+            self.add_block_to_map(610,-60,20,'block1','1','top',590,-30)
+            self.add_block_to_map(640,-70,20,'block2','2','top',610,-60)
+            self.add_block_to_map(670,-80,20,'block3','3','top',640,-70)
+            self.add_block_to_map(700,-90,20,'block4','4','top',670,-80)
+            self.add_block_to_map(730,-100,20,'block5','5','top',700,-90)
+            self.add_block_to_map(760,-110,20,'block6','6','top',730,-100)
+            self.add_block_to_map(810,-110,20,'block7','7','top',760,-110)
+            self.add_block_to_map(850,-95,20,'block8','8','right',810,-110)
             
-            # connect blocks 9 and 10
-            line = QtWidgets.QGraphicsLineItem(770,-4,800,-50)
-            line.setPen(QtGui.QColor(255,255,255))
+            # connect blocks 8 and 9
+            line = QtWidgets.QGraphicsLineItem(860,-75,870,-50)
+            line.setPen(QtGui.QColor(255,255,255)) # white color for lines
             self.graphicsView.scene().addItem(line)
             
-            # add more blocks
-            self.add_block_to_map(330,-30,40,'block17','17','top',390,-30)
-            self.add_block_to_map(270,-30,40,'block18','18','top',330,-30)
-            self.add_block_to_map(210,-30,40,'block19','19','top',270,-30)
-            self.add_block_to_map(150,-30,40,'block20','20','top',210,-30)
-            self.add_block_to_map(90,-20,40,'block21','21','top',150,-30)
-            self.add_block_to_map(40,30,40,'block22','22','left',90,-20)
-            self.add_block_to_map(30,80,40,'block23','23','left',40,30)
-            self.add_block_to_map(60,130,40,'block24','24','left',30,80)
-            self.add_block_to_map(105,140,40,'block25','25','top',60,130)
-            self.add_block_to_map(150,150,40,'block26','26','top',105,140)
-            self.add_block_to_map(195,160,40,'block27','27','top',150,150)
-            self.add_block_to_map(240,170,40,'block28','28','top',195,160)
-            self.add_block_to_map(285,180,40,'block29','29','top',240,170)
-            self.add_block_to_map(330,190,40,'block30','30','top',285,180)
-            self.add_block_to_map(375,200,40,'block31','31','top',330,190)
-            self.add_block_to_map(420,210,40,'block32','32','top',375,200)
-            self.add_block_to_map(465,220,40,'block33','33','top',420,210)
-            self.add_block_to_map(510,220,40,'block34','34','top',465,220)
-            self.add_block_to_map(555,220,40,'block35','35','top',510,220)
-            self.add_block_to_map(600,220,40,'block36','36','top',555,220)
-            self.add_block_to_map(645,220,40,'block37','37','top',600,220)
-            self.add_block_to_map(690,220,40,'block38','38','top',645,220)
-            self.add_block_to_map(735,220,40,'block39','39','top',690,220)
-            self.add_block_to_map(780,220,40,'block40','40','top',735,220)
-            self.add_block_to_map(825,220,40,'block41','41','top',780,220)
-            self.add_block_to_map(870,265,40,'block42','42','right',825,220)
-            self.add_block_to_map(915,310,40,'block43','43','right',870,265)
+            # continue building track map 
+            self.add_block_to_map(565,-30,20,'block17','17','top',590,-30)
+            self.add_block_to_map(540,-30,20,'block18','18','top',565,-30)
+            self.add_block_to_map(515,-30,20,'block19','19','top',540,-30)
+            self.add_block_to_map(490,-30,20,'block20','20','top',515,-30)
+            self.add_block_to_map(465,-30,20,'block21','21','top',490,-30)
+            self.add_block_to_map(440,-10,20,'block22','22','top',465,-30)
+            self.add_block_to_map(440,15,20,'block23','23','right',440,-10)
+            self.add_block_to_map(440,40,20,'block24','24','right',440,15)
+            self.add_block_to_map(440,65,20,'block25','25','right',440,40)
+            self.add_block_to_map(440,90,20,'block26','26','right',440,65)
+            self.add_block_to_map(440,115,20,'block27','27','right',440,90)
+            self.add_block_to_map(440,140,20,'block28','28','right',440,115)
+            self.add_block_to_map(440,165,20,'block29','29','right',440,140)
+            self.add_block_to_map(440,190,20,'block30','30','right',440,165)
+            self.add_block_to_map(440,215,20,'block31','31','right',440,190)
+            self.add_block_to_map(440,240,20,'block32','32','right',440,215)
+            self.add_block_to_map(440,265,20,'block33','33','right',440,240)
+            self.add_block_to_map(440,290,20,'block34','34','right',440,265)
+            self.add_block_to_map(440,315,20,'block35','35','right',440,290)
+            self.add_block_to_map(440,340,20,'block36','36','right',440,315)
+            self.add_block_to_map(440,365,20,'block37','37','right',440,340)
+            self.add_block_to_map(440,390,20,'block38','38','right',440,365)
+            self.add_block_to_map(440,415,20,'block39','39','right',440,390)
+            self.add_block_to_map(440,440,20,'block40','40','right',440,415)
+            self.add_block_to_map(440,465,20,'block41','41','right',440,440)
+            self.add_block_to_map(440,490,20,'block42','42','right',440,465)
+            self.add_block_to_map(440,515,20,'block43','43','right',440,490)
+            self.add_block_to_map(440,540,20,'block44','44','right',440,515)
+            self.add_block_to_map(440,565,20,'block45','45','right',440,540)
+            self.add_block_to_map(430,587,20,'block46','46','right',440,565)
+            self.add_block_to_map(415,610,20,'block47','47','right',430,587)
+            self.add_block_to_map(395,633,20,'block48','48','right',415,610)
+            self.add_block_to_map(375,655,20,'block49','49','right',395,633)
+            self.add_block_to_map(345,655,20,'block50','50','bottom',375,655)
+            self.add_block_to_map(315,655,20,'block51','51','bottom',345,655)
+            self.add_block_to_map(285,655,20,'block52','52','bottom',315,655)
+            self.add_block_to_map(255,655,20,'block53','53','bottom',285,655)
+            self.add_block_to_map(225,655,20,'block54','54','bottom',255,655)
+            self.add_block_to_map(185,645,20,'block55','55','bottom',225,655)
+            self.add_block_to_map(155,615,20,'block56','56','left',185,645)
+            self.add_block_to_map(135,590,20,'block57','57','left',155,615)
+            self.add_block_to_map(135,560,20,'block58','58','left',135,590)
+            self.add_block_to_map(145,530,20,'block59','59','left',135,560)
+            self.add_block_to_map(155,500,20,'block60','60','top',145,530)
+            self.add_block_to_map(177,520,20,'block61','61','top',155,500)
+            self.add_block_to_map(199,540,20,'block62','62','top',177,520)
+            self.add_block_to_map(221,560,20,'block63','63','top',199,540)
+            self.add_block_to_map(243,580,20,'block64','64','top',221,560)
+            self.add_block_to_map(265,600,20,'block65','65','top',243,580)
+            self.add_block_to_map(287,620,20,'block66','66','top',265,600)
+
+            # connect blocks 66 and 52
+            line = QtWidgets.QGraphicsLineItem(297,640,295,655)
+            line.setPen(QtGui.QColor(255,255,255)) # white color for lines
+            self.graphicsView.scene().addItem(line)
             
-        elif line_name == 'Green Line':
+            # add side pass 1 (blocks 76 through 72)
+            self.add_block_to_map(410,130,20,'block76','76','top',440,115)
+            self.add_block_to_map(380,145,20,'block75','75','left',410,130)
+            self.add_block_to_map(380,190,20,'block74','74','left',380,145)
+            self.add_block_to_map(380,235,20,'block73','73','left',380,190)
+            self.add_block_to_map(410,250,20,'block72','72','bottom',380,235)
+            
+            # connect blocks 72 and 33
+            line = QtWidgets.QGraphicsLineItem(430,260,440,275)
+            line.setPen(QtGui.QColor(255,255,255)) # white color for lines
+            self.graphicsView.scene().addItem(line)
+            
+            # add side pass 2 (blocks 71 through 67)
+            self.add_block_to_map(410,405,20,'block71','71','top',440,390)
+            self.add_block_to_map(380,420,20,'block70','70','left',410,405)
+            self.add_block_to_map(380,465,20,'block69','69','left',380,420)
+            self.add_block_to_map(380,510,20,'block68','68','left',380,465)
+            self.add_block_to_map(410,525,20,'block67','67','bottom',380,510)
+            
+            # connect blocks 67 and 44
+            line = QtWidgets.QGraphicsLineItem(430,535,440,550)
+            line.setPen(QtGui.QColor(255,255,255)) # white color for lines
+            self.graphicsView.scene().addItem(line)
+
+        elif self.line_name == 'Green Line':
             # place the yard block 
             block0 = QtWidgets.QGraphicsRectItem(900,100,20,20)
             block0.setBrush(QtGui.QColor(128,128,128)) # gray color for yard block 
@@ -532,12 +630,12 @@ class TrackModelModule(QtWidgets.QMainWindow):
             # handle different positions for the block label
             if label_pos == 'top' and y<0:
                 text = QtWidgets.QGraphicsTextItem(block_number_2)
-                text.setPos(x+5,y-(block_size))
+                text.setPos(x,y-(block_size))
                 self.graphicsView.scene().addItem(text)
             
             if label_pos == 'top' and y>=0:
                 text = QtWidgets.QGraphicsTextItem(block_number_2)
-                text.setPos(x-5,y-(block_size))
+                text.setPos(x,y-(block_size))
                 self.graphicsView.scene().addItem(text)
             
             if label_pos == 'right':
@@ -552,12 +650,12 @@ class TrackModelModule(QtWidgets.QMainWindow):
             
             if label_pos == 'bottom' and y<0:
                 text = QtWidgets.QGraphicsTextItem(block_number_2)
-                text.setPos(x-5,y+block_size)
+                text.setPos(x,y+block_size)
                 self.graphicsView.scene().addItem(text)
             
             if label_pos == 'bottom' and y>=0:
                 text = QtWidgets.QGraphicsTextItem(block_number_2)
-                text.setPos(x-5,y+block_size)
+                text.setPos(x,y+block_size)
                 self.graphicsView.scene().addItem(text)
             
             # draw line to connect blocks with handling for different orientations 
@@ -565,22 +663,23 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 return
             
             # vertically aligned (negative)
-            if (abs(prev_x-x)) <= 10 and y<0: 
+            if (abs(prev_x-x)) <= 20 and y<0: 
                 line = QtWidgets.QGraphicsLineItem(prev_x+(block_size/2),prev_y,x+(block_size/2),y+block_size)
                 line.setPen(QtGui.QColor(255,255,255)) # white color for lines
                 self.graphicsView.scene().addItem(line)
                 return
             
             # vertically aligned moving down (positive)
-            if (abs(prev_x-x)) <= 10 and y>=0 and y > prev_y: 
+            if (abs(prev_x-x)) <= 20 and y>=0 and y > prev_y: 
                 line = QtWidgets.QGraphicsLineItem((x+(block_size/2)),y,prev_x+(block_size/2),prev_y+block_size)
                 line.setPen(QtGui.QColor(255,255,255)) # white color for lines
                 self.graphicsView.scene().addItem(line)
+
                 return 
             
             # vertically aligned moving upwards
             if (abs(prev_x-x)) <= 10 and y>=0 and prev_y > y:
-                line = QtWidgets.QGraphicsLineItem(x+(block_size/2),prev_y,prev_x+(block_size/2),y+block_size)
+                line = QtWidgets.QGraphicsLineItem(prev_x+(block_size/2),prev_y,x+(block_size/2),y+block_size)
                 line.setPen(QtGui.QColor(255,255,255)) # white color for lines
                 self.graphicsView.scene().addItem(line)
                 return
