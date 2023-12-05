@@ -310,7 +310,6 @@ class TrackModelModule(QtWidgets.QMainWindow):
         
     def build_track_map(self):
         self.graphicsView.scene().clear()
-        
         self.line_name = self.TrackLineColorValue.currentText()
     
         if self.line_name == 'Red Line':
@@ -349,6 +348,87 @@ class TrackModelModule(QtWidgets.QMainWindow):
             line.setPen(QtGui.QColor(255,255,255)) # white color for lines
             self.graphicsView.scene().addItem(line)
             
+            # continue building track map 
+            self.add_block_to_map(565,-30,20,'block17','17','top',590,-30)
+            self.add_block_to_map(540,-30,20,'block18','18','top',565,-30)
+            self.add_block_to_map(515,-30,20,'block19','19','top',540,-30)
+            self.add_block_to_map(490,-30,20,'block20','20','top',515,-30)
+            self.add_block_to_map(465,-30,20,'block21','21','top',490,-30)
+            self.add_block_to_map(440,-10,20,'block22','22','top',465,-30)
+            self.add_block_to_map(440,15,20,'block23','23','right',440,-10)
+            self.add_block_to_map(440,40,20,'block24','24','right',440,15)
+            self.add_block_to_map(440,65,20,'block25','25','right',440,40)
+            self.add_block_to_map(440,90,20,'block26','26','right',440,65)
+            self.add_block_to_map(440,115,20,'block27','27','right',440,90)
+            self.add_block_to_map(440,140,20,'block28','28','right',440,115)
+            self.add_block_to_map(440,165,20,'block29','29','right',440,140)
+            self.add_block_to_map(440,190,20,'block30','30','right',440,165)
+            self.add_block_to_map(440,215,20,'block31','31','right',440,190)
+            self.add_block_to_map(440,240,20,'block32','32','right',440,215)
+            self.add_block_to_map(440,265,20,'block33','33','right',440,240)
+            self.add_block_to_map(440,290,20,'block34','34','right',440,265)
+            self.add_block_to_map(440,315,20,'block35','35','right',440,290)
+            self.add_block_to_map(440,340,20,'block36','36','right',440,315)
+            self.add_block_to_map(440,365,20,'block37','37','right',440,340)
+            self.add_block_to_map(440,390,20,'block38','38','right',440,365)
+            self.add_block_to_map(440,415,20,'block39','39','right',440,390)
+            self.add_block_to_map(440,440,20,'block40','40','right',440,415)
+            self.add_block_to_map(440,465,20,'block41','41','right',440,440)
+            self.add_block_to_map(440,490,20,'block42','42','right',440,465)
+            self.add_block_to_map(440,515,20,'block43','43','right',440,490)
+            self.add_block_to_map(440,540,20,'block44','44','right',440,515)
+            self.add_block_to_map(440,565,20,'block45','45','right',440,540)
+            self.add_block_to_map(430,587,20,'block46','46','right',440,565)
+            self.add_block_to_map(415,610,20,'block47','47','right',430,587)
+            self.add_block_to_map(395,633,20,'block48','48','right',415,610)
+            self.add_block_to_map(375,655,20,'block49','49','right',395,633)
+            self.add_block_to_map(345,655,20,'block50','50','bottom',375,655)
+            self.add_block_to_map(315,655,20,'block51','51','bottom',345,655)
+            self.add_block_to_map(285,655,20,'block52','52','bottom',315,655)
+            self.add_block_to_map(255,655,20,'block53','53','bottom',285,655)
+            self.add_block_to_map(225,655,20,'block54','54','bottom',255,655)
+            self.add_block_to_map(185,645,20,'block55','55','bottom',225,655)
+            self.add_block_to_map(155,615,20,'block56','56','left',185,645)
+            self.add_block_to_map(135,590,20,'block57','57','left',155,615)
+            self.add_block_to_map(135,560,20,'block58','58','left',135,590)
+            self.add_block_to_map(145,530,20,'block59','59','left',135,560)
+            self.add_block_to_map(155,500,20,'block60','60','top',145,530)
+            self.add_block_to_map(177,520,20,'block61','61','top',155,500)
+            self.add_block_to_map(199,540,20,'block62','62','top',177,520)
+            self.add_block_to_map(221,560,20,'block63','63','top',199,540)
+            self.add_block_to_map(243,580,20,'block64','64','top',221,560)
+            self.add_block_to_map(265,600,20,'block65','65','top',243,580)
+            self.add_block_to_map(287,620,20,'block66','66','top',265,600)
+
+            # connect blocks 66 and 52
+            line = QtWidgets.QGraphicsLineItem(297,640,295,655)
+            line.setPen(QtGui.QColor(255,255,255)) # white color for lines
+            self.graphicsView.scene().addItem(line)
+            
+            # add side pass 1 (blocks 76 through 72)
+            self.add_block_to_map(410,130,20,'block76','76','top',440,115)
+            self.add_block_to_map(380,145,20,'block75','75','left',410,130)
+            self.add_block_to_map(380,190,20,'block74','74','left',380,145)
+            self.add_block_to_map(380,235,20,'block73','73','left',380,190)
+            self.add_block_to_map(410,250,20,'block72','72','bottom',380,235)
+            
+            # connect blocks 72 and 33
+            line = QtWidgets.QGraphicsLineItem(430,260,440,275)
+            line.setPen(QtGui.QColor(255,255,255)) # white color for lines
+            self.graphicsView.scene().addItem(line)
+            
+            # add side pass 2 (blocks 71 through 67)
+            self.add_block_to_map(410,405,20,'block71','71','top',440,390)
+            self.add_block_to_map(380,420,20,'block70','70','left',410,405)
+            self.add_block_to_map(380,465,20,'block69','69','left',380,420)
+            self.add_block_to_map(380,510,20,'block68','68','left',380,465)
+            self.add_block_to_map(410,525,20,'block67','67','bottom',380,510)
+            
+            # connect blocks 67 and 44
+            line = QtWidgets.QGraphicsLineItem(430,535,440,550)
+            line.setPen(QtGui.QColor(255,255,255)) # white color for lines
+            self.graphicsView.scene().addItem(line)
+
         elif self.line_name == 'Green Line':
             # place the yard block 
             block0 = QtWidgets.QGraphicsRectItem(900,100,20,20)
@@ -550,12 +630,12 @@ class TrackModelModule(QtWidgets.QMainWindow):
             # handle different positions for the block label
             if label_pos == 'top' and y<0:
                 text = QtWidgets.QGraphicsTextItem(block_number_2)
-                text.setPos(x+5,y-(block_size))
+                text.setPos(x,y-(block_size))
                 self.graphicsView.scene().addItem(text)
             
             if label_pos == 'top' and y>=0:
                 text = QtWidgets.QGraphicsTextItem(block_number_2)
-                text.setPos(x-5,y-(block_size))
+                text.setPos(x,y-(block_size))
                 self.graphicsView.scene().addItem(text)
             
             if label_pos == 'right':
@@ -570,12 +650,12 @@ class TrackModelModule(QtWidgets.QMainWindow):
             
             if label_pos == 'bottom' and y<0:
                 text = QtWidgets.QGraphicsTextItem(block_number_2)
-                text.setPos(x-5,y+block_size)
+                text.setPos(x,y+block_size)
                 self.graphicsView.scene().addItem(text)
             
             if label_pos == 'bottom' and y>=0:
                 text = QtWidgets.QGraphicsTextItem(block_number_2)
-                text.setPos(x-5,y+block_size)
+                text.setPos(x,y+block_size)
                 self.graphicsView.scene().addItem(text)
             
             # draw line to connect blocks with handling for different orientations 
@@ -590,15 +670,16 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 return
             
             # vertically aligned moving down (positive)
-            if (abs(prev_x-x)) <= 10 and y>=0 and y > prev_y: 
+            if (abs(prev_x-x)) <= 20 and y>=0 and y > prev_y: 
                 line = QtWidgets.QGraphicsLineItem((x+(block_size/2)),y,prev_x+(block_size/2),prev_y+block_size)
                 line.setPen(QtGui.QColor(255,255,255)) # white color for lines
                 self.graphicsView.scene().addItem(line)
+
                 return 
             
             # vertically aligned moving upwards
             if (abs(prev_x-x)) <= 10 and y>=0 and prev_y > y:
-                line = QtWidgets.QGraphicsLineItem(x+(block_size/2),prev_y,prev_x+(block_size/2),y+block_size)
+                line = QtWidgets.QGraphicsLineItem(prev_x+(block_size/2),prev_y,x+(block_size/2),y+block_size)
                 line.setPen(QtGui.QColor(255,255,255)) # white color for lines
                 self.graphicsView.scene().addItem(line)
                 return
