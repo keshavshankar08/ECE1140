@@ -29,7 +29,9 @@ class Train:
 
     def __init__(self, route, line):
         ##TODO Make red and green trains different
-
+        self.current_block = []
+        self.current_direction = -1 # 0 is southbound, 1 is northbound
+        self.current_line = -1
         #set train ID
         self.train_ID = str(next(Train.id_obj))
         while(len(self.train_ID) != 4):

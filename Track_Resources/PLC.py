@@ -29,6 +29,7 @@ class PLC():
         self.update_plc_program(file_name, line_number, wayside_number)
         if(len(self.green_line_wayside1_token_list) != 0 and len(self.green_line_wayside2_token_list) != 0 and len(self.red_line_wayside1_token_list) != 0 and len(self.red_line_wayside2_token_list) != 0):
             self.route_verification()
+            self.execute_plc_program()
         self.send_plc_update()
 
     # Send updates from plc to wayside backend
@@ -263,7 +264,16 @@ class PLC():
     def get_pre_crossing_occupancies(self, line_number):
         CF = CB = False
         if(line_number == 0):
-            pass
+            cross_47 = [[48,49,50,51,52],[46,45,44,43,67,68,42]]
+            for section in cross_47:
+                for blk in section:
+                    if(self.track_instance_copy.lines[1].blocks[blk].block_occupancy):
+                        if(section == 0):
+                            CF = True
+                            break
+                        if(section == 1):
+                            CB = True
+                            break
         elif(line_number == 1):
             cross_19 = [[20,21,22,23,24],[18,17,16,15,14]]
             for section in cross_19:
@@ -276,18 +286,126 @@ class PLC():
                             CB = True
                             break
         return CF, CB
+    
+    # Gets a sections occupancy for a line
+    def get_section_occupancy(self, line_number, section_number):
+        if(line_number == 0):
+            for block in self.track_instance_copy.red_line_sections[section_number]:
+                if(self.track_instance_copy.lines[0].blocks[block].block_occupancy == True):
+                    return True
+            return False
+        if(line_number == 1):
+            for block in self.track_instance_copy.green_line_sections[section_number]:
+                if(self.track_instance_copy.lines[1].blocks[block].block_occupancy == True):
+                    return True
+            return False
+        
+    # Gets the section a block is in
+    def get_section_number(self, line_number, block_number):
+        if(line_number == 0):
+            section_num = 0
+            for section in self.track_instance_copy.red_line_sections:
+                for block in section:
+                    if(block_number == block):
+                        return section_num
+                section_num += 1
+        if(line_number == 1):
+            section_num = 0
+            for section in self.track_instance_copy.green_line_sections:
+                for block in section:
+                    if(block_number == block):
+                        return section_num
+                section_num += 1
 
+    # Gets the new authority depending on what section the train is in
+    def get_authority(self):
+        pass
+    
     # Will verify suggested authority and speed for all trains based on track
     def route_verification(self):
-        # should take in which line
-        # go through every section and check blocks occupied and what direction trains going
-        # do logic on changing authority depending on section occupancies by juncitons
-            # essentially, check surrounding sections of junction. 
-            # check which way loop travel is
-            # check which way 1 width sections travel is
-            # use this to see if trains get get off loop
-            # if not, trains have to get off 1 width section into loop before other trains can get off
-        self.execute_plc_program()
+        for train in self.active_trains_instance_copy.active_trains:
+            if(train.current_line == 0):
+                # get the block status'
+                block_status = []
+                for i in range(len(self.track_instance_copy.red_line_sections)):
+                    block_status.append(self.get_section_occupancy(i, 1))
+
+                # if the train is on 1 block
+                if(len(train.current_block) == 1):
+                    curr_section = self.get_section_number(0, train.current_block[0])
+                    if(curr_section == 0):
+                        if(block_status[1]):
+                            # give authority to end of 0
+                    elif(curr_section == 1):
+                        if(block_status[3] and not train.current_direction):
+                            # give authority to end of 1 south
+                        elif(block_status[0] and train.current_direction):
+                            # give authority to end of 1 north
+                    elif(curr_section == 2):
+                        if(block_status[0] or block_status[1] or block_status[3]):
+                            # give authority to end of 2 south or north
+                    elif(curr_section == 3):
+                        if(block_status[4] or block_status[1] or block_status[2]):
+                            # give authority to end of 3 south or north
+                    elif(curr_section == 4):
+                        if(block_status[6]):
+                            # give authority to end of 4 south 
+                    elif(curr_section == 5):
+                        if(block_status[0] or block_status[1] or block_status[0]):
+                            # give authority to end of 5    
+                    elif(curr_section == 6):
+                        pass    
+                    elif(curr_section == 7):
+                        pass   
+                    elif(curr_section == 8):
+                        pass   
+                    elif(curr_section == 9):
+                        pass   
+                    elif(curr_section == 10):
+                        pass       
+                # if the train is between 2 blocks
+                elif(len(train.current_block) == 2):
+                    self.get_section_number(0, train.current_block[0])
+                    self.get_section_number(0, train.current_block[1])
+            elif(train.current_line == 1):
+                # get the block status'
+                block_status = []
+                for i in range(len(self.track_instance_copy.green_line_sections)):
+                    block_status.append(self.get_section_occupancy(i, 1))
+
+                # if the train is on 1 block
+                if(len(train.current_block) == 1):
+                    curr_section = self.get_section_number(1, train.current_block[0])
+                    if(curr_section == 0):
+                        if(block_status[1]):
+                            # give authority to end of 0
+                    elif(curr_section == 1):
+                        if(block_status[0] or block_status[2]):
+                            # give authority to end of 1 on either side
+                    elif(curr_section == 2):
+                        if(block_status[3] or block_status[4]):
+                            # give authority to end of 2
+                    elif(curr_section == 3):
+                        if(block_status[5]):
+                            # give authority to end of 3 
+                    elif(curr_section == 4):
+                        if(block_status[3] or block_status[5]):
+                            # give authority to end of 4
+                    elif(curr_section == 5):
+                        if(block_status[6]):
+                            # give authority to end of 5    
+                    elif(curr_section == 6):
+                        if(block_status[7] or block_status[8]):
+                            # give authority to end of 6 on either side
+                    elif(curr_section == 7):
+                        if(block_status[6]):
+                            # give authority to end of 7   
+                    elif(curr_section == 8):
+                        if(block_status[1]):
+                            # give authority to end of 8   
+                elif(len(train.current_block) == 2):
+                    self.get_section_number(0, train.current_block[0])
+                    self.get_section_number(0, train.current_block[1])
 
     # Executes PLC program for each wayside controller
     def execute_plc_program(self):
