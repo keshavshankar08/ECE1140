@@ -10,7 +10,7 @@ from Modules.SW_Wayside.Frontend.SW_Wayside_Frontend import *
 from Modules.HW_Wayside.Frontend.HW_Wayside_UI import *
 from Modules.Track_Model.Frontend.Track_Model_UI import *
 from Modules.Train_Model.Frontend.Train_Model import *
-from Modules.Train_Controller.Frontend.TrainControllerUI import *
+from Modules.Train_Controller.Frontend.Train_Controller_UI import *
 from Admin_UI import *
 
 
