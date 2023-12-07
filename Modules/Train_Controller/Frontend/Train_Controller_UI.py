@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtCore import QTimer
 from playsound import playsound
 import sys
+import threading
 sys.path.append(".")
 from signals import *
 from Modules.Train_Controller.Backend.Train_Controller import *
@@ -14,7 +15,7 @@ class TrainControllerUI(QtWidgets.QMainWindow):
     def __init__(self):
         #setup
         super().__init__()
-        uic.loadUi("Modules/Train_Controller/Frontend/TrainControllerUI.ui", self)
+        uic.loadUi("Modules/Train_Controller/Frontend/Train_Controller_UI.ui", self)
         self.trainController = trainController()
         signals.train_controller_update_backend.connect(self.update_UI)
         
@@ -254,9 +255,11 @@ class TrainControllerUI(QtWidgets.QMainWindow):
 
     #function for train horn
     def play_sound(self):
-        sound_file = os.path.abspath('Train Horn.mp3')
-        playsound(sound_file)
-
+        def play_audio():
+            sound_file = os.path.abspath('Train Horn.mp3')
+            playsound(sound_file)
+        audio_thread = threading.Thread(target=play_audio)
+        audio_thread.start()
         
     
             
