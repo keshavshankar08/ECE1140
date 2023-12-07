@@ -29,9 +29,9 @@ class Train:
 
     def __init__(self, route, line):
         ##TODO Make red and green trains different
-        self.current_block = -1
-        self.current_authority_changed = False
-        self.authority_reset_ready = False
+        self.current_block = -1 # the head of the train's current block
+        self.current_authority_changed = False # indicates when authority has been changed by wayside
+        self.authority_reset_ready = False # indicates when ctc should reset trains authority
         self.current_direction = False # false = southbound, true = northbound
         self.current_line = -1 # 0 = red, 1 = green
 
