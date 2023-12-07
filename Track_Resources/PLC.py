@@ -318,55 +318,113 @@ class PLC():
                 section_num += 1
 
     # Gets the new authority depending on what section the train is in
-    def get_authority(self):
-        pass
+    def get_authority(self, line_number, block_number, direction):
+        section_number = self.get_section_number(line_number, block_number)
+        if(line_number == 0):
+            if(not direction):#southbound
+                return abs(block_number - self.track_instance_copy.red_line_sections[section_number][0])
+            elif(direction):#northbound
+                return abs(block_number - self.track_instance_copy.red_line_sections[section_number][-1])
+        elif(line_number == 1):
+            if(not direction):#southbound
+                return abs(block_number - self.track_instance_copy.green_line_sections[section_number][0])
+            elif(direction):#northbound
+                return abs(block_number - self.track_instance_copy.green_line_sections[section_number][-1])
     
     # Will verify suggested authority and speed for all trains based on track
     def route_verification(self):
         for train in self.active_trains_instance_copy.active_trains:
             if(train.current_line == 0):
-                # get the block status'
+                # get all sections' statuses
                 block_status = []
                 for i in range(len(self.track_instance_copy.red_line_sections)):
                     block_status.append(self.get_section_occupancy(i, 1))
 
-                # if the train is on 1 block
-                if(len(train.current_block) == 1):
-                    curr_section = self.get_section_number(0, train.current_block[0])
-                    if(curr_section == 0):
+                curr_section = self.get_section_number(0, train.current_block)
+                # go through and adjust auth to stop train when needed
+                if(curr_section == 0):
+                    if(not train.current_direction):
                         if(block_status[1]):
-                            # give authority to end of 0
-                    elif(curr_section == 1):
-                        if(block_status[3] and not train.current_direction):
-                            # give authority to end of 1 south
-                        elif(block_status[0] and train.current_direction):
-                            # give authority to end of 1 north
-                    elif(curr_section == 2):
-                        if(block_status[0] or block_status[1] or block_status[3]):
-                            # give authority to end of 2 south or north
-                    elif(curr_section == 3):
-                        if(block_status[4] or block_status[1] or block_status[2]):
-                            # give authority to end of 3 south or north
-                    elif(curr_section == 4):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction)
+                    else:
+                        pass
+                elif(curr_section == 1):
+                    if(not train.current_direction):
+                        if(block_status[3]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                    else:
+                        if(block_status[0]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                elif(curr_section == 2):
+                    if(not train.current_direction):
+                        if(block_status[3]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                    else:
+                        if(block_status[1]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                elif(curr_section == 3):
+                    if(not train.current_direction):
+                        if(block_status[4]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                    else:
+                        if(block_status[1]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                elif(curr_section == 4):
+                    if(not train.current_direction):
+                        if(block_status[6] or block_status[8]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                    else:
+                        pass
+                elif(curr_section == 5):
+                    if(not train.current_direction):
+                        pass
+                    else:
+                        if(block_status[3] or block_status[1] or block_status[0] or block_status[2]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                elif(curr_section == 6):
+                    if(not train.current_direction):
+                        if(block_status[7]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                    else:
+                        if(block_status[5]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                elif(curr_section == 7):
+                    if(not train.current_direction):
+                        if(block_status[9] or block_status[10]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                    else:
+                        pass
+                elif(curr_section == 8):
+                    if(not train.current_direction):
+                        pass
+                    else:
                         if(block_status[6]):
-                            # give authority to end of 4 south 
-                    elif(curr_section == 5):
-                        if(block_status[0] or block_status[1] or block_status[0]):
-                            # give authority to end of 5    
-                    elif(curr_section == 6):
-                        pass    
-                    elif(curr_section == 7):
-                        pass   
-                    elif(curr_section == 8):
-                        pass   
-                    elif(curr_section == 9):
-                        pass   
-                    elif(curr_section == 10):
-                        pass       
-                # if the train is between 2 blocks
-                elif(len(train.current_block) == 2):
-                    self.get_section_number(0, train.current_block[0])
-                    self.get_section_number(0, train.current_block[1])
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                elif(curr_section == 9):
+                    if(not train.current_direction):
+                        pass
+                    else:
+                        if(block_status[8]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                elif(curr_section == 10):
+                    if(not train.current_direction):
+                        pass
+                    else:
+                        pass     
             elif(train.current_line == 1):
                 # get the block status'
                 block_status = []
@@ -374,38 +432,66 @@ class PLC():
                     block_status.append(self.get_section_occupancy(i, 1))
 
                 # if the train is on 1 block
-                if(len(train.current_block) == 1):
-                    curr_section = self.get_section_number(1, train.current_block[0])
-                    if(curr_section == 0):
-                        if(block_status[1]):
-                            # give authority to end of 0
-                    elif(curr_section == 1):
-                        if(block_status[0] or block_status[2]):
-                            # give authority to end of 1 on either side
-                    elif(curr_section == 2):
+                curr_section = self.get_section_number(1, train.current_block[0])
+                if(curr_section == 0):
+                    if(not train.current_direction):
+                        pass
+                    else:
+                        pass
+                elif(curr_section == 1):
+                    if(not train.current_direction):
+                        if(block_status[2]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                    else:
+                        pass
+                elif(curr_section == 2):
+                    if(not train.current_direction):
                         if(block_status[3] or block_status[4]):
-                            # give authority to end of 2
-                    elif(curr_section == 3):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                    else:
+                        pass
+                elif(curr_section == 3):
+                    if(not train.current_direction):
+                        if(block_status[4] or block_status[5]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                    else:
+                        pass
+                elif(curr_section == 4):
+                    if(not train.current_direction):
                         if(block_status[5]):
-                            # give authority to end of 3 
-                    elif(curr_section == 4):
-                        if(block_status[3] or block_status[5]):
-                            # give authority to end of 4
-                    elif(curr_section == 5):
-                        if(block_status[6]):
-                            # give authority to end of 5    
-                    elif(curr_section == 6):
-                        if(block_status[7] or block_status[8]):
-                            # give authority to end of 6 on either side
-                    elif(curr_section == 7):
-                        if(block_status[6]):
-                            # give authority to end of 7   
-                    elif(curr_section == 8):
-                        if(block_status[1]):
-                            # give authority to end of 8   
-                elif(len(train.current_block) == 2):
-                    self.get_section_number(0, train.current_block[0])
-                    self.get_section_number(0, train.current_block[1])
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                    else:
+                        pass
+                elif(curr_section == 5):
+                    if(not train.current_direction):
+                        if(block_status[6] or block_status[7]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                    else:
+                        pass   
+                elif(curr_section == 6):
+                    if(not train.current_direction):
+                        pass
+                    else:
+                        if(block_status[8]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                elif(curr_section == 7):
+                    if(not train.current_direction):
+                        pass
+                    else:
+                        pass
+                elif(curr_section == 8):
+                    if(not train.current_direction):
+                        pass
+                    else:
+                        if(block_status[1] or block_status[0]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction)  
 
     # Executes PLC program for each wayside controller
     def execute_plc_program(self):
