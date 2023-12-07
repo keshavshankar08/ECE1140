@@ -1,6 +1,8 @@
+import os
 from PyQt6 import QtCore, QtGui, QtWidgets, uic
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import QTimer
+from playsound import playsound
 import sys
 sys.path.append(".")
 from signals import *
@@ -27,7 +29,7 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         self.ext_lights_off()
         self.r_doors_closed()
         self.l_doors_closed()
-        self.automatic_button_clicked()
+        #self.automatic_button_clicked()
         self.password_val.setPlaceholderText("Enter password")
 
         #connect functions
@@ -48,19 +50,31 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         self.service_brake.valueChanged.connect(self.s_brake)
         self.driver_throttle.valueChanged.connect(self.receive_driver_throttle)
         self.password_val.textChanged.connect(self.checkPassword)
+        self.train_horn.clicked.connect(self.play_sound)
+
+        #for drop down box
+        # self.active_train = None
+        # self.train_selection.addItem("< select train >")
+        # for key, value in trains.items():
+        #     self.train_selection.addItem(f"ID: {key}")
+        #     self.train_selection.setItemData(self.train_selection.count() - 1, value)
     
     def update_UI(self):
         self.com_power_val.setText(format(self.trainController.commanded_power, '.2f'))
-        self.authority_val.setText(format(self.trainController.authority, '.2f'))
-        self.cur_speed_val.setText(format(self.trainController.current_speed, '.2f'))
+        self.authority_val.setText(format(self.trainController.authority*3.28084, '.2f'))
+        self.cur_speed_val.setText(format(self.trainController.current_speed*2.237, '.2f'))
 
         if self.trainController.emergency_brake:
             self.emergency_brake.setValue(1)
+            self.com_speed_val.setText('0')
+            self.driver_throttle.setValue(0)
         else:
             self.emergency_brake.setValue(0)
 
         if self.trainController.service_brake:
             self.service_brake.setValue(1)
+            self.com_speed_val.setText('0')
+            self.driver_throttle.setValue(0)
         else:
             self.service_brake.setValue(0)
         
@@ -68,20 +82,36 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         self.KI_val.setValue(self.trainController.KI)
         self.temp_val.setValue(self.trainController.train_temp)
 
+        #iteration for engine failure along with e brake
         if self.trainController.engine_fail:
             self.engine_failure.setChecked(True)
+            self.trainController.emergency_brake = True
         else:
             self.engine_failure.setChecked(False)
+            if self.trainController.emergency_brake and self.trainController.brake_fail == False and\
+                self.trainController.signal_fail == False and self.trainController.mode == True:
+                self.emergency_brake.setEnabled(True)
 
+        #iteration for brake failure along with e brake
         if self.trainController.brake_fail:
             self.brake_failure.setChecked(True)
+            self.trainController.emergency_brake = True
         else:
             self.brake_failure.setChecked(False)
+            if self.trainController.emergency_brake and self.trainController.engine_fail == False and\
+                self.trainController.signal_fail == False and self.trainController.mode == True:
+                self.emergency_brake.setEnabled(True)
 
+        #iteration for signal failure along with e brake
         if self.trainController.signal_fail:
             self.signal_failure.setChecked(True)
+            self.trainController.emergency_brake = True
         else:
             self.signal_failure.setChecked(False)
+            if self.trainController.emergency_brake and self.trainController.engine_fail == False and\
+                self.trainController.brake_fail == False and self.trainController.mode == True:
+                self.emergency_brake.setEnabled(True)
+
 
     #function for automatic mode
     def automatic_button_clicked(self):
@@ -99,6 +129,7 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         self.left_door_closed.setEnabled(False)
         self.left_door_open.setEnabled(False)
         self.temp_val.setEnabled(False)
+        self.train_horn.setEnabled(False)
         self.trainController.mode = True
         #QMessageBox.information(self, "Alert", "The Train is in Automatic Mode.")
         
@@ -118,6 +149,7 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         self.left_door_closed.setEnabled(True)
         self.left_door_open.setEnabled(True)
         self.temp_val.setEnabled(True)
+        self.train_horn.setEnabled(True)
         self.trainController.mode = False
         QMessageBox.information(self, "Alert", "The Train is in Manual Mode.")
 
@@ -219,6 +251,13 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         else:
             self.KI_val.setEnabled(False)
             self.KP_val.setEnabled(False)
+
+    #function for train horn
+    def play_sound(self):
+        sound_file = os.path.abspath('Train Horn.mp3')
+        playsound(sound_file)
+
+        
     
             
 #Main

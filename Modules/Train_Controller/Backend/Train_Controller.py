@@ -3,7 +3,7 @@ import sys
 from PyQt6.QtCore import QObject, QDateTime, pyqtSignal
 sys.path.append(".")
 from signals import signals
-from CONSTANTS import START_YEAR, START_MONTH, START_DAY, START_HOUR, START_MIN, START_SEC, TIME_DELTA
+from CONSTANTS import constants
 
 #This class represents the train controller
 #This is written by John A Deibert for ECE1140
@@ -13,12 +13,12 @@ MAX_POWER = 120000
 
 class trainController():
     def __init__(self):
-        signals.current_system_time.connect(self.setCurrentTime)
+        signals.current_system_time.connect(self.set_current_time)
         signals.train_controller_update_backend.connect(self.tc_update_values)
 
         #KP and KI values, true = auto, false = manual
-        self.KP = 400
-        self.KI = 20
+        self.KP = 5000
+        self.KI = 2500
         self.mode = True
 
         #Door/lightbulb values, True = Closed/on, False = Open/off
@@ -46,10 +46,9 @@ class trainController():
         self.station = None
         self.train_ID = None
         self.train_list = []
+        self.train_horn = False
 
-        '''Emergency button AND DA SERVY WERVY BRAKEY WAKEY, True = On, False = Off 
-        da SeRvIcE bRaKe is from range 0.0 to 1.0 (no to full brake), btw angry no green comment
-        '''
+        #emergency brakes and service brakes, True = On, False = Off
         self.emergency_brake = False
         self.pEBrake = False
         self.service_brake = False
@@ -65,14 +64,14 @@ class trainController():
         self.previous_current_speed = 0.0
 
         self.speed_limit = 70.0
-        self.current_time = QDateTime(START_YEAR, START_MONTH, START_MONTH, START_DAY, 
-                                      START_HOUR, START_MIN, START_SEC)
+        self.current_time = QDateTime(constants.START_YEAR, constants.START_MONTH, constants.START_MONTH, constants.START_DAY, 
+                                      constants.START_HOUR, constants.START_MIN, constants.START_SEC)
         self.current_time = QDateTime()
 
         #Signals
         signals.trainModel_send_actual_velocity.connect(self.update_current_speed)
         signals.trainModel_send_authority.connect(self.update_authority)
-        signals.trainModel_send_beacon.connect(self.announceStation)
+        signals.trainModel_send_beacon.connect(self.announce_station)
         signals.trainModel_send_emergency_brake.connect(self.passenger_EBrake)
         #signals.trainModel_send_speed_limit.connect(self.update_suggested_speed)
         signals.trainModel_send_suggested_speed.connect(self.update_suggested_speed)
@@ -83,7 +82,7 @@ class trainController():
     def updateCurrentTime(self, value):
         self.current_time = value
 
-    def setCurrentTime(self, time):
+    def set_current_time(self, time):
         self.current_time = time
 
     def tc_update_values(self):
@@ -96,20 +95,17 @@ class trainController():
         signals.train_controller_right_door_status.emit(self.R_door)
         signals.train_controller_temperature_value.emit(self.train_temp)
 
-        #convert to right metrics
-        self.commanded_speed * 0.44704
-        #vError = 0
-        vError = self.commanded_speed - self.current_speed
-        # if self.mode == True: #autobot mode
-        #     vError = self.commanded_speed - self.current_speed
-        # else: #manual mode
-        #     vError = self.suggested_speed - self.current_speed
+        vError = 0
+        if self.mode == True: #auto mode
+            vError = self.suggested_speed - self.current_speed
+        else: #manual mode
+            vError = (self.commanded_speed * 0.44704) - self.current_speed
 
         #set the ek as sample of vError
         self.ek = vError
 
         if self.commanded_power < MAX_POWER:
-            self.uk = self.uk1 + TIME_DELTA/2 *(self.ek + self.ek1)
+            self.uk = self.uk1 + (constants.TIME_DELTA*0.001)/2 *(self.ek - self.ek1)
         else: 
             self.uk = self.uk1
         
@@ -139,7 +135,7 @@ class trainController():
         elif(self.commanded_power < -120000):
             self.commanded_power = -120000
 
-        #now we set uk1 to uk and ek1 to ek, since they be past values now homie
+        #now we set uk1 to uk and ek1 to ek, since they are past values
         self.uk1 = self.uk
         self.ek1 = self.ek
 
@@ -156,37 +152,35 @@ class trainController():
 
     #this function goes through a station stop
     def train_station_stop(self):
-        while self.current_speed != 0:
+        if self.authority == 0:
             pass
-            #wait 1 second
+            #open doors and turn on lights
+            #wait 1 minute
+            #wait = constants.TIME_DELTA*0.001*60
+            #if wait == 0:
+            #close doors and turn off lights 
+            
 
-        #activate service brake to stop moving
-        #self.service_brake = True
-        #toggle lights and doors for a station
+            #activate service brake to stop moving
+            #self.service_brake = True
+            #toggle lights and doors for a station
 
-
-        #wait 1 minute
-
-        #deactivate the service brake to start moving again
-        #self.service_brake = False
-        #toggle lights and doors
-       
-
+            #deactivate the service brake to start moving again
+            #self.service_brake = False
+            #toggle lights and doors
+        
     #this function updates the commanded speed
     def update_commanded_speed(self, value):
         self.commanded_speed = value
 
+        if self.commanded_speed > self.suggested_speed:
+            self.commanded_speed = self.suggested_speed
 
     #this function updates the current speed
     def update_current_speed(self, currSpeed):
         self.previous_current_speed = self.current_speed
         self.current_speed = currSpeed
         
-        #check for engine failure
-        if self.previous_power_command == self.commanded_power and\
-            self.previous_current_speed > self.current_speed:
-
-            self.engine_fail = True
 
     #this function updates the authority
     def update_authority(self, newAuthority):
@@ -208,33 +202,33 @@ class trainController():
             #self.service_brake = True
             
     #this function updates the temp
-    def updateTempValue(self, temperature):
+    def update_temp_value(self, temperature):
         self.train_temp = temperature
 
     #this function toggles the service brake 
-    def serviceBrakeStatus(self, value):
+    def service_brake_status(self, value):
         if value:
             self.service_brake = True
         else:
             self.service_brake = False
 
     #this function report E brake on
-    def emergencyBrakeStatus(self, value):
-        if value or self.pEBrake == True:
+    def emergency_brake_status(self, value):
+        if value == True or self.pEBrake == True:
             self.emergency_brake = True
         else:
             self.emergency_brake = False
 
     #this function will report if passenger e brake status
     def passenger_EBrake(self, value):
-        if value:
-            self.pEBrake = True
-        else:
-            self.pEBrake = False
+        self.pEBrake = value
 
     #this function will toggle modes
-    def toggleModes(self):
-        self.mode = not self.mode
+    def toggle_modes(self, value):
+        if value:
+            self.mode = True
+        else:
+            self.mode = False
 
     def interiorLightsStatus(self, value):
         if value:
@@ -261,38 +255,21 @@ class trainController():
             self.R_door = False
             
     #this function is for announcements
-    def announceStation(self, beacon):
+    def announce_station(self, beacon):
         self.station = beacon
 
     #this function is for engine failure
     def engine_failure(self, failure):
         self.engine_fail = failure
-
-        if self.engine_fail:
-            self.emergency_brake = True
-            self.commanded_power = 0
-        else:
-            self.emergency_brake = False
     
     #this function is for brake failure
     def brake_failure(self, failure):
         self.brake_fail = failure
-
-        if self.brake_fail:
-            self.emergency_brake = True
-            self.service_brake = False
-        else:
-            self.emergency_brake = False
     
     #this function is for signal failure
     def signal_failure(self, failure):
         self.signal_fail = failure
 
-        if self.signal_fail:
-            self.emergency_brake = True
-            #beacon will equal nothing
-        else:
-            self.emergency_brake = False
 
 
 

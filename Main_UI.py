@@ -14,7 +14,7 @@ from Modules.Train_Controller.Frontend.Train_Controller_UI import *
 from Admin_UI import *
 
 
-class MainFrontend(QtWidgets.QMainWindow):
+class Mainmenu(QtWidgets.QMainWindow):
     def __init__(self):
         #setup
         super().__init__()
@@ -103,5 +103,5 @@ class MainFrontend(QtWidgets.QMainWindow):
 #Main
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = MainFrontend()
+    window = Mainmenu()
     app.exec()
