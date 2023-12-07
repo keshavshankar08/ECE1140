@@ -14,7 +14,7 @@ class TrainControllerUI(QtWidgets.QMainWindow):
     def __init__(self):
         #setup
         super().__init__()
-        uic.loadUi("Modules/Train_Controller/Frontend/TrainControllerUI.ui", self)
+        uic.loadUi("Modules/Train_Controller/Frontend/Train_Controller_UI.ui", self)
         self.trainController = trainController()
         signals.train_controller_update_backend.connect(self.update_UI)
         
