@@ -60,6 +60,10 @@ class TrackModelModule(QtWidgets.QMainWindow):
         self.TrackCircuitFailureToggleButton.toggled.connect(self.failure_mode)
         self.BrokenRailToggleButton.toggled.connect(self.failure_mode)
         self.PowerFailureToggleButton.toggled.connect(self.failure_mode)
+        
+        # env temp changed signal 
+        self.track_heater_display.setText("Inactive")
+        self.SetEnvironmentTemperatureInputBox.valueChanged.connect(self.track_heater)
 
         # set up scene for graphics view and set scene size to widget size 
         self.graphicsView.setScene(QtWidgets.QGraphicsScene())
@@ -102,6 +106,12 @@ class TrackModelModule(QtWidgets.QMainWindow):
         # update block occupancies
         self.occupied_block = self.block_occupancy()
         
+        # update traffic lights
+        self.set_light_color()
+        
+        # update crossing statuses
+        self.set_crossing_block()
+        
         # signals to train model
         signals.track_model_block_grade.emit(self.block_grade)
         signals.track_model_beacon.emit(self.station_name)
@@ -116,6 +126,14 @@ class TrackModelModule(QtWidgets.QMainWindow):
         else: 
             self.track_instance_copy.lines[1].blocks[int(self.clicked_block)].track_fault_status = False
     
+    # track heater handler
+    def track_heater(self,value):
+        # activate track heater if 32 degrees or colder
+        if value <= 32 and value is not None:
+            self.track_heater_display.setText("Active")
+        else:
+            self.track_heater_display.setText("Inactive")
+                
     # train model signal slots 
     def receive_train_model_signals(self):
         self.receive_train_length(self.train_length)
@@ -134,7 +152,6 @@ class TrackModelModule(QtWidgets.QMainWindow):
         # Handle the received distance from yard signal
         self.distance_from_yard = distance_yard
 
-        
     # sends updates from track model backend to main backend
     def send_main_backend_update(self):
         signals.track_model_backend_update.emit(self.track_instance_copy)
@@ -175,7 +192,56 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 if str(item.toolTip()) == str(occupied_block-1):
                     item.setBrush(QtGui.QColor(0,128,0))
                     self.track_instance_copy.lines[1].blocks[occupied_block-1].block_occupancy = False
-        
+                
+    def set_crossing_block(self):
+        scene = self.graphicsView.scene()
+        for item in scene.items():
+            if isinstance(item,QtWidgets.QGraphicsRectItem):
+                block_number = int(item.toolTip())
+                 # check if the block has an active crossing status
+                if self.line_name == 'Red Line':
+                    if self.track_instance_copy.lines[0].blocks[block_number].crossing_status:
+                        # make crossing block orange
+                        item.setBrush(QtGui.QColor(255, 165, 0))
+                    else:
+                        # revert back to green
+                        item.setBrush(QtGui.QColor(0, 128, 0))
+                if self.line_name == 'Green Line':
+                    if self.track_instance_copy.lines[1].blocks[block_number].crossing_status:
+                        # make crossing block orange
+                        item.setBrush(QtGui.QColor(255, 165, 0))
+                    else:
+                        # revert back to green
+                        item.setBrush(QtGui.QColor(0, 128, 0))
+
+
+
+    def set_light_color(self):
+        scene = self.graphicsView.scene()
+        for item in scene.items():
+            if isinstance(item, QtWidgets.QGraphicsEllipseItem):
+                # Check if the item is a traffic light (adjust the condition as needed)
+                if item.toolTip().startswith('light'):
+                    block_number = int(item.toolTip().replace('light',''))
+                    if self.line_name == 'Red Line':
+                        light_color = self.track_instance_copy.lines[0].blocks[block_number].traffic_light_color
+                        # change given light to green
+                        if light_color == 1:
+                            item.setBrush(QtGui.QColor(0, 128, 0))
+                        # change given light to red
+                        elif light_color == 0:
+                            item.setBrush(QtGui.QColor(255, 0, 0))
+                    
+                    if self.line_name == 'Green Line':
+                        light_color = self.track_instance_copy.lines[1].blocks[block_number].traffic_light_color
+                        # change given light to green
+                        if light_color == 1:
+                            item.setBrush(QtGui.QColor(0, 128, 0))
+                        # change given light to red
+                        elif light_color == 0:
+                            item.setBrush(QtGui.QColor(255, 0, 0))
+
+                
     def track_layout(self):
         file_filter = 'Excel File (*.xlsx)'
         response, _ = QFileDialog.getOpenFileName(
@@ -249,15 +315,15 @@ class TrackModelModule(QtWidgets.QMainWindow):
                     else:
                         self.infrastructure_display.setText(str(data[6]))
                         self.station_name_display.setText(str(data[6]))
-                    # TODO display active switch direction (if applicable): get signal from wayside
                     self.switch_direction_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_switch_direction_string(1))
-                    # TODO display crossing status (if applicable): get signal from wayside
+                    
+                    # display crossing status in sidebar 
                     self.crossing_status_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_crossing_status_string()) 
+                        
                     if data[8] is not None and data[9] is not None:
                         self.elevation_display.setText("{:.2f}".format(data[8] * 3.281))
                         self.cum_elevation_display.setText("{:.2f}".format(data[9] * 3.281))
                     # TODO display beacon data (if applicable)
-                    # TODO display track heater status
                     # TODO display train info (only if block is occupied)
                     if block_number == self.occupied_block:
                         self.train_ID_display.setText(str(self.active_trains_instance_copy.Train[0].train_ID))
@@ -291,15 +357,17 @@ class TrackModelModule(QtWidgets.QMainWindow):
                     else:
                         self.infrastructure_display.setText(str(data[6]))
                         self.station_name_display.setText(str(data[6]))
-                    # TODO display active switch direction (if applicable): get signal from wayside
-                    self.switch_direction_display.setText(self.track_instance_copy.lines[0].blocks[int(block_number)].get_switch_direction_string(1))
-                    # TODO display crossing status (if applicable): get signal from wayside
+                    
+                    # display active switch direction in sidebar
+                    self.switch_direction_display.setText(self.track_instance_copy.lines[0].blocks[int(block_number)].get_switch_direction_string(0))
+                    
+                    # display crossing status in sidebar
                     self.crossing_status_display.setText(self.track_instance_copy.lines[0].blocks[int(block_number)].get_crossing_status_string()) 
+                    
                     if data[8] is not None and data[9] is not None:
                         self.elevation_display.setText("{:.2f}".format(data[8] * 3.281))
                         self.cum_elevation_display.setText("{:.2f}".format(data[9] * 3.281))
                     # TODO display beacon data (if applicable)
-                    # TODO display track heater status
                     # TODO display train info (only if block is occupied)
                     if block_number == self.occupied_block:
                         self.train_ID_display.setText(str(self.active_trains_instance_copy.Train[0].train_ID))
@@ -428,6 +496,35 @@ class TrackModelModule(QtWidgets.QMainWindow):
             line = QtWidgets.QGraphicsLineItem(430,535,440,550)
             line.setPen(QtGui.QColor(255,255,255)) # white color for lines
             self.graphicsView.scene().addItem(line)
+            
+            # add traffic lights
+            self.add_light_to_map(850,-50,'light9')
+            self.add_light_to_map(820,-40,'light10')
+            self.add_light_to_map(870,40,'light0')
+            
+            self.add_light_to_map(640,-40,'light15')
+            self.add_light_to_map(620,-70,'light1')
+            self.add_light_to_map(585,-10,'light16')
+            
+            self.add_light_to_map(430,110,'light27')
+            self.add_light_to_map(410,150,'light76')
+            self.add_light_to_map(460,157,'light28')
+            
+            self.add_light_to_map(430,385,'light38')
+            self.add_light_to_map(410,425,'light71')
+            self.add_light_to_map(460,432,'light39')
+            
+            self.add_light_to_map(410,240,'light72')
+            self.add_light_to_map(430,240,'light32')
+            self.add_light_to_map(460,282,'light33')
+            
+            self.add_light_to_map(430,515,'light43')
+            self.add_light_to_map(410,515,'light67')
+            self.add_light_to_map(460,558,'light44')
+            
+            self.add_light_to_map(298,645,'light52')
+            self.add_light_to_map(250,675,'light53')
+            self.add_light_to_map(275,620,'light66')
 
         elif self.line_name == 'Green Line':
             # place the yard block 
@@ -620,6 +717,24 @@ class TrackModelModule(QtWidgets.QMainWindow):
             line = QtWidgets.QGraphicsLineItem(900,110,805,110)
             line.setPen(QtGui.QColor(255,255,255))
             self.graphicsView.scene().addItem(line)
+            
+            # add traffic lights 
+            self.add_light_to_map(515,-175,'light1')
+            self.add_light_to_map(475,-185,'light13')
+    
+            self.add_light_to_map(110,-35,'light28')
+            self.add_light_to_map(107,-5,'light150')
+            
+            self.add_light_to_map(888,95,'light0')
+            self.add_light_to_map(785,120,'light57')
+            
+            self.add_light_to_map(870,235,'light62')
+            
+            self.add_light_to_map(710,630,'light76')
+            self.add_light_to_map(645,660,'light77')
+            
+            self.add_light_to_map(260,630,'light85')
+            self.add_light_to_map(230,600,'light100')
 
     def add_block_to_map(self,x,y,block_size,block_number,block_number_2,label_pos,prev_x,prev_y):
             block_number = QtWidgets.QGraphicsRectItem(x,y,block_size,block_size)
@@ -746,7 +861,14 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 line = QtWidgets.QGraphicsLineItem(prev_x+(block_size/2),prev_y,x+(block_size/2),y+block_size)
                 line.setPen(QtGui.QColor(255,255,255))
                 self.graphicsView.scene().addItem(line)
-            
+
+    # function to add traffic lights to map
+    def add_light_to_map(self,x,y,light_number):
+        light_number_2 = light_number
+        light_number = QtWidgets.QGraphicsEllipseItem(x, y, 10, 10)  # (x, y, width, height)
+        light_number.setBrush(QtGui.QColor(255,0,0))  # Set red color by default
+        self.graphicsView.scene().addItem(light_number)
+        light_number.setToolTip(str(light_number_2))
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
