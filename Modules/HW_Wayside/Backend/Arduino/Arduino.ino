@@ -25,21 +25,38 @@ void loop() {
 
   // READ PLC PROGRAM - convert to string
   if (Serial.available() > 0) {
+    // check if read or write
+    char incoming = Serial.read();
+    Serial.write(incoming);
+    Serial.write("\n");
 
+    //display
+    if (incoming == 'D')
+    {
     // read display
-    display();
+      display();
+    }
 
-    //ReadPLC();
+    else if (Serial.read() == 'P')
+    {
+          
+      Serial.write("Expected Arduino PLC");
+    }
 
+    // Print Received
+  }
+}
 
+void Received(){
     Serial.write("Received: ");
     for (int i = 0; i < Data.length(); i++)
     {
       Serial.write(Data[i]);
     }
+
     Serial.write("\n");
-    }
-  }
+}
+
 
 void LCD_setup(){
   lcd.init(); //initialize the lcd
@@ -56,7 +73,8 @@ void display(){
   while (Serial.available() > 0)
     {
       incoming = Serial.read(); // read byte
-      digitalWrite(LED_BUILTIN, HIGH);
+      if (incoming == 'z')
+        return;
 
       if (incoming == '.')
       {

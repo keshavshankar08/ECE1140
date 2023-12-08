@@ -11,6 +11,14 @@ try:
 except: 
         exit
 
+# Test case
+def TestDataReceived(ArduinoInput):
+         # check if there is received data from Arduino
+        if (ArduinoInput == "Received: Junction Unoccupied.Undetected.Inactive.9-0 Red.."):   
+                print("Test Case Passed!")
+        else:
+                print("Test Case Failed!")
+
 # send data to Arduino to display
 def display(data):
         # send data to arduino
@@ -21,8 +29,6 @@ def display(data):
         response = SER.readline().decode('ascii').strip()
         print("Arduino output: \n", response)
 
-        
-
 class HWWaysideFrontend(QtWidgets.QMainWindow):
         def __init__(self):
                 super().__init__()
@@ -32,7 +38,7 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 self.track_instance_copy = Track()
 
                 # receives updates from wayside backend
-                signals.sw_wayside_update_frontend.connect(self.update_frontend)
+                signals.hw_wayside_update_frontend.connect(self.update_frontend)
 
                 # handles override signals for manual inputs
                 self.switch_direction_transmit.clicked.connect(self.manual_switch_toggled)
@@ -51,6 +57,7 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 self.last_switch_state = ""
                 self.last_light_state = ""
                 self.last_crossing_state = ""
+
         
         # Handles all frontend updates
         def update_frontend(self, track_instance):
@@ -62,6 +69,8 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
 
                 # send updated signals to wayside backend
                 self.send_frontend_update()
+
+
 
         # Sends updates from wayside frontend to wayside backend
         def send_frontend_update(self):
@@ -227,7 +236,7 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
 
 
                 # Arduino Display
-                ArduinoString = ""
+                ArduinoString = "D"
                 ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_type_string() + " "
                 ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_occupancy_string() + "."
 
@@ -237,7 +246,7 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_switch_direction_string(curr_line_int) + " "
                 ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_traffic_light_color_string() + "."
 
-                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_crossing_status_string() + "."
+                ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_crossing_status_string() + "z"
                 if (counter == 0):
                         display(ArduinoString)
                         counter += 1

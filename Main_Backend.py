@@ -5,8 +5,6 @@ from signals import signals
 from Track_Resources.Track import *
 from Train_Resources.CTC_Train import *
 from Modules.CTC.Backend.CTC_Backend import *
-from Modules.SW_Wayside.Backend.SW_Wayside_Backend import *
-from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
 from Modules.Track_Model.Backend.Track_Model_Backend import *
 from Modules.Track_Model.Frontend.Track_Model_UI import *
 from Modules.HW_Wayside.Backend.backend import *
@@ -14,7 +12,6 @@ from Modules.HW_Wayside.Frontend.HW_Wayside_UI import *
 from Track_Resources.PLC import *
 from Main_UI import *
 from CONSTANTS import *
-
 
 class MainBackend(QObject):
     def __init__(self):
@@ -36,9 +33,8 @@ class MainBackend(QObject):
 
         # SW Wayside Instances
         self.sw_wayside_backend_instance = WaysideBackend()
-        self.plc_instance = PLC()
         self.track_instance = Track()
-        signals.sw_wayside_backend_update.connect(self.sw_wayside_backend_update)
+        signals.hw_wayside_backend_update.connect(self.hw_wayside_backend_update)
         signals.admin_update.connect(self.admin_update)
 
         # Track Model Instances
@@ -54,7 +50,7 @@ class MainBackend(QObject):
         signals.current_system_time.emit(self.current_time)  # Y:M:D:h:m:s
         signals.ctc_office_update_backend.emit(self.track_instance, self.active_trains_instance,
                                                self.ticket_sales_instance)
-        signals.sw_wayside_update_backend.emit(self.track_instance, self.active_trains_instance)
+        signals.hw_wayside_update_backend.emit(self.track_instance, self.active_trains_instance)
         signals.track_model_update_backend.emit(self.track_instance, self.active_trains_instance)
         signals.update_admin.emit(self.track_instance, self.active_trains_instance)
         signals.trainModel_backend_update.emit()
@@ -76,7 +72,7 @@ class MainBackend(QObject):
         self.update_ticket_sales(updated_ticket_sales)
 
     # Handler for update from SW Wayside
-    def sw_wayside_backend_update(self, updated_track, updated_active_trains):
+    def hw_wayside_backend_update(self, updated_track, updated_active_trains):
         self.update_active_trains(updated_active_trains)
         self.update_track_instance(updated_track)
 

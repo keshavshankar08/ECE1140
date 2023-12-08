@@ -6,7 +6,6 @@ sys.path.append(".")
 from Modules.CTC.Frontend.CTC_UI import *
 from Modules.Track_Model.Backend.Track_Model_Backend import *
 #from Modules.CTC.Frontend.frontend import *
-from Modules.SW_Wayside.Frontend.SW_Wayside_UI import *
 from Modules.HW_Wayside.Frontend.HW_Wayside_UI import *
 from Modules.Track_Model.Frontend.Track_Model_UI import *
 from Modules.Train_Model.Frontend.Train_Model import *
@@ -42,7 +41,6 @@ class Mainmenu(QtWidgets.QMainWindow):
         self.ctcWindow = CTCFrontend()
         self.trackModelWindow = TrackModelModule()
         self.trainModelWindow = TrainModel()
-        self.swWaysideWindow = SWWaysideFrontend()
         self.hwWaysideWindow = HWWaysideFrontend()
         self.trainControllerWindow = TrainControllerUI()
         self.adminWindow = ADMIN()
