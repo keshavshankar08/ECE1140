@@ -10,6 +10,7 @@ from CONSTANTS import constants
 
 #CONSTANTS
 MAX_POWER = 120000
+FRICTION_POWER = 448.66
 
 class trainController():
     def __init__(self):
@@ -17,8 +18,8 @@ class trainController():
         signals.train_controller_update_backend.connect(self.tc_update_values)
 
         #KP and KI values, true = auto, false = manual
-        self.KP = 5000
-        self.KI = 2500
+        self.KP = 8500
+        self.KI = 5000
         self.mode = True
 
         #Door/lightbulb values, True = Closed/on, False = Open/off
@@ -105,8 +106,8 @@ class trainController():
         self.ek = vError
 
         if self.commanded_power < MAX_POWER:
-            self.uk = self.uk1 + (constants.TIME_DELTA*0.001)/2 *(self.ek - self.ek1)
-        else: 
+            self.uk = self.uk1 + (constants.TIME_DELTA * 0.001/2)*(self.ek - self.ek1)
+        else:
             self.uk = self.uk1
         
         #set previous power command
@@ -127,7 +128,7 @@ class trainController():
         if (power1 != power2) or (power1 != power3) or (power2 != power3):
             self.emergency_brake = True
         else:
-            self.commanded_power = (self.KP*self.ek) + (self.KI*self.uk)
+            self.commanded_power = (self.KP*self.ek) + (self.KI*self.uk) + (FRICTION_POWER * self.commanded_speed)
 
         # cut off power at appropriate time
         if(self.commanded_power > 120000):
