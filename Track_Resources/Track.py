@@ -552,14 +552,14 @@ class Block:
                 list_pos = green_line_junction_switch_ends.index(block_int)
             return [green_line_junction_switch_ends[list_pos], green_line_junction_receiver_ends_left[list_pos], green_line_junction_receiver_ends_right[list_pos]]
 
-    # Get crossing status string
+    # Get traffic light color string 
     def get_traffic_light_color_string(self):
         if(self.block_type == 1):
             return "Green" if(self.traffic_light_color) else "Red"
         else:
             return ""
         
-    # Get crossing status boolean
+    # Get traffic light color boolean
     def get_traffic_light_color_bool(self, color):
         return True if(color == "Green") else False
     
