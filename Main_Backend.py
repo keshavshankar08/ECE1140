@@ -9,6 +9,9 @@ from Modules.SW_Wayside.Backend.SW_Wayside_Backend import *
 from Modules.SW_Wayside.Frontend.SW_Wayside_Frontend import *
 from Modules.Track_Model.Backend.Track_Model_Backend import *
 from Modules.Track_Model.Frontend.Track_Model_UI import *
+from Modules.HW_Wayside.Backend.backend import *
+from Modules.HW_Wayside.Frontend.HW_Wayside_UI import *
+from Modules.HW_Wayside.Backend.Arduino_PLC import *
 from Track_Resources.PLC import *
 from Main_Frontend import *
 from CONSTANTS import *
@@ -35,6 +38,13 @@ class MainBackend(QObject):
         self.plc_instance = PLC()
         self.track_instance = Track()
         signals.sw_wayside_backend_update.connect(self.sw_wayside_backend_update)
+
+        # HW Wayside Instances
+        self.hw_wayside_backend_instance = HWWaysideBackend()
+        self.plc_instance = PLC()
+        self.track_instance = Track()
+        signals.hw_wayside_backend_update.connect(self.hw_wayside_backend_update)
+
 
         # Track Model Instances
         self.track_model_backend_instance = TrackModelModule()     
@@ -75,6 +85,11 @@ class MainBackend(QObject):
 
     # Handles update from SW Wayside
     def sw_wayside_backend_update(self, updated_track, updated_active_trains):
+        self.update_active_trains(updated_active_trains)
+        self.update_track_instance(updated_track)
+
+    # Handles update from hardware
+    def hw_wayside_backend_update(self, updated_track, updated_active_trains):
         self.update_active_trains(updated_active_trains)
         self.update_track_instance(updated_track)
 
