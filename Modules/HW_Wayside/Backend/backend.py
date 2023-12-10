@@ -63,10 +63,10 @@ class HWWaysideBackend():
     def frontend_update_backend(self, track_instance, file_name, line_number, wayside_number, operation_mode):
         # update local instance of track
         self.update_copy_track(track_instance)
-        self.plc_file_name(file_name)
-        self.plc_line_number(line_number)
-        self.plc_wayside_number(wayside_number)
-        self.operation_mode(operation_mode)
+        self.plc_file_name = (file_name)
+        self.plc_line_number = (line_number)
+        self.plc_wayside_number = (wayside_number)
+        self.operation_mode = (operation_mode)
 
     def plc_update_backend(self, track_instance, train_instance):
         self.update_copy_track(track_instance)
