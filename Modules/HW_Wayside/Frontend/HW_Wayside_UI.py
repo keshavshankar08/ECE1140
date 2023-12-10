@@ -1,6 +1,7 @@
 import sys
 import serial
 import time
+import platform
 sys.path.append(".")
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import *
@@ -49,7 +50,7 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 # handles track map button clicked
                 self.track_map_view_button.clicked.connect(self.view_track_map_clicked)
 
-                # default values
+                # default
                 self.last_line_state = ""
                 self.last_wayside_state = ""
                 self.last_block_state = ""
@@ -255,6 +256,8 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
 
         # Handles view track map button clicked
         def view_track_map_clicked(self):
+                system_platform = platform.system().lower()
+
                 curr_line_int = self.get_current_line_displayed_int()
                 image_viewer = {'linux':'xdg-open',
                                   'win32':'explorer',
