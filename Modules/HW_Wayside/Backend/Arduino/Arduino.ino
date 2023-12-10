@@ -27,7 +27,18 @@ void loop() {
   if (Serial.available() > 0) {
 
     // read display
-    display();
+    char incoming = Serial.read();
+    if (incoming == 'D')
+      display();
+    else if (incoming == 'P')
+    {
+      while (Serial.available() > 0)
+      {
+        lcd.print(incoming); 
+        Data += incoming;
+      }
+
+    }
 
     //ReadPLC();
 
