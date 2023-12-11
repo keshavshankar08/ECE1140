@@ -2,6 +2,7 @@
 
 import sys
 import itertools
+import copy
 from PyQt6.QtCore import QTime
 sys.path.append(".")
 from Track_Resources.Track import *
@@ -37,6 +38,8 @@ class Train:
         self.current_line = line # 0 = red, 1 = green
         self.stop_index = 0 # stop that the train is at
         self.authority_stop_queue = [] # make a list of the route
+        self.train_route = route
+        self.station_departure_time = QTime()
 
         #set train ID
         self.train_ID = str(next(Train.id_obj))
@@ -61,7 +64,8 @@ class Train:
                 #if it's the last stop, return to yard at -1
                 if(i == 0):
                     #for first stop, get authority from yard **[1:] removes first element (previous stop)
-                    self.authority_stop_queue.append(track.lines[0].get_left_path(0, block_stops[i]))
+                    first_authority = track.lines[0].get_left_path(0, block_stops[i])
+                    self.authority_stop_queue.append([0] + first_authority)
                 else:
                     #otherwise, get the length of the shortest path between the stops **[1:] removes first element (previous stop)
                     self.authority_stop_queue.append(track.lines[0].get_left_path(block_stops[i-1], block_stops[i]))
@@ -74,22 +78,28 @@ class Train:
                 #if it's the last stop, return to yard at -1
                 if(i == 0):
                     #for first stop, get authority from yard **[1:] removes first element (previous stop)
-                    self.authority_stop_queue.append(track.lines[1].get_left_path(0, block_stops[i]))
+                    first_authority = track.lines[1].get_left_path(0, block_stops[i])
+                    self.authority_stop_queue.append([0] + first_authority)
                 else:
                     #otherwise, get the length of the shortest path between the stops **[1:] removes first element (previous stop)
                     self.authority_stop_queue.append(track.lines[1].get_left_path(block_stops[i-1], block_stops[i]))
-
 
             #set authority to go back to the yard
             self.authority_stop_queue.append(track.lines[1].get_left_path(block_stops[len(block_stops)-1], 0))
 
         #the suggested speed inbetween each station
-        self.suggested_speed_list = [20] * len(self.authority_stop_queue)
-        self.suggested_speed_list[0] = 0
+        self.suggested_speed_queue = copy.deepcopy(self.authority_stop_queue)
+        for speed in self.suggested_speed_queue:
+            for i in range(len(speed)):
+                if(i == len(speed)-1):
+                    speed[i] = 0
+                else:
+                    speed[i] = 20
 
         #set the current parameters
         self.current_authority = 0
-        self.current_suggested_speed = self.suggested_speed_list[self.stop_index]
+        self.current_suggested_speed = 0
+        self.current_suggested_speed_stop_queue = self.suggested_speed_queue[self.stop_index]
         self.current_authority_stop_queue = self.authority_stop_queue[self.stop_index]
         
         #set departure time
@@ -114,8 +124,42 @@ class Train:
 
         #update the current authority and speed
         self.current_authority = len(self.authority_stop_queue[self.stop_index])
-        self.current_suggested_speed = self.suggested_speed_list[self.stop_index]
+        self.current_suggested_speed = self.suggested_speed_queue[self.stop_index][0]
+        self.current_suggested_speed_stop_queue = self.suggested_speed_queue[self.stop_index]
         self.current_authority_stop_queue = self.authority_stop_queue[self.stop_index]
+
+    #function to check if a train is at a station stop
+    def station_stop(self):
+        #the train is at a station block, return true
+        #and (self.current_suggested_speed == 0)
+        if((self.current_authority == 0) and (self.current_authority_changed == False)):
+            return True
+        
+    #function that will use dwell time, then go to the next stop
+    def update_stop(self, system_time):
+        #get system time in readable format
+        system_time_comp = QTime.fromString(system_time.toString("hh:mm:ss"), "hh:mm:ss")
+
+        #if the index is 0, exit function
+        if(self.stop_index == 0):
+            return
+
+        #if the train is stopped and time equals station
+        if(self.current_authority == -1):
+            if(system_time_comp == self.station_departure_time):
+                self.next_stop()
+
+        #if station is a stop, set departure time and make authority 0
+        if(self.station_stop() == True):
+            #get dwell time
+            dwell = QTime.fromString(self.train_route.dwell_time[self.stop_index-1], "hh:mm:ss")
+            print(f'dwell: ',dwell)
+
+            #get next departure time
+            self.station_departure_time = system_time_comp + dwell
+
+            #set authority to -1 to avoid updating again
+            self.current_authority = -1
 
     def update_authority(self, track):
         #first check if if the list is empty
@@ -125,15 +169,20 @@ class Train:
         if(self.current_line == 0):
             #if the first block is occupied, remove it from the route
             if track.red_line.blocks[self.authority_stop_queue[self.stop_index][0]].block_occupancy == True:
+                #update current block
+                self.current_block = self.authority_stop_queue[self.stop_index][0]
+                print(self.authority_stop_queue[self.stop_index])
+                print(f'cur block: ',self.current_block)
                 self.authority_stop_queue[self.stop_index] = self.authority_stop_queue[self.stop_index][1:]
 
         if(self.current_line == 1):
             #if the first block is occupied, remove it from the route
             if track.green_line.blocks[self.authority_stop_queue[self.stop_index][0]].block_occupancy == True:
+                #update current block
+                self.current_block = self.authority_stop_queue[self.stop_index][0]
+                print(self.authority_stop_queue[self.stop_index])
+                print(f'cur block: ',self.current_block)
                 self.authority_stop_queue[self.stop_index] = self.authority_stop_queue[self.stop_index][1:]
-                
-        #update current block
-        self.current_block = self.authority_stop_queue[self.stop_index][0]
 
         #update current direction for each possible line
         if(self.current_line == 0):
@@ -149,8 +198,6 @@ class Train:
 
         #update current authority
         self.current_authority = len(self.authority_stop_queue[self.stop_index])
-
-        print(f'Authority: ',self.current_authority,'\nCurrent Block:',self.current_block,'\nCurrent Direction: ',self.current_direction)
 
 class ActiveTrains:
     def __init__(self):
