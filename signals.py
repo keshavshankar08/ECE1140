@@ -48,6 +48,7 @@ class signalsList(QObject):
     track_model_block_occupancy = pyqtSignal(int)
     track_model_ticket_sales = pyqtSignal(int)
     track_model_speed_limit = pyqtSignal(int,int)
+    track_model_track_circuit_polarity = pyqtSignal(int)
     track_model_suggested_speed = pyqtSignal(int,int)
     track_model_track_fault = pyqtSignal(bool)
     track_model_authority = pyqtSignal(int,float)
