@@ -256,6 +256,10 @@ class CTCFrontend(QtWidgets.QMainWindow):
         rowPosition = self.manual_table.rowCount()
         self.manual_table.insertRow(rowPosition)
 
+        #TEMP
+        dispatch_time = QTableWidgetItem("13:00:00")
+        self.manual_table.setItem(rowPosition, 1, dispatch_time)
+
         #fill dwell time as 1:00
         dwell = QTableWidgetItem("1:00")
         self.manual_table.setItem(rowPosition, 2, dwell)
@@ -265,7 +269,7 @@ class CTCFrontend(QtWidgets.QMainWindow):
         if(self.line_value_box.currentText() == "Red Line"):
             combo.addItems(self.track_instance_copy.red_line_station_names)
         if(self.line_value_box.currentText() == "Green Line"):
-            combo.addItems(self.track_instance_copy.green_line_station_names)
+            combo.addItems(self.track_instance_copy.green_line_station_names_ordered)
         self.manual_table.setCellWidget(rowPosition, 0, combo)
       
     def delete_stop_button_clicked(self):
@@ -306,15 +310,15 @@ class CTCFrontend(QtWidgets.QMainWindow):
             new_route.stops.append(self.manual_table.cellWidget(row, 0).currentText())
             new_route.stop_time.append(str(self.manual_table.item(row, 1).text()))
             new_route.dwell_time.append(str(self.manual_table.item(row, 2).text()))
-        
+
         #add new route to the route queue
         self.route_queue_copy.add_route(new_route)
 
         #make a train in the train queue
         if(str(self.line_value_box.currentText()) == 'Green Line'):
-            self.queue_trains_copy.add_train(Train(new_route, "Green"))
+            self.queue_trains_copy.add_train(Train(new_route, 1))
         if (str(self.line_value_box.currentText()) == 'Red Line'):
-            self.queue_trains_copy.add_train(Train(new_route, "Red"))
+            self.queue_trains_copy.add_train(Train(new_route, 0))
 
         #clear the table
         self.manual_table.setRowCount(0)
