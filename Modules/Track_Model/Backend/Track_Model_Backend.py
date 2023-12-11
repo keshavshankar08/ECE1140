@@ -32,7 +32,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
         
         # train model variables
         self.train_length = 0
-        self.distance_from_yard = 100
+        self.distance_from_yard = 0
         self.distance_from_block_start = 0
         
         # declare lists to store line data
