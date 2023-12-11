@@ -9,8 +9,8 @@ from Modules.SW_Wayside.Backend.SW_Wayside_Backend import *
 from Modules.SW_Wayside.Frontend.SW_Wayside_Frontend import *
 from Modules.Track_Model.Backend.Track_Model_Backend import *
 from Modules.Track_Model.Frontend.Track_Model_UI import *
-from Modules.HW_Wayside.Backend.backend import *
-from Modules.HW_Wayside.Frontend.HW_Wayside_UI import *
+from Modules.HW_Wayside.Backend.HW_Wayside_Backend import *
+from Modules.HW_Wayside.Frontend.HW_Wayside_Frontend import *
 from Modules.HW_Wayside.Backend.Arduino_PLC import *
 from Track_Resources.PLC import *
 from Main_Frontend import *
@@ -41,8 +41,7 @@ class MainBackend(QObject):
 
         # HW Wayside Instances
         self.hw_wayside_backend_instance = HWWaysideBackend()
-        self.plc_instance = PLC()
-        self.track_instance = Track()
+        self.hw_plc_instance = Arduino_PLC()
         signals.hw_wayside_backend_update.connect(self.hw_wayside_backend_update)
 
 
