@@ -1,14 +1,21 @@
 import sys
 import serial
 import time
+import platform
 sys.path.append(".")
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import *
 from signals import *
+import subprocess
 
+# Global variable used to act as a timer on Arduino uploads
+counter = 0
+
+# Try to connect
 try:
         SER = serial.Serial('COM3', 9600)
 except: 
+        # if no connection established, terminate
         exit
 
 # send data to Arduino to display
@@ -18,10 +25,8 @@ def display(data):
         time.sleep(1)
 
         # read in serial output
-        response = SER.readline().decode('ascii').strip()
-        print("Arduino output: \n", response)
-
-        
+        # response = SER.readline().decode('ascii').strip()
+        # print("Arduino output: \n", response)
 
 class HWWaysideFrontend(QtWidgets.QMainWindow):
         def __init__(self):
@@ -45,12 +50,14 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 # handles track map button clicked
                 self.track_map_view_button.clicked.connect(self.view_track_map_clicked)
 
+                # default
                 self.last_line_state = ""
                 self.last_wayside_state = ""
                 self.last_block_state = ""
-                self.last_switch_state = ""
-                self.last_light_state = ""
-                self.last_crossing_state = ""
+                self.plc_file_name = ""
+                self.plc_line_number = -1
+                self.plc_wayside_number = -1
+                self.operation_mode = ""
         
         # Handles all frontend updates
         def update_frontend(self, track_instance):
@@ -65,7 +72,7 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
 
         # Sends updates from wayside frontend to wayside backend
         def send_frontend_update(self):
-                signals.hw_wayside_frontend_update.emit(self.track_instance_copy)
+                signals.hw_wayside_frontend_update.emit(self.track_instance_copy, self.plc_file_name, self.plc_line_number, self.plc_wayside_number, self.operation_mode)
 
         # Updates all UI display information
         def update_display(self):
@@ -213,7 +220,6 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                         
         # Updates display block information
         def update_block_information(self):
-                counter = 0
                 curr_line_int = self.get_current_line_displayed_int()
                 curr_block_int = self.get_current_block_displayed_int()
                 self.block_type_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_type_string())
@@ -227,7 +233,7 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
 
 
                 # Arduino Display
-                ArduinoString = ""
+                ArduinoString = "D"
                 ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_type_string() + " "
                 ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_occupancy_string() + "."
 
@@ -238,28 +244,34 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_traffic_light_color_string() + "."
 
                 ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_crossing_status_string() + "."
+                global counter
                 if (counter == 0):
                         display(ArduinoString)
                         counter += 1
-                if (counter < 500):
+                if (counter < 15):
                         counter += 1
-                if (counter == 500):
+                if (counter == 15):
                         counter = 0
 
 
         # Handles view track map button clicked
         def view_track_map_clicked(self):
-                # figure out alternative to opencv to open up the map pictures
-                # need to make a good map with devices to show
-                pass
+                system_platform = platform.system().lower()
+
+                curr_line_int = self.get_current_line_displayed_int()
+                image_viewer = {'linux':'xdg-open',
+                                  'win32':'explorer',
+                                  'darwin':'open'}[sys.platform]
+                if(curr_line_int == 0):
+                        subprocess.Popen([image_viewer, "Modules/HW_Wayside/Frontend/red_line_map.png"])
+                elif(curr_line_int == 1):
+                        subprocess.Popen([image_viewer, "Modules/HW_Wayside/Frontend/green_line_map.png"])
 
         # Handles upload plc program button clicked
         def uploadPLCClicked(self):
-                fileName = QtWidgets.QFileDialog.getOpenFileName(self, "Open File", "", "Text Files (*.txt)")
-                # this will get fed into the interpreter
-                # the interpreter will spit back a wayside logic object
-                # this gets added to a copy of the wayside controller object, which contains the logic and info from the track for each wayside
-                # most importantly, it has a wayside logic object for each controller
+                self.plc_file_name, _filter = QtWidgets.QFileDialog.getOpenFileName(self, "Open File", "", "Text Files (*.txt)")
+                self.plc_line_number = self.get_current_line_displayed_int()
+                self.plc_wayside_number = self.get_current_wayside_displayed_int()
         
         # Handles switch toggle in manual mode
         def manual_switch_toggled(self):
