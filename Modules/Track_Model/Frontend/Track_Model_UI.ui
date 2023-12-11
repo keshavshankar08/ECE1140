@@ -162,7 +162,7 @@
         <x>940</x>
         <y>40</y>
         <width>271</width>
-        <height>451</height>
+        <height>468</height>
        </rect>
       </property>
       <layout class="QFormLayout" name="formLayout">
@@ -192,9 +192,6 @@
           <string>Speed Limit (mph)</string>
          </property>
         </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QLineEdit" name="speed_limit_display"/>
        </item>
        <item row="5" column="0">
         <widget class="QLabel" name="label_19">
@@ -252,21 +249,6 @@
           <string>Cumulative Elevation (ft)</string>
          </property>
         </widget>
-       </item>
-       <item row="17" column="0">
-        <widget class="QLabel" name="label_11">
-         <property name="font">
-          <font>
-           <pointsize>14</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Beacon</string>
-         </property>
-        </widget>
-       </item>
-       <item row="17" column="1">
-        <widget class="QLineEdit" name="beacon_display"/>
        </item>
        <item row="18" column="0">
         <widget class="QLabel" name="label_12">
@@ -341,13 +323,31 @@
          </property>
         </widget>
        </item>
+       <item row="16" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Beacon</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="0" colspan="2">
+        <widget class="QLineEdit" name="beacon_display"/>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="speed_limit_display"/>
+       </item>
       </layout>
      </widget>
      <widget class="QLabel" name="label_13">
       <property name="geometry">
        <rect>
-        <x>1010</x>
-        <y>500</y>
+        <x>1000</x>
+        <y>510</y>
         <width>141</width>
         <height>16</height>
        </rect>
@@ -365,7 +365,7 @@
       <property name="geometry">
        <rect>
         <x>940</x>
-        <y>520</y>
+        <y>530</y>
         <width>271</width>
         <height>215</height>
        </rect>

@@ -1,6 +1,6 @@
 import sys
 sys.path.append(".")
-import os, openpyxl
+import os, openpyxl, random 
 from PyQt6 import QtWidgets, QtGui, uic
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFileDialog
@@ -27,16 +27,23 @@ class TrackModelModule(QtWidgets.QMainWindow):
         # member variable to hold occupied block
         self.occupied_block = 0
         self.block_grade = 0
-        self.station_name = None
+    
         
         # train model variables
         self.train_length = 0
         self.distance_from_yard = 100
         self.distance_from_block_start = 0
         
-        # declare list to store line data
+        # declare lists to store line data
         self.red_line_data = []
         self.green_line_data = []
+        
+        # tickets and passenger variables
+        self.tickets_sold = 0
+        self.passengers_on = 0
+        self.passengers_off = 0
+        self.red_sales = 0
+        self.green_sales = 0
         
         # receives updates from main backend
         signals.track_model_update_backend.connect(self.backend_update_backend)
@@ -49,7 +56,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
         # disable line selector until track is loaded to avoid undefined behavior
         self.TrackLineColorValue.setEnabled(False)
         
-        # line color combo box hint behavior, hide hint initially
+        # line color combo box hint behavior, show hint initially
         self.TrackLineColorValue.installEventFilter(self)
         self.LineSelectHint.setVisible(True)
         
@@ -110,11 +117,11 @@ class TrackModelModule(QtWidgets.QMainWindow):
         self.set_light_color()
         
         # update crossing statuses
-        self.set_crossing_block()
+        self.set_crossing_light()
         
         # signals to train model
         signals.track_model_block_grade.emit(self.block_grade)
-        signals.track_model_beacon.emit(self.station_name)
+        #signals.track_model_passengers.emit(self.net_passengers)
         
         # send updated signals to main backend
         self.send_main_backend_update()
@@ -133,7 +140,10 @@ class TrackModelModule(QtWidgets.QMainWindow):
             self.track_heater_display.setText("Active")
         else:
             self.track_heater_display.setText("Inactive")
-                
+    # receive suggested speed and authority
+    def receive_train_attributes(self, authority, suggested_speed):
+        self.receive
+               
     # train model signal slots 
     def receive_train_model_signals(self):
         self.receive_train_length(self.train_length)
@@ -158,30 +168,144 @@ class TrackModelModule(QtWidgets.QMainWindow):
     
    # Calculates block occupancy
     def block_occupancy(self):
-        if len(self.green_line_data) > 0:
-        # path to dormont
-            path = [63,64,65,66,67,68,69,70,71,72,73]
-            block_length_sum = 0
-            count = 0
-            obj = self.green_line_data[path[count]]
-            block = obj[2]
-            while count < 11:
-                block_length_sum += int(self.green_line_data[block][3])
-                if(self.distance_from_yard-block_length_sum <= 30 and self.distance_from_yard != 0):
-                    # position found
-                    self.set_block_color(path[count])
-                    self.track_instance_copy.lines[1].blocks[path[count]].block_occupancy = True
-                    for data in self.green_line_data:
-                        if data[2] == block:
-                            self.block_grade = data[4]
-                    if count == 10: 
-                        self.station_name = 'Dormont'
-                    return block
-                count += 1
+        if len(self.green_line_data) > 0 and len(self.red_line_data) > 0:
+            if self.line_name == 'Green Line':
+                # path around track 
+                path = [63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81,
+		            82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 85, 84,
+		            83, 82, 81, 80, 79, 78, 77, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
+		            112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128,
+		            129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145,
+		            146, 147, 148, 149, 150, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15,
+		            14, 13, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+		            22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
+		            43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57]
+            
+                stations = [2,9,16,22,31,39,48,56,65,73,88,96,105,114,123,132,141]
+                block_length_sum = 0
+                count = 0
+                obj = self.green_line_data[path[count]]
+                block = obj[2]
+                while count < 150:
+                    block_length_sum += int(self.green_line_data[block][3])
+                    if(self.distance_from_yard-block_length_sum <= 30 and self.distance_from_yard != 0):
+                        # position found
+                        self.set_block_color(path[count],path[count-1])
+                        self.track_instance_copy.lines[1].blocks[path[count]].block_occupancy = True
+                        self.block_grade = self.green_line_data[block][4]
+
+                        for station_block in stations:
+                            if block == station_block:
+                                # station block is occupied, send beacon signal
+                                signals.track_model_beacon.emit(self.beacon(block))
+                            
+                        return block
+                    count += 1
+            
+            if self.line_name == 'Red Line':
+                # path around track
+                path = [9, 8, 7, 6, 5, 4, 3, 2, 1, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 76, 75,
+		                         74, 73, 72, 33, 34, 35, 36, 37, 38, 71, 70, 69, 68, 67, 44, 45, 46, 47, 48, 49, 50, 51,
+		                         52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 52, 51, 50, 49, 48, 47, 46,
+		                         45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24,
+		                         23, 22, 21, 20, 19, 18, 17, 16, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                
+                stations = [7,17,21,25,35,45,48,60]
+                block_length_sum = 0
+                count = 0
+                obj = self.green_line_data[path[count]]
+                block = obj[2]
+                
+                while count < 76:
+                    block_length_sum += int(self.red_line_data[block][3])
+                    if(self.distance_from_yard-block_length_sum <= 30 and self.distance_from_yard != 0):
+                        # position found
+                        self.set_block_color(path[count],path[count-1])
+                        self.track_instance_copy.lines[0].blocks[path[count]].block_occupancy = True
+                        self.block_grade = self.red_line_data[block][4]
+                        
+                        for station_block in stations:
+                            if block == station_block:
+                                # train is at station, send beacon signal
+                                signals.track_model_beacon.emit(self.beacon(block))
+                        
+                        return block
+                    count += 1
+                
         else:
             pass
+    
+    # beacon function
+    def beacon(self,block_number):
+        # beacon format: station name, station side, blocks to next station, blocks to underground 
+        if self.line_name == 'Green Line':
+            stations = [2,9,16,22,31,39,48,56,65,73,88,96,105,114,123,132,141]
+            undergrounds = [36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143] 
             
-    def set_block_color(self,occupied_block):
+            # initialize blocks to next station and underground
+            blocks_to_station = 100 
+            blocks_to_underground = 100
+
+            if block_number in stations:
+                # block is a station, find next station
+                for i in range(block_number+1, max(stations)+1):
+                    if i in stations and i != block_number:
+                        blocks_to_station = i - block_number
+                        break
+            
+            if block_number in undergrounds:
+                # block is underground, set blocks to itself as 0
+                blocks_to_underground = 0
+            else:
+                # block not underground, find distance to next underground
+                for i in range(block_number + 1, max(undergrounds) + 1):
+                    if i in undergrounds:
+                        blocks_to_underground = i - block_number
+                        break
+            
+            # format beacon string
+            if blocks_to_underground == 0:
+                beacon = "{} {} {} {}".format(self.green_line_data[block_number][6][22:40],self.green_line_data[block_number][7],blocks_to_station,blocks_to_underground)
+            else:
+                beacon = "{} {} {} {}".format(self.green_line_data[block_number][6][9:20],self.green_line_data[block_number][7],blocks_to_station, blocks_to_underground)
+            return beacon
+        
+        if self.line_name == 'Red Line':
+            stations = [7,17,21,25,35,45,48,60]
+            undergrounds = [24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46]
+
+            # initialize blocks to next station and underground
+            blocks_to_station = 100
+            blocks_to_underground = 100
+            
+            if block_number in stations:
+                # block is a station, find next station
+                for i in range(block_number+1, max(stations)+1):
+                    if i in stations and i != block_number:
+                        blocks_to_station = i-block_number
+                        break
+            
+            if block_number in undergrounds: 
+                # block is underground, set blocks to itself as 0
+                blocks_to_underground = 0
+            else: 
+                # block is not underground, find distance to next underground
+                for i in range(block_number + 1, max(undergrounds) + 1):
+                    if i in undergrounds: 
+                        blocks_to_underground = i - block_number
+                        break
+            
+            blocks_to_station = blocks_to_station
+            blocks_to_underground = blocks_to_underground
+            
+             # format beacon string
+            if blocks_to_underground == 0:
+                beacon = "{} {} {} {}".format(self.red_line_data[block_number][6][22:40],self.red_line_data[block_number][7],blocks_to_station,blocks_to_underground)
+            else:
+                beacon = "{} {} {} {}".format(self.red_line_data[block_number][6][9:20],self.red_line_data[block_number][7],blocks_to_station, blocks_to_underground)
+            return beacon
+
+    def set_block_color(self,occupied_block,prev_block):
         scene = self.graphicsView.scene()
         for item in scene.items():
             if isinstance(item,QtWidgets.QGraphicsRectItem):
@@ -189,31 +313,32 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 if str(item.toolTip()) == str(occupied_block):
                     item.setBrush(QtGui.QColor(255,0,0))
                 # put prev block back to green 
-                if str(item.toolTip()) == str(occupied_block-1):
+                if str(item.toolTip()) == str(prev_block):
                     item.setBrush(QtGui.QColor(0,128,0))
-                    self.track_instance_copy.lines[1].blocks[occupied_block-1].block_occupancy = False
+                    self.track_instance_copy.lines[1].blocks[prev_block].block_occupancy = False
                 
-    def set_crossing_block(self):
+    def set_crossing_light(self):
         scene = self.graphicsView.scene()
         for item in scene.items():
-            if isinstance(item,QtWidgets.QGraphicsRectItem):
-                block_number = int(item.toolTip())
-                 # check if the block has an active crossing status
-                if self.line_name == 'Red Line':
-                    if self.track_instance_copy.lines[0].blocks[block_number].crossing_status:
-                        # make crossing block orange
-                        item.setBrush(QtGui.QColor(255, 165, 0))
-                    else:
-                        # revert back to green
-                        item.setBrush(QtGui.QColor(0, 128, 0))
-                if self.line_name == 'Green Line':
-                    if self.track_instance_copy.lines[1].blocks[block_number].crossing_status:
-                        # make crossing block orange
-                        item.setBrush(QtGui.QColor(255, 165, 0))
-                    else:
-                        # revert back to green
-                        item.setBrush(QtGui.QColor(0, 128, 0))
+            if isinstance(item,QtWidgets.QGraphicsEllipseItem):
+                if item.toolTip().startswith('crossing'):
+                    block_number = int(item.toolTip().replace('crossing',''))
 
+                    # check if the block has an active crossing status
+                    if self.line_name == 'Red Line':
+                        if self.track_instance_copy.lines[0].blocks[block_number].crossing_status:
+                            # make crossing light orange
+                            item.setBrush(QtGui.QColor(255, 165, 0))
+                        else:
+                            # revert back to white
+                            item.setBrush(QtGui.QColor(255, 255, 255))
+                    if self.line_name == 'Green Line':
+                        if self.track_instance_copy.lines[1].blocks[block_number].crossing_status:
+                            # make crossing block orange
+                            item.setBrush(QtGui.QColor(255, 165, 0))
+                        else:
+                            # revert back to white
+                            item.setBrush(QtGui.QColor(255, 255, 255))
 
 
     def set_light_color(self):
@@ -241,7 +366,34 @@ class TrackModelModule(QtWidgets.QMainWindow):
                         elif light_color == 0:
                             item.setBrush(QtGui.QColor(255, 0, 0))
 
-                
+    def tickets(self):
+        # generate ticket sales for entire line 
+        if self.line_name == 'Red Line':
+            station_count = 8
+            # set lower and upper limits for sales numbers
+            lower_limit = station_count # number of stations, so minimum 1 sale per station
+            upper_limit = 1000
+            
+            # generate random number of ticket sales for red line
+            self.red_sales = random.randint(lower_limit,upper_limit)
+            
+            # obtain ticket sales number for each station of red line
+            self.tickets_sold = int(self.red_sales / station_count)
+        
+        if self.line_name == 'Green Line':
+            station_count = 18
+            # set lower and upper limits for sales numbers
+            lower_limit = station_count # number of stations, so minimum 1 sale per station
+            upper_limit = 1000
+            
+            # generate random number of ticket sales for green line
+            self.green_sales = random.randint(lower_limit,upper_limit)
+            
+            # obtain ticket sales number for each station of green line
+            self.tickets_sold = int(self.green_sales / station_count)
+            
+            
+
     def track_layout(self):
         file_filter = 'Excel File (*.xlsx)'
         response, _ = QFileDialog.getOpenFileName(
@@ -290,31 +442,51 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 
     def display_block_info(self):
         block_number = self.clicked_block
+        
         if self.line_name == 'Green Line':
             for data in self.green_line_data:
                 if data[2] == int(block_number):  
+                    # display currently selected block number
                     self.block_number_display.setText(str(data[2]))
                     if data[3] is not None:
+                        # if block is not the yard, display block length and block grade with appropriate conversions
                         self.block_length_display.setText("{:.2f}".format(data[3] * 3.281))
-                    self.block_grade_display.setText(str(data[4]))
+                        self.block_grade_display.setText(str(data[4]))
                     if data[5] is not None:
+                        # display speed limit and traffic light status 
                         self.speed_limit_display.setText("{:.2f}".format(data[5] / 1.609))
-                    self.traffic_light_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_traffic_light_color_string())
+                        self.traffic_light_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_traffic_light_color_string())
                     if data[6] is not None:
+                        # display infrastructure
                         self.infrastructure_display.setText(str(data[6][0:7]))
                         if str(data[6][0:7]) == 'STATION':
+                            # if infrastructure is station, display station name and ticket sales 
                             self.station_name_display.setText(str(data[6][9:20]))
+                            self.tickets_sold_display.setText(str(self.tickets_sold))
+                            # TODO display remainder of station info (passengers boarding and disembarking)
+                            # TODO display beacon data (if applicable)
+                            self.beacon_display.setText(self.beacon(int(block_number)))
+                        else: 
+                            # do not display ticket sales or beacon if block is not a station
+                            self.tickets_sold_display.setText("None")
+                            self.beacon_display.setText("None")
                         if str(data[6][0:6]) == 'SWITCH' or str(data[6]) == 'UNDERGROUND':
+                            # if block is switch or underground display infrastructure, do not display a station name
                             self.infrastructure_display.setText(str(data[6]))
                             self.station_name_display.setText('')
                         if str(data[6][0:20]) == 'UNDERGROUND; STATION':
                             self.infrastructure_display.setText(str(data[6][0:20]))
                             self.station_name_display.setText(str(data[6][22:40]))
+                            # display beacon data
+                            self.beacon_display.setText(self.beacon(int(block_number)))
                         if str(data[6]) == 'RAILWAY CROSSING':
                             self.infrastructure_display.setText(str(data[6]))
                     else:
                         self.infrastructure_display.setText(str(data[6]))
                         self.station_name_display.setText(str(data[6]))
+                        self.tickets_sold_display.setText(str(data[6]))
+                        self.passengers_boarding_display.setText(str(data[6]))
+                        self.passengers_disembarking_display.setText(str(data[6]))
                     self.switch_direction_display.setText(self.track_instance_copy.lines[1].blocks[int(block_number)].get_switch_direction_string(1))
                     
                     # display crossing status in sidebar 
@@ -323,14 +495,15 @@ class TrackModelModule(QtWidgets.QMainWindow):
                     if data[8] is not None and data[9] is not None:
                         self.elevation_display.setText("{:.2f}".format(data[8] * 3.281))
                         self.cum_elevation_display.setText("{:.2f}".format(data[9] * 3.281))
-                    # TODO display beacon data (if applicable)
+                    
                     # TODO display train info (only if block is occupied)
                     if block_number == self.occupied_block:
                         self.train_ID_display.setText(str(self.active_trains_instance_copy.Train[0].train_ID))
                         self.direction_of_travel_display.setText('Traveling South')
                         self.authority_display.setText((self.active_trains_instance_copy.Train[0].current_authority) * (3.281 * (73-self.occupied_block)))
                         self.current_speed_display.setText(str(self.active_trains_instance_copy.Train[0].current_suggested_speed))
-                    # TODO display remainder of station info (tickets sold, passengers boarding and disembarking)
+                   
+                   
                     
         if self.line_name == 'Red Line':
             for data in self.red_line_data:
@@ -345,18 +518,30 @@ class TrackModelModule(QtWidgets.QMainWindow):
                     if data[6] is not None:
                         self.infrastructure_display.setText(str(data[6][0:7]))
                         if str(data[6][0:7]) == 'STATION':
-                            self.station_name_display.setText(str(data[6][9:20]))
+                            self.station_name_display.setText(str(data[6][9:30]))
+                            self.tickets_sold_display.setText(str(self.tickets_sold))
+                            # TODO display remainder of station info (passengers boarding and disembarking)
+                            # display beacon info for given station
+                            self.beacon_display.setText(self.beacon(int(block_number)))
+                        else:
+                            self.tickets_sold_display.setText('')
                         if str(data[6][0:6]) == 'SWITCH' or str(data[6]) == 'UNDERGROUND':
                             self.infrastructure_display.setText(str(data[6]))
                             self.station_name_display.setText('')
                         if str(data[6][0:20]) == 'UNDERGROUND; STATION':
                             self.infrastructure_display.setText(str(data[6][0:20]))
                             self.station_name_display.setText(str(data[6][22:40]))
+                            # display beacon data
+                            self.beacon_display.setText(self.beacon(int(block_number)))
                         if str(data[6]) == 'RAILWAY CROSSING':
                             self.infrastructure_display.setText(str(data[6]))
                     else:
                         self.infrastructure_display.setText(str(data[6]))
                         self.station_name_display.setText(str(data[6]))
+                        self.tickets_sold_display.setText(str(data[6]))
+                        self.passengers_boarding_display.setText(str(data[6]))
+                        self.passengers_disembarking_display.setText(str(data[6]))
+                        self.beacon_display.setText(str(data[6]))
                     
                     # display active switch direction in sidebar
                     self.switch_direction_display.setText(self.track_instance_copy.lines[0].blocks[int(block_number)].get_switch_direction_string(0))
@@ -374,12 +559,16 @@ class TrackModelModule(QtWidgets.QMainWindow):
                         self.direction_of_travel_display.setText('Traveling South')
                         self.authority_display.setText((self.active_trains_instance_copy.Train[0].current_authority) * (3.281 * (73-self.occupied_block)))
                         self.current_speed_display.setText(str(self.active_trains_instance_copy.Train[0].current_suggested_speed))
-                    # TODO display remainder of station info (tickets sold, passengers boarding and disembarking)
+                    
+                    
         
     def build_track_map(self):
         self.graphicsView.scene().clear()
         self.line_name = self.TrackLineColorValue.currentText()
-    
+
+        # generate ticket sales
+        self.tickets()
+        
         if self.line_name == 'Red Line':
             
             # place the yard block and go from there
@@ -525,6 +714,12 @@ class TrackModelModule(QtWidgets.QMainWindow):
             self.add_light_to_map(298,645,'light52')
             self.add_light_to_map(250,675,'light53')
             self.add_light_to_map(275,620,'light66')
+            
+            # place crossing light
+            red_crossing = QtWidgets.QGraphicsEllipseItem(405,615,10,10)  # (x, y, width, height)
+            red_crossing.setBrush(QtGui.QColor(255,255,255))  # white color by default for inactive crossing
+            self.graphicsView.scene().addItem(red_crossing)
+            red_crossing.setToolTip("crossing47")
 
         elif self.line_name == 'Green Line':
             # place the yard block 
@@ -735,6 +930,12 @@ class TrackModelModule(QtWidgets.QMainWindow):
             
             self.add_light_to_map(260,630,'light85')
             self.add_light_to_map(230,600,'light100')
+            
+            # place crossing light
+            green_crossing = QtWidgets.QGraphicsEllipseItem(170,-180,10,10)  # (x, y, width, height)
+            green_crossing.setBrush(QtGui.QColor(255,255,255))  # white color by default for inactive crossing
+            self.graphicsView.scene().addItem(green_crossing)
+            green_crossing.setToolTip("crossing19")
 
     def add_block_to_map(self,x,y,block_size,block_number,block_number_2,label_pos,prev_x,prev_y):
             block_number = QtWidgets.QGraphicsRectItem(x,y,block_size,block_size)

@@ -40,15 +40,16 @@ class signalsList(QObject):
     # Track Model signals
     track_model_update_backend = pyqtSignal(Track,ActiveTrains)
     track_model_backend_update = pyqtSignal(Track)
-    track_model_block_occupancy = pyqtSignal(int)
     track_model_ticket_sales = pyqtSignal(int)
-    track_model_speed_limit = pyqtSignal(int)
-    track_model_suggested_speed = pyqtSignal(int)
-    track_model_track_circuit_polarity = pyqtSignal(int)
     track_model_track_fault = pyqtSignal(bool)
-    track_model_authority = pyqtSignal(float)
-    track_model_block_grade = pyqtSignal(float)
-    track_model_beacon = pyqtSignal(str)
+    
+    # sent to train model
+    track_model_passengers = pyqtSignal(int,int)
+    track_model_speed_limit = pyqtSignal(int,int)
+    track_model_suggested_speed = pyqtSignal(int,int)
+    track_model_authority = pyqtSignal(int,float)
+    track_model_block_grade = pyqtSignal(int,float)
+    track_model_beacon = pyqtSignal(int,str)
     
     # Train Model signals
     trainModel_backend_update = pyqtSignal()
