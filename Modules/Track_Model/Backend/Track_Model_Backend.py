@@ -417,6 +417,10 @@ class TrackModelModule(QtWidgets.QMainWindow):
             
             # obtain ticket sales number for each station of green line
             self.tickets_sold = int(self.green_sales / station_count)
+        
+        if self.red_sales is not None and self.green_sales is not None: 
+            # send ctc the ticket sales
+            signals.track_model_ticket_sales.emit([self.red_sales,self.green_sales])
             
             
 
