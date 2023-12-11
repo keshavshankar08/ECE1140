@@ -20,6 +20,8 @@ class signalsList(QObject):
     ctc_office_update_frontend = pyqtSignal(Track, ActiveTrains, int) # update from ctc office backend to ctc office frontend
     ctc_office_frontend_update = pyqtSignal(Track, ActiveTrains, int, QueueTrains) # update from ctc office frontend to ctc office backend
     ctc_office_backend_update = pyqtSignal(Track, ActiveTrains, int) # update from ctc office backend to main backend
+    ctc_added_train = pyqtSignal(int)
+    ctc_removed_train = pyqtSignal(int)
 
     # SW Wayside Signals
     sw_wayside_update_backend = pyqtSignal(Track, ActiveTrains) # update from main backend to sw wayside backend
@@ -52,19 +54,19 @@ class signalsList(QObject):
     
     # Train Model signals
     trainModel_backend_update = pyqtSignal()
-    trainModel_send_actual_velocity = pyqtSignal(float)
-    trainModel_send_emergency_brake = pyqtSignal(bool)
-    trainModel_send_suggested_speed = pyqtSignal(float)
-    trainModel_send_authority = pyqtSignal(float)
-    trainModel_send_speed_limit = pyqtSignal(float)
-    trainModel_send_beacon = pyqtSignal(str)
-    trainModel_send_train_length = pyqtSignal(float)
-    trainModel_send_distance_from_yard = pyqtSignal(float)
-    trainModel_send_distance_from_block_start = pyqtSignal(float)
-    trainModel_send_engine_failure = pyqtSignal(bool)
-    trainModel_send_brake_failure = pyqtSignal(bool)
-    trainModel_send_signal_failure = pyqtSignal(bool)
-    trainModel_update_beacon_UI = pyqtSignal(str)
+    trainModel_send_actual_velocity = pyqtSignal(int, float)
+    trainModel_send_emergency_brake = pyqtSignal(int, bool)
+    trainModel_send_suggested_speed = pyqtSignal(int, float)
+    trainModel_send_authority = pyqtSignal(int, float)
+    trainModel_send_speed_limit = pyqtSignal(int, float)
+    trainModel_send_beacon = pyqtSignal(int, str)
+    trainModel_send_train_length = pyqtSignal(int, float)
+    trainModel_send_distance_from_yard = pyqtSignal(int, float)
+    trainModel_send_distance_from_block_start = pyqtSignal(int, float)
+    trainModel_send_engine_failure = pyqtSignal(int, bool)
+    trainModel_send_brake_failure = pyqtSignal(int, bool)
+    trainModel_send_signal_failure = pyqtSignal(int, bool)
+    trainModel_update_beacon_UI = pyqtSignal(int, str)
     
     # Train Controller signals
     # train_controller_update_frontend = pyqtSignal(int, int, int, float, bool, bool, bool, bool, bool, bool, bool)#TC backend to TC frontend

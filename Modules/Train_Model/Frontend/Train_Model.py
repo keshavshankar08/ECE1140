@@ -2,7 +2,7 @@ from PyQt6 import QtWidgets, uic, QtGui
 from PyQt6.QtCore import QTimer
 import sys
 sys.path.append(".")
-from Modules.Train_Model.Backend.Train import Train, trains
+from Modules.Train_Model.Backend.TrainList import trainList
 from signals import signals
 
 class TrainModel(QtWidgets.QMainWindow):
@@ -10,6 +10,7 @@ class TrainModel(QtWidgets.QMainWindow):
         super().__init__()
         uic.loadUi("Modules/Train_Model/Frontend/Train_Model_UI.ui", self)
         signals.trainModel_backend_update.connect(self.UIUpdate)
+        signals.ctc_added_train.connect(self.addTrainToBox)
         self.trainSelectComboBox.currentIndexChanged.connect(self.trainSelect)
         self.eBrakeButton.clicked.connect(self.setEBrake)
         self.signalFail.stateChanged.connect(self.sendSignalFail)
@@ -29,13 +30,13 @@ class TrainModel(QtWidgets.QMainWindow):
         self.adCounter = 40
         
         self.currentTrain = None
-        self.trainSelectComboBox.addItem("< select train >")
-        for key, value in trains.items():
-            self.trainSelectComboBox.addItem(f"ID: {key}")
-            self.trainSelectComboBox.setItemData(self.trainSelectComboBox.count() - 1, value)
-            
         self.eBrakeButton.setEnabled(False)
+        self.trainSelectComboBox.addItem("< select train >")
         
+    def addTrainToBox(self, id):
+        train = trainList.allTrains[id]
+        self.trainSelectComboBox.addItem(f"ID: {id}")
+        self.trainSelectComboBox.setItemData(self.trainSelectComboBox.count() - 1, train)
 
     def UIUpdate(self):
         self.adCounter -= 1

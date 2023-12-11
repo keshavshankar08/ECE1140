@@ -182,6 +182,9 @@
           </item>
           <item alignment="Qt::AlignRight">
            <widget class="QDoubleSpinBox" name="tb_power">
+            <property name="minimum">
+             <double>-120000.000000000000000</double>
+            </property>
             <property name="maximum">
              <double>120000.000000000000000</double>
             </property>

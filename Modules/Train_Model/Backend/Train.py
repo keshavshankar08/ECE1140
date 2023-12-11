@@ -7,7 +7,7 @@ import sys
 
 sys.path.append(".")
 from signals import signals
-from CONSTANTS import START_YEAR, START_MONTH, START_DAY, START_HOUR, START_MIN, START_SEC, TIME_DELTA
+from CONSTANTS import constants
 
 import math
 
@@ -29,9 +29,6 @@ FRICTION_COEFF = 0.0  # dimensionless
 class Train(QObject):
     def __init__(self):
         super().__init__()
-        #### Signals
-        signals.current_system_time.connect(self.setCurrentTime)
-        signals.trainModel_backend_update.connect(self.TrainModelUpdateValues)
         # Train Controller
         signals.train_controller_send_power_command.connect(self.setPowerCommand)
         signals.train_controller_int_lights_status.connect(self.interiorLights)
@@ -48,7 +45,6 @@ class Train(QObject):
         signals.track_model_beacon.connect(self.receiveBeacon)
         signals.track_model_suggested_speed.connect(self.receiveSuggestedSpeed)
         signals.track_model_block_grade.connect(self.receiveGradient)
-        signals.current_system_time.connect(self.setCurrentTime)
         #### Train ID
         self.train_id = 0
         #### Number of Passengers
@@ -96,18 +92,12 @@ class Train(QObject):
         self.distanceFromYard = 0.0
         self.distanceFromBlockStart = 0.0
         self.currentBeacon = None
-        #### Time
-        self.current_time = QDateTime(START_YEAR, START_MONTH, START_MONTH, START_DAY, START_HOUR, START_MIN, START_SEC)
         #### Failure
         self.engineFail = False
         self.brakeFail = False
         self.signalFail = False
         #### Passthroughs
         self.speedLimit = 70.0
-        self.currentTime = QDateTime()
-
-    def updateCurrentTime(self, value):
-        self.currentTime = value
 
     def TrainModelUpdateValues(self):
         ### MASS
@@ -133,7 +123,7 @@ class Train(QObject):
             self.brakeForce = 0
         ### ENGINE
         try:
-            self.engineForce = abs(self.commandedPower / self.currentSpeed)
+            self.engineForce = self.commandedPower / self.currentSpeed
         except ZeroDivisionError:
             if (self.commandedPower > 0):
                 self.currentSpeed = 0.1  # ????
@@ -151,7 +141,7 @@ class Train(QObject):
         self.currentAccel = self.netForce / self.mass
 
         if (self.commandedPower <= MAX_MOTOR_POWER):
-            self.currentSpeed = self.currentSpeed + (TIME_DELTA * 0.001 / 2) * (self.currentAccel + self.previousAccel)
+            self.currentSpeed = self.currentSpeed + (constants.TIME_DELTA * 0.001 / 2) * (self.currentAccel + self.previousAccel)
 
         if (self.currentSpeed < 0):
             self.currentSpeed = 0
@@ -164,23 +154,23 @@ class Train(QObject):
             
         ## Position Calculation
         
-        self.distanceFromYard += self.currentSpeed * (TIME_DELTA * 0.001)
-        self.distanceFromBlockStart += self.currentSpeed * (TIME_DELTA * 0.001)
+        self.distanceFromYard += self.currentSpeed * (constants.TIME_DELTA * 0.001)
+        self.distanceFromBlockStart += self.currentSpeed * (constants.TIME_DELTA * 0.001)
 
         # Signals to Train Controller
-        signals.trainModel_send_engine_failure.emit(self.engineFail)
-        signals.trainModel_send_signal_failure.emit(self.signalFail)
-        signals.trainModel_send_brake_failure.emit(self.brakeFail)
-        signals.trainModel_send_actual_velocity.emit(self.currentSpeed)
-        signals.trainModel_send_emergency_brake.emit(self.emergencyBrake)
-        signals.trainModel_send_authority.emit(self.currentAuthority)
-        signals.trainModel_send_beacon.emit(self.currentBeacon)
-        signals.trainModel_send_speed_limit.emit(self.speedLimit)
-        signals.trainModel_send_suggested_speed.emit(self.suggestedSpeed)
+        signals.trainModel_send_engine_failure.emit(self.train_id, self.engineFail)
+        signals.trainModel_send_signal_failure.emit(self.train_id, self.signalFail)
+        signals.trainModel_send_brake_failure.emit(self.train_id, self.brakeFail)
+        signals.trainModel_send_actual_velocity.emit(self.train_id, self.currentSpeed)
+        signals.trainModel_send_emergency_brake.emit(self.train_id, self.emergencyBrake)
+        signals.trainModel_send_authority.emit(self.train_id, self.currentAuthority)
+        signals.trainModel_send_beacon.emit(self.train_id, self.currentBeacon)
+        signals.trainModel_send_speed_limit.emit(self.train_id, self.speedLimit)
+        signals.trainModel_send_suggested_speed.emit(self.train_id, self.suggestedSpeed)
         # Signals to Track Model
-        signals.trainModel_send_train_length.emit(self.length)
-        signals.trainModel_send_distance_from_block_start.emit(self.distanceFromBlockStart)
-        signals.trainModel_send_distance_from_yard.emit(self.distanceFromYard)
+        signals.trainModel_send_train_length.emit(self.train_id, self.length)
+        signals.trainModel_send_distance_from_block_start.emit(self.train_id, self.distanceFromBlockStart)
+        signals.trainModel_send_distance_from_yard.emit(self.train_id, self.distanceFromYard)
 
     def eBrake(self, value):
         self.emergencyBrake = value
@@ -202,9 +192,6 @@ class Train(QObject):
 
     def receiveTemperature(self, value):
         self.temperatureCommand = value
-
-    def setCurrentTime(self, time):
-        self.current_time = time
 
     def setPowerCommand(self, value):
         self.commandedPower = value
@@ -233,9 +220,5 @@ class Train(QObject):
     def receiveGradient(self, value):
         self.currentGradient = value
 
-train = Train()
 
 
-trains = {
-    0: train
-}
