@@ -74,18 +74,18 @@ class signalsList(QObject):
     train_controller_update_backend = pyqtSignal() #main backend to TC backend
     # train_controller_backend_update = pyqtSignal()#TC backend to Main backend
     #lights
-    train_controller_int_lights_status = pyqtSignal(bool)
-    train_controller_ext_lights_status = pyqtSignal(bool)
+    train_controller_int_lights_status = pyqtSignal(int, bool)
+    train_controller_ext_lights_status = pyqtSignal(int, bool)
     #doors
-    train_controller_right_door_status = pyqtSignal(bool)
-    train_controller_left_door_status = pyqtSignal(bool)
+    train_controller_right_door_status = pyqtSignal(int, bool)
+    train_controller_left_door_status = pyqtSignal(int, bool)
     #Bower
-    train_controller_send_power_command = pyqtSignal(float)
+    train_controller_send_power_command = pyqtSignal(int, float)
     #Temperature
-    train_controller_temperature_value = pyqtSignal(float)
+    train_controller_temperature_value = pyqtSignal(int, float)
     #Braking
-    train_controller_emergency_brake_status = pyqtSignal(bool)
-    train_controller_service_brake_status = pyqtSignal(bool)
+    train_controller_emergency_brake_status = pyqtSignal(int, bool)
+    train_controller_service_brake_status = pyqtSignal(int, bool)
 
 signals = signalsList()
 

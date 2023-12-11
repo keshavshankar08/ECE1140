@@ -582,7 +582,7 @@
       <rect>
        <x>22</x>
        <y>20</y>
-       <width>71</width>
+       <width>101</width>
        <height>31</height>
       </rect>
      </property>
@@ -593,7 +593,7 @@
       <bool>true</bool>
      </property>
      <property name="currentText">
-      <string extracomment="Train">Train</string>
+      <string extracomment="Train">train selection</string>
      </property>
     </widget>
     <widget class="QLabel" name="utilities_7">

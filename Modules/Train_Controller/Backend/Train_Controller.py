@@ -11,8 +11,9 @@ from CONSTANTS import constants
 #CONSTANTS
 MAX_POWER = 120000
 
-class TrainController():
+class TrainController(QObject):
     def __init__(self):
+        super().__init__()
         signals.current_system_time.connect(self.set_current_time)
         signals.train_controller_update_backend.connect(self.tc_update_values)
 
@@ -44,9 +45,8 @@ class TrainController():
         #authority and others
         self.authority = 0.0
         self.station = None
+        self.train_id = None
         self.beacon_flag = False
-        self.train_ID = None
-        self.train_list = []
         self.train_horn = False
 
         #emergency brakes and service brakes, True = On, False = Off
@@ -87,14 +87,15 @@ class TrainController():
         self.current_time = time
 
     def tc_update_values(self):
-        signals.train_controller_send_power_command.emit(self.commanded_power)
-        signals.train_controller_emergency_brake_status.emit(self.emergency_brake)
-        signals.train_controller_service_brake_status.emit(self.service_brake)
-        signals.train_controller_ext_lights_status.emit(self.ext_lights)
-        signals.train_controller_int_lights_status.emit(self.int_lights)
-        signals.train_controller_left_door_status.emit(self.L_door)
-        signals.train_controller_right_door_status.emit(self.R_door)
-        signals.train_controller_temperature_value.emit(self.train_temp)
+        signals.train_controller_send_power_command.emit(self.train_id, self.commanded_power)
+        signals.train_controller_emergency_brake_status.emit(self.train_id, self.emergency_brake)
+        signals.train_controller_service_brake_status.emit(self.train_id, self.service_brake)
+        signals.train_controller_ext_lights_status.emit(self.train_id, self.ext_lights)
+        signals.train_controller_int_lights_status.emit(self.train_id, self.int_lights)
+        signals.train_controller_left_door_status.emit(self.train_id, self.L_door)
+        signals.train_controller_right_door_status.emit(self.train_id, self.R_door)
+        signals.train_controller_temperature_value.emit(self.train_id, self.train_temp)
+
 
         vError = 0
         if self.mode == True: #auto mode
@@ -271,9 +272,3 @@ class TrainController():
 
     def train_horn_status(self, value):
         self.train_horn = value
-
-
-
-
-
-    

@@ -5,6 +5,7 @@ from signals import signals
 from CONSTANTS import constants
 from Modules.Train_Model.Backend.Train import Train
 
+
 class TrainList(QObject):
     def __init__(self):
         super().__init__()
