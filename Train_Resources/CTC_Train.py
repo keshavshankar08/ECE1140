@@ -115,8 +115,6 @@ class Train:
         else:
             self.departure_time = "0"
 
-        print(self.authority_stop_queue)
-
     #function to get the train to the next stop
     def next_stop(self):
         #iterate the stop index by 1
@@ -171,8 +169,6 @@ class Train:
             if track.red_line.blocks[self.authority_stop_queue[self.stop_index][0]].block_occupancy == True:
                 #update current block
                 self.current_block = self.authority_stop_queue[self.stop_index][0]
-                print(self.authority_stop_queue[self.stop_index])
-                print(f'cur block: ',self.current_block)
                 self.authority_stop_queue[self.stop_index] = self.authority_stop_queue[self.stop_index][1:]
 
         if(self.current_line == 1):
@@ -180,8 +176,6 @@ class Train:
             if track.green_line.blocks[self.authority_stop_queue[self.stop_index][0]].block_occupancy == True:
                 #update current block
                 self.current_block = self.authority_stop_queue[self.stop_index][0]
-                print(self.authority_stop_queue[self.stop_index])
-                print(f'cur block: ',self.current_block)
                 self.authority_stop_queue[self.stop_index] = self.authority_stop_queue[self.stop_index][1:]
 
         #update current direction for each possible line
