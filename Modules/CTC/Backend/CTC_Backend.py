@@ -84,6 +84,7 @@ class CTCBackend():
                 self.active_trains_instance_copy.active_trains.append(train)
                 self.queue_trains.remove_train(i)
                 self.active_trains_instance_copy.active_trains[len(self.active_trains_instance_copy.active_trains) - 1].next_stop()
+                signals.ctc_added_train.emit(int(train.train_ID))
 
     #This function will update active trains and update their progress
     def update_train_progress(self, track):
