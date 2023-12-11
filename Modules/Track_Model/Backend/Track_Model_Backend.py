@@ -27,7 +27,8 @@ class TrackModelModule(QtWidgets.QMainWindow):
         # member variable to hold occupied block
         self.occupied_block = 0
         self.block_grade = 0
-    
+        self.speed_limit = 0
+        self.train_id = 0
         
         # train model variables
         self.train_length = 0
@@ -50,7 +51,6 @@ class TrackModelModule(QtWidgets.QMainWindow):
 
         # receive updates from train model
         signals.trainModel_send_train_length.connect(self.receive_train_length)
-        signals.trainModel_send_distance_from_block_start.connect(self.receive_distance_from_block_start)
         signals.trainModel_send_distance_from_yard.connect(self.receive_distance_from_yard)
         
         # disable line selector until track is loaded to avoid undefined behavior
@@ -86,7 +86,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
     
     # send updates from track model backend to main backend
     def send_main_backend_update(self):
-        signals.track_model_backend_update.emit(self.track_instance_copy, self.active_trains_instance_copy)
+        signals.track_model_backend_update.emit(self.track_instance_copy, self.active_trains_instance_copy.Train)
     
     # Update local instance of track 
     def update_copy_track(self,updated_track):
@@ -120,11 +120,18 @@ class TrackModelModule(QtWidgets.QMainWindow):
         self.set_crossing_light()
         
         # signals to train model
-        signals.track_model_block_grade.emit(self.block_grade)
+        self.send_train_info()
         #signals.track_model_passengers.emit(self.net_passengers)
         
         # send updated signals to main backend
         self.send_main_backend_update()
+    
+    # send active trains info to train model
+    def send_train_info(self):
+        # loop through all active trains and send info to train model 
+        for train in self.active_trains_instance_copy.active_trains:
+            signals.track_model_suggested_speed.emit(train.train_ID,train.current_suggested_speed)
+            signals.track_model_authority.emit(train.train_ID,train.current_authority)
         
     # failure mode handler
     def failure_mode(self):
@@ -140,27 +147,22 @@ class TrackModelModule(QtWidgets.QMainWindow):
             self.track_heater_display.setText("Active")
         else:
             self.track_heater_display.setText("Inactive")
-    # receive suggested speed and authority
-    def receive_train_attributes(self, authority, suggested_speed):
-        self.receive
+            
                
     # train model signal slots 
     def receive_train_model_signals(self):
-        self.receive_train_length(self.train_length)
-        self.receive_distance_from_block_start(self.distance_from_block_start)
-        self.receive_distance_from_yard(self.distance_from_yard)
+        self.receive_train_length(self.train_id,self.train_length)
+        self.receive_distance_from_yard(self.train_id,self.distance_from_yard)
         
-    def receive_train_length(self, length):
+    def receive_train_length(self, train_id, length):
         # Handle the received train length signal
         self.train_length = length
+        self.train_id = train_id
 
-    def receive_distance_from_block_start(self, distance_block):
-        # Handle the received distance from block start signal
-        self.distance_from_block_start = distance_block
-
-    def receive_distance_from_yard(self, distance_yard):
+    def receive_distance_from_yard(self, train_id, distance_yard):
         # Handle the received distance from yard signal
         self.distance_from_yard = distance_yard
+        self.train_id = train_id
 
     # sends updates from track model backend to main backend
     def send_main_backend_update(self):
@@ -192,12 +194,15 @@ class TrackModelModule(QtWidgets.QMainWindow):
                         # position found
                         self.set_block_color(path[count],path[count-1])
                         self.track_instance_copy.lines[1].blocks[path[count]].block_occupancy = True
-                        self.block_grade = self.green_line_data[block][4]
-
+                        
+                        # send signals for block grade and speed limit to train model
+                        signals.track_model_block_grade.emit(self.train_id,self.green_line_data[block][4])
+                        signals.track_model_speed_limit.emit(self.train_id,self.green_line_data[block][5])
+                        
                         for station_block in stations:
                             if block == station_block:
                                 # station block is occupied, send beacon signal
-                                signals.track_model_beacon.emit(self.beacon(block))
+                                signals.track_model_beacon.emit(self.train_id,self.beacon(block))
                             
                         return block
                     count += 1
@@ -222,12 +227,16 @@ class TrackModelModule(QtWidgets.QMainWindow):
                         # position found
                         self.set_block_color(path[count],path[count-1])
                         self.track_instance_copy.lines[0].blocks[path[count]].block_occupancy = True
-                        self.block_grade = self.red_line_data[block][4]
+                        
+                        # send signals for block grade and speed limit to train model
+                        signals.track_model_block_grade.emit(self.train_id,self.red_line_data[block][4])
+                        signals.track_model_speed_limit.emit(self.train_id,self.red_line_data[block][5])
+                        
                         
                         for station_block in stations:
                             if block == station_block:
                                 # train is at station, send beacon signal
-                                signals.track_model_beacon.emit(self.beacon(block))
+                                signals.track_model_beacon.emit(self.train_id,self.beacon(block))
                         
                         return block
                     count += 1
@@ -498,10 +507,10 @@ class TrackModelModule(QtWidgets.QMainWindow):
                     
                     # TODO display train info (only if block is occupied)
                     if block_number == self.occupied_block:
-                        self.train_ID_display.setText(str(self.active_trains_instance_copy.Train[0].train_ID))
+                        self.train_ID_display.setText(str(self.active_trains_instance_copy.active_trains[0].train_ID))
                         self.direction_of_travel_display.setText('Traveling South')
-                        self.authority_display.setText((self.active_trains_instance_copy.Train[0].current_authority) * (3.281 * (73-self.occupied_block)))
-                        self.current_speed_display.setText(str(self.active_trains_instance_copy.Train[0].current_suggested_speed))
+                        self.authority_display.setText((self.active_trains_instance_copy.active_trains[0].current_authority) * (3.281 * (73-self.occupied_block)))
+                        self.current_speed_display.setText(str(self.active_trains_instance_copy.active_trains[0].current_suggested_speed))
                    
                    
                     

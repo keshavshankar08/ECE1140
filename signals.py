@@ -37,13 +37,13 @@ class signalsList(QObject):
     hw_wayside_frontend_update = pyqtSignal(Track)
     hw_wayside_backend_update = pyqtSignal(Track)
     
-    # Track Model signals
+    # Track Model signals receive and send to CTC / Wayside
     track_model_update_backend = pyqtSignal(Track,ActiveTrains)
     track_model_backend_update = pyqtSignal(Track)
     track_model_ticket_sales = pyqtSignal(int)
     track_model_track_fault = pyqtSignal(bool)
     
-    # sent to train model
+    # Track Model signals send to train model
     track_model_passengers = pyqtSignal(int,int)
     track_model_speed_limit = pyqtSignal(int,int)
     track_model_suggested_speed = pyqtSignal(int,int)
