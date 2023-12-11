@@ -14,7 +14,7 @@ class TestBenchTrainControllerUI(QtWidgets.QMainWindow):
     def __init__(self):
         #setup
         super().__init__()
-        uic.loadUi("Modules/Train_Controller/Frontend/TCtestbenchUI.ui", self)
+        uic.loadUi("Modules/Train_Controller/Frontend/TC_test_bench_UI.ui", self)
         self.trainController = trainController()
         self.testingTimer = QTimer()
         self.testingTimer.timeout.connect(signals.train_controller_update_backend)

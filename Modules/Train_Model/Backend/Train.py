@@ -133,7 +133,7 @@ class Train(QObject):
             self.brakeForce = 0
         ### ENGINE
         try:
-            self.engineForce = abs(self.commandedPower / self.currentSpeed)
+            self.engineForce = self.commandedPower / self.currentSpeed
         except ZeroDivisionError:
             if (self.commandedPower > 0):
                 self.currentSpeed = 0.1  # ????
@@ -141,8 +141,8 @@ class Train(QObject):
         self.currentAngle = math.atan(self.currentGradient / 100)
         self.slopeForce = self.mass * GRAVITY * math.sin(self.currentAngle)
         ### FRICTION
-        #self.frictionForce = self.mass * GRAVITY * FRICTION_COEFF * math.cos(self.currentAngle)
-        self.frictionForce = 1000
+        self.frictionForce = self.mass * GRAVITY * FRICTION_COEFF * math.cos(self.currentAngle)
+        #self.frictionForce = 1000
         ### NET FORCE
         self.netForce = self.engineForce - self.slopeForce - self.brakeForce - self.frictionForce
         if (self.netForce > MAX_ENGINE_FORCE):
