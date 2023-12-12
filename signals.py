@@ -32,6 +32,7 @@ class signalsList(QObject):
     sw_wayside_plc_update = pyqtSignal(Track, ActiveTrains) # update from plc to sw wayside backend
     sw_wayside_backend_update = pyqtSignal(Track, ActiveTrains) # update from sw wayside backend to main backend
 
+    wayside_choice = pyqtSignal(bool) # which wayside is chosen at start (false = sw, true = hw)
 
     # HW Wayside signals
     hw_wayside_update_backend = pyqtSignal(Track, ActiveTrains) # update main backend to hw
@@ -46,7 +47,7 @@ class signalsList(QObject):
     track_model_update_backend = pyqtSignal(Track,ActiveTrains)
     track_model_backend_update = pyqtSignal(Track)
     track_model_block_occupancy = pyqtSignal(int)
-    track_model_ticket_sales = pyqtSignal(int)
+    track_model_ticket_sales = pyqtSignal(list)
     track_model_speed_limit = pyqtSignal(int,int)
     track_model_track_circuit_polarity = pyqtSignal(int)
     track_model_suggested_speed = pyqtSignal(int,int)
@@ -77,17 +78,17 @@ class signalsList(QObject):
     train_controller_update_backend = pyqtSignal() #main backend to TC backend
     # train_controller_backend_update = pyqtSignal()#TC backend to Main backend
     #lights
-    train_controller_int_lights_status = pyqtSignal(bool)
-    train_controller_ext_lights_status = pyqtSignal(bool)
+    train_controller_int_lights_status = pyqtSignal(int, bool)
+    train_controller_ext_lights_status = pyqtSignal(int, bool)
     #doors
-    train_controller_right_door_status = pyqtSignal(bool)
-    train_controller_left_door_status = pyqtSignal(bool)
+    train_controller_right_door_status = pyqtSignal(int, bool)
+    train_controller_left_door_status = pyqtSignal(int, bool)
     #Bower
-    train_controller_send_power_command = pyqtSignal(float)
+    train_controller_send_power_command = pyqtSignal(int, float)
     #Temperature
-    train_controller_temperature_value = pyqtSignal(float)
+    train_controller_temperature_value = pyqtSignal(int, float)
     #Braking
-    train_controller_emergency_brake_status = pyqtSignal(bool)
-    train_controller_service_brake_status = pyqtSignal(bool)
+    train_controller_emergency_brake_status = pyqtSignal(int, bool)
+    train_controller_service_brake_status = pyqtSignal(int, bool)
 
 signals = signalsList()

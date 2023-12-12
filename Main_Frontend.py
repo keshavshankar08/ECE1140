@@ -1,8 +1,7 @@
 import sys
+sys.path.append(".")
 from PyQt6 import QtCore, QtGui, QtWidgets, uic
 from PyQt6.QtWidgets import *
-sys.path.append(".")
-
 from Modules.CTC.Frontend.CTC_UI import *
 from Modules.Track_Model.Backend.Track_Model_Backend import *
 #from Modules.CTC.Frontend.frontend import *
@@ -12,7 +11,6 @@ from Modules.Track_Model.Frontend.Track_Model_UI import *
 from Modules.Train_Model.Frontend.Train_Model import *
 from Modules.Train_Controller.Frontend.Train_Controller_UI import *
 from Admin_UI import *
-
 
 class MainFrontend(QtWidgets.QMainWindow):
     def __init__(self):
@@ -88,20 +86,15 @@ class MainFrontend(QtWidgets.QMainWindow):
     #window for the se wayside controller
     def sw_wayside_clicked(self):
         self.swWaysideWindow.show()
+        self.hw_wayside_button.setEnabled(False)
+        signals.wayside_choice.emit(0)
 
     #window for the hw wayside controller
     def hw_wayside_clicked(self):
         self.hwWaysideWindow.show()
+        self.sw_wayside_button.setEnabled(False)
+        signals.wayside_choice.emit(1)
 
     #window for the train controller
     def train_controller_clicked(self):
         self.trainControllerWindow.show()
-    
-    
-
-
-#Main
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    window = MainFrontend()
-    app.exec()
