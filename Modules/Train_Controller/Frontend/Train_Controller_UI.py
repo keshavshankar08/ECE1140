@@ -267,7 +267,7 @@ class TrainControllerUI(QtWidgets.QMainWindow):
     #function for train horn
     def play_sound(self):
         def play_audio():
-            sound_file = os.path.abspath('Easter Egg Horn.mp3')
+            sound_file = os.path.abspath('Train Horn.mp3')
             playsound(sound_file)
         audio_thread = threading.Thread(target=play_audio)
         audio_thread.start()
