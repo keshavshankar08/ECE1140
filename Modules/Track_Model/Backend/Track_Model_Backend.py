@@ -132,8 +132,8 @@ class TrackModelModule(QtWidgets.QMainWindow):
     def send_train_info(self):
         # loop through all active trains and send info to train model 
         for train in self.active_trains_instance_copy.active_trains:
-            signals.track_model_suggested_speed.emit(train.train_ID,train.current_suggested_speed)
-            signals.track_model_authority.emit(train.train_ID,train.current_authority)
+            signals.track_model_suggested_speed.emit(int(train.train_ID),train.current_suggested_speed)
+            signals.track_model_authority.emit(int(train.train_ID),train.current_authority)
         
     # failure mode handler
     def failure_mode(self):

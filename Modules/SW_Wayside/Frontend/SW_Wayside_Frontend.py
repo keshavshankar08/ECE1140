@@ -222,12 +222,17 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
         def view_track_map_clicked(self):
                 curr_line_int = self.get_current_line_displayed_int()
                 image_viewer = {'linux':'xdg-open',
-                                  'win32':'explorer',
                                   'darwin':'open'}[sys.platform]
-                if(curr_line_int == 0):
-                        subprocess.Popen([image_viewer, "Modules/SW_Wayside/Frontend/red_line_map.png"])
-                elif(curr_line_int == 1):
-                        subprocess.Popen([image_viewer, "Modules/SW_Wayside/Frontend/green_line_map.png"])
+                if(sys.platform == 'win32'):
+                        if(curr_line_int == 0):
+                                subprocess.Popen(['start', "Modules/SW_Wayside/Frontend/red_line_map.png"], shell=True)
+                        elif(curr_line_int == 1):
+                                subprocess.Popen(['start', "Modules/SW_Wayside/Frontend/green_line_map.png"], shell=True)
+                else:
+                        if(curr_line_int == 0):
+                                subprocess.Popen([image_viewer, "Modules/SW_Wayside/Frontend/red_line_map.png"])
+                        elif(curr_line_int == 1):
+                                subprocess.Popen([image_viewer, "Modules/SW_Wayside/Frontend/green_line_map.png"])
 
         # Handles upload plc program button clicked
         def uploadPLCClicked(self):
