@@ -154,20 +154,20 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #if red line
         if (str(self.line_value_box.currentText()) == 'Red Line'):
             #check block occupancy
-            if(self.track_instance_copy.red_line.blocks[status_block].block_occupancy == True):
+            if(self.track_instance_copy.lines[0].blocks[status_block].block_occupancy == True):
                 self.block_occupancy_indicator.setStyleSheet("background-color: rgb(167, 255, 167)")
             #check block status
-            if(self.track_instance_copy.red_line.blocks[status_block].track_fault_status == True):
+            if(self.track_instance_copy.lines[0].blocks[status_block].track_fault_status == True):
                 self.block_status_indicator.setStyleSheet("background-color: rgb(255, 167, 167)")
             #check maintenance status
-            if(self.track_instance_copy.red_line.blocks[status_block].maintenance_status == True):
+            if(self.track_instance_copy.lines[0].blocks[status_block].maintenance_status == True):
                 self.block_status_indicator.setStyleSheet("background-color: rgb(255, 255, 167)")
 
             #compile list of notable blocks
             maintenance_list = ""
             fault_list = ""
             occupied_list = ""
-            for block in self.track_instance_copy.red_line.blocks:
+            for block in self.track_instance_copy.lines[0].blocks:
                 if(block.block_occupancy == True):
                     occupied_list = occupied_list + " " + str(block.block_number)
                 if(block.track_fault_status == True):
@@ -181,20 +181,20 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #if green line
         if (str(self.line_value_box.currentText()) == 'Green Line'):
             #check block occupancy
-            if(self.track_instance_copy.green_line.blocks[status_block].block_occupancy == True):
+            if(self.track_instance_copy.lines[1].blocks[status_block].block_occupancy == True):
                 self.block_occupancy_indicator.setStyleSheet("background-color: rgb(167, 255, 167)")
             #check block status
-            if(self.track_instance_copy.green_line.blocks[status_block].track_fault_status == True):
+            if(self.track_instance_copy.lines[1].blocks[status_block].track_fault_status == True):
                 self.block_status_indicator.setStyleSheet("background-color: rgb(255, 167, 167)")
             #check maintenance status
-            if(self.track_instance_copy.green_line.blocks[status_block].maintenance_status == True):
+            if(self.track_instance_copy.lines[1].blocks[status_block].maintenance_status == True):
                 self.block_status_indicator.setStyleSheet("background-color: rgb(255, 255, 167)")
 
             #compile list of notable blocks
             maintenance_list = ""
             fault_list = ""
             occupied_list = ""
-            for block in self.track_instance_copy.green_line.blocks:
+            for block in self.track_instance_copy.lines[1].blocks:
                 if(block.block_occupancy == True):
                     occupied_list = occupied_list + " " + str(block.block_number)
                 if(block.track_fault_status == True):
@@ -226,12 +226,12 @@ class CTCFrontend(QtWidgets.QMainWindow):
         maintenance_block = int(self.set_block_maintenance_value.currentText())
 
         if (str(self.line_value_box.currentText()) == 'Red Line'):
-            for block in self.track_instance_copy.red_line.blocks:
+            for block in self.track_instance_copy.lines[0].blocks:
                 if(block.block_number == maintenance_block):
                     block.maintenance_status = not block.maintenance_status
 
         if (str(self.line_value_box.currentText()) == 'Green Line'):
-            for block in self.track_instance_copy.green_line.blocks:
+            for block in self.track_instance_copy.lines[1].blocks:
                 if(block.block_number == maintenance_block):
                     block.maintenance_status = not block.maintenance_status
 
@@ -242,10 +242,10 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #update line status
         if (str(self.line_value_box.currentText()) == 'Red Line'):
             self.set_block_maintenance_value.clear()
-            self.set_block_maintenance_value.addItems([str(x.block_number) for x in self.track_instance_copy.red_line.blocks])
+            self.set_block_maintenance_value.addItems([str(x.block_number) for x in self.track_instance_copy.lines[0].blocks])
         if (str(self.line_value_box.currentText()) == 'Green Line'):
             self.set_block_maintenance_value.clear()
-            self.set_block_maintenance_value.addItems([str(x.block_number) for x in self.track_instance_copy.green_line.blocks])
+            self.set_block_maintenance_value.addItems([str(x.block_number) for x in self.track_instance_copy.lines[1].blocks])
 
     def upload_schedule_button_clicked(self):
         pass
@@ -257,7 +257,7 @@ class CTCFrontend(QtWidgets.QMainWindow):
         self.manual_table.insertRow(rowPosition)
 
         #TEMP
-        dispatch_time = QTableWidgetItem("13:00:00")
+        dispatch_time = QTableWidgetItem("12:00:00")
         self.manual_table.setItem(rowPosition, 1, dispatch_time)
 
         #fill dwell time as 1:00
