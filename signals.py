@@ -32,6 +32,7 @@ class signalsList(QObject):
     sw_wayside_plc_update = pyqtSignal(Track, ActiveTrains) # update from plc to sw wayside backend
     sw_wayside_backend_update = pyqtSignal(Track, ActiveTrains) # update from sw wayside backend to main backend
 
+    wayside_choice = pyqtSignal(bool) # which wayside is chosen at start (false = sw, true = hw)
 
     # HW Wayside signals
     hw_wayside_update_backend = pyqtSignal(Track, ActiveTrains) # update main backend to hw

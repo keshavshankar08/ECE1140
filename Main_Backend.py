@@ -34,14 +34,17 @@ class MainBackend(QObject):
         signals.ctc_office_backend_update.connect(self.ctc_office_backend_update)
 
         # SW Wayside Instances
-        self.sw_wayside_backend_instance = SWWaysideBackend()
-        self.plc_instance = PLC()
+        self.sw_wayside_backend_instance = None
+        self.sw_plc_instance = None
         self.track_instance = Track()
         signals.sw_wayside_backend_update.connect(self.sw_wayside_backend_update)
 
+        # Handler for wayside chosen
+        signals.wayside_choice.connect(self.initialize_wayside)
+
         # HW Wayside Instances
-        self.hw_wayside_backend_instance = HWWaysideBackend()
-        self.hw_plc_instance = Arduino_PLC()
+        self.hw_wayside_backend_instance = None
+        self.hw_plc_instance = None
         signals.hw_wayside_backend_update.connect(self.hw_wayside_backend_update)
 
 
@@ -86,6 +89,15 @@ class MainBackend(QObject):
     def sw_wayside_backend_update(self, updated_track, updated_active_trains):
         self.update_active_trains(updated_active_trains)
         self.update_track_instance(updated_track)
+
+    # Handles which wayside to initialize
+    def initialize_wayside(self, wayside):
+        if(wayside == False):
+            self.sw_wayside_backend_instance = SWWaysideBackend()
+            self.sw_plc_instance = PLC()
+        elif(wayside == True):
+            self.hw_wayside_backend_instance = HWWaysideBackend()
+            self.hw_plc_instance = Arduino_PLC()
 
     # Handles update from hardware
     def hw_wayside_backend_update(self, updated_track, updated_active_trains):
