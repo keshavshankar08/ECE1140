@@ -23,6 +23,12 @@ class TrainList(QObject):
         signals.train_controller_service_brake_status.connect(self.sBrake)
         signals.train_controller_emergency_brake_status.connect(self.eBrake)
         signals.train_controller_temperature_value.connect(self.receiveTemperature)
+        # Track Model
+        signals.track_model_speed_limit.connect(self.receiveSpeedLimit)
+        signals.track_model_authority.connect(self.receiveAuthority)
+        signals.track_model_beacon.connect(self.receiveBeacon)
+        signals.track_model_suggested_speed.connect(self.receiveSuggestedSpeed)
+        signals.track_model_block_grade.connect(self.receiveGradient)
     
     def addTrain(self, id):
         if id in self.allTrains:
@@ -39,52 +45,68 @@ class TrainList(QObject):
         
     def updateAllTrains(self):
         for id in self.allTrains:
-            self.allTrains[id].TrainModelUpdateValues()
+            if isinstance(self.allTrains[id], Train):
+                self.allTrains[id].TrainModelUpdateValues()
             
     def eBrake(self, id, value):
-        self.allTrains[id].eBrake(value)
+        if isinstance(self.allTrains[id], Train):
+            self.allTrains[id].eBrake(value)
         
     def sBrake(self, id, value):
-        self.allTrains[id].sBrake(value)
+        if isinstance(self.allTrains[id], Train):
+            self.allTrains[id].sBrake(value)
         
     def interiorLights(self, id, value):
-        self.allTrains[id].interiorLights(value)
+        if isinstance(self.allTrains[id], Train):
+            self.allTrains[id].interiorLights(value)
         
     def exteriorLights(self, id, value):
-        self.allTrains[id].exteriorLights(value)
+        if isinstance(self.allTrains[id], Train):
+            self.allTrains[id].exteriorLights(value)
         
     def leftDoors(self, id, value):
-        self.allTrains[id].leftDoors(value)
+        if isinstance(self.allTrains[id], Train):
+            self.allTrains[id].leftDoors(value)
         
     def rightDoors(self, id, value):
-        self.allTrains[id].rightDoors(value)
+        if isinstance(self.allTrains[id], Train):
+            self.allTrains[id].rightDoors(value)
         
     def receiveTemperature(self, id, value):
-        self.allTrains[id].receiveTemperature(value)
+        if isinstance(self.allTrains[id], Train):
+            self.allTrains[id].receiveTemperature(value)
         
     def setPowerCommand(self, id, value): 
-        self.allTrains[id].setPowerCommand(value)
+        if isinstance(self.allTrains[id], Train):
+            self.allTrains[id].setPowerCommand(value)
         
     def receiveBeacon(self, id, value):
-        self.allTrains[id].receiveBeacon(value)
+        if isinstance(self.allTrains[id], Train):
+            self.allTrains[id].receiveBeacon(value)
         
     def receiveSpeedLimit(self, id, value):
-        self.allTrains[id].receiveSpeedLimit(value)
+        if isinstance(self.allTrains[id], Train):
+            self.allTrains[id].receiveSpeedLimit(value)
         
     def receiveAuthority(self, id, value):
-        self.allTrains[id].receiveAuthority(value)
+        if isinstance(self.allTrains[id], Train):
+            self.allTrains[id].receiveAuthority(value)
         
     def receivePolarity(self, id, value):
-        self.allTrains[id].receivePolarity(value)
+        if isinstance(self.allTrains[id], Train):
+            self.allTrains[id].receivePolarity(value)
         
     def receiveSuggestedSpeed(self, id, value):
-        self.allTrains[id].receiveSuggestedSpeed(value)
+        if isinstance(self.allTrains[id], Train):
+            self.allTrains[id].receiveSuggestedSpeed(value)
         
     def receivePassengers(self, id, value):
-        self.allTrains[id].receivePassengers(value)
+        if isinstance(self.allTrains[id], Train):
+            self.allTrains[id].receivePassengers(value)
     
     def receiveGradient(self, id, value):
-        self.allTrains[id].receiveGradient(value)
+        if isinstance(self.allTrains[id], Train):
+            self.allTrains[id].receiveGradient(value)
             
         
     
