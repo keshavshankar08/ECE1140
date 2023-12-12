@@ -138,7 +138,7 @@ class Arduino_PLC():
             code1 = "X" + token_line
             RESPONSE = send_arduino(code1)
 
-            # identify SW or CR
+            # transfer CR or SW from Arduino back to Python
             if RESPONSE[0] == '1':
                 curr_device = "SW"
             elif RESPONSE[0] == '2':
@@ -150,8 +150,12 @@ class Arduino_PLC():
             if(set_device_stage == False):
                 # if device is switch
                 if(curr_device == "SW" and self.track_instance_copy.lines[line_number].blocks[block_number].block_type == 1):
-                    # read - read in variables for switch
-                    if(token_line[0] == "READ"):
+
+                    # SEND TO ARDUINO
+                    RESPONSE = send_arduino("Y" + token_line[0])
+
+                    # read values to each switch
+                    if(RESPONSE == 'R'):
                         occupancies = self.get_pre_junction_occupancies(line_number, block_number)
                         ss = occupancies[0]
                         sl = occupancies[1]
@@ -162,13 +166,18 @@ class Arduino_PLC():
                             sl_register = sl_register or self.track_instance_copy.lines[line_number].blocks[blk].block_occupancy
                         for blk in sr:
                             sr_register = sr_register or self.track_instance_copy.lines[line_number].blocks[blk].block_occupancy
-                    # condition - get which output register
-                    elif(token_line[0] == "COND"):
+
+                    # condition
+                    elif(RESPONSE == 'C'):
                         curr_device_var = token_line[1]
-                    # operation - compute and add to stack for calculation
-                    elif(token_line[0] == "OPP"):
+                    # operation
+                    elif(RESPONSE == 'O'):
                         # not gate - not the variable identified and add to stack
-                        if(token_line[1] == "NOT"):
+                        
+                        # Send to arduino
+                        RESPONSE = send_arduino("Z" + token_line[1])
+
+                        if(RESPONSE == 'N'):
                             if(token_line[2] == "SS"):
                                 stack.append(not(ss_register))
                             elif(token_line[2] == "SL"):
@@ -176,7 +185,7 @@ class Arduino_PLC():
                             elif(token_line[2] == "SR"):
                                 stack.append(not(sr_register))
                         # no change gate - add the variable to stack
-                        elif(token_line[1] == "NC"):
+                        elif(RESPONSE == 'C'):
                             if(token_line[2] == "SS"):
                                 stack.append(ss_register)
                             elif(token_line[2] == "SL"):
@@ -186,12 +195,12 @@ class Arduino_PLC():
                             elif(token_line[2] == "0"):
                                 stack.append(False)
                         # save gate - store stack var to designated output
-                        elif(token_line[1] == "SV"):
+                        elif(RESPONSE == 'S'):
                             if(curr_device_var == "TLL"):
                                 tll_register = stack[0]
                             stack.clear()
                         # and gate - and all elements in stack and store to designated output
-                        elif(token_line[1] == "AND"):
+                        elif(RESPONSE == 'A'):
                             if(curr_device_var == "SD"):
                                 sd_register = stack[0] and stack[1]
                             elif(curr_device_var == "TLS"):
@@ -206,11 +215,12 @@ class Arduino_PLC():
                             stack.clear()
                 # if device is crossing
                 elif(curr_device == "CR" and self.track_instance_copy.lines[line_number].blocks[block_number].block_type == 3):
-                    if(token_line[0] == "READ"):
+                    RESPONSE = send_arduino("Y" + token_line[0])
+                    if(RESPONSE == 'R'):
                         cf_register, cb_register = self.get_pre_crossing_occupancies(line_number)
-                    elif(token_line[0] == "COND"):
+                    elif(RESPONSE == 'C'):
                         curr_device_var = token_line[1]
-                    elif(token_line[0] == "OPP"):
+                    elif(RESPONSE == 'O'):
                         if(token_line[1] == "NOT"):
                             if(token_line[2] == "CF"):
                                 stack.append(not(cf_register))
