@@ -1,8 +1,9 @@
-from PyQt6 import QtWidgets, uic, QtGui
+from PyQt6 import QtCore, QtWidgets, uic, QtGui
 from PyQt6.QtCore import QTimer
 import sys
 sys.path.append(".")
 from Modules.Train_Model.Backend.TrainList import trainList
+from Modules.Train_Model.Backend.Train import Train
 from signals import signals
 
 class TrainModel(QtWidgets.QMainWindow):
@@ -112,6 +113,16 @@ class TrainModel(QtWidgets.QMainWindow):
         
     def trainSelect(self, idx):
         self.currentTrain = self.trainSelectComboBox.itemData(idx)
+        if isinstance(self.currentTrain, Train):
+            signal_check_state = QtCore.Qt.CheckState.Checked if self.currentTrain.signalFail else QtCore.Qt.CheckState.Unchecked
+            engine_check_state = QtCore.Qt.CheckState.Checked if self.currentTrain.engineFail else QtCore.Qt.CheckState.Unchecked
+            brake_check_state = QtCore.Qt.CheckState.Checked if self.currentTrain.brakeFail else QtCore.Qt.CheckState.Unchecked
+
+            self.signalFail.setCheckState(signal_check_state)
+            self.engineFail.setCheckState(engine_check_state)
+            self.brakeFail.setCheckState(brake_check_state)
+
+        self.UIUpdate()
         
     def setEBrake(self):
         self.currentTrain.emergencyBrake = True

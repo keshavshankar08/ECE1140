@@ -10,17 +10,17 @@ from CONSTANTS import constants
 
 #CONSTANTS
 MAX_POWER = 120000
-FRICTION_POWER = 448.66
 
-class trainController():
+class TrainController(QObject):
     def __init__(self):
+        super().__init__()
         signals.current_system_time.connect(self.set_current_time)
         signals.train_controller_update_backend.connect(self.tc_update_values)
 
         #KP and KI values, true = auto, false = manual
-        self.KP = 8500
-        self.KI = 5000
-        self.mode = True
+        self.KP = 4000 
+        self.KI = 2000 
+        self.mode = False
 
         #Door/lightbulb values, True = Closed/on, False = Open/off
         self.R_door = True
@@ -45,14 +45,13 @@ class trainController():
         #authority and others
         self.authority = 0.0
         self.station = None
-        self.train_ID = None
-        self.train_list = []
+        self.train_id = None
+        self.beacon_flag = False
         self.train_horn = False
 
         #emergency brakes and service brakes, True = On, False = Off
         self.emergency_brake = False
         self.pEBrake = False
-        self.service_brake = False
         self.service_brake = False
 
         #failures
@@ -69,16 +68,6 @@ class trainController():
                                       constants.START_HOUR, constants.START_MIN, constants.START_SEC)
         self.current_time = QDateTime()
 
-        #Signals
-        signals.trainModel_send_actual_velocity.connect(self.update_current_speed)
-        signals.trainModel_send_authority.connect(self.update_authority)
-        signals.trainModel_send_beacon.connect(self.announce_station)
-        signals.trainModel_send_emergency_brake.connect(self.passenger_EBrake)
-        #signals.trainModel_send_speed_limit.connect(self.update_suggested_speed)
-        signals.trainModel_send_suggested_speed.connect(self.update_suggested_speed)
-        signals.trainModel_send_engine_failure.connect(self.engine_failure)
-        signals.trainModel_send_brake_failure.connect(self.brake_failure)
-        signals.trainModel_send_signal_failure.connect(self.signal_failure)
 
     def updateCurrentTime(self, value):
         self.current_time = value
@@ -87,14 +76,15 @@ class trainController():
         self.current_time = time
 
     def tc_update_values(self):
-        signals.train_controller_send_power_command.emit(self.commanded_power)
-        signals.train_controller_emergency_brake_status.emit(self.emergency_brake)
-        signals.train_controller_service_brake_status.emit(self.service_brake)
-        signals.train_controller_ext_lights_status.emit(self.ext_lights)
-        signals.train_controller_int_lights_status.emit(self.int_lights)
-        signals.train_controller_left_door_status.emit(self.L_door)
-        signals.train_controller_right_door_status.emit(self.R_door)
-        signals.train_controller_temperature_value.emit(self.train_temp)
+        signals.train_controller_send_power_command.emit(self.train_id, self.commanded_power)
+        signals.train_controller_emergency_brake_status.emit(self.train_id, self.emergency_brake)
+        signals.train_controller_service_brake_status.emit(self.train_id, self.service_brake)
+        signals.train_controller_ext_lights_status.emit(self.train_id, self.ext_lights)
+        signals.train_controller_int_lights_status.emit(self.train_id, self.int_lights)
+        signals.train_controller_left_door_status.emit(self.train_id, self.L_door)
+        signals.train_controller_right_door_status.emit(self.train_id, self.R_door)
+        signals.train_controller_temperature_value.emit(self.train_id, self.train_temp)
+
 
         vError = 0
         if self.mode == True: #auto mode
@@ -111,7 +101,7 @@ class trainController():
             self.uk = self.uk1
         
         #set previous power command
-        self.previous_power_command = self.commanded_power
+        #self.previous_power_command = self.commanded_power
         power1 = power2 = power3 = 0
         
         if self.emergency_brake == True or self.service_brake == True:
@@ -128,7 +118,7 @@ class trainController():
         if (power1 != power2) or (power1 != power3) or (power2 != power3):
             self.emergency_brake = True
         else:
-            self.commanded_power = (self.KP*self.ek) + (self.KI*self.uk) + (FRICTION_POWER * self.commanded_speed)
+            self.commanded_power = (self.KP*self.ek) + (self.KI*self.uk)
 
         # cut off power at appropriate time
         if(self.commanded_power > 120000):
@@ -174,15 +164,13 @@ class trainController():
     def update_commanded_speed(self, value):
         self.commanded_speed = value
 
-        if self.commanded_speed > self.suggested_speed:
-            self.commanded_speed = self.suggested_speed
+        # if self.commanded_speed > self.suggested_speed:
+        #     self.commanded_speed = self.suggested_speed
 
     #this function updates the current speed
     def update_current_speed(self, currSpeed):
-        self.previous_current_speed = self.current_speed
         self.current_speed = currSpeed
         
-
     #this function updates the authority
     def update_authority(self, newAuthority):
         if newAuthority:
@@ -215,7 +203,7 @@ class trainController():
 
     #this function report E brake on
     def emergency_brake_status(self, value):
-        if value == True or self.pEBrake == True:
+        if value:
             self.emergency_brake = True
         else:
             self.emergency_brake = False
@@ -231,25 +219,25 @@ class trainController():
         else:
             self.mode = False
 
-    def interiorLightsStatus(self, value):
+    def interior_lights_status(self, value):
         if value:
             self.int_lights = True #on
         else:
             self.int_lights = False #off
 
-    def exteriorLightsStatus(self, value):
+    def exterior_lights_status(self, value):
         if value:
             self.ext_lights = True
         else:
             self.ext_lights = False
 
-    def leftDoorsStatus(self, value):
+    def left_doors_status(self, value):
         if value:
             self.L_door = True #closed
         else:
             self.L_door = False #open
 
-    def rightDoorsStatus(self, value):
+    def right_doors_status(self, value):
         if value:
             self.R_door = True
         else:
@@ -271,8 +259,5 @@ class trainController():
     def signal_failure(self, failure):
         self.signal_fail = failure
 
-
-
-
-
-    
+    def train_horn_status(self, value):
+        self.train_horn = value
