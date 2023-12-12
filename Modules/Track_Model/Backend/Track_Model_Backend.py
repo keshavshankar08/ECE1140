@@ -32,7 +32,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
         
         # train model variables
         self.train_length = 0
-        self.distance_from_yard = 100
+        self.distance_from_yard = 0
         self.distance_from_block_start = 0
         
         # declare lists to store line data
@@ -112,6 +112,8 @@ class TrackModelModule(QtWidgets.QMainWindow):
         
         # update block occupancies
         self.occupied_block = self.block_occupancy()
+        
+        self.yard_occupancy()
         
         # update traffic lights
         self.set_light_color()
@@ -325,7 +327,22 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 if str(item.toolTip()) == str(prev_block):
                     item.setBrush(QtGui.QColor(0,128,0))
                     self.track_instance_copy.lines[1].blocks[prev_block].block_occupancy = False
-                
+        
+    # update occupancy of yard to show if train has been dispatched             
+    def yard_occupancy(self):
+        if self.line_name == 'Green Line':
+            if self.track_instance_copy.lines[1].blocks[0].block_occupancy == True:
+                self.set_block_color(0,None)
+            else:
+                self.set_block_color(None,0)
+
+        if self.line_name == 'Red Line':
+            if self.track_instance_copy.lines[0].blocks[0].block_occupancy == True:
+                self.set_block_color(0,None)
+            else:
+                self.set_block_color(None,0)
+        
+                        
     def set_crossing_light(self):
         scene = self.graphicsView.scene()
         for item in scene.items():
@@ -400,6 +417,10 @@ class TrackModelModule(QtWidgets.QMainWindow):
             
             # obtain ticket sales number for each station of green line
             self.tickets_sold = int(self.green_sales / station_count)
+        
+        if self.red_sales is not None and self.green_sales is not None: 
+            # send ctc the ticket sales
+            signals.track_model_ticket_sales.emit([self.red_sales,self.green_sales])
             
             
 
