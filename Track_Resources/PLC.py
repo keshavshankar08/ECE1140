@@ -350,8 +350,6 @@ class PLC():
                                 if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
                                     train.current_authority = self.get_authority(0, train.current_block, train.current_direction)
                                     train.current_authority_changed = True
-                        else:
-                            pass
                     elif(curr_section == 1):
                         if(not train.current_direction):
                             if(block_status[3]):
@@ -391,8 +389,6 @@ class PLC():
                                 if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
                                     train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
                                     train.current_authority_changed = True
-                        else:
-                            pass
                     elif(curr_section == 5):
                         if(not train.current_direction):
                             pass
@@ -418,8 +414,6 @@ class PLC():
                                 if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
                                     train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
                                     train.current_authority_changed = True
-                        else:
-                            pass
                     elif(curr_section == 8):
                         if(not train.current_direction):
                             pass
@@ -436,82 +430,9 @@ class PLC():
                                 if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
                                     train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
                                     train.current_authority_changed = True
-                    elif(curr_section == 10):
-                        if(not train.current_direction):
-                            pass
-                        else:
-                            pass     
-                else:
-                    # go through and adjust auth to stop train when needed
-                    if(curr_section == 0):
-                        if(not train.current_direction):
-                            if(not block_status[1]):
-                                train.authority_reset_ready = True
-                        else:
-                            pass
-                    elif(curr_section == 1):
-                        if(not train.current_direction):
-                            if(not block_status[3]):
-                                train.authority_reset_ready = True
-                        else:
-                            if(not block_status[0]):
-                                train.authority_reset_ready = True
-                    elif(curr_section == 2):
-                        if(not train.current_direction):
-                            if(not block_status[3]):
-                                train.authority_reset_ready = True
-                        else:
-                            if(not block_status[1]):
-                                train.authority_reset_ready = True
-                    elif(curr_section == 3):
-                        if(not train.current_direction):
-                            if(not block_status[4]):
-                                train.authority_reset_ready = True
-                        else:
-                            if(not block_status[1]):
-                                train.authority_reset_ready = True
-                    elif(curr_section == 4):
-                        if(not train.current_direction):
-                            if(not (block_status[6] or block_status[8])):
-                                train.authority_reset_ready = True
-                        else:
-                            pass
-                    elif(curr_section == 5):
-                        if(not train.current_direction):
-                            pass
-                        else:
-                            if(not (block_status[3] or block_status[1] or block_status[0] or block_status[2])):
-                                train.authority_reset_ready = True
-                    elif(curr_section == 6):
-                        if(not train.current_direction):
-                            if(not block_status[7]):
-                                train.authority_reset_ready = True
-                        else:
-                            if(not block_status[5]):
-                                train.authority_reset_ready = True
-                    elif(curr_section == 7):
-                        if(not train.current_direction):
-                            if(not (block_status[9] or block_status[10])):
-                                train.authority_reset_ready = True
-                        else:
-                            pass
-                    elif(curr_section == 8):
-                        if(not train.current_direction):
-                            pass
-                        else:
-                            if(not block_status[6]):
-                                train.authority_reset_ready = True
-                    elif(curr_section == 9):
-                        if(not train.current_direction):
-                            pass
-                        else:
-                            if(not block_status[8]):
-                                train.authority_reset_ready = True
-                    elif(curr_section == 10):
-                        if(not train.current_direction):
-                            pass
-                        else:
-                            pass    
+                elif(train.current_authority_changed and not train.authority_reset_ready):
+                    if(train.current_authority == 0):
+                        train.authority_reset_ready = True   
             # green line verfication
             elif(train.current_line == 1):
                 # get the block status'
@@ -522,126 +443,56 @@ class PLC():
                 # if the train is on 1 block
                 curr_section = self.get_section_number(1, train.current_block)
 
-                if(not train.current_authority_changed):
-                    if(curr_section == 0):
+                if(train.current_authority_changed == False):
+                    if(curr_section == 1):
                         if(not train.current_direction):
-                            pass
-                        else:
-                            pass
-                    elif(curr_section == 1):
-                        if(not train.current_direction):
-                            if(not block_status[2]):
+                            if(block_status[2]):
                                 if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
                                     train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
                                     train.current_authority_changed = True
-                        else:
-                            pass
                     elif(curr_section == 2):
                         if(not train.current_direction):
-                            if(not (block_status[3] or block_status[4])):
+                            if(block_status[3] or block_status[4]):
                                 if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
                                     train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
                                     train.current_authority_changed = True
-                        else:
-                            pass
                     elif(curr_section == 3):
                         if(not train.current_direction):
-                            if(not (block_status[4] or block_status[5])):
+                            if(block_status[4] or block_status[5]):
                                 if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
                                     train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
                                     train.current_authority_changed = True
-                        else:
-                            pass
                     elif(curr_section == 4):
                         if(not train.current_direction):
-                            if(not block_status[5]):
+                            if(block_status[5]):
                                 if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
                                     train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
                                     train.current_authority_changed = True
-                        else:
-                            pass
                     elif(curr_section == 5):
                         if(not train.current_direction):
-                            if(not (block_status[6] or block_status[7])):
+                            if(block_status[6] or block_status[7]):
                                 if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
                                     train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
                                     train.current_authority_changed = True
-                        else:
-                            pass   
                     elif(curr_section == 6):
                         if(not train.current_direction):
                             pass
                         else:
-                            if(not block_status[8]):
+                            if(block_status[8]):
                                 if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
                                     train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
                                     train.current_authority_changed = True
-                    elif(curr_section == 7):
-                        if(not train.current_direction):
-                            pass
-                        else:
-                            pass
                     elif(curr_section == 8):
                         if(not train.current_direction):
                             pass
                         else:
-                            if(not (block_status[1] or block_status[0])):
+                            if(block_status[1] or block_status[0]):
                                 if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
                                     train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
                                     train.current_authority_changed = True
-                else:
-                    if(curr_section == 0):
-                        if(not train.current_direction):
-                            pass
-                        else:
-                            pass
-                    elif(curr_section == 1):
-                        if(not train.current_direction):
-                            if(not block_status[2]):
-                                train.authority_reset_ready = True
-                        else:
-                            pass
-                    elif(curr_section == 2):
-                        if(not train.current_direction):
-                            if(not (block_status[3] or block_status[4])):
-                                train.authority_reset_ready = True
-                        else:
-                            pass
-                    elif(curr_section == 3):
-                        if(not train.current_direction):
-                            if(not (block_status[4] or block_status[5])):
-                                train.authority_reset_ready = True
-                        else:
-                            pass
-                    elif(curr_section == 4):
-                        if(not train.current_direction):
-                            if(not block_status[5]):
-                                train.authority_reset_ready = True
-                        else:
-                            pass
-                    elif(curr_section == 5):
-                        if(not train.current_direction):
-                            if(not (block_status[6] or block_status[7])):
-                                train.authority_reset_ready = True
-                        else:
-                            pass   
-                    elif(curr_section == 6):
-                        if(not train.current_direction):
-                            pass
-                        else:
-                            if(not block_status[8]):
-                                train.authority_reset_ready = True 
-                    elif(curr_section == 7):
-                        if(not train.current_direction):
-                            pass
-                        else:
-                            pass
-                    elif(curr_section == 8):
-                        if(not train.current_direction):
-                            pass
-                        else:
-                            if(not (block_status[1] or block_status[0])):
-                                train.authority_reset_ready = True 
+                elif(train.current_authority_changed and not train.authority_reset_ready):
+                    if(train.current_authority == 0):
+                        train.authority_reset_ready = True
 
     # Executes PLC program for each wayside controller
     def execute_plc_program(self):
