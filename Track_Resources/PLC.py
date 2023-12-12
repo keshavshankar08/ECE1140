@@ -520,7 +520,7 @@ class PLC():
                     block_status.append(self.get_section_occupancy(i, 1))
 
                 # if the train is on 1 block
-                curr_section = self.get_section_number(1, train.current_block[0])
+                curr_section = self.get_section_number(1, train.current_block)
 
                 if(not train.current_authority_changed):
                     if(curr_section == 0):

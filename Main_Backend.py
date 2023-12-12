@@ -66,6 +66,7 @@ class MainBackend(QObject):
         signals.ctc_office_update_backend.emit(self.track_instance, self.active_trains_instance,
                                                self.ticket_sales_instance)
         signals.sw_wayside_update_backend.emit(self.track_instance, self.active_trains_instance)
+        signals.hw_wayside_update_backend.emit(self.track_instance, self.active_trains_instance)
         signals.track_model_update_backend.emit(self.track_instance, self.active_trains_instance)
         signals.update_admin.emit(self.track_instance, self.active_trains_instance)
         signals.trainModel_backend_update.emit()
