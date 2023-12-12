@@ -190,7 +190,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 count = 0
                 obj = self.green_line_data[path[count]]
                 block = obj[2]
-                while count < 150:
+                while count < len(path):
                     block_length_sum += int(self.green_line_data[block][3])
                     if(self.distance_from_yard-block_length_sum <= 30 and self.distance_from_yard != 0):
                         # position found
@@ -223,7 +223,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 obj = self.green_line_data[path[count]]
                 block = obj[2]
                 
-                while count < 76:
+                while count < len(path):
                     block_length_sum += int(self.red_line_data[block][3])
                     if(self.distance_from_yard-block_length_sum <= 30 and self.distance_from_yard != 0):
                         # position found
