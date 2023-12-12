@@ -20,13 +20,13 @@ class TrainController(QObject):
         #KP and KI values, true = auto, false = manual
         self.KP = 4000 
         self.KI = 2000 
-        self.mode = False
+        self.mode = True
 
         #Door/lightbulb values, True = Closed/on, False = Open/off
         self.R_door = True
         self.L_door = True
-        self.int_lights = True
-        self.ext_lights = True
+        self.int_lights = False
+        self.ext_lights = False
         #Temperature
         self.train_temp = 70
 
@@ -85,16 +85,15 @@ class TrainController(QObject):
         signals.train_controller_right_door_status.emit(self.train_id, self.R_door)
         signals.train_controller_temperature_value.emit(self.train_id, self.train_temp)
 
-
+        ###Power
         vError = 0
         if self.mode == True: #auto mode
-            vError = self.suggested_speed - self.current_speed
+            vError = (self.suggested_speed* 0.44704) - self.current_speed
         else: #manual mode
             vError = (self.commanded_speed * 0.44704) - self.current_speed
 
         #set the ek as sample of vError
         self.ek = vError
-
         if self.commanded_power < MAX_POWER:
             self.uk = self.uk1 + (constants.TIME_DELTA * 0.001/2)*(self.ek - self.ek1)
         else:
@@ -130,6 +129,19 @@ class TrainController(QObject):
         self.uk1 = self.uk
         self.ek1 = self.ek
 
+        ###Authority
+        # if self.authority:
+        #     if self.authority <= 5:
+        #         self.suggested_speed = 15
+        #         if self.authority <= 1:
+        #             self.service_brake = True
+        #         else:
+        #             self.service_brake = False
+        #     else:
+        #         pass
+        # else:
+        #     self.service_brake = True
+
     #this function will set the kp and ki by the engineer
     def set_KP(self, kp):
         self.KP = kp
@@ -164,8 +176,8 @@ class TrainController(QObject):
     def update_commanded_speed(self, value):
         self.commanded_speed = value
 
-        # if self.commanded_speed > self.suggested_speed:
-        #     self.commanded_speed = self.suggested_speed
+        if self.commanded_speed > self.speed_limit:
+            self.commanded_speed = self.speed_limit
 
     #this function updates the current speed
     def update_current_speed(self, currSpeed):
@@ -173,22 +185,7 @@ class TrainController(QObject):
         
     #this function updates the authority
     def update_authority(self, newAuthority):
-        if newAuthority:
-            if self.authority:
-                if self.service_brake:
-                    pass
-                else:
-                    self.service_brake = False
-                    
-            else:
-                if self.KP == 0 or self.KI == 0:
-                    pass
-                else:
-                    self.authority = newAuthority
-                    self.service_brake = False
-        else:
-            self.authority = newAuthority
-            #self.service_brake = True
+        self.authority = newAuthority
             
     #this function updates the temp
     def update_temp_value(self, temperature):
@@ -211,7 +208,7 @@ class TrainController(QObject):
     #this function will report if passenger e brake status
     def passenger_EBrake(self, value):
         self.pEBrake = value
-
+            
     #this function will toggle modes
     def toggle_modes(self, value):
         if value:

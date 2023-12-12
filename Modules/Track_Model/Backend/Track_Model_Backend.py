@@ -95,6 +95,9 @@ class TrackModelModule(QtWidgets.QMainWindow):
     # Update local instance of active trains
     def update_copy_active_trains(self,updated_active_trains):
         self.active_trains_instance_copy = updated_active_trains
+        # if(len(self.active_trains_instance_copy.active_trains) > 0):
+        #     print("Auth is: " + str(self.active_trains_instance_copy.active_trains[0].current_authority))
+
         
     # main function to carry out all functions in a cycle
     def backend_update_backend(self,track_instance,active_trains):
