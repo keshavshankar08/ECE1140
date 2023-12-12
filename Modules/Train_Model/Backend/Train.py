@@ -143,6 +143,7 @@ class Train(QObject):
         self.distanceFromYard += self.currentSpeed * (constants.TIME_DELTA * 0.001)
         self.distanceFromBlockStart += self.currentSpeed * (constants.TIME_DELTA * 0.001)
 
+
         # Signals to Train Controller
         signals.trainModel_send_engine_failure.emit(self.train_id, self.engineFail)
         signals.trainModel_send_signal_failure.emit(self.train_id, self.signalFail)

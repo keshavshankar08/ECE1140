@@ -37,7 +37,7 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 self.track_instance_copy = Track()
 
                 # receives updates from wayside backend
-                signals.sw_wayside_update_frontend.connect(self.update_frontend)
+                signals.hw_wayside_update_frontend.connect(self.update_frontend)
 
                 # handles override signals for manual inputs
                 self.switch_direction_transmit.clicked.connect(self.manual_switch_toggled)
@@ -83,10 +83,11 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
 
         # Updates local instance of track
         def update_copy_track(self, updated_track):
-                self.trackInstanceCopy = updated_track
+                self.track_instance_copy = updated_track
         
         # Updates elements shown once mode chosen
         def update_opeartion_dropdown(self):
+                self.operation_mode = self.mode_selection_dropdown.currentText()
                 if(self.mode_selection_dropdown.currentText() == "Select Mode..."):
                         self.line_selection_dropdown.setEnabled(False)
                         self.line_box.setEnabled(False)
@@ -161,7 +162,6 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
 
         # Updates elements shown once block chosen
         def update_block_dropdown(self):
-
                 if(self.block_selection_dropdown.currentText() == "Select Block..."):
                         self.general_box.setEnabled(False)
                         self.maintenance_box.setEnabled(False)
@@ -205,6 +205,7 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                                         self.crossing_box.setEnabled(False)
                         self.update_block_information()
 
+
         # Gets the integer representation of the current line chosen
         def get_current_line_displayed_int(self):
                 curr_line = self.line_selection_dropdown.currentText()
@@ -213,6 +214,14 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 elif(curr_line == "Red Line"):
                         return 0
                 
+        # Gets the integer representation of the current line chosen
+        def get_current_wayside_displayed_int(self):
+                curr_wayside = self.wayside_selection_dropdown.currentText()
+                if(curr_wayside == "Wayside 1"):
+                        return 1
+                elif(curr_wayside == "wayside 2"):
+                        return 2    
+
         # Gets the integer representation of the current block chosen
         def get_current_block_displayed_int(self):
                 curr_block = self.block_selection_dropdown.currentText()
@@ -226,11 +235,14 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 self.block_occupancy_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_block_occupancy_string())
                 self.track_fault_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_track_fault_status_string())
                 self.maintenance_active_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_maintenance_status_string())
+                if(curr_block_int == 0):
+                        self.switch_direction_value.setEnabled(False)
+                else:
+                        self.switch_direction_value.setEnabled(True)
                 self.switch_direction_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_switch_direction_string(curr_line_int))
                 self.traffic_light_color_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_traffic_light_color_string())
                 self.station_name_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].station_name)
                 self.crossing_status_value.setText(self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_crossing_status_string())
-
 
                 # Arduino Display
                 ArduinoString = "D"
@@ -244,6 +256,8 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                 ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_traffic_light_color_string() + "."
 
                 ArduinoString += self.track_instance_copy.lines[curr_line_int].blocks[curr_block_int].get_crossing_status_string() + "."
+                
+                # update every 15 cycles (reduces lag)
                 global counter
                 if (counter == 0):
                         display(ArduinoString)
