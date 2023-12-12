@@ -12,6 +12,18 @@ try:
 except: 
         exit
 
+# send data to Arduino to display
+def send_arduino(data):
+        # send data to arduino
+        SER.write(data.encode('ascii'))
+        time.sleep(1)
+
+        # read in serial output
+        response = SER.readline().decode('ascii').strip()
+        
+        # return response
+        return response
+
 
 class Arduino_PLC():
     def __init__(self):
@@ -82,10 +94,10 @@ class Arduino_PLC():
         file_in = open(file_name, "r")
         
         line = "init"
+        data = ""
         while(line):
             line = file_in.readline()
             if(line == ""):
-
                 break
             line = line.strip()
             line_tokens = line.split(",")
@@ -121,16 +133,18 @@ class Arduino_PLC():
 
         # loop through every line of tokens
         for token_line in tokens:
-            # SW device logic identified
-            if(token_line[0] == "SW"):
+            
+            # send line to Arduino
+            code1 = "X" + token_line
+            RESPONSE = send_arduino(code1)
+
+            # identify SW or CR
+            if RESPONSE[0] == '1':
                 curr_device = "SW"
-                set_device_stage = True
-            # CR device logic identified
-            elif(token_line[0] == "CR"):
+            elif RESPONSE[0] == '2':
                 curr_device = "CR"
+            if RESPONSE[1] == '1' or RESPONSE[1] == '1':
                 set_device_stage = True
-            else:
-                set_device_stage = False
 
             # Once device identified
             if(set_device_stage == False):

@@ -30,17 +30,33 @@ void loop() {
     char incoming = Serial.read();
     if (incoming == 'D')
       display();
-    else if (incoming == 'P')
+
+      // PLC Program
+    else if (incoming == 'X')
     {
+      Data = ""
+      char curr_device = 0;
+      char set_device_stage = 0;
       while (Serial.available() > 0)
       {
-        lcd.print(incoming); 
-        Data += incoming;
+              incoming = Serial.read(); // read byte
+              Data += incoming;
       }
-
+      if (Data == "SW")
+      {
+        curr_device = 1; // 1 corresponds to SW 
+        set_device_stage = 1;
+      }
+      else if (Data == "CR")
+      {
+        curr_device = 2; // 2 corresponds to CR
+        set_device_stage = 1;
+      }
+      String send = curr_device + set_device_stage;
+      Serial.write(send);
     }
 
-    //ReadPLC();
+  
 
 
     Serial.write("Received: ");
