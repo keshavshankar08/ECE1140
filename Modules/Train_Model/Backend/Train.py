@@ -30,12 +30,7 @@ class Train(QObject):
     def __init__(self):
         super().__init__()
         
-        # Track Model
-        signals.track_model_speed_limit.connect(self.receiveSpeedLimit)
-        signals.track_model_authority.connect(self.receiveAuthority)
-        signals.track_model_beacon.connect(self.receiveBeacon)
-        signals.track_model_suggested_speed.connect(self.receiveSuggestedSpeed)
-        signals.track_model_block_grade.connect(self.receiveGradient)
+        
         #### Train ID
         self.train_id = 0
         #### Number of Passengers
