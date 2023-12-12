@@ -699,7 +699,7 @@
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QCheckBox" name="brake_failure">
+    <widget class="QCheckBox" name="brake_fail">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -720,7 +720,7 @@
       <string>Brake</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="engine_failure">
+    <widget class="QCheckBox" name="engine_fail">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -759,7 +759,7 @@
       <string>Failures</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="signal_failure">
+    <widget class="QCheckBox" name="signal_fail">
      <property name="enabled">
       <bool>true</bool>
      </property>

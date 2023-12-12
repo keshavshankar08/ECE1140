@@ -14,6 +14,15 @@ class TrainList(QObject):
         #### SIGNALS
         signals.trainModel_backend_update.connect(self.updateAllTrains)
         signals.ctc_added_train.connect(self.addTrain)
+        # Train Controller
+        signals.train_controller_send_power_command.connect(self.setPowerCommand)
+        signals.train_controller_int_lights_status.connect(self.interiorLights)
+        signals.train_controller_ext_lights_status.connect(self.exteriorLights)
+        signals.train_controller_left_door_status.connect(self.leftDoors)
+        signals.train_controller_right_door_status.connect(self.rightDoors)
+        signals.train_controller_service_brake_status.connect(self.sBrake)
+        signals.train_controller_emergency_brake_status.connect(self.eBrake)
+        signals.train_controller_temperature_value.connect(self.receiveTemperature)
     
     def addTrain(self, id):
         if id in self.allTrains:

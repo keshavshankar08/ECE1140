@@ -29,19 +29,10 @@ FRICTION_COEFF = 0.0  # dimensionless
 class Train(QObject):
     def __init__(self):
         super().__init__()
-        # Train Controller
-        signals.train_controller_send_power_command.connect(self.setPowerCommand)
-        signals.train_controller_int_lights_status.connect(self.interiorLights)
-        signals.train_controller_ext_lights_status.connect(self.exteriorLights)
-        signals.train_controller_left_door_status.connect(self.leftDoors)
-        signals.train_controller_right_door_status.connect(self.rightDoors)
-        signals.train_controller_service_brake_status.connect(self.sBrake)
-        signals.train_controller_emergency_brake_status.connect(self.eBrake)
-        signals.train_controller_temperature_value.connect(self.receiveTemperature)
+        
         # Track Model
         signals.track_model_speed_limit.connect(self.receiveSpeedLimit)
         signals.track_model_authority.connect(self.receiveAuthority)
-        signals.track_model_track_circuit_polarity.connect(self.receivePolarity)
         signals.track_model_beacon.connect(self.receiveBeacon)
         signals.track_model_suggested_speed.connect(self.receiveSuggestedSpeed)
         signals.track_model_block_grade.connect(self.receiveGradient)

@@ -20,7 +20,7 @@ class TrainController(QObject):
         #KP and KI values, true = auto, false = manual
         self.KP = 4000 
         self.KI = 2000 
-        self.mode = True
+        self.mode = False
 
         #Door/lightbulb values, True = Closed/on, False = Open/off
         self.R_door = True
@@ -53,7 +53,6 @@ class TrainController(QObject):
         self.emergency_brake = False
         self.pEBrake = False
         self.service_brake = False
-        self.service_brake = False
 
         #failures
         self.engine_fail = False
@@ -69,16 +68,6 @@ class TrainController(QObject):
                                       constants.START_HOUR, constants.START_MIN, constants.START_SEC)
         self.current_time = QDateTime()
 
-        #Signals
-        signals.trainModel_send_actual_velocity.connect(self.update_current_speed)
-        signals.trainModel_send_authority.connect(self.update_authority)
-        signals.trainModel_send_beacon.connect(self.announce_station)
-        signals.trainModel_send_emergency_brake.connect(self.passenger_EBrake)
-        #signals.trainModel_send_speed_limit.connect(self.update_suggested_speed)
-        signals.trainModel_send_suggested_speed.connect(self.update_suggested_speed)
-        signals.trainModel_send_engine_failure.connect(self.engine_failure)
-        signals.trainModel_send_brake_failure.connect(self.brake_failure)
-        signals.trainModel_send_signal_failure.connect(self.signal_failure)
 
     def updateCurrentTime(self, value):
         self.current_time = value
@@ -112,7 +101,7 @@ class TrainController(QObject):
             self.uk = self.uk1
         
         #set previous power command
-        self.previous_power_command = self.commanded_power
+        #self.previous_power_command = self.commanded_power
         power1 = power2 = power3 = 0
         
         if self.emergency_brake == True or self.service_brake == True:

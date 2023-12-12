@@ -1,6 +1,6 @@
 import sys
 sys.path.append(".")
-from PyQt6.QtCore import QTimer, QThread, QCoreApplication, QObject, QDateTime
+from PyQt6.QtCore import QTimer, QThread, QObject, QDateTime
 from signals import signals
 from Track_Resources.Track import *
 from Train_Resources.CTC_Train import *

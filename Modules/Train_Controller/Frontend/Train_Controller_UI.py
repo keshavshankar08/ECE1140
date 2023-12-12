@@ -7,6 +7,7 @@ import sys
 import threading
 sys.path.append(".")
 from signals import *
+from Modules.Train_Controller.Backend.Train_Controller_List import train_controller_list
 from Modules.Train_Controller.Backend.Train_Controller import TrainController
 
 ##main module setup
@@ -16,9 +17,8 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         super().__init__()
         uic.loadUi("Modules/Train_Controller/Frontend/Train_Controller_UI.ui", self)
         signals.train_controller_update_backend.connect(self.update_UI)
-        signals.ctc_added_train.connect(self.add_train)
+        signals.ctc_added_train.connect(self.add_train_to_box)
         self.current_train_controller = TrainController()
-        self.total_trains = {}
 
         #initialize Values
         self.com_power_val.setText(format(0, '.0f'))
@@ -36,7 +36,7 @@ class TrainControllerUI(QtWidgets.QMainWindow):
 
         #connect functions
         self.automatic_button.clicked.connect(self.automatic_button_clicked)
-        self.manual_button.clicked.connect(self.manaul_button_clicked)
+        self.manual_button.clicked.connect(self.manual_button_clicked)
         self.int_light_on.clicked.connect(self.int_lights_on)
         self.int_light_off.clicked.connect(self.int_lights_off)
         self.ext_light_on.clicked.connect(self.ext_lights_on)
@@ -58,31 +58,14 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         self.current_train_controller = None
         self.train_selection.addItem("< select train >")
         
-        
 
     def train_select(self, idx):
         self.current_train_controller = self.train_selection.itemData(idx)
-        print(self.current_train_controller.train_id)
 
-    def add_train(self, id):
-        if id in self.total_trains:
-            raise ValueError(f"Train with ID {id} already exists in the train list.")
-        train_controller = TrainController()
-        train_controller.train_id = int(id)
-        self.total_trains[id] = train_controller
-        train_contoller = self.total_trains[id]
+    def add_train_to_box(self, id):
+        train_contoller = train_controller_list.total_trains[id]
         self.train_selection.addItem(f"ID: {id}")
         self.train_selection.setItemData(self.train_selection.count() - 1, train_contoller)
-        
-    def remove_train(self, id):
-        if id in self.total_trains:
-            self.total_trains.pop(id)
-        else:
-            raise KeyError(f"{id} not found in train list.")
-        
-    def update_all_trains(self):
-        for id in self.total_trains:
-            self.total_trains[id].tc_update_values()
     
     def update_UI(self):
         if self.current_train_controller is not None:
@@ -112,30 +95,30 @@ class TrainControllerUI(QtWidgets.QMainWindow):
 
             #iteration for engine failure along with e brake
             if self.current_train_controller.engine_fail:
-                self.engine_failure.setChecked(True)
+                self.engine_fail.setChecked(True)
                 self.current_train_controller.emergency_brake = True
             else:
-                self.engine_failure.setChecked(False)
+                self.engine_fail.setChecked(False)
                 if self.current_train_controller.emergency_brake and self.current_train_controller.brake_fail == False and\
                     self.current_train_controller.signal_fail == False and self.current_train_controller.mode == True:
                     self.emergency_brake.setEnabled(True)
 
             #iteration for brake failure along with e brake
             if self.current_train_controller.brake_fail:
-                self.brake_failure.setChecked(True)
+                self.brake_fail.setChecked(True)
                 self.current_train_controller.emergency_brake = True
             else:
-                self.brake_failure.setChecked(False)
+                self.brake_fail.setChecked(False)
                 if self.current_train_controller.emergency_brake and self.current_train_controller.engine_fail == False and\
                     self.current_train_controller.signal_fail == False and self.current_train_controller.mode == True:
                     self.emergency_brake.setEnabled(True)
 
             #iteration for signal failure along with e brake
             if self.current_train_controller.signal_fail:
-                self.signal_failure.setChecked(True)
+                self.signal_fail.setChecked(True)
                 self.current_train_controller.emergency_brake = True
             else:
-                self.signal_failure.setChecked(False)
+                self.signal_fail.setChecked(False)
                 if self.current_train_controller.emergency_brake and self.current_train_controller.engine_fail == False and\
                     self.current_train_controller.brake_fail == False and self.current_train_controller.mode == True:
                     self.emergency_brake.setEnabled(True)
@@ -163,7 +146,7 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         #QMessageBox.information(self, "Alert", "The Train is in Automatic Mode.")
         
     #function for manual mode
-    def manaul_button_clicked(self):
+    def manual_button_clicked(self):
         self.automatic_button.setStyleSheet("background-color: rgb(255, 255, 255)")
         self.manual_button.setStyleSheet("background-color: rgb(199, 199, 199)")
         self.service_brake.setEnabled(True)
@@ -288,6 +271,8 @@ class TrainControllerUI(QtWidgets.QMainWindow):
             playsound(sound_file)
         audio_thread = threading.Thread(target=play_audio)
         audio_thread.start()
+
+
         
 #Main
 if __name__ == "__main__":
