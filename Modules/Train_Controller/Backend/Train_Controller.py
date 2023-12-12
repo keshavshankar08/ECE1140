@@ -164,8 +164,8 @@ class TrainController(QObject):
     def update_commanded_speed(self, value):
         self.commanded_speed = value
 
-        # if self.commanded_speed > self.suggested_speed:
-        #     self.commanded_speed = self.suggested_speed
+        if self.commanded_speed > self.speed_limit:
+            self.commanded_speed = self.speed_limit
 
     #this function updates the current speed
     def update_current_speed(self, currSpeed):
@@ -173,6 +173,9 @@ class TrainController(QObject):
         
     #this function updates the authority
     def update_authority(self, newAuthority):
+        self.authority*3.28084
+        newAuthority*3.28084
+        
         if newAuthority:
             if self.authority:
                 if self.service_brake:

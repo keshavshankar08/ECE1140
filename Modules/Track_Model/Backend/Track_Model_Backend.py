@@ -103,6 +103,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
         
         # update local instance of active trains
         self.update_copy_active_trains(active_trains)
+        print("Auth is: " + str(self.active_trains_instance_copy.active_trains[0].current_authority))
         
         # update frontend 
         self.display_block_info()
