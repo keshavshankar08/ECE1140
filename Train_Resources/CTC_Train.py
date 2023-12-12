@@ -130,7 +130,7 @@ class Train:
     def station_stop(self):
         #the train is at a station block, return true
         #and (self.current_suggested_speed == 0)
-        if((self.current_authority == 0) and (self.current_authority_changed == False)):
+        if((self.current_authority == 0)):
             return True
         
     #function that will use dwell time, then go to the next stop
@@ -150,11 +150,11 @@ class Train:
         #if station is a stop, set departure time and make authority 0
         if(self.station_stop() == True):
             #get dwell time
-            dwell = QTime.fromString(self.train_route.dwell_time[self.stop_index-1], "hh:mm:ss")
-            print(f'dwell: ',dwell)
+            dwell = QTime.fromString(self.train_route.dwell_time[self.stop_index-1], "m:ss")
+            dwell_secs = QTime(0,0).secsTo(dwell)
 
             #get next departure time
-            self.station_departure_time = system_time_comp + dwell
+            self.station_departure_time = system_time_comp.addSecs(dwell_secs)
 
             #set authority to -1 to avoid updating again
             self.current_authority = -1
