@@ -56,6 +56,7 @@ class CTCBackend():
 
     #Main backend handler
     def backend_update_backend(self, track_instance, active_trains, ticket_sales):
+        self.update_dispatch()
         self.update_trains()
         self.update_train_progress(track_instance)
         self.update_copy_active_trains(active_trains)
@@ -86,9 +87,22 @@ class CTCBackend():
                 self.active_trains_instance_copy.active_trains[len(self.active_trains_instance_copy.active_trains) - 1].next_stop()
                 signals.ctc_added_train.emit(int(train.train_ID))
 
+                #set block 0 to occupied
+                self.track_instance_copy.lines[0].blocks[0].block_occupancy = True
+                self.track_instance_copy.lines[1].blocks[0].block_occupancy = True
+
+    def update_dispatch(self):
+        if(self.track_instance_copy.lines[0].blocks[9].block_occupancy == True):
+            self.track_instance_copy.lines[0].blocks[0].block_occupancy = False
+            self.track_instance_copy.lines[1].blocks[0].block_occupancy = False
+        if(self.track_instance_copy.lines[1].blocks[63].block_occupancy == True):
+            self.track_instance_copy.lines[0].blocks[0].block_occupancy = False
+            self.track_instance_copy.lines[1].blocks[0].block_occupancy = False 
+
     #This function will update active trains and update their progress
     def update_train_progress(self, track):
         for train in self.active_trains_instance_copy.active_trains:
+            train.update_stop(self.system_time)
             train.update_authority(track)
             
     def verify_schedule(route_schedule):
