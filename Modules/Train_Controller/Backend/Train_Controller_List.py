@@ -15,10 +15,10 @@ class TrainControllerList(QObject):
         signals.ctc_added_train.connect(self.add_train)
         #Signals
         signals.trainModel_send_actual_velocity.connect(self.update_current_speed)
-        signals.trainModel_send_authority.connect(self.new_authority)
+        signals.trainModel_send_authority.connect(self.update_authority)
         signals.trainModel_send_beacon.connect(self.announce_station)
         signals.trainModel_send_emergency_brake.connect(self.passenger_EBrake)
-        #signals.trainModel_send_speed_limit.connect(self.update_suggested_speed)
+        signals.trainModel_send_speed_limit.connect(self.update_suggested_speed)
         signals.trainModel_send_suggested_speed.connect(self.update_suggested_speed)
         signals.trainModel_send_engine_failure.connect(self.engine_failure)
         signals.trainModel_send_brake_failure.connect(self.brake_failure)
@@ -45,29 +45,39 @@ class TrainControllerList(QObject):
     #functions for train ID
 
     def update_current_speed(self, id, value):
-        self.total_trains[id].update_current_speed(value)
+        if isinstance(self.total_trains[id], TrainController):
+            self.total_trains[id].update_current_speed(value)
 
-    def new_authority(self, id, value):
-        self.total_trains[id].update_authority(value)
+    def update_authority(self, id, value):
+        if isinstance(self.total_trains[id], TrainController):
+            self.total_trains[id].update_authority(value)
 
     def announce_station(self, id, value):
-        self.total_trains[id].announce_station(value)
+        if isinstance(self.total_trains[id], TrainController):
+            self.total_trains[id].announce_station(value)
 
     def passenger_EBrake(self, id, value):
-        self.total_trains[id].passenger_EBrake(value)
+        if isinstance(self.total_trains[id], TrainController):
+            self.total_trains[id].passenger_EBrake(value)
 
     def update_suggested_speed(self, id, value):
-        self.total_trains[id].update_suggested_speed(value)
+        if isinstance(self.total_trains[id], TrainController):
+            self.total_trains[id].update_suggested_speed(value)
 
     def engine_failure(self, id, value):
-        self.total_trains[id].engine_failure(value)
+        if isinstance(self.total_trains[id], TrainController):
+            self.total_trains[id].engine_failure(value)
 
     def brake_failure(self, id, value):
-        self.total_trains[id].brake_failure(value)
+        if isinstance(self.total_trains[id], TrainController):
+            self.total_trains[id].brake_failure(value)
 
     def signal_failure(self, id, value):
-        self.total_trains[id].signal_failure(value)
+        if isinstance(self.total_trains[id], TrainController):
+            self.total_trains[id].signal_failure(value)
 
-    #signals.trainModel_send_speed_limit.connect(self.update_suggested_speed)
+    def update_suggested_speed(self, id, value):
+        if isinstance(self.total_trains[id], TrainController):
+            self.total_trains[id].update_suggested_speed(value)
 
 train_controller_list = TrainControllerList()
