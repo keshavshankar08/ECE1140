@@ -79,10 +79,6 @@ class TrainControllerUI(QtWidgets.QMainWindow):
             else:
                 self.emergency_brake.setValue(0)
 
-            if self.current_train_controller.pEBrake:
-                self.current_train_controller.emergency_brake = True
-                self.emergency_brake.setEnabled(True)
-
             if self.current_train_controller.service_brake:
                 self.service_brake.setValue(1)
                 #self.driver_throttle.setValue(0)
