@@ -33,6 +33,7 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         self.l_doors_closed()
         #self.automatic_button_clicked()
         self.password_val.setPlaceholderText("Enter password")
+        self.passenger_brake_flag = False
 
         #connect functions
         self.automatic_button.clicked.connect(self.automatic_button_clicked)
@@ -69,11 +70,14 @@ class TrainControllerUI(QtWidgets.QMainWindow):
     
     def update_UI(self):
         if self.current_train_controller is not None:
+            if self.current_train_controller.mode:
+                self.cur_speed_val.setText(format(self.current_train_controller.suggested_speed*2.237, '.2f'))
+            else:
+                self.cur_speed_val.setText(format(self.current_train_controller.current_speed*2.237, '.2f'))
             self.com_power_val.setText(format(self.current_train_controller.commanded_power, '.2f'))
             self.authority_val.setText(format(self.current_train_controller.authority*3.28084, '.2f'))
-            self.cur_speed_val.setText(format(self.current_train_controller.current_speed*2.237, '.2f'))
 
-            if self.current_train_controller.emergency_brake:
+            if self.current_train_controller.emergency_brake or self.current_train_controller.pEBrake:
                 self.emergency_brake.setValue(1)
                 #self.driver_throttle.setValue(0)
             else:
@@ -162,9 +166,13 @@ class TrainControllerUI(QtWidgets.QMainWindow):
         QMessageBox.information(self, "Alert", "The Train is in Manual Mode.")
 
     def receive_driver_throttle(self, value):
-        self.current_train_controller.commanded_speed = value
-        self.com_speed_val.setText(str(self.current_train_controller.commanded_speed))
-
+        if self.current_train_controller.mode == False:
+            self.current_train_controller.commanded_speed = value
+            self.com_speed_val.setText(str(self.current_train_controller.commanded_speed))
+        else:
+            #needs work
+            self.receive_driver_throttle(self.current_train_controller.suggested_speed)
+            self.com_speed_val.setText(str(self.current_train_controller.suggested_speed))
     #function for emergency brakes
     def e_brake(self, value):
         if value:
@@ -181,7 +189,6 @@ class TrainControllerUI(QtWidgets.QMainWindow):
     #function will display the current speed
     def display_current_speed(self, speed):
         self.current_train_controller.current_speed = speed
-        self.cur_speed_val.setText(format(self.current_train_controller.current_speed, '.2f'))
 
     #function will display Kp and Ki
     def display_KP(self, kp):
@@ -195,12 +202,10 @@ class TrainControllerUI(QtWidgets.QMainWindow):
     #function display power
     def update_power(self, power):
         self.current_train_controller.commanded_power = power
-        self.com_power_val.setText(str(self.current_train_controller.commanded_power))
 
     #function displays authority
     def update_authority(self, authority):
         self.current_train_controller.authority = authority
-        self.authority_val.setText(str(self.current_train_controller.authority))
 
     #function will toggle int lights
     def int_lights_on(self):

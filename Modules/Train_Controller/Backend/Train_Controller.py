@@ -211,7 +211,7 @@ class TrainController(QObject):
     #this function will report if passenger e brake status
     def passenger_EBrake(self, value):
         self.pEBrake = value
-
+            
     #this function will toggle modes
     def toggle_modes(self, value):
         if value:
