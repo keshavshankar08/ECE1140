@@ -50,6 +50,7 @@ class Train(QObject):
         #### Interior Train Temperature
         self.temperatureCommand = 60.0  # F
         self.temperatureActual = 60.0  # F
+        self.elapsedTime = 0  # s
         #### Emergency Brake - either on or off
         self.emergencyBrake = False
         #### Service Brake - either on or off
@@ -139,9 +140,12 @@ class Train(QObject):
             self.currentSpeed = self.speedLimit
             
         ## Position Calculation
-        
         self.distanceFromYard += self.currentSpeed * (constants.TIME_DELTA * 0.001)
         self.distanceFromBlockStart += self.currentSpeed * (constants.TIME_DELTA * 0.001)
+        
+        ## Temperature Calculation
+        self.elapsedTime += constants.TIME_DELTA * 0.001
+        self.temperatureActual = self.temperatureCommand * math.exp(-0.1 * self.elapsedTime)
 
         # Signals to Train Controller
         signals.trainModel_send_engine_failure.emit(self.train_id, self.engineFail)
