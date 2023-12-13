@@ -443,7 +443,7 @@ class PLC():
                 # if the train is on 1 block
                 curr_section = self.get_section_number(1, train.current_block)
 
-                if(train.current_authority_changed == False):
+                if(not train.current_authority_changed):
                     if(curr_section == 1):
                         if(not train.current_direction):
                             if(block_status[2]):
