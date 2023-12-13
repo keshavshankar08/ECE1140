@@ -30,25 +30,88 @@ void loop() {
     char incoming = Serial.read();
     if (incoming == 'D')
       display();
-    else if (incoming == 'P')
+
+      // PLC Program
+    else if (incoming == 'X')
+    {
+      Data = "";
+      char curr_device = '0';
+      char set_device_stage = '0';
+      while (Serial.available() > 0)
+      {
+              incoming = Serial.read(); // read byte
+              Data += incoming;
+      }
+      if (Data == "SW")
+      {
+        curr_device = '1'; // 1 corresponds to SW 
+        set_device_stage = '1';
+      }
+      else if (Data == "CR")
+      {
+        curr_device = '2'; // 2 corresponds to CR
+        set_device_stage = '1';
+      }
+      //TRANSFER DATA BACK
+      String transfer = "";
+      transfer[0] = curr_device;
+      transfer[1] = set_device_stage;
+      transfer[2] = '\0';
+      Serial.println(transfer);
+    }
+
+    // corresponds to token 0
+    else if (incoming == 'Y')
     {
       while (Serial.available() > 0)
       {
-        lcd.print(incoming); 
-        Data += incoming;
+              incoming = Serial.read(); // read byte
+              Data += incoming;
       }
-
+      if (Data == "READ")
+      {
+        char transfer = "R";
+        Serial.println(transfer);
+      }
+      else if (Data == "COND")
+      {
+        char transfer = "C";
+        Serial.println(transfer);
+      }
+      else if (Data == "OPP")
+      {
+        char transfer = "O";
+        Serial.println(transfer);
+      }
+      
+    }
+    else if (incoming == 'Z')
+    {
+      while (Serial.available() > 0)
+      {
+              incoming = Serial.read(); // read byte
+              Data += incoming;
+      } 
+      if (Data == "NOT")
+        Serial.println("N");
+      else if (Data == "NC")
+        Serial.println("C");
+      else if (Data == "SV")
+        Serial.println("S");
+      else if (Data == "AND")
+        Serial.println("A");
     }
 
-    //ReadPLC();
+  
 
 
-    Serial.write("Received: ");
+    /*Serial.write("Received: ");
     for (int i = 0; i < Data.length(); i++)
     {
       Serial.write(Data[i]);
     }
     Serial.write("\n");
+    */
     }
   }
 
