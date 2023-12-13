@@ -7,6 +7,7 @@ from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import *
 from signals import *
 import subprocess
+import os
 
 # Global variable used to act as a timer on Arduino uploads
 counter = 0
@@ -288,17 +289,17 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
 
         # Handles view track map button clicked
         def view_track_map_clicked(self):
-                system_platform = platform.system().lower()
-
                 curr_line_int = self.get_current_line_displayed_int()
-                image_viewer = {'linux':'xdg-open',
-                                  'win32':'explorer',
-                                  'darwin':'open'}[sys.platform]
-                if(curr_line_int == 0):
-                        subprocess.Popen([image_viewer, "Modules/HW_Wayside/Frontend/red_line_map.png"])
-                elif(curr_line_int == 1):
-                        subprocess.Popen([image_viewer, "Modules/HW_Wayside/Frontend/green_line_map.png"])
-
+                if(sys.platform == 'win32'):
+                        if(curr_line_int == 0):
+                                os.system('start Modules\\SW_Wayside\\Frontend\\red_line_map.png')
+                        elif(curr_line_int == 1):
+                                os.system('start Modules\\SW_Wayside\\Frontend\\green_line_map.png')
+                else:
+                        if(curr_line_int == 0):
+                                subprocess.Popen([image_viewer, "Modules/SW_Wayside/Frontend/red_line_map.png"])
+                        elif(curr_line_int == 1):
+                                subprocess.Popen([image_viewer, "Modules/SW_Wayside/Frontend/green_line_map.png"])
         # Handles upload plc program button clicked
         def uploadPLCClicked(self):
                 self.plc_file_name, _filter = QtWidgets.QFileDialog.getOpenFileName(self, "Open File", "", "Text Files (*.txt)")
