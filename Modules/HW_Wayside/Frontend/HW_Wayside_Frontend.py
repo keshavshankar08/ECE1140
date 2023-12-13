@@ -16,7 +16,25 @@ try:
         SER = serial.Serial('COM3', 9600)
 except: 
         # if no connection established, terminate
-        exit
+        try:
+                SER = serial.Serial('COM1', 9600)
+        except:
+                try:
+                        SER = serial.Serial('COM2', 9600)
+                except:
+                        try:
+                                SER = serial.Serial('COM4', 9600)
+                        except:
+                                try:
+                                        SER = serial.Serial('COM5', 9600)
+                                except:
+                                        try:
+                                                SER = serial.Serial('COM6', 9600)
+                                        except:
+                                               app = QApplication([])
+                                               QMessageBox.warning(None, "Warning", "Arduino not detected")
+                                               exit
+
 
 # send data to Arduino to display
 def display(data):
