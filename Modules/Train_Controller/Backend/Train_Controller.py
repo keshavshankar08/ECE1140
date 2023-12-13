@@ -18,8 +18,8 @@ class TrainController(QObject):
         signals.train_controller_update_backend.connect(self.tc_update_values)
 
         #KP and KI values, true = auto, false = manual
-        self.KP = 4000 
-        self.KI = 2000 
+        self.KP = 2000 
+        self.KI = 1000 
         self.mode = True
 
         #Door/lightbulb values, True = Closed/on, False = Open/off
