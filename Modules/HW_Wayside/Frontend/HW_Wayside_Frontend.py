@@ -6,7 +6,6 @@ sys.path.append(".")
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import *
 from signals import *
-import subprocess
 import os
 
 # Global variable used to act as a timer on Arduino uploads
@@ -17,7 +16,25 @@ try:
         SER = serial.Serial('COM3', 9600)
 except: 
         # if no connection established, terminate
-        exit
+        try:
+                SER = serial.Serial('COM1', 9600)
+        except:
+                try:
+                        SER = serial.Serial('COM2', 9600)
+                except:
+                        try:
+                                SER = serial.Serial('COM4', 9600)
+                        except:
+                                try:
+                                        SER = serial.Serial('COM5', 9600)
+                                except:
+                                        try:
+                                                SER = serial.Serial('COM6', 9600)
+                                        except:
+                                               app = QApplication([])
+                                               QMessageBox.warning(None, "Warning", "Arduino not detected")
+                                               exit
+
 
 # send data to Arduino to display
 def display(data):
@@ -282,6 +299,7 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
                                 subprocess.Popen([image_viewer, "Modules/SW_Wayside/Frontend/red_line_map.png"])
                         elif(curr_line_int == 1):
                                 subprocess.Popen([image_viewer, "Modules/SW_Wayside/Frontend/green_line_map.png"])
+
         # Handles upload plc program button clicked
         def uploadPLCClicked(self):
                 self.plc_file_name, _filter = QtWidgets.QFileDialog.getOpenFileName(self, "Open File", "", "Text Files (*.txt)")
