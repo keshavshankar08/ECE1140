@@ -4,6 +4,7 @@ from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import *
 from signals import *
 import subprocess
+import os
 
 class SWWaysideFrontend(QtWidgets.QMainWindow):
         def __init__(self):
@@ -221,13 +222,11 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
         # Handles view track map button clicked
         def view_track_map_clicked(self):
                 curr_line_int = self.get_current_line_displayed_int()
-                image_viewer = {'linux':'xdg-open',
-                                  'darwin':'open'}[sys.platform]
                 if(sys.platform == 'win32'):
                         if(curr_line_int == 0):
-                                subprocess.Popen(['start', "Modules/SW_Wayside/Frontend/red_line_map.png"], shell=True)
+                                os.system('start Modules\\SW_Wayside\\Frontend\\red_line_map.png')
                         elif(curr_line_int == 1):
-                                subprocess.Popen(['start', "Modules/SW_Wayside/Frontend/green_line_map.png"], shell=True)
+                                os.system('start Modules\\SW_Wayside\\Frontend\\green_line_map.png')
                 else:
                         if(curr_line_int == 0):
                                 subprocess.Popen([image_viewer, "Modules/SW_Wayside/Frontend/red_line_map.png"])
