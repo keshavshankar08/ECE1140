@@ -23,7 +23,7 @@ class ScheduleBuilder(QtWidgets.QMainWindow):
         self.route_queue_copy = RouteQueue()
         self.queue_trains_copy = QueueTrains()
 
-        #Current Line Signal
+        #Menu Bar Signals
         self.line_value_box.currentTextChanged.connect(self.line_value_box_changed)
 
         #Manual Scheduling Signals
@@ -60,8 +60,8 @@ class ScheduleBuilder(QtWidgets.QMainWindow):
 
     #Menu Bar Signals
     def line_value_box_changed(self):
-        if(len(self.route_queue_copy.routes) != 0):
-            QMessageBox.information(self, "Alert", "Make sure you confirm all routes before changing lines.")
+        #reset scheduling
+        self.route_table.setRowCount(0)
 
     #Manual Scheduling Functions
     def add_stop_button_clicked(self):
@@ -96,7 +96,7 @@ class ScheduleBuilder(QtWidgets.QMainWindow):
         #create station and time data
         new_route = Route()
 
-        #loop through 
+        #loop through
         for row in range(self.route_table.rowCount()):
             #errors for station
             if self.route_table.cellWidget(row, 0).currentText() in new_route.stops:
@@ -145,6 +145,10 @@ class ScheduleBuilder(QtWidgets.QMainWindow):
             self.route_queue_table.setItem(0, 0, train_id)
             departure_time = QTableWidgetItem(str(train.departure_time))
             self.route_queue_table.setItem(0, 1, departure_time)
+
+        #deactivate line change ability
+        if(len(self.route_queue_copy.routes) > 0):
+            self.line_value_box.setEnabled(False)
     
     def route_queue_table_selection_changed(self):
         #get selection
@@ -216,6 +220,14 @@ class ScheduleBuilder(QtWidgets.QMainWindow):
 
         #close file
         route_file.close()
+
+        #reactivate the ability to change lines
+        self.line_value_box.setEnabled(True)
+
+        #clear all tables
+        self.selected_schedule_table.setRowCount(0)
+        self.route_table.setRowCount(0)
+        self.route_queue_table.setRowCount(0)
 
 #Main
 if __name__ == "__main__":
