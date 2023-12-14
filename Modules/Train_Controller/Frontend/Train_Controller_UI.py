@@ -131,7 +131,6 @@ class TrainControllerUI(QtWidgets.QMainWindow):
             self.password_val.setEnabled(True)
             self.automatic_button.setEnabled(True)
             self.manual_button.setEnabled(True)
-            print(self.current_train_controller.station)
 
             if self.current_train_controller.authority <= 100:
                 self.station_name.setText("APPROACHING " + self.current_train_controller.station + " STATION")
