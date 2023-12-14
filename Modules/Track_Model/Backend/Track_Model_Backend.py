@@ -90,9 +90,6 @@ class TrackModelModule(QtWidgets.QMainWindow):
     # Update local instance of active trains
     def update_copy_active_trains(self,updated_active_trains):
         self.active_trains_instance_copy = updated_active_trains
-        if(len(self.active_trains_instance_copy.active_trains) > 0):
-            print(len(self.active_trains_instance_copy.active_trains))
-            print("Auth received is: " + str(self.active_trains_instance_copy.active_trains[0].current_authority))
 
     # main function to carry out all functions in a cycle
     def backend_update_backend(self,track_instance,active_trains):
@@ -101,7 +98,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
         
         # update local instance of active trains
         self.update_copy_active_trains(active_trains)
-        
+   
         # update frontend 
         self.display_block_info()
         
@@ -109,7 +106,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
         self.receive_train_model_signals()
         
         # update block occupancies
-        self.occupied_block = self.block_occupancy()
+        self.block_occupancy()
         
         self.yard_occupancy()
         
@@ -135,21 +132,23 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 signals.track_model_authority.emit(int(train.train_ID), 0)
             else:
                 # convert to meters then emit to train model 
-                if self.active_trains_instance_copy.active_trains[int(train.train_ID)].current_line == 0:
-                    # red line
-                    start = self.active_trains_instance_copy.active_trains[int(train.train_ID)].current_block
-                    end = start + self.active_trains_instance_copy.active_trains[int(train.train_ID)].current_authority
-                    authority_meters = sum(row[3] for row in self.red_line_data[start:end-2])
-                    print("red line authority in meters: " + authority_meters)
-                    signals.track_model_authority.emit(int(train.train_ID), authority_meters)
-                    
-                if self.active_trains_instance_copy.active_trains[int(train.train_ID)].current_line == 1:
+                if train.current_line == 0:
                     # green line
-                    start = self.active_trains_instance_copy.active_trains[int(train.train_ID)].current_block
-                    end = start + self.active_trains_instance_copy.active_trains[int(train.train_ID)].current_authority
-                    authority_meters = sum(int(row[3]) for row in self.green_line_data[start:end-2])
-                    print("green line authority in meters: " + str(authority_meters))
-                    signals.track_model_authority.emit(int(train.train_ID), authority_meters)
+                    start = train.current_block
+                    end = start + train.current_authority
+                    sum = 0
+                    for block_length in self.track_instance_copy.red_line_block_lengths[start:end]:
+                        sum += block_length
+                    signals.track_model_authority.emit(int(train.train_ID), sum)
+                    
+                if train.current_line == 1:
+                    # green line
+                    start = train.current_block
+                    end = start + train.current_authority
+                    sum = 0
+                    for block_length in self.track_instance_copy.green_line_block_lengths[start:end]:
+                        sum += block_length
+                    signals.track_model_authority.emit(int(train.train_ID), sum)
         
     # failure mode handler
     def failure_mode(self):
@@ -173,10 +172,9 @@ class TrackModelModule(QtWidgets.QMainWindow):
 
     def receive_distance_from_yard(self, train_id, distance_yard):
         for train in self.active_trains_instance_copy.active_trains:
-            if train.train_ID == train_id:
+            if int(train.train_ID) == train_id:
                 # Handle the received distance from yard signal
                 train.distance_from_yard = distance_yard
-                self.train_id = train_id
 
     # sends updates from track model backend to main backend
     def send_main_backend_update(self):
@@ -231,17 +229,15 @@ class TrackModelModule(QtWidgets.QMainWindow):
                                     signals.track_model_underground.emit(int(active_train.train_ID),True)
                                 else:
                                     signals.track_model_underground.emit(int(active_train.train_ID),False)
-                                
-                            return block
+                            
+                            break
                         
                         # check if at end of path
-                        if path[count] == path[-1]:
+                        #if path[count] == path[-1]:
                             # at end of path, reset count
-                            count = 0
-                        
-                        else:
-                            # not at end of path yet, continue moving through list
-                            count += 1
+                            
+
+                        count += 1
             
                 if self.line_name == 'Red Line':
                     # path around track (106 blocks)
@@ -257,7 +253,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
                     
                     block_length_sum = 0
                     count = 0
-                    obj = self.green_line_data[path[count]]
+                    obj = self.red_line_data[path[count]]
                     block = obj[2]
                     
                     while count < len(path):
@@ -284,16 +280,10 @@ class TrackModelModule(QtWidgets.QMainWindow):
                                 else:
                                     signals.track_model_underground.emit(int(active_train.train_ID),False)
                             
-                            return block
+                            break
                         
-                        # check if at end of path
-                        if path[count] == path[-1]:
-                            # at end of path, reset count
-                            count = 0
-                        
-                        else:
-                            # not at end of path yet, continue moving through list
-                            count += 1
+                            
+                        count += 1
                 
         else:
             pass
@@ -650,6 +640,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
                         self.cum_elevation_display.setText("{:.2f}".format(data[9] * 3.281))
                     
                     # display train info (only if block is occupied)
+                    '''
                     if self.track_instance_copy.lines[0].blocks[int(block_number)].block_occupancy:
                         self.train_ID_display.setText(str(self.active_trains_instance_copy.active_trains[self.train_id].train_ID))
                         
@@ -665,7 +656,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
                         self.direction_of_travel_display.setText("None")
                         self.authority_display.setText("None")
                         self.current_speed_display.setText("None")
-                    
+                    '''
                     
         
     def build_track_map(self):
