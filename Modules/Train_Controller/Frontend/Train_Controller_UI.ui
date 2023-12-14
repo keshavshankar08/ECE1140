@@ -473,7 +473,7 @@
       </font>
      </property>
      <property name="maximum">
-      <number>44</number>
+      <number>43</number>
      </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>

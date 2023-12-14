@@ -23,6 +23,8 @@ class TrainControllerList(QObject):
         signals.trainModel_send_engine_failure.connect(self.engine_failure)
         signals.trainModel_send_brake_failure.connect(self.brake_failure)
         signals.trainModel_send_signal_failure.connect(self.signal_failure)
+        signals.trainModel_send_tunnel.connect(self.exterior_lights_status)
+        signals.trainModel_send_tunnel.connect(self.interior_lights_status)
 
     def add_train(self, id):
         if id in self.total_trains:
@@ -79,10 +81,16 @@ class TrainControllerList(QObject):
         if isinstance(self.total_trains[id], TrainController):
             self.total_trains[id].update_suggested_speed(value)
 
-<<<<<<< HEAD
     def update_temp_value(self, id, value):
         self.total_trains[id].update_temp_value(value)
-=======
->>>>>>> bfdd244713837e7be0e1871b51be617c095a2c7f
+
+    def exterior_lights_status(self, id, value):
+        if isinstance(self.total_trains[id], TrainController):
+            self.total_trains[id].exterior_lights_status(value)
+
+    def interior_lights_status(self, id, value):
+        if isinstance(self.total_trains[id], TrainController):
+            self.total_trains[id].interior_lights_status(value)
+
 
 train_controller_list = TrainControllerList()

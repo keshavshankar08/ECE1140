@@ -48,6 +48,7 @@ class TrainController(QObject):
         self.train_id = None
         self.beacon_flag = False
         self.train_horn = False
+        self.tunnel_status = False
 
         #emergency brakes and service brakes, True = On, False = Off
         self.emergency_brake = False
@@ -87,7 +88,6 @@ class TrainController(QObject):
 
         # if self.authority !=0:
         #     self.authority -= self.current_speed * (constants.TIME_DELTA * 0.15)
-
 
         ###Power
         vError = 0
