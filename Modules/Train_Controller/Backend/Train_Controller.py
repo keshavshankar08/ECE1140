@@ -51,6 +51,7 @@ class TrainController(QObject):
         self.beacon_flag = False
         self.train_horn = False
         self.tunnel_status = False
+        self.authority_flag = True
 
         #emergency brakes and service brakes, True = On, False = Off
         self.emergency_brake = False
@@ -147,22 +148,14 @@ class TrainController(QObject):
     def update_commanded_speed(self, value):
         self.commanded_speed = value
 
-        if self.commanded_speed > self.speed_limit:
-            self.commanded_speed = self.speed_limit
-
     #this function updates the current speed
     def update_current_speed(self, currSpeed):
         self.current_speed = currSpeed
         
     #this function updates the authority
     def update_authority(self, newAuthority):
-        if newAuthority:
-            self.authority = newAuthority
-        else:
-             self.authority = self.station_authority
-             if self.authority == 0:
-                 self.station_authority = 0
-            
+        self.authority = newAuthority
+
     #this function updates the temp
     def update_temp_value(self, temperature):
         self.train_temp = temperature
@@ -253,7 +246,7 @@ class TrainController(QObject):
                 elif temp_string[0] == "SOUTH":
                     self.station = temp_string[0] + " " + temp_string[1] + " " + temp_string[2]
                     self.station_side = temp_string[3]
-                    self.station_authority = float(temp_string[4])
+                    #self.station_authority = float(temp_string[4])
                 else:
                     self.station = temp_string[0]
                     self.station_side = temp_string[1]
@@ -273,3 +266,8 @@ class TrainController(QObject):
 
     def train_horn_status(self, value):
         self.train_horn = value
+
+    def receive_tunnel(self, value):
+        if value:
+            self.ext_lights = True
+            self.int_lights = True
