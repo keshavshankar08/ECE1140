@@ -31,6 +31,9 @@ class TrackModelModule(QtWidgets.QMainWindow):
         self.train_id = None
         self.distance_from_yard_receive = 0
         
+        self.train_id
+        self.new_passengers = 0
+        
         # declare lists to store line data
         self.red_line_data = []
         self.green_line_data = []
@@ -47,6 +50,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
 
         # receive updates from train model
         signals.trainModel_send_distance_from_yard.connect(self.receive_distance_from_yard)
+        
         
         # disable line selector until track is loaded to avoid undefined behavior
         self.TrackLineColorValue.setEnabled(False)
@@ -118,7 +122,6 @@ class TrackModelModule(QtWidgets.QMainWindow):
         
         # signals to train model
         self.send_train_info()
-        #signals.track_model_passengers.emit(self.net_passengers)
         
         # send updated signals to main backend
         self.send_main_backend_update()
@@ -169,6 +172,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
     # train model signal slots 
     def receive_train_model_signals(self):
         self.receive_distance_from_yard(self.train_id,self.distance_from_yard_receive)
+        self.receive_passengers(self.train_id,self.new_passengers)
 
     def receive_distance_from_yard(self, train_id, distance_yard):
         for train in self.active_trains_instance_copy.active_trains:
@@ -176,6 +180,12 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 # Handle the received distance from yard signal
                 train.distance_from_yard = distance_yard
 
+    def receive_passengers(self,train_id,new_passengers):
+        for train in self.active_trains_instance_copy.active_trains:
+            if int(train.train_ID) == train_id:
+                # handle the new passengers signal
+                train.passenger_count = new_passengers
+    
     # sends updates from track model backend to main backend
     def send_main_backend_update(self):
         signals.track_model_backend_update.emit(self.track_instance_copy)
@@ -219,23 +229,20 @@ class TrackModelModule(QtWidgets.QMainWindow):
                             signals.track_model_speed_limit.emit(int(active_train.train_ID),self.green_line_data[block][5])
                             
                             for station_block in stations:
-                                if block == station_block:
-                                    # station block is occupied, send beacon signal
-                                    signals.track_model_beacon.emit(int(active_train.train_ID),self.beacon(block))
+                                if path[count] == station_block:
+                                    # call function
+                                    self.passenger_movement(active_train)
+                                    # station block is occupied, send beacon signal and update passenger count
+                                    signals.track_model_beacon.emit(int(active_train.train_ID),self.beacon(path[count]))
                             
                             for underground_block in undergrounds:
-                                if block == underground_block:
+                                if path[count] == underground_block:
                                     # train is underground, send signal for lights
                                     signals.track_model_underground.emit(int(active_train.train_ID),True)
                                 else:
                                     signals.track_model_underground.emit(int(active_train.train_ID),False)
                             
                             break
-                        
-                        # check if at end of path
-                        #if path[count] == path[-1]:
-                            # at end of path, reset count
-                            
 
                         count += 1
             
@@ -267,14 +274,15 @@ class TrackModelModule(QtWidgets.QMainWindow):
                             signals.track_model_block_grade.emit(int(active_train.train_ID),self.red_line_data[block][4])
                             signals.track_model_speed_limit.emit(int(active_train.train_ID),self.red_line_data[block][5])
                             
-                            
                             for station_block in stations:
-                                if block == station_block:
-                                    # train is at station, send beacon signal
-                                    signals.track_model_beacon.emit(int(active_train.train_ID),self.beacon(block))
+                                if path[count] == station_block:
+                                    # call function
+                                    self.passenger_movement(active_train)
+                                    # station block is occupied, send beacon signal and update passenger count
+                                    signals.track_model_beacon.emit(int(active_train.train_ID),self.beacon(path[count]))
                             
                             for underground_block in undergrounds:
-                                if block == underground_block:
+                                if path[count] == underground_block:
                                     # train is underground, send signal for lights
                                     signals.track_model_underground.emit(int(active_train.train_ID),True)
                                 else:
@@ -469,7 +477,21 @@ class TrackModelModule(QtWidgets.QMainWindow):
                 # send ctc the ticket sales
                 signals.track_model_green_line_ticket_sales.emit(self.green_sales)
             
-            
+    def passenger_movement(self,active_train):
+        lower_limit = 0 
+        upper_limit = self.tickets_sold 
+                                        
+        # generate passenger movement for train on red line
+        passengers_on = random.randint(lower_limit,upper_limit)
+        passengers_off = random.randint(lower_limit,active_train.passenger_count)
+                                    
+        send_passengers = active_train.passenger_count + (passengers_on - passengers_off)
+        active_train.passenger_count = send_passengers
+        signals.track_model_send_passengers.emit(int(active_train.train_ID),send_passengers)
+                               
+        # display passengers on and off in sidebar
+        self.passengers_boarding_display.setText(str(passengers_on))
+        self.passengers_disembarking_display.setText(str(passengers_off))
 
     def track_layout(self):
         file_filter = 'Excel File (*.xlsx)'
@@ -574,23 +596,24 @@ class TrackModelModule(QtWidgets.QMainWindow):
                         self.cum_elevation_display.setText("{:.2f}".format(data[9] * 3.281))
                     
                     # display train info (only if block is occupied)
-                    '''
-                    if self.track_instance_copy.lines[1].blocks[int(block_number)].block_occupancy:
-                        self.train_ID_display.setText(str(self.active_trains_instance_copy.active_trains[train.train_ID].train_ID))
+                    for active_train in self.active_trains_instance_copy.active_trains:
+                        if active_train.current_block == int(block_number):
+                            self.train_ID_display.setText(str(active_train.train_ID))
+                            
+                            if active_train.current_direction:
+                                self.direction_of_travel_display.setText("Northbound")
+                            else:
+                                self.direction_of_travel_display.setText("Southbound")
+                                    
+                            self.authority_display.setText(str(active_train.current_authority))
+                            self.current_speed_display.setText(str(active_train.current_suggested_speed))
                         
-                        if self.active_trains_instance_copy.active_trains[self.train_id].current_direction:
-                            self.direction_of_travel_display.setText("Northbound")
-                        else:
-                            self.direction_of_travel_display.setText("Southbound")
-                        self.authority_display.setText(str(self.active_trains_instance_copy.active_trains[self.train_id].current_authority))
-                        self.current_speed_display.setText(str(self.active_trains_instance_copy.active_trains[self.train_id].current_suggested_speed))
+                        else: 
+                            self.train_ID_display.setText("None")
+                            self.direction_of_travel_display.setText("None")
+                            self.authority_display.setText("None")
+                            self.current_speed_display.setText("None")
                     
-                    else: 
-                        self.train_ID_display.setText("None")
-                        self.direction_of_travel_display.setText("None")
-                        self.authority_display.setText("None")
-                        self.current_speed_display.setText("None")
-                   '''
                     
         if self.line_name == 'Red Line':
             for data in self.red_line_data:

@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import *
 import sys
 import os
 sys.path.append(".")
+from Modules.CTC.Frontend.schedule_builder import *
 from signals import *
 from Track_Resources.Track import *
 
@@ -22,6 +23,10 @@ class CTCFrontend(QtWidgets.QMainWindow):
         self.queue_trains_copy = QueueTrains()
         self.route_queue_copy = RouteQueue()
         self.ticket_sales_copy = 0
+        self.schedule_file_name = ""
+
+        #create schedulebuilder window
+        self.schedule_builder_window = ScheduleBuilder()
 
         #initialize display
         self.initialize_display()
@@ -219,7 +224,7 @@ class CTCFrontend(QtWidgets.QMainWindow):
 
     #Menu Bar Functions
     def schedule_builder_clicked(self):
-        os.system("start EXCEL.EXE")
+        self.schedule_builder_window.show()
     
     def toggle_maintenance_button_clicked(self):
         #get block to toggle maintenance
@@ -248,7 +253,46 @@ class CTCFrontend(QtWidgets.QMainWindow):
             self.set_block_maintenance_value.addItems([str(x.block_number) for x in self.track_instance_copy.lines[1].blocks])
 
     def upload_schedule_button_clicked(self):
-        pass
+        #get filename
+        self.schedule_file_name, _filter = QtWidgets.QFileDialog.getOpenFileName(self, "Open File", "", "Text Files (*.txt)")
+        
+        if(self.schedule_file_name == ''):
+            QMessageBox.information(self, "Alert", "No file selected.")
+            return
+
+        #open file to read
+        route_file = open(self.schedule_file_name, "r")
+        lines = route_file.readlines()
+
+        #go through each line and add to route queue after error validation
+        if(lines[0].strip() != self.line_value_box.currentText()):
+            QMessageBox.information(self, "Alert", "Wrong line selected for schedule.")
+            return
+
+        #remove line and then iterate through each line and make a new route
+        line_value = -1
+        if(self.line_value_box.currentText() == "Green Line"):
+            line_value = 1
+        elif(self.line_value_box.currentText() == "Red Line"):
+            line_value = 0
+
+        lines.pop(0)
+        schedule_route = Route()
+
+        #loop through lines
+        for i in range(len(lines)):
+            #remove newline characters
+            line = lines[i].strip()
+            #if the line is the delimiter, then add the route to the queue
+            if(i % 4 == 0):
+                schedule_route.stops = [int(j) for j in line.split(',')]
+            elif(i % 4 == 1):
+                schedule_route.dwell_time = line.split(',')
+            elif(i % 4 == 2):
+                schedule_route.stop_time = line.split(',')
+            elif(i % 4 == 3):
+                self.route_queue_copy.add_route(schedule_route)
+                self.queue_trains_copy.add_train(Train(schedule_route, line_value))
 
     #Manual Scheduling Functions
     def add_stop_button_clicked(self):
