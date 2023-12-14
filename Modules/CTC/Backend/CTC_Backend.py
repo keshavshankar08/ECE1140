@@ -104,15 +104,49 @@ class CTCBackend():
         for train in self.active_trains_instance_copy.active_trains:
             train.update_stop(self.system_time)
             train.update_authority(track)
+        self.verify_authority()
+        self.remove_train()
             
-    def verify_schedule(route_schedule):
-        pass
+    #function to verify authority in the case that a train is two blocks or closer to a fault
+    def verify_authority(self):
+        #loop through each train in active trains
+        for train in self.active_trains_instance_copy.active_trains:
+            #get the block numbers of the next two blocks
+            if(len(train.authority_stop_queue[train.stop_index]) == 0):
+                return
+            elif(len(train.authority_stop_queue[train.stop_index]) == 1):
+                test_block_1 = train.authority_stop_queue[train.stop_index][0]
+                test_block_2 = train.authority_stop_queue[train.stop_index][0]
+            elif(len(train.authority_stop_queue[train.stop_index]) > 1):
+                #print(train.authority_stop_queue[train.stop_index])
+                test_block_1 = train.authority_stop_queue[train.stop_index][0]
+                test_block_2 = train.authority_stop_queue[train.stop_index][1]
 
-    def verify_time_between(route_schedule):
-        pass
-
-    def verify_route_order(route_stops):
-        pass
+            #check for values in the next to blocks to be 1) occupied, 2) under maintenance, or 3) faulted
+            if(train.current_line == 0):
+                if((self.track_instance_copy.lines[0].blocks[test_block_1].block_occupancy == True) or (self.track_instance_copy.lines[0].blocks[test_block_1].maintenance_status == True) or (self.track_instance_copy.lines[0].blocks[test_block_1].track_fault_status == True)):
+                    train.current_authority = -1
+                    train.current_suggested_speed = 0
+                elif((self.track_instance_copy.lines[0].blocks[test_block_2].block_occupancy == True) or (self.track_instance_copy.lines[0].blocks[test_block_2].maintenance_status == True) or (self.track_instance_copy.lines[0].blocks[test_block_2].track_fault_status == True)):
+                    train.current_authority = -1
+                    train.current_suggested_speed = 0
+                elif(train.current_suggested_speed == 0):
+                    train.current_suggested_speed = 10
+            if(train.current_line == 1):
+                if((self.track_instance_copy.lines[1].blocks[test_block_1].block_occupancy == True) or (self.track_instance_copy.lines[1].blocks[test_block_1].maintenance_status == True) or (self.track_instance_copy.lines[1].blocks[test_block_1].track_fault_status == True)):
+                    train.current_authority = -1
+                    train.current_suggested_speed = 0
+                elif((self.track_instance_copy.lines[1].blocks[test_block_2].block_occupancy == True) or (self.track_instance_copy.lines[1].blocks[test_block_2].maintenance_status == True) or (self.track_instance_copy.lines[1].blocks[test_block_2].track_fault_status == True)):
+                    train.current_authority = -1
+                    train.current_suggested_speed = 0
+                elif(train.current_suggested_speed == 0):
+                    train.current_suggested_speed = 10
+                
+    def remove_train(self):
+        for train in self.active_trains_instance_copy.active_trains:
+            if(train.current_line == 1):
+                if(train.current_block == 5):
+                    self.active_trains_instance_copy.active_trains.remove(train)
 
 #Helper Functions
 def validate_time_hours(input_time):
