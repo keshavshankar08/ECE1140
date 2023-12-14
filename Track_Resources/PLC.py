@@ -268,10 +268,10 @@ class PLC():
             for section in cross_47:
                 for blk in section:
                     if(self.track_instance_copy.lines[1].blocks[blk].block_occupancy):
-                        if(section == 0):
+                        if(section == cross_47[0]):
                             CF = True
                             break
-                        if(section == 1):
+                        if(section == cross_47[1]):
                             CB = True
                             break
         elif(line_number == 1):
@@ -279,10 +279,10 @@ class PLC():
             for section in cross_19:
                 for blk in section:
                     if(self.track_instance_copy.lines[1].blocks[blk].block_occupancy):
-                        if(section == 0):
+                        if(section == cross_19[0]):
                             CF = True
                             break
-                        if(section == 1):
+                        if(section == cross_19[1]):
                             CB = True
                             break
         return CF, CB
