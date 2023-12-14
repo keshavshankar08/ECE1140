@@ -28,7 +28,7 @@ class PLC():
         self.update_copy_active_trains(active_trains_instance)
         self.update_plc_program(file_name, line_number, wayside_number)
         if(len(self.green_line_wayside1_token_list) != 0 and len(self.green_line_wayside2_token_list) != 0 and len(self.red_line_wayside1_token_list) != 0 and len(self.red_line_wayside2_token_list) != 0):
-            self.route_verification()
+            #self.route_verification()
             self.execute_plc_program()
         self.send_plc_update()
 
