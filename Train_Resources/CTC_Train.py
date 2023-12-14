@@ -41,6 +41,7 @@ class Train:
         self.train_route = route
         self.station_departure_time = QTime()
         self.distance_from_yard = -1
+        self.passenger_count = 0
 
         #set train ID
         self.train_ID = str(next(Train.id_obj))
