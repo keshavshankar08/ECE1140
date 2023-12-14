@@ -98,6 +98,8 @@ class ScheduleBuilder(QtWidgets.QMainWindow):
         #create station and time data
         new_route = Route()
 
+        route_order_list = []
+
         #loop through
         for row in range(self.route_table.rowCount()):
             #errors for station
@@ -105,8 +107,25 @@ class ScheduleBuilder(QtWidgets.QMainWindow):
                 QMessageBox.information(self, "Alert", "Duplicate station. Try updating the routing.")
                 return
             
-            #TODO - Error for station out of order
-            
+            #error for stations out of order
+            if(self.line_value_box.currentText() == 'Green Line'):
+                index = np.where(np.array(self.track_instance_copy.green_line_station_names_ordered) == self.route_table.cellWidget(row, 0).currentText())
+                for ord in route_order_list:
+                    print(f'ord:',ord)
+                    if index < ord:
+                        QMessageBox.information(self, "Alert", "Station routed out of order. Follow the order in the dropdown menu.")
+                        return
+                route_order_list.append(index)
+
+            #error for stations out of order
+            if(self.line_value_box.currentText() == 'Red Line'):
+                index = np.where(self.track_instance_copy.red_line_station_names == self.route_table.cellWidget(row, 0).currentText())
+                for ord in route_order_list:
+                    if index < ord:
+                        QMessageBox.information(self, "Alert", "Station routed out of order. Follow the order in the dropdown menu.")
+                        return
+                route_order_list.append(index)
+                      
             #errors for time
             if self.route_table.item(row, 1) == None:
                 QMessageBox.information(self, "Alert", "A time value is missing. Fill and try again.")
