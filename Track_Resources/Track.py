@@ -128,8 +128,8 @@ class Track:
         # Green line block information
         green_line_default_blocks = [3,4,5,6,7,8,10,11,14,15,17,18,20,21,23,24,25,26,27,30,32,33,34,35,36,37,38,40,41,42,43,44,45,46,47,49,50,51,52,53,54,55,59,60,61,64,66,67,68,69,70,71,72,74,75,79,80,81,82,83,84,86,87,89,90,91,92,93,94,95,97,98,99,102,103,104,106,107,108,109,110,111,112,113,115,116,117,118,119,120,121,122,124,125,126,127,128,129,130,131,133,134,135,136,137,138,139,140,142,143,144,145,146,147,148,149]
         self.green_line_station_blocks = [2,9,16,22,31,39,48,56,65,73,78,88,96,105,114,123,132,141]
-        self.green_line_station_names = ["Pioneer", "Edgebrook", "Jalappa", "Whited", "South Bank", "Central", "Inglewood", "Overbrook", "Glenbury", "Dormont", "Mt Lebanon", "Poplar", "Castle Shannon", "Dormont", "Glenbury", "Overbrook", "Inglewood", "Central"]
-        self.green_line_station_names_ordered = ["Glenbury", "Dormont", "Mt Lebanon", "Poplar", "Castle Shannon", "Overbrook", "Inglewood", "Central", "Whited", "Jalappa", "Edgebrook", "Pioneer", "South Bank"]
+        self.green_line_station_names = ["Pioneer", "Edgebrook", "Jalappa", "Whited", "South Bank", "Central (1)", "Inglewood (1)", "Overbrook (1)", "Glenbury (1)", "Dormont (1)", "Mt Lebanon", "Poplar", "Castle Shannon", "Dormont (2)", "Glenbury (2)", "Overbrook (2)", "Inglewood (2)", "Central (2)"]
+        self.green_line_station_names_ordered = ["Glenbury (1)", "Dormont (1)", "Mt Lebanon", "Poplar", "Castle Shannon", "Dormont (2)", "Glenbury (2)", "Overbrook (2)", "Inglewood (2)", "Central (2)", "Whited", "Jalappa", "Edgebrook", "Pioneer", "South Bank", "Central (1)", "Inglewood (1)", "Overbrook (1)"]
         green_line_crossing_blocks = [19]
         green_line_junction_blocks = [13,12,1,28,29,150,57,0,58,63,62,0,77,101,76,85,86,100]
         self.green_line_device_blocks_ws1 = [13,19,28,57,63]
