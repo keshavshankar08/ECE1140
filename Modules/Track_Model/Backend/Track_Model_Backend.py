@@ -564,7 +564,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
                             # TODO display remainder of station info (passengers boarding and disembarking)
                             # display beacon data (if applicable)
                             self.beacon_display.setText(self.beacon(int(block_number)))
-                            print(self.beacon_display.setText(self.beacon(int(block_number))))
+                            #print(self.beacon_display.setText(self.beacon(int(block_number))))
                         else: 
                             # do not display ticket sales or beacon if block is not a station
                             self.tickets_sold_display.setText("None")

@@ -55,7 +55,8 @@ class TrainControllerList(QObject):
             self.total_trains[id].update_authority(value)
 
     def beacon_receive(self, id, value):
-        self.total_trains[id].beacon_receive(value)
+        if isinstance(self.total_trains[id], TrainController):
+            self.total_trains[id].beacon_receive(value)
 
     def passenger_EBrake(self, id, value):
         if isinstance(self.total_trains[id], TrainController):

@@ -80,7 +80,7 @@ class TrainControllerUI(QtWidgets.QMainWindow):
             else:
                 self.ext_lights_off()
                 self.int_lights_off()
-                
+
             if self.current_train_controller.int_lights:
                 self.int_lights_on()
             else:
@@ -114,80 +114,6 @@ class TrainControllerUI(QtWidgets.QMainWindow):
                 self.manual_button_clicked()
             
             self.temp_val.setValue(self.current_train_controller.train_temp)
-
-            # #iteration for engine failure along with e brake
-            # if self.current_train_controller.engine_fail:
-            #     self.engine_fail.setChecked(True)
-            #     self.current_train_controller.emergency_brake = True
-            # else:
-            #     self.engine_fail.setChecked(False)
-            #     if self.current_train_controller.emergency_brake and self.current_train_controller.brake_fail == False and\
-            #         self.current_train_controller.signal_fail == False and self.current_train_controller.mode == True:
-            #         self.emergency_brake.setEnabled(True)
-            #     elif self.current_train_controller.emergency_brake == False and self.current_train_controller.brake_fail == False and\
-            #         self.current_train_controller.signal_fail == False and self.current_train_controller.mode == True:
-            #         self.emergency_brake.setEnabled(False)
-            
-            # #iteration for brake failure along with e brake
-            # if self.current_train_controller.brake_fail:
-            #     self.brake_fail.setChecked(True)
-            #     self.current_train_controller.emergency_brake = True
-            # else:
-            #     self.brake_fail.setChecked(False)
-            #     if self.current_train_controller.emergency_brake and self.current_train_controller.engine_fail == False and\
-            #         self.current_train_controller.signal_fail == False and self.current_train_controller.mode == True:
-            #         self.emergency_brake.setEnabled(True)
-            #     elif self.current_train_controller.emergency_brake == False and self.current_train_controller.engine_fail == False and\
-            #         self.current_train_controller.signal_fail == False and self.current_train_controller.mode == True:
-            #         self.emergency_brake.setEnabled(False)
-
-            # #iteration for signal failure along with e brake
-            # if self.current_train_controller.signal_fail:
-            #     self.signal_fail.setChecked(True)
-            #     self.current_train_controller.emergency_brake = True
-            # else:
-            #     self.signal_fail.setChecked(False)
-            #     if self.current_train_controller.emergency_brake and self.current_train_controller.engine_fail == False and\
-            #         self.current_train_controller.brake_fail == False and self.current_train_controller.mode == True:
-            #         self.emergency_brake.setEnabled(True)
-            #     elif self.current_train_controller.emergency_brake == False and self.current_train_controller.engine_fail == False and\
-            #         self.current_train_controller.brake_fail == False and self.current_train_controller.mode == True:
-            #         self.emergency_brake.setEnabled(False)
-
-            #self.current_train_controller.authority -= self.current_train_controller.current_speed * (constants.TIME_DELTA * 0.001)
-            # ###CONVERT CURRENT SPEED TO MPH
-            # if self.current_train_controller.authority: #authority has some value
-
-            #     if self.current_train_controller.authority <= 150: #authority is less than 150 m
-
-            #         if self.current_train_controller.current_speed <= 15: #current speed less than 15 mph
-            #             self.current_train_controller.service_brake = False
-
-            #             if self.current_train_controller.authority <= 20: #authority less than 20 m
-
-            #                 if self.current_train_controller.current_speed <= 5: #current speed less than 5 mph
-            #                     self.current_train_controller.service_brake = False
-
-            #                     if self.current_train_controller.authority != 0: #if authority does not equal 0 
-            #                         self.current_train_controller.service_brake = False
-
-            #                     else: #goes to authority 0
-            #                         pass
-
-            #                 else: #current speed greater than  to 5 mph
-            #                     self.current_train_controller.service_brake = True
-
-            #             else: #authority greater than 20 m
-            #                 self.current_train_controller.service_brake = False
-
-            #         else: #current speed greater than  to 15 mph 
-            #             self.current_train_controller.service_brake = True
-
-            #     else: #authority greater than 150 
-            #         self.current_train_controller.service_brake = False
-
-            # else: #authority is 0
-            #     self.current_train_controller.service_brake = True
                 
 
             self.update_UI()
@@ -205,6 +131,39 @@ class TrainControllerUI(QtWidgets.QMainWindow):
             self.password_val.setEnabled(True)
             self.automatic_button.setEnabled(True)
             self.manual_button.setEnabled(True)
+            print(self.current_train_controller.station)
+
+            if self.current_train_controller.authority <= 100:
+                self.station_name.setText("APPROACHING " + self.current_train_controller.station + " STATION")
+            if self.current_train_controller.authority == 0 and self.current_train_controller.current_speed == 0:
+                if self.current_train_controller.station_side == "Right":
+                    self.int_lights_on()
+                    self.ext_lights_on()
+                    self.r_doors_open()
+                elif self.current_train_controller.station_side == "Left":
+                    self.int_lights_on()
+                    self.ext_lights_on()
+                    self.l_doors_open()
+                elif self.current_train_controller.station_side == "Right/Left":
+                    self.int_lights_on()
+                    self.ext_lights_on()
+                    self.r_doors_open()
+                    self.l_doors_open()
+                self.current_train_controller.service_brake = True
+
+            if self.current_train_controller.authority != 0 and self.current_train_controller.current_speed != 0:
+                    self.ext_lights_off()
+                    self.int_lights_off()
+                    self.r_doors_closed()
+                    self.l_doors_closed()
+                    self.station_name.setText(" ")
+
+            if self.current_train_controller.tunnel_status:
+                self.ext_lights_on()
+                self.int_lights_on()
+            else:
+                self.ext_lights_off()
+                self.int_lights_off()
 
             if self.current_train_controller.mode:
                 self.receive_driver_throttle(self.current_train_controller.suggested_speed)
@@ -265,6 +224,36 @@ class TrainControllerUI(QtWidgets.QMainWindow):
                 elif self.current_train_controller.emergency_brake == False and self.current_train_controller.engine_fail == False and\
                     self.current_train_controller.brake_fail == False and self.current_train_controller.mode == True:
                     self.emergency_brake.setEnabled(False)
+
+
+            # ###CONVERT CURRENT SPEED TO MPH
+            if self.current_train_controller.authority: #authority has some value
+
+                if self.current_train_controller.suggested_speed == 15: #suggested speed is 15
+
+                    if (self.current_train_controller.current_speed*2.23694) > self.current_train_controller.suggested_speed: #current speed is not suggested speed
+                        self.current_train_controller.service_brake = True
+
+                        if self.current_train_controller.suggested_speed == 10: #suggested speed is 10
+
+                            if (self.current_train_controller.current_speed*2.23694) > self.current_train_controller.suggested_speed: #current speed is not suggested speed
+                                self.current_train_controller.service_brake = True
+
+                                if self.current_train_controller.authority != 0: #authority is not 0
+                                    self.current_train_controller.service_brake = False
+
+                                else:
+                                    pass
+                        else:
+                            self.current_train_controller.service_brake = False
+
+                    else:# current speed is equal to suggested speed
+                        self.current_train_controller.service_brake = False
+                else:
+                    self.current_train_controller.service_brake = False
+
+            else: #authority is 0
+                self.current_train_controller.service_brake = True
 
 
 
@@ -400,7 +389,6 @@ class TrainControllerUI(QtWidgets.QMainWindow):
 
     def annouce_stations(self, value):
         self.current_train_controller.station = value
-        self.station_name.setText("Approaching " + value + " Station")
 
     #function for train horn
     def play_sound(self):

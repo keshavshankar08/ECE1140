@@ -45,6 +45,7 @@ class TrainController(QObject):
         #authority and others
         self.authority = 0.0
         self.station = None
+        self.station_side = None
         self.train_id = None
         self.beacon_flag = False
         self.train_horn = False
@@ -85,9 +86,6 @@ class TrainController(QObject):
         signals.train_controller_left_door_status.emit(self.train_id, self.L_door)
         signals.train_controller_right_door_status.emit(self.train_id, self.R_door)
         signals.train_controller_temperature_value.emit(self.train_id, self.train_temp)
-
-        # if self.authority !=0:
-        #     self.authority -= self.current_speed * (constants.TIME_DELTA * 0.15)
 
         ###Power
         vError = 0
@@ -143,25 +141,7 @@ class TrainController(QObject):
     #this function updates the setpoint speed
     def update_suggested_speed(self, value):
         self.suggested_speed = value
-
-    #this function goes through a station stop
-    def train_station_stop(self):
-        if self.authority == 0:
-            pass
-            #open doors and turn on lights
-            #wait 1 minute
-            #wait = constants.TIME_DELTA*0.001*60
-            #if wait == 0:
-            #close doors and turn off lights 
-            
-
-            #activate service brake to stop moving
-            #self.service_brake = True
-            #toggle lights and doors for a station
-
-            #deactivate the service brake to start moving again
-            #self.service_brake = False
-            #toggle lights and doors
+              
         
     #this function updates the commanded speed
     def update_commanded_speed(self, value):
@@ -233,7 +213,18 @@ class TrainController(QObject):
             
     #this function is for announcements
     def beacon_receive(self, beacon):
-        self.station = beacon
+        
+        if len(beacon) > 1:
+                temp_string = beacon.split()
+                if beacon[0] == "CASTLE" and beacon[1] == "SHANNON":
+                    self.station = "CASTLE SHANNON"
+                    self.station_side = beacon[2]
+                elif beacon[0] == "MT" and beacon[1] == "LEBANON":
+                    self.station = "MT LEBANON"
+                    self.station_side = beacon[2]
+                else:
+                    self.station = temp_string[0]
+                    self.station_side = temp_string[1]
 
     #this function is for engine failure
     def engine_failure(self, failure):
