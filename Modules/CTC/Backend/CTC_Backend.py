@@ -81,15 +81,25 @@ class CTCBackend():
         #loop through queue and check time
         for i, train in enumerate(self.queue_trains.queue_trains):
             comp_time = QTime.fromString(train.departure_time, "hh:mm:ss")
-            if(system_comp_time >= comp_time):
-                self.active_trains_instance_copy.active_trains.append(train)
-                self.queue_trains.remove_train(i)
-                self.active_trains_instance_copy.active_trains[len(self.active_trains_instance_copy.active_trains) - 1].next_stop()
-                signals.ctc_added_train.emit(int(train.train_ID))
+            if(train.current_line == 0):
+                if((system_comp_time >= comp_time) and (self.track_instance_copy.lines[0].blocks[1].block_occupancy == False) and (self.track_instance_copy.lines[0].blocks[2].block_occupancy == False) and (self.track_instance_copy.lines[0].blocks[3].block_occupancy == False) and (self.track_instance_copy.lines[0].blocks[4].block_occupancy == False) and (self.track_instance_copy.lines[0].blocks[5].block_occupancy == False) and (self.track_instance_copy.lines[0].blocks[6].block_occupancy == False) and (self.track_instance_copy.lines[0].blocks[7].block_occupancy == False) and (self.track_instance_copy.lines[0].blocks[8].block_occupancy == False) and (self.track_instance_copy.lines[0].blocks[9].block_occupancy == False)):
+                    self.active_trains_instance_copy.active_trains.append(train)
+                    self.queue_trains.remove_train(i)
+                    self.active_trains_instance_copy.active_trains[len(self.active_trains_instance_copy.active_trains) - 1].next_stop()
+                    signals.ctc_added_train.emit(int(train.train_ID))
 
-                #set block 0 to occupied
-                self.track_instance_copy.lines[0].blocks[0].block_occupancy = True
-                self.track_instance_copy.lines[1].blocks[0].block_occupancy = True
+                    #set block 0 to occupied
+                    self.track_instance_copy.lines[0].blocks[0].block_occupancy = True
+
+            if(train.current_line == 1):
+                if((system_comp_time >= comp_time) and (self.track_instance_copy.lines[1].blocks[63].block_occupancy == False) and (self.track_instance_copy.lines[1].blocks[64].block_occupancy == False)):
+                    self.active_trains_instance_copy.active_trains.append(train)
+                    self.queue_trains.remove_train(i)
+                    self.active_trains_instance_copy.active_trains[len(self.active_trains_instance_copy.active_trains) - 1].next_stop()
+                    signals.ctc_added_train.emit(int(train.train_ID))
+    
+                    #set block 0 to occupied
+                    self.track_instance_copy.lines[1].blocks[0].block_occupancy = True
 
     def update_dispatch(self):
         if(self.track_instance_copy.lines[0].blocks[9].block_occupancy == True):
