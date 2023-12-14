@@ -7,6 +7,7 @@ from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import *
 from signals import *
 import os
+import subprocess
 import tkinter as tk; from tkinter import messagebox
 
 # Global variable used to act as a timer on Arduino uploads
@@ -287,6 +288,9 @@ class HWWaysideFrontend(QtWidgets.QMainWindow):
 
         # Handles view track map button clicked
         def view_track_map_clicked(self):
+                image_viewer = {'linux':'xdg-open',
+                                  'win32':'explorer',
+                                  'darwin':'open'}[sys.platform]
                 curr_line_int = self.get_current_line_displayed_int()
                 if(sys.platform == 'win32'):
                         if(curr_line_int == 0):
