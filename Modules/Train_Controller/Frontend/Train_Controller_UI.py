@@ -131,6 +131,7 @@ class TrainControllerUI(QtWidgets.QMainWindow):
             self.password_val.setEnabled(True)
             self.automatic_button.setEnabled(True)
             self.manual_button.setEnabled(True)
+            
 
             if self.current_train_controller.tunnel_status:
                 self.ext_lights_on()

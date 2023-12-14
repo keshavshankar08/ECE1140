@@ -45,6 +45,7 @@ class TrainController(QObject):
         #authority and others
         self.authority = 0.0
         self.station = None
+        self.station_side = None
         self.train_id = None
         self.beacon_flag = False
         self.train_horn = False
@@ -233,7 +234,13 @@ class TrainController(QObject):
             
     #this function is for announcements
     def beacon_receive(self, beacon):
-        self.station = beacon
+        temp_string = beacon
+        # split_string = temp_string.split(';')
+        # self.station = split_string[0].strip()
+        # self.station_side = split_string[1].strip().split()[0]
+        # print(self.station)
+        # print(self.station_side)
+        print(temp_string)
 
     #this function is for engine failure
     def engine_failure(self, failure):
