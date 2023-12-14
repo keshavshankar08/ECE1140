@@ -108,8 +108,6 @@ class Train:
                             speed[j] = round(track.green_line_speed_limit[self.authority_stop_queue[i][j]] * 0.66)
                         else:
                             speed[j] = track.green_line_speed_limit[self.authority_stop_queue[i][j]]
-        
-        print(f'speed queue: ',self.suggested_speed_queue)
 
         #set the current parameters
         self.current_authority = 0
@@ -210,8 +208,13 @@ class Train:
             if(self.current_block == 1):
                 self.current_direction = not self.current_direction
 
-        #update current authority
-        self.current_authority = len(self.authority_stop_queue[self.stop_index])
+        #update current authority only if authority has been changed by sw wayside
+        if(not self.current_authority_changed):
+            self.current_authority = len(self.authority_stop_queue[self.stop_index])
+
+        if(self.authority_reset_ready):
+            self.authority_reset_ready = False
+            self.current_authority_changed = False
 
 class ActiveTrains:
     def __init__(self):

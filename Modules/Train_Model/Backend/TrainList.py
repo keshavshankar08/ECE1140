@@ -108,14 +108,11 @@ class TrainList(QObject):
         if isinstance(self.allTrains[id], Train):
             self.allTrains[id].receiveGradient(value)
             
+    def receiveTunnel(self, id, value):
+        if isinstance(self.allTrains[id], Train):
+            self.allTrains[id].receiveTunnel(value)
+            
         
     
 trainList = TrainList()
 
-
-# what I need from Tim:
-    # signal for when train is dispatched, id to assign, line it is on (if that's relevant)
-    # signal for when train returns to yard, id of train to remove from dictionary
-# what I need from Tim, Ben, John (don't think this concerns wayside but could be wrong):
-    # modify signals so that their first parameter is train ID.
-        # that way, signals can go to specific train and not every train
