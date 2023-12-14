@@ -128,6 +128,7 @@ class TrainModel(QtWidgets.QMainWindow):
     def setEBrake(self):
         self.currentTrain.emergencyBrake = True
         self.eBrakeButton.setEnabled(False)
+        signals.trainModel_send_emergency_brake.emit(self.currentTrain.train_id, True)
         print("button clicekd")
         
     def sendSignalFail(self, value):

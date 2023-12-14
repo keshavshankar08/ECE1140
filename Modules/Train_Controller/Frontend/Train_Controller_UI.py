@@ -227,12 +227,14 @@ class TrainControllerUI(QtWidgets.QMainWindow):
             self.current_train_controller.emergency_brake = True
         else:
             self.current_train_controller.emergency_brake = False
+        signals.train_controller_emergency_brake_status.emit(self.current_train_controller.train_id, value)
 
     def s_brake(self, value):
         if value:
             self.current_train_controller.service_brake = True
         else:
             self.current_train_controller.service_brake = False
+        signals.train_controller_service_brake_status.emit(self.current_train_controller.train_id, value)
 
     #function will display Kp and Ki
     def display_KP(self, kp):

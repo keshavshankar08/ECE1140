@@ -80,4 +80,5 @@ class TrainControllerList(QObject):
         if isinstance(self.total_trains[id], TrainController):
             self.total_trains[id].update_suggested_speed(value)
 
+
 train_controller_list = TrainControllerList()
