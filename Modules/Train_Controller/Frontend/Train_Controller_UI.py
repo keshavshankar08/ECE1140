@@ -115,7 +115,6 @@ class TrainControllerUI(QtWidgets.QMainWindow):
             
             self.temp_val.setValue(self.current_train_controller.train_temp)
                 
-
             self.update_UI()
 
     def add_train_to_box(self, id):
@@ -132,32 +131,38 @@ class TrainControllerUI(QtWidgets.QMainWindow):
             self.automatic_button.setEnabled(True)
             self.manual_button.setEnabled(True)
 
-            if self.current_train_controller.authority <= 0:
+            if self.current_train_controller.authority <= 50:
                 self.station_name.setText("APPROACHING " + self.current_train_controller.station + " STATION")
-            if self.current_train_controller.authority == 0 and self.current_train_controller.current_speed == 0:
+                
+            if self.current_train_controller.authority == 0 and self.current_train_controller.current_speed == 0 and self.current_train_controller.mode:
                 if self.current_train_controller.station_side == "Right":
                     self.int_lights_on()
                     self.ext_lights_on()
                     self.r_doors_open()
+                    self.current_train_controller.service_brake = True
                 elif self.current_train_controller.station_side == "Left":
                     self.int_lights_on()
                     self.ext_lights_on()
                     self.l_doors_open()
+                    self.current_train_controller.service_brake = True
                 elif self.current_train_controller.station_side == "Right/Left":
                     self.int_lights_on()
                     self.ext_lights_on()
                     self.r_doors_open()
                     self.l_doors_open()
-                self.current_train_controller.service_brake = True
+                    self.current_train_controller.service_brake = True
 
-            if self.current_train_controller.authority != 0 and self.current_train_controller.current_speed != 0:
+            if self.current_train_controller.authority != 0 and self.current_train_controller.current_speed != 0 and self.current_train_controller.mode:
                     self.ext_lights_off()
                     self.int_lights_off()
                     self.r_doors_closed()
                     self.l_doors_closed()
                     self.station_name.setText(" ")
+                    self.current_train_controller.service_brake = False
+            elif self.current_train_controller.mode == False:
+                pass 
 
-            if self.current_train_controller.tunnel_status:
+            if self.current_train_controller.tunnel_status and self.current_train_controller.mode:
                 self.ext_lights_on()
                 self.int_lights_on()
 
@@ -222,22 +227,20 @@ class TrainControllerUI(QtWidgets.QMainWindow):
                     self.emergency_brake.setEnabled(False)
 
 
-            # ###CONVERT CURRENT SPEED TO MPH
-            if self.current_train_controller.authority: #authority has some value
+            # ###Authority
+            if self.current_train_controller.authority and self.current_train_controller.mode: #authority has some value
                 
                 if (self.current_train_controller.current_speed*2.23694) > self.current_train_controller.suggested_speed:
                     self.s_brake(True)
-           
+                    if self.current_train_controller.authority <= 10:
+                        self.s_brake(True)
                 else:
                     self.s_brake(False)
-
-            else: #authority is 0
-                if self.current_train_controller.station_authority != 0:
-                     new_authority = self.current_train_controller.station_authority - self.current_train_controller.current_speed * (constants.TIME_DELTA*0.1)
-                     self.current_train_controller.authority = new_authority
+            else:
+                if self.current_train_controller.mode == False:
+                    pass
                 else:
                     self.s_brake(True)
-
 
 
     #function for automatic mode
