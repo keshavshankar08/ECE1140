@@ -50,6 +50,7 @@ class Train(QObject):
         #### Interior Train Temperature
         self.temperatureCommand = 60.0  # F
         self.temperatureActual = 60.0  # F
+        self.elapsedTime = 0  # s
         #### Emergency Brake - either on or off
         self.emergencyBrake = False
         #### Service Brake - either on or off
@@ -78,6 +79,7 @@ class Train(QObject):
         self.distanceFromYard = 0.0
         self.distanceFromBlockStart = 0.0
         self.currentBeacon = None
+        self.tunnel = False
         #### Failure
         self.engineFail = False
         self.brakeFail = False
@@ -139,9 +141,12 @@ class Train(QObject):
             self.currentSpeed = self.speedLimit
             
         ## Position Calculation
-        
         self.distanceFromYard += self.currentSpeed * (constants.TIME_DELTA * 0.001)
         self.distanceFromBlockStart += self.currentSpeed * (constants.TIME_DELTA * 0.001)
+        
+        ## Temperature Calculation
+        self.elapsedTime += constants.TIME_DELTA * 0.001
+        self.temperatureActual = self.temperatureCommand * math.exp(-0.1 * self.elapsedTime)
 
 
         # Signals to Train Controller
@@ -154,6 +159,7 @@ class Train(QObject):
         signals.trainModel_send_beacon.emit(self.train_id, self.currentBeacon)
         signals.trainModel_send_speed_limit.emit(self.train_id, self.speedLimit)
         signals.trainModel_send_suggested_speed.emit(self.train_id, self.suggestedSpeed)
+        signals.trainModel_send_tunnel.emit(self.train_id, self.tunnel)
         # Signals to Track Model
         signals.trainModel_send_train_length.emit(self.train_id, self.length)
         signals.trainModel_send_distance_from_block_start.emit(self.train_id, self.distanceFromBlockStart)
@@ -207,5 +213,7 @@ class Train(QObject):
     def receiveGradient(self, value):
         self.currentGradient = value
 
+    def receiveTunnel(self, value):
+        self.tunnel = value
 
 
