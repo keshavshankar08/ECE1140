@@ -159,7 +159,7 @@ class Train:
 
         #if the train is stopped and time equals station
         if(self.current_authority == -1):
-            if(system_time_comp == self.station_departure_time):
+            if(system_time_comp >= self.station_departure_time):
                 self.next_stop()
 
         #if station is a stop, set departure time and make authority 0
