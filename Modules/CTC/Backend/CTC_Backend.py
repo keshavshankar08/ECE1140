@@ -92,7 +92,7 @@ class CTCBackend():
                     self.track_instance_copy.lines[0].blocks[0].block_occupancy = True
 
             if(train.current_line == 1):
-                if((system_comp_time >= comp_time) and (self.track_instance_copy.lines[1].blocks[63].block_occupancy == False) and (self.track_instance_copy.lines[1].blocks[64].block_occupancy == False)):
+                if((system_comp_time >= comp_time) and (self.track_instance_copy.lines[1].blocks[63].block_occupancy == False) and (self.track_instance_copy.lines[1].blocks[64].block_occupancy == False) and (self.track_instance_copy.lines[1].blocks[65].block_occupancy == False) and (self.track_instance_copy.lines[1].blocks[66].block_occupancy == False) and (self.track_instance_copy.lines[1].blocks[67].block_occupancy == False) and (self.track_instance_copy.lines[1].blocks[68].block_occupancy == False) and (self.track_instance_copy.lines[1].blocks[69].block_occupancy == False) and (self.track_instance_copy.lines[1].blocks[70].block_occupancy == False) and (self.track_instance_copy.lines[1].blocks[71].block_occupancy == False) and (self.track_instance_copy.lines[1].blocks[72].block_occupancy == False) and (self.track_instance_copy.lines[1].blocks[73].block_occupancy == False) and (self.track_instance_copy.lines[1].blocks[74].block_occupancy == False) and (self.track_instance_copy.lines[1].blocks[75].block_occupancy == False) and (self.track_instance_copy.lines[1].blocks[76].block_occupancy == False)):
                     self.active_trains_instance_copy.active_trains.append(train)
                     self.queue_trains.remove_train(i)
                     self.active_trains_instance_copy.active_trains[len(self.active_trains_instance_copy.active_trains) - 1].next_stop()
@@ -155,7 +155,10 @@ class CTCBackend():
     def remove_train(self):
         for train in self.active_trains_instance_copy.active_trains:
             if(train.current_line == 1):
-                if(train.current_block == 5):
+                if(train.current_block == 57):
+                    self.active_trains_instance_copy.active_trains.remove(train)
+            if(train.current_line == 0):
+                if((train.current_block == 9) and (train.current_authority == 0 or train.current_authority == -1)):
                     self.active_trains_instance_copy.active_trains.remove(train)
 
 #Helper Functions

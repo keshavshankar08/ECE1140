@@ -338,99 +338,99 @@ class PLC():
                 # get all sections' statuses
                 block_status = []
                 for i in range(len(self.track_instance_copy.red_line_sections)):
-                    block_status.append(self.get_section_occupancy(i, 1))
+                    block_status.append(self.get_section_occupancy(0, i))
 
                 curr_section = self.get_section_number(0, train.current_block)
 
-                if(not train.current_authority_changed):
-                    # go through and adjust auth to stop train when needed
-                    if(curr_section == 0):
-                        if(not train.current_direction):
-                            if(block_status[1]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction)
-                                    train.current_authority_changed = True
-                    elif(curr_section == 1):
-                        if(not train.current_direction):
-                            if(block_status[3]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                        else:
-                            if(block_status[0]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                    elif(curr_section == 2):
-                        if(not train.current_direction):
-                            if(block_status[3]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                        else:
-                            if(block_status[1]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                    elif(curr_section == 3):
-                        if(not train.current_direction):
-                            if(block_status[4]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                        else:
-                            if(block_status[1]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                    elif(curr_section == 4):
-                        if(not train.current_direction):
-                            if(block_status[6] or block_status[8]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                    elif(curr_section == 5):
-                        if(not train.current_direction):
-                            pass
-                        else:
-                            if(block_status[3] or block_status[1] or block_status[0] or block_status[2]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                    elif(curr_section == 6):
-                        if(not train.current_direction):
-                            if(block_status[7]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                        else:
-                            if(block_status[5]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                    elif(curr_section == 7):
-                        if(not train.current_direction):
-                            if(block_status[9] or block_status[10]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                    elif(curr_section == 8):
-                        if(not train.current_direction):
-                            pass
-                        else:
-                            if(block_status[6]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                    elif(curr_section == 9):
-                        if(not train.current_direction):
-                            pass
-                        else:
-                            if(block_status[8]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                elif(train.current_authority_changed and not train.authority_reset_ready):
+                # go through and adjust auth to stop train when needed
+                if(curr_section == 0):
+                    if(not train.current_direction):
+                        if(block_status[1]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction)
+                                train.current_authority_changed = True
+                elif(curr_section == 1):
+                    if(not train.current_direction):
+                        if(block_status[3]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                    else:
+                        if(block_status[0]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                elif(curr_section == 2):
+                    if(not train.current_direction):
+                        if(block_status[3]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                    else:
+                        if(block_status[1]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                elif(curr_section == 3):
+                    if(not train.current_direction):
+                        if(block_status[4]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                    else:
+                        if(block_status[1]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                elif(curr_section == 4):
+                    if(not train.current_direction):
+                        if(block_status[6] or block_status[8]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                elif(curr_section == 5):
+                    if(not train.current_direction):
+                        pass
+                    else:
+                        if(block_status[3] or block_status[1] or block_status[0] or block_status[2]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                elif(curr_section == 6):
+                    if(not train.current_direction):
+                        if(block_status[7]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                    else:
+                        if(block_status[5]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                elif(curr_section == 7):
+                    if(not train.current_direction):
+                        if(block_status[9] or block_status[10]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                elif(curr_section == 8):
+                    if(not train.current_direction):
+                        pass
+                    else:
+                        if(block_status[6]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                elif(curr_section == 9):
+                    if(not train.current_direction):
+                        pass
+                    else:
+                        if(block_status[8]):
+                            if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+
+                if(train.current_authority_changed and not train.authority_reset_ready):
                     if(train.current_authority == 0):
                         train.authority_reset_ready = True   
             # green line verfication
@@ -438,62 +438,62 @@ class PLC():
                 # get the block status'
                 block_status = []
                 for i in range(len(self.track_instance_copy.green_line_sections)):
-                    block_status.append(self.get_section_occupancy(i, 1))
+                    block_status.append(self.get_section_occupancy(1, i))
 
                 # if the train is on 1 block
                 curr_section = self.get_section_number(1, train.current_block)
 
-                if(not train.current_authority_changed):
-                    if(curr_section == 1):
-                        if(not train.current_direction):
-                            if(block_status[2]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                    elif(curr_section == 2):
-                        if(not train.current_direction):
-                            if(block_status[3] or block_status[4]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                    elif(curr_section == 3):
-                        if(not train.current_direction):
-                            if(block_status[4] or block_status[5]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                    elif(curr_section == 4):
-                        if(not train.current_direction):
-                            if(block_status[5]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                    elif(curr_section == 5):
-                        if(not train.current_direction):
-                            if(block_status[6] or block_status[7]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                    elif(curr_section == 6):
-                        if(not train.current_direction):
-                            pass
-                        else:
-                            if(block_status[8]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                    elif(curr_section == 8):
-                        if(not train.current_direction):
-                            pass
-                        else:
-                            if(block_status[1] or block_status[0]):
-                                if(self.get_authority(0, train.current_block, train.current_direction) < train.current_authority):
-                                    train.current_authority = self.get_authority(0, train.current_block, train.current_direction) 
-                                    train.current_authority_changed = True
-                elif(train.current_authority_changed and not train.authority_reset_ready):
+                if(curr_section == 1):
+                    if(not train.current_direction):
+                        if(block_status[2]):
+                            if(self.get_authority(1, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(1, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                elif(curr_section == 2):
+                    if(not train.current_direction):
+                        if(block_status[3] or block_status[4]):
+                            if(self.get_authority(1, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(1, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                elif(curr_section == 3):
+                    if(not train.current_direction):
+                        if(block_status[4] or block_status[5]):
+                            if(self.get_authority(1, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(1, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                elif(curr_section == 4):
+                    if(not train.current_direction):
+                        if(block_status[5]):
+                            if(self.get_authority(1, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(1, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                elif(curr_section == 5):
+                    if(not train.current_direction):
+                        if(block_status[6] or block_status[7]):
+                            if(self.get_authority(1, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(1, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                elif(curr_section == 6):
+                    if(not train.current_direction):
+                        pass
+                    else:
+                        if(block_status[8]):
+                            if(self.get_authority(1, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(1, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+                elif(curr_section == 8):
+                    if(not train.current_direction):
+                        pass
+                    else:
+                        if(block_status[1] or block_status[0]):
+                            if(self.get_authority(1, train.current_block, train.current_direction) < train.current_authority):
+                                train.current_authority = self.get_authority(1, train.current_block, train.current_direction) 
+                                train.current_authority_changed = True
+
+                if(train.current_authority_changed and not train.authority_reset_ready):
                     if(train.current_authority == 0):
                         train.authority_reset_ready = True
-
+                    
     # Executes PLC program for each wayside controller
     def execute_plc_program(self):
         for device in self.track_instance_copy.red_line_device_blocks_ws1:

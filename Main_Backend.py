@@ -47,7 +47,6 @@ class MainBackend(QObject):
         self.hw_plc_instance = None
         signals.hw_wayside_backend_update.connect(self.hw_wayside_backend_update)
 
-
         # Track Model Instances
         self.track_model_backend_instance = TrackModelModule()     
         signals.track_model_backend_update.connect(self.track_model_backend_update)

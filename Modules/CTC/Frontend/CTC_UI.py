@@ -246,6 +246,12 @@ class CTCFrontend(QtWidgets.QMainWindow):
 
     #Menu Bar Functions
     def schedule_builder_clicked(self):
+        #make sure no trains have been routed yet in manual mode
+        if(len(self.route_queue_copy.routes) > 0):
+            QMessageBox.information(self, "Alert", "Can't enter Automatic Mode after Manual Mode has been used.")
+            return
+        
+        #open schedule builder
         self.schedule_builder_window.show()
     
     def toggle_maintenance_button_clicked(self):

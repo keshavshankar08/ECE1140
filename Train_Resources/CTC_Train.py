@@ -94,7 +94,7 @@ class Train:
         for i, speed in enumerate(self.suggested_speed_queue):
             for j in range(len(speed)):
                 if(j == len(speed)-1):
-                    speed[j] = 0
+                    speed[j] = 5
                 else:
                     if(self.current_line == 0):
                         if(j == len(speed)-2):
@@ -159,7 +159,7 @@ class Train:
 
         #if the train is stopped and time equals station
         if(self.current_authority == -1):
-            if(system_time_comp == self.station_departure_time):
+            if(system_time_comp >= self.station_departure_time):
                 self.next_stop()
 
         #if station is a stop, set departure time and make authority 0
