@@ -142,7 +142,6 @@ class TrainController(QObject):
     def update_suggested_speed(self, value):
         self.suggested_speed = value
               
-        
     #this function updates the commanded speed
     def update_commanded_speed(self, value):
         self.commanded_speed = value
@@ -213,15 +212,14 @@ class TrainController(QObject):
             
     #this function is for announcements
     def beacon_receive(self, beacon):
-        
         if len(beacon) > 1:
                 temp_string = beacon.split()
-                if beacon[0] == "CASTLE" and beacon[1] == "SHANNON":
-                    self.station = "CASTLE SHANNON"
-                    self.station_side = beacon[2]
-                elif beacon[0] == "MT" and beacon[1] == "LEBANON":
-                    self.station = "MT LEBANON"
-                    self.station_side = beacon[2]
+                if temp_string[0] == "CASTLE":
+                    self.station = temp_string[0] + " " + temp_string[1]
+                    self.station_side = temp_string[2]
+                elif temp_string[0] == "MT":
+                    self.station = temp_string[0] + " " + temp_string[1]
+                    self.station_side = temp_string[2]
                 else:
                     self.station = temp_string[0]
                     self.station_side = temp_string[1]
