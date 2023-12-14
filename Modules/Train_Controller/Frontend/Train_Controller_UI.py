@@ -104,6 +104,12 @@ class TrainControllerUI(QtWidgets.QMainWindow):
                 self.automatic_button_clicked()
             else:
                 self.manual_button_clicked()
+
+            # if self.current_train_controller.authority:
+            #     if self.current_train_controller >
+            
+            # else:
+            #     self.current_train_controller.service_brake = True
                 
 
             self.update_UI()

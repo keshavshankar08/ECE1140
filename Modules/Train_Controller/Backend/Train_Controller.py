@@ -18,8 +18,8 @@ class TrainController(QObject):
         signals.train_controller_update_backend.connect(self.tc_update_values)
 
         #KP and KI values, true = auto, false = manual
-        self.KP = 4000 
-        self.KI = 2000 
+        self.KP = 2000 
+        self.KI = 1000 
         self.mode = True
 
         #Door/lightbulb values, True = Closed/on, False = Open/off
@@ -128,19 +128,6 @@ class TrainController(QObject):
         #now we set uk1 to uk and ek1 to ek, since they are past values
         self.uk1 = self.uk
         self.ek1 = self.ek
-
-        ###Authority
-        # if self.authority:
-        #     if self.authority <= 5:
-        #         self.suggested_speed = 15
-        #         if self.authority <= 1:
-        #             self.service_brake = True
-        #         else:
-        #             self.service_brake = False
-        #     else:
-        #         pass
-        # else:
-        #     self.service_brake = True
 
     #this function will set the kp and ki by the engineer
     def set_KP(self, kp):
