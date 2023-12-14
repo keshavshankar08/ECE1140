@@ -346,10 +346,10 @@
      <widget class="QLabel" name="label_13">
       <property name="geometry">
        <rect>
-        <x>1010</x>
-        <y>500</y>
-        <width>141</width>
-        <height>16</height>
+        <x>980</x>
+        <y>510</y>
+        <width>191</width>
+        <height>20</height>
        </rect>
       </property>
       <property name="font">
@@ -365,36 +365,21 @@
       <property name="geometry">
        <rect>
         <x>940</x>
-        <y>520</y>
+        <y>540</y>
         <width>271</width>
-        <height>215</height>
+        <height>201</height>
        </rect>
       </property>
       <layout class="QFormLayout" name="formLayout_2">
-       <item row="7" column="1">
-        <widget class="QLineEdit" name="passenger_occupancy_display"/>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="label_18">
-         <property name="font">
-          <font>
-           <pointsize>14</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Passenger Occupancy</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="train_ID_display"/>
-       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_26">
          <property name="text">
           <string>Train ID</string>
          </property>
         </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="train_ID_display"/>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_14">
@@ -414,7 +399,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="label_16">
          <property name="text">
-          <string>Authority (ft)</string>
+          <string>Authority (blocks)</string>
          </property>
         </widget>
        </item>
@@ -425,40 +410,40 @@
         <widget class="QLabel" name="label_15">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="text">
-          <string>Current Speed (mph)</string>
+          <string>Suggested Speed (mph)</string>
          </property>
         </widget>
        </item>
        <item row="3" column="1">
         <widget class="QLineEdit" name="current_speed_display"/>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_17">
+       <item row="6" column="1">
+        <widget class="QLineEdit" name="passenger_occupancy_display"/>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_18">
          <property name="font">
           <font>
            <pointsize>14</pointsize>
           </font>
          </property>
          <property name="text">
-          <string>Acceleration(mi/s^2)</string>
+          <string>Passenger Occupancy</string>
          </property>
         </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QLineEdit" name="acceleration_display"/>
        </item>
       </layout>
      </widget>
      <widget class="QLabel" name="label_20">
       <property name="geometry">
        <rect>
-        <x>1010</x>
+        <x>970</x>
         <y>20</y>
-        <width>141</width>
+        <width>191</width>
         <height>20</height>
        </rect>
       </property>
@@ -546,9 +531,9 @@
      <widget class="QLabel" name="label_21">
       <property name="geometry">
        <rect>
-        <x>1000</x>
+        <x>962</x>
         <y>750</y>
-        <width>153</width>
+        <width>211</width>
         <height>22</height>
        </rect>
       </property>
@@ -621,9 +606,9 @@
     <widget class="QPushButton" name="LoadTrackModelButton">
      <property name="geometry">
       <rect>
-       <x>570</x>
+       <x>540</x>
        <y>0</y>
-       <width>221</width>
+       <width>291</width>
        <height>41</height>
       </rect>
      </property>
