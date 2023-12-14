@@ -473,7 +473,7 @@
       </font>
      </property>
      <property name="maximum">
-      <number>44</number>
+      <number>43</number>
      </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -840,8 +840,19 @@
        <x>180</x>
        <y>40</y>
        <width>261</width>
-       <height>20</height>
+       <height>41</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>6</pointsize>
+      </font>
+     </property>
+     <property name="contextMenuPolicy">
+      <enum>Qt::NoContextMenu</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
      <property name="readOnly">
       <bool>true</bool>

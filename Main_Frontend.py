@@ -17,6 +17,12 @@ class MainFrontend(QtWidgets.QMainWindow):
         #setup
         super().__init__()
         uic.loadUi("MainLauncherUI.ui", self)
+        
+        self.ctc_office_button.setEnabled(False)
+        self.sw_wayside_button.setEnabled(False)
+        self.hw_wayside_button.setEnabled(False)
+        self.train_model_button.setEnabled(False)
+        self.train_controller_button.setEnabled(False)
 
         self.ctc_office_button.clicked.connect(self.ctc_office_clicked)
         self.track_model_button.clicked.connect(self.track_model_clicked)
@@ -77,6 +83,8 @@ class MainFrontend(QtWidgets.QMainWindow):
 
     #window for the track model
     def track_model_clicked(self):
+        self.sw_wayside_button.setEnabled(True)
+        self.hw_wayside_button.setEnabled(True)
         self.trackModelWindow.show()
 
     #window for the train model 
@@ -85,12 +93,18 @@ class MainFrontend(QtWidgets.QMainWindow):
 
     #window for the se wayside controller
     def sw_wayside_clicked(self):
+        self.ctc_office_button.setEnabled(True)
+        self.train_model_button.setEnabled(True)
+        self.train_controller_button.setEnabled(True)
         self.swWaysideWindow.show()
         self.hw_wayside_button.setEnabled(False)
         signals.wayside_choice.emit(0)
 
     #window for the hw wayside controller
     def hw_wayside_clicked(self):
+        self.ctc_office_button.setEnabled(True)
+        self.train_model_button.setEnabled(True)
+        self.train_controller_button.setEnabled(True)
         self.hwWaysideWindow.show()
         self.sw_wayside_button.setEnabled(False)
         signals.wayside_choice.emit(1)

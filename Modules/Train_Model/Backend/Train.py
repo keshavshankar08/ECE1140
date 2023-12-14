@@ -146,7 +146,13 @@ class Train(QObject):
         
         ## Temperature Calculation
         self.elapsedTime += constants.TIME_DELTA * 0.001
-        self.temperatureActual = self.temperatureCommand * math.exp(-0.1 * self.elapsedTime)
+        if (self.elapsedTime >= 1 and self.temperatureActual > self.temperatureCommand):
+            self.elapsedTime = 0
+            self.temperatureActual -= 1
+        elif (self.elapsedTime >= 1 and self.temperatureActual < self.temperatureCommand):
+            self.elapsedTime = 0
+            self.temperatureActual += 1
+            
 
 
         # Signals to Train Controller
@@ -208,7 +214,7 @@ class Train(QObject):
     
     def receivePassengers(self, value):
         self.numPassengers += value
-        self.mass += ((self.numPassengers) * 70) # average human weighs 70 kg.
+        self.mass = CAR_WEIGHT_EMPTY + ((self.numPassengers) * 70) # average human weighs 70 kg.
         
     def receiveGradient(self, value):
         self.currentGradient = value

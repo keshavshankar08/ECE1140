@@ -18,8 +18,8 @@ class TrainController(QObject):
         signals.train_controller_update_backend.connect(self.tc_update_values)
 
         #KP and KI values, true = auto, false = manual
-        self.KP = 4000 
-        self.KI = 2000 
+        self.KP = 2000 
+        self.KI = 1000 
         self.mode = True
 
         #Door/lightbulb values, True = Closed/on, False = Open/off
@@ -45,9 +45,12 @@ class TrainController(QObject):
         #authority and others
         self.authority = 0.0
         self.station = None
+        self.station_side = None
+        self.station_authority  = None
         self.train_id = None
         self.beacon_flag = False
         self.train_horn = False
+        self.tunnel_status = False
 
         #emergency brakes and service brakes, True = On, False = Off
         self.emergency_brake = False
@@ -129,19 +132,6 @@ class TrainController(QObject):
         self.uk1 = self.uk
         self.ek1 = self.ek
 
-        ###Authority
-        # if self.authority:
-        #     if self.authority <= 5:
-        #         self.suggested_speed = 15
-        #         if self.authority <= 1:
-        #             self.service_brake = True
-        #         else:
-        #             self.service_brake = False
-        #     else:
-        #         pass
-        # else:
-        #     self.service_brake = True
-
     #this function will set the kp and ki by the engineer
     def set_KP(self, kp):
         self.KP = kp
@@ -152,26 +142,7 @@ class TrainController(QObject):
     #this function updates the setpoint speed
     def update_suggested_speed(self, value):
         self.suggested_speed = value
-
-    #this function goes through a station stop
-    def train_station_stop(self):
-        if self.authority == 0:
-            pass
-            #open doors and turn on lights
-            #wait 1 minute
-            #wait = constants.TIME_DELTA*0.001*60
-            #if wait == 0:
-            #close doors and turn off lights 
-            
-
-            #activate service brake to stop moving
-            #self.service_brake = True
-            #toggle lights and doors for a station
-
-            #deactivate the service brake to start moving again
-            #self.service_brake = False
-            #toggle lights and doors
-        
+              
     #this function updates the commanded speed
     def update_commanded_speed(self, value):
         self.commanded_speed = value
@@ -185,7 +156,10 @@ class TrainController(QObject):
         
     #this function updates the authority
     def update_authority(self, newAuthority):
-        self.authority = newAuthority
+        if newAuthority:
+            self.authority = newAuthority
+        else:
+            self.authority = self.station_authority
             
     #this function updates the temp
     def update_temp_value(self, temperature):
@@ -207,7 +181,7 @@ class TrainController(QObject):
 
     #this function will report if passenger e brake status
     def passenger_EBrake(self, value):
-        self.pEBrake = value
+        self.emergency_brake = value
             
     #this function will toggle modes
     def toggle_modes(self, value):
@@ -241,8 +215,47 @@ class TrainController(QObject):
             self.R_door = False
             
     #this function is for announcements
-    def announce_station(self, beacon):
+    def beacon_receive(self, beacon):
         self.station = beacon
+        if len(beacon) > 1:
+                temp_string = beacon.split()
+                if temp_string[0] == "CASTLE":
+                    self.station = temp_string[0] + " " + temp_string[1]
+                    self.station_side = temp_string[2]
+                    self.station_authority = float(temp_string[3])
+                elif temp_string[0] == "MT":
+                    self.station = temp_string[0] + " " + temp_string[1]
+                    self.station_side = temp_string[2]
+                    self.station_authority = float(temp_string[3])
+                #red line 
+                elif temp_string[0] == "HERRON":
+                    self.station = temp_string[0] + " " + temp_string[1]
+                    self.station_side = temp_string[2]
+                    self.station_authority = float(temp_string[3])
+                elif temp_string[0] == "PENN":
+                    self.station = temp_string[0] + " " + temp_string[1]
+                    self.station_side = "Left/Right"
+                    self.station_authority = float(temp_string[3])
+                elif temp_string[0] == "STEEL":
+                    self.station = temp_string[0] + " " + temp_string[1]
+                    self.station_side = temp_string[2]
+                    self.station_authority = float(temp_string[3])
+                elif temp_string[0] == "FIRST":
+                    self.station = temp_string[0] + " " + temp_string[1]
+                    self.station_side = temp_string[2]
+                    self.station_authority = float(temp_string[3])
+                elif temp_string[0] == "STATION":
+                    self.station = temp_string[0] + " " + temp_string[1]
+                    self.station_side = temp_string[2]
+                    self.station_authority = float(temp_string[3])
+                elif temp_string[0] == "SOUTH":
+                    self.station = temp_string[0] + " " + temp_string[1] + " " + temp_string[2]
+                    self.station_side = temp_string[3]
+                    self.station_authority = float(temp_string[4])
+                else:
+                    self.station = temp_string[0]
+                    self.station_side = temp_string[1]
+                    self.station_authority = float(temp_string[2])
 
     #this function is for engine failure
     def engine_failure(self, failure):

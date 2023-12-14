@@ -41,6 +41,7 @@ class Train:
         self.train_route = route
         self.station_departure_time = QTime()
         self.distance_from_yard = -1
+        self.passenger_count = 0
 
         #set train ID
         self.train_ID = str(next(Train.id_obj))
@@ -97,16 +98,16 @@ class Train:
                 else:
                     if(self.current_line == 0):
                         if(j == len(speed)-2):
-                            speed[j] = round(track.red_line_speed_limit[self.authority_stop_queue[i][j]] * 0.33)
+                            speed[j] = 10
                         elif(j == len(speed)-3):
-                            speed[j] = round(track.red_line_speed_limit[self.authority_stop_queue[i][j]] * 0.66)
+                            speed[j] = 15
                         else:
                             speed[j] = track.red_line_speed_limit[self.authority_stop_queue[i][j]]
                     if(self.current_line == 1):
                         if(j == len(speed) - 2):
-                            speed[j] = round(track.green_line_speed_limit[self.authority_stop_queue[i][j]] * 0.33)      
+                            speed[j] = 10
                         elif(j == len(speed)-3):
-                            speed[j] = round(track.green_line_speed_limit[self.authority_stop_queue[i][j]] * 0.66)
+                            speed[j] = 15
                         else:
                             speed[j] = track.green_line_speed_limit[self.authority_stop_queue[i][j]]
 
@@ -158,7 +159,7 @@ class Train:
 
         #if the train is stopped and time equals station
         if(self.current_authority == -1):
-            if(system_time_comp == self.station_departure_time):
+            if(system_time_comp >= self.station_departure_time):
                 self.next_stop()
 
         #if station is a stop, set departure time and make authority 0
@@ -178,15 +179,14 @@ class Train:
         if len(self.authority_stop_queue[self.stop_index]) == 0:
             return
         
-        #update speed before removing it
-        self.current_suggested_speed = self.suggested_speed_queue[self.stop_index][0]
-
         if(self.current_line == 0):
             #if the first block is occupied, remove it from the route
             if track.red_line.blocks[self.authority_stop_queue[self.stop_index][0]].block_occupancy == True:
                 #update current block
                 self.current_block = self.authority_stop_queue[self.stop_index][0]
                 self.authority_stop_queue[self.stop_index] = self.authority_stop_queue[self.stop_index][1:]
+                #update current speed
+                self.current_suggested_speed = self.suggested_speed_queue[self.stop_index][0]
                 self.suggested_speed_queue[self.stop_index] = self.suggested_speed_queue[self.stop_index][1:]
 
         if(self.current_line == 1):
@@ -195,6 +195,8 @@ class Train:
                 #update current block
                 self.current_block = self.authority_stop_queue[self.stop_index][0]
                 self.authority_stop_queue[self.stop_index] = self.authority_stop_queue[self.stop_index][1:]
+                #update current speed
+                self.current_suggested_speed = self.suggested_speed_queue[self.stop_index][0]
                 self.suggested_speed_queue[self.stop_index] = self.suggested_speed_queue[self.stop_index][1:]
 
         #update current direction for each possible line
