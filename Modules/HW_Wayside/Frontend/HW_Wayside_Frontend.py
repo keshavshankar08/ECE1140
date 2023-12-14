@@ -7,6 +7,7 @@ from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import *
 from signals import *
 import os
+import tkinter as tk; from tkinter import messagebox
 
 # Global variable used to act as a timer on Arduino uploads
 counter = 0
@@ -31,9 +32,7 @@ except:
                                         try:
                                                 SER = serial.Serial('COM6', 9600)
                                         except:
-                                               app = QApplication([])
-                                               QMessageBox.warning(None, "Warning", "Arduino not detected")
-                                               exit
+                                               tk.Tk().withdraw(); messagebox.showwarning("Warning!", "Arduino not detected!")
 
 
 # send data to Arduino to display
