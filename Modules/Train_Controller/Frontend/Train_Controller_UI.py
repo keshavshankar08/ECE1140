@@ -131,7 +131,32 @@ class TrainControllerUI(QtWidgets.QMainWindow):
             self.password_val.setEnabled(True)
             self.automatic_button.setEnabled(True)
             self.manual_button.setEnabled(True)
-            
+            print(self.current_train_controller.station)
+
+            if self.current_train_controller.authority <= 100:
+                self.station_name.setText("APPROACHING " + self.current_train_controller.station + " STATION")
+            if self.current_train_controller.authority == 0 and self.current_train_controller.current_speed == 0:
+                if self.current_train_controller.station_side == "Right":
+                    self.int_lights_on()
+                    self.ext_lights_on()
+                    self.r_doors_open()
+                elif self.current_train_controller.station_side == "Left":
+                    self.int_lights_on()
+                    self.ext_lights_on()
+                    self.l_doors_open()
+                elif self.current_train_controller.station_side == "Right/Left":
+                    self.int_lights_on()
+                    self.ext_lights_on()
+                    self.r_doors_open()
+                    self.l_doors_open()
+                self.current_train_controller.service_brake = True
+
+            if self.current_train_controller.authority != 0 and self.current_train_controller.current_speed != 0:
+                    self.ext_lights_off()
+                    self.int_lights_off()
+                    self.r_doors_closed()
+                    self.l_doors_closed()
+                    self.station_name.setText(" ")
 
             if self.current_train_controller.tunnel_status:
                 self.ext_lights_on()
@@ -364,7 +389,6 @@ class TrainControllerUI(QtWidgets.QMainWindow):
 
     def annouce_stations(self, value):
         self.current_train_controller.station = value
-        self.station_name.setText("Approaching " + value + " Station")
 
     #function for train horn
     def play_sound(self):

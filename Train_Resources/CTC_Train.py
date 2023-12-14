@@ -130,8 +130,8 @@ class Train:
         else:
             self.departure_time = "0"
 
-        print(self.authority_stop_queue)
-        print(self.suggested_speed_queue)
+        # print(self.authority_stop_queue)
+        # print(self.suggested_speed_queue)
 
     #function to get the train to the next stop
     def next_stop(self):
@@ -222,10 +222,10 @@ class Train:
             self.authority_reset_ready = False
             self.current_authority_changed = False
 
-        print(f'speed list: ',self.suggested_speed_queue[self.stop_index])
-        print(f'authority list: ',self.authority_stop_queue[self.stop_index])
-        print(f'current speed: ',self.current_suggested_speed)
-        print(f'current block: ', self.current_block)
+        # print(f'speed list: ',self.suggested_speed_queue[self.stop_index])
+        # print(f'authority list: ',self.authority_stop_queue[self.stop_index])
+        # print(f'current speed: ',self.current_suggested_speed)
+        # print(f'current block: ', self.current_block)
 
 class ActiveTrains:
     def __init__(self):
