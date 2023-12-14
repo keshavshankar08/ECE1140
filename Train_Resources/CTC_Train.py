@@ -94,7 +94,7 @@ class Train:
         for i, speed in enumerate(self.suggested_speed_queue):
             for j in range(len(speed)):
                 if(j == len(speed)-1):
-                    speed[j] = 0
+                    speed[j] = 5
                 else:
                     if(self.current_line == 0):
                         if(j == len(speed)-2):
