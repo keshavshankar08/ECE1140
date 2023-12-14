@@ -159,7 +159,9 @@ class TrainController(QObject):
         if newAuthority:
             self.authority = newAuthority
         else:
-            self.authority = self.station_authority
+             self.authority = self.station_authority
+             if self.authority == 0:
+                 self.station_authority = 0
             
     #this function updates the temp
     def update_temp_value(self, temperature):
