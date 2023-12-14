@@ -18,8 +18,8 @@ class TrainController(QObject):
         signals.train_controller_update_backend.connect(self.tc_update_values)
 
         #KP and KI values, true = auto, false = manual
-        self.KP = 4000 
-        self.KI = 2000 
+        self.KP = 2000 
+        self.KI = 1000 
         self.mode = True
 
         #Door/lightbulb values, True = Closed/on, False = Open/off
@@ -48,6 +48,7 @@ class TrainController(QObject):
         self.train_id = None
         self.beacon_flag = False
         self.train_horn = False
+        self.tunnel_status = False
 
         #emergency brakes and service brakes, True = On, False = Off
         self.emergency_brake = False
@@ -84,6 +85,9 @@ class TrainController(QObject):
         signals.train_controller_left_door_status.emit(self.train_id, self.L_door)
         signals.train_controller_right_door_status.emit(self.train_id, self.R_door)
         signals.train_controller_temperature_value.emit(self.train_id, self.train_temp)
+
+        # if self.authority !=0:
+        #     self.authority -= self.current_speed * (constants.TIME_DELTA * 0.15)
 
         ###Power
         vError = 0
@@ -128,19 +132,6 @@ class TrainController(QObject):
         #now we set uk1 to uk and ek1 to ek, since they are past values
         self.uk1 = self.uk
         self.ek1 = self.ek
-
-        ###Authority
-        # if self.authority:
-        #     if self.authority <= 5:
-        #         self.suggested_speed = 15
-        #         if self.authority <= 1:
-        #             self.service_brake = True
-        #         else:
-        #             self.service_brake = False
-        #     else:
-        #         pass
-        # else:
-        #     self.service_brake = True
 
     #this function will set the kp and ki by the engineer
     def set_KP(self, kp):
@@ -241,7 +232,7 @@ class TrainController(QObject):
             self.R_door = False
             
     #this function is for announcements
-    def announce_station(self, beacon):
+    def beacon_receive(self, beacon):
         self.station = beacon
 
     #this function is for engine failure
