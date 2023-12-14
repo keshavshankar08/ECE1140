@@ -79,6 +79,7 @@ class Train(QObject):
         self.distanceFromYard = 0.0
         self.distanceFromBlockStart = 0.0
         self.currentBeacon = None
+        self.tunnel = False
         #### Failure
         self.engineFail = False
         self.brakeFail = False
@@ -157,6 +158,7 @@ class Train(QObject):
         signals.trainModel_send_beacon.emit(self.train_id, self.currentBeacon)
         signals.trainModel_send_speed_limit.emit(self.train_id, self.speedLimit)
         signals.trainModel_send_suggested_speed.emit(self.train_id, self.suggestedSpeed)
+        signals.trainModel_send_tunnel.emit(self.train_id, self.tunnel)
         # Signals to Track Model
         signals.trainModel_send_train_length.emit(self.train_id, self.length)
         signals.trainModel_send_distance_from_block_start.emit(self.train_id, self.distanceFromBlockStart)
@@ -210,5 +212,7 @@ class Train(QObject):
     def receiveGradient(self, value):
         self.currentGradient = value
 
+    def receiveTunnel(self, value):
+        self.tunnel = value
 
 
