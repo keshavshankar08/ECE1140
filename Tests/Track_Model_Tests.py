@@ -59,3 +59,10 @@ class TestTrackModel(unittest.TestCase):
         
         self.assertEqual(authority_meters,1000)
         
+    def test_beacon(self):
+        self.line_name = 'Green Line'
+        block = 73
+        
+        beacon_message = self.beacon(block)
+        
+        self.assertEqual(beacon_message,"Dormont Right 50.0")
