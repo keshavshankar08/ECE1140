@@ -24,24 +24,18 @@ class TrackModelModule(QtWidgets.QMainWindow):
         self.clicked_block = 0
         self.line_name = None
         
-        # member variable to hold occupied block
-        self.occupied_block = 0
-        self.block_grade = 0
-        self.speed_limit = 0
+        # temp variables 
         self.train_id = None
         self.distance_from_yard_receive = 0
-        
-        self.train_id
         self.new_passengers = 0
+        self.in_station = 0
         
         # declare lists to store line data
         self.red_line_data = []
         self.green_line_data = []
         
-        # tickets and passenger variables
+        # ticket sales variables
         self.tickets_sold = 0
-        self.passengers_on = 0
-        self.passengers_off = 0
         self.red_sales = 0
         self.green_sales = 0
         
@@ -229,11 +223,12 @@ class TrackModelModule(QtWidgets.QMainWindow):
                             signals.track_model_speed_limit.emit(int(active_train.train_ID),self.green_line_data[block][5])
                             
                             for station_block in stations:
-                                if path[count] == station_block:
+                                if path[count] == station_block and self.in_station == 0:
                                     # call function
                                     self.passenger_movement(active_train)
                                     # station block is occupied, send beacon signal and update passenger count
                                     signals.track_model_beacon.emit(int(active_train.train_ID),self.beacon(path[count]))
+                                    self.in_station = 1
                             
                             for underground_block in undergrounds:
                                 if path[count] == underground_block:
@@ -275,11 +270,12 @@ class TrackModelModule(QtWidgets.QMainWindow):
                             signals.track_model_speed_limit.emit(int(active_train.train_ID),self.red_line_data[block][5])
                             
                             for station_block in stations:
-                                if path[count] == station_block:
+                                if path[count] == station_block and self.in_station == 0:
                                     # call function
                                     self.passenger_movement(active_train)
                                     # station block is occupied, send beacon signal and update passenger count
                                     signals.track_model_beacon.emit(int(active_train.train_ID),self.beacon(path[count]))
+                                    self.in_station == 1
                             
                             for underground_block in undergrounds:
                                 if path[count] == underground_block:
@@ -312,7 +308,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
                     station_authority = int(self.green_line_data[block_number][3]) / 2
                 
             # format beacon string
-            if block_number in undergrounds and station_authority is not 0:
+            if block_number in undergrounds and station_authority != 0:
                 beacon = "{} {} {}".format(self.green_line_data[block_number][6][22:40],self.green_line_data[block_number][7],station_authority)
             else:
                 beacon = "{} {} {}".format(self.green_line_data[block_number][6][9:25],self.green_line_data[block_number][7],station_authority)
@@ -331,7 +327,7 @@ class TrackModelModule(QtWidgets.QMainWindow):
                     station_authority = int(self.red_line_data[block_number][3]) / 2
                 
             # format beacon string
-            if block_number in undergrounds and station_authority is not 0:
+            if block_number in undergrounds and station_authority != 0:
                 beacon = "{} {} {}".format(self.red_line_data[block_number][6][22:40],self.red_line_data[block_number][7],station_authority)
             else:
                 beacon = "{} {} {}".format(self.red_line_data[block_number][6][9:30],self.red_line_data[block_number][7],station_authority)
@@ -349,8 +345,13 @@ class TrackModelModule(QtWidgets.QMainWindow):
                     item.setBrush(QtGui.QColor(0,128,0))
                     if self.line_name == "Green Line":
                         self.track_instance_copy.lines[1].blocks[prev_block].block_occupancy = False
+                        if prev_block in self.track_instance_copy.green_line_station_blocks:
+                            self.in_station = 0
+         
                     if self.line_name == "Red Line":
                         self.track_instance_copy.lines[0].blocks[prev_block].block_occupancy = False
+                        if prev_block in self.track_instance_copy.red_line_station_blocks:
+                            self.in_station = 0
         
     # update occupancy of yard to show if train has been dispatched             
     def yard_occupancy(self):
