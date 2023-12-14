@@ -40,6 +40,7 @@ class Train:
         self.authority_stop_queue = [] # make a list of the route
         self.train_route = route
         self.station_departure_time = QTime()
+        self.distance_from_yard = -1
 
         #set train ID
         self.train_ID = str(next(Train.id_obj))
