@@ -12,6 +12,8 @@ from Modules.Train_Model.Frontend.Train_Model import *
 from Modules.Train_Controller.Frontend.Train_Controller_UI import *
 from Admin_UI import *
 
+# provides UI functionality to main launcher
+
 class MainFrontend(QtWidgets.QMainWindow):
     def __init__(self):
         #setup
