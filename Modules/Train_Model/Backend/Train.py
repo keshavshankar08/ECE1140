@@ -214,7 +214,7 @@ class Train(QObject):
     
     def receivePassengers(self, value):
         self.numPassengers += value
-        self.mass += ((self.numPassengers) * 70) # average human weighs 70 kg.
+        self.mass = CAR_WEIGHT_EMPTY + ((self.numPassengers) * 70) # average human weighs 70 kg.
         
     def receiveGradient(self, value):
         self.currentGradient = value
