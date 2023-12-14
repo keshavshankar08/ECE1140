@@ -132,7 +132,7 @@ class TrainControllerUI(QtWidgets.QMainWindow):
             self.automatic_button.setEnabled(True)
             self.manual_button.setEnabled(True)
 
-            if self.current_train_controller.authority <= 100:
+            if self.current_train_controller.authority <= 0:
                 self.station_name.setText("APPROACHING " + self.current_train_controller.station + " STATION")
             if self.current_train_controller.authority == 0 and self.current_train_controller.current_speed == 0:
                 if self.current_train_controller.station_side == "Right":
@@ -160,9 +160,6 @@ class TrainControllerUI(QtWidgets.QMainWindow):
             if self.current_train_controller.tunnel_status:
                 self.ext_lights_on()
                 self.int_lights_on()
-            else:
-                self.ext_lights_off()
-                self.int_lights_off()
 
             if self.current_train_controller.mode:
                 self.receive_driver_throttle(self.current_train_controller.suggested_speed)
@@ -227,32 +224,19 @@ class TrainControllerUI(QtWidgets.QMainWindow):
 
             # ###CONVERT CURRENT SPEED TO MPH
             if self.current_train_controller.authority: #authority has some value
-
-                if self.current_train_controller.suggested_speed == 15: #suggested speed is 15
-
-                    if (self.current_train_controller.current_speed*2.23694) > self.current_train_controller.suggested_speed: #current speed is not suggested speed
-                        self.current_train_controller.service_brake = True
-
-                        if self.current_train_controller.suggested_speed == 10: #suggested speed is 10
-
-                            if (self.current_train_controller.current_speed*2.23694) > self.current_train_controller.suggested_speed: #current speed is not suggested speed
-                                self.current_train_controller.service_brake = True
-
-                                if self.current_train_controller.authority != 0: #authority is not 0
-                                    self.current_train_controller.service_brake = False
-
-                                else:
-                                    pass
-                        else:
-                            self.current_train_controller.service_brake = False
-
-                    else:# current speed is equal to suggested speed
-                        self.current_train_controller.service_brake = False
+                
+                if (self.current_train_controller.current_speed*2.23694) > self.current_train_controller.suggested_speed:
+                    self.s_brake(True)
+           
                 else:
-                    self.current_train_controller.service_brake = False
+                    self.s_brake(False)
 
             else: #authority is 0
-                self.current_train_controller.service_brake = True
+                if self.current_train_controller.station_authority != 0:
+                     new_authority = self.current_train_controller.station_authority - self.current_train_controller.current_speed * (constants.TIME_DELTA*0.1)
+                     self.current_train_controller.authority = new_authority
+                else:
+                    self.s_brake(True)
 
 
 
