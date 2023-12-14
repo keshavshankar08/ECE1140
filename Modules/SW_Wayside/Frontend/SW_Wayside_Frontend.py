@@ -222,6 +222,9 @@ class SWWaysideFrontend(QtWidgets.QMainWindow):
         # Handles view track map button clicked
         def view_track_map_clicked(self):
                 curr_line_int = self.get_current_line_displayed_int()
+                image_viewer = {'linux':'xdg-open',
+                                  'win32':'explorer',
+                                  'darwin':'open'}[sys.platform]
                 if(sys.platform == 'win32'):
                         if(curr_line_int == 0):
                                 os.system('start Modules\\SW_Wayside\\Frontend\\red_line_map.png')
