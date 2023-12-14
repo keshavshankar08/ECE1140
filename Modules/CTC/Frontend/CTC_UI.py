@@ -42,6 +42,7 @@ class CTCFrontend(QtWidgets.QMainWindow):
         self.open_schedule_builder_button.clicked.connect(self.schedule_builder_clicked)
         self.line_value_box.currentTextChanged.connect(self.line_value_box_changed)
         self.maintenance_update_button.clicked.connect(self.toggle_maintenance_button_clicked)
+        self.toggle_switch_button.clicked.connect(self.toggle_switch_button_clicked)
 
         #Manual Scheduling Signals
         self.manual_add_stop_button.clicked.connect(self.add_stop_button_clicked)
@@ -110,6 +111,7 @@ class CTCFrontend(QtWidgets.QMainWindow):
         dispatched_trains_table_header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
         dispatched_trains_table_header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
         dispatched_trains_table_header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
+        dispatched_trains_table_header.setSectionResizeMode(3, QHeaderView.ResizeMode.Stretch)
 
         dispatch_selected_schedule_table_header = self.dispatch_selected_schedule_table.horizontalHeader()
         dispatch_selected_schedule_table_header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
@@ -119,6 +121,9 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #Line Selector
         self.line_value_box.addItems({"Green Line", "Red Line"})
         self.line_value_box.setCurrentIndex(-1)
+
+        self.toggle_switch_button.setEnabled(False)
+        self.toggle_switch_output.setPlainText("-")
 
     def update_display(self):
         #clear tables
@@ -144,6 +149,8 @@ class CTCFrontend(QtWidgets.QMainWindow):
             self.dispatched_trains_table.setItem(0, 1, suggested_speed)
             current_authority = QTableWidgetItem(str(train.current_authority) + " blocks")
             self.dispatched_trains_table.setItem(0, 2, current_authority)
+            current_block = QTableWidgetItem(str(train.current_block))
+            self.dispatched_trains_table.setItem(0, 3, current_block)
 
         #update track statuses
         #check what block it is
@@ -207,8 +214,23 @@ class CTCFrontend(QtWidgets.QMainWindow):
                 if(block.maintenance_status == True):
                     maintenance_list = maintenance_list + " " + str(block.block_number)
             
-            #display to notable blocks output TODO
+            #display to notable blocks output
             self.notable_blocks_output.setPlainText("The occupied blocks are: " + occupied_list + "\n\nThe faulty blocks are: " + fault_list + "\n\nThe maintenance blocks are: " + maintenance_list)
+
+        if(str(self.line_value_box.currentText()) == 'Red Line'):
+            if status_block in [9,16,27,33,38,44,52]:
+                self.toggle_switch_button.setEnabled(True)
+                self.toggle_switch_output.setPlainText(str(self.track_instance_copy.lines[0].blocks[status_block].get_switch_direction_string(0)))
+            else:
+                self.toggle_switch_button.setEnabled(False)
+                self.toggle_switch_output.setPlainText("-")
+        if(str(self.line_value_box.currentText()) == 'Green Line'):
+            if status_block in [13,28,57,63,77,85]:
+                self.toggle_switch_button.setEnabled(True)
+                self.toggle_switch_output.setPlainText(str(self.track_instance_copy.lines[1].blocks[status_block].get_switch_direction_string(1)))
+            else:
+                self.toggle_switch_button.setEnabled(False)
+                self.toggle_switch_output.setPlainText("-")
 
         #update ticket sales
         self.hourly_ticket_sales_output.setPlainText(str(self.ticket_sales_copy))
@@ -239,6 +261,20 @@ class CTCFrontend(QtWidgets.QMainWindow):
             for block in self.track_instance_copy.lines[1].blocks:
                 if(block.block_number == maintenance_block):
                     block.maintenance_status = not block.maintenance_status
+
+    def toggle_switch_button_clicked(self):
+        #get block to toggle maintenance
+        switch_block = int(self.set_block_maintenance_value.currentText())
+
+        if(str(self.line_value_box.currentText()) == 'Red Line'):
+            for block in self.track_instance_copy.lines[0].blocks:
+                if(block.block_number == switch_block):
+                    block.switch_direction = not block.switch_direction
+
+        if (str(self.line_value_box.currentText()) == 'Green Line'):
+            for block in self.track_instance_copy.lines[1].blocks:
+                if(block.block_number == switch_block):
+                    block.switch_direction = not block.switch_direction
 
     def line_value_box_changed(self):
         #reset scheduling
