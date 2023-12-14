@@ -85,6 +85,10 @@ class TrainController(QObject):
         signals.train_controller_right_door_status.emit(self.train_id, self.R_door)
         signals.train_controller_temperature_value.emit(self.train_id, self.train_temp)
 
+        # if self.authority !=0:
+        #     self.authority -= self.current_speed * (constants.TIME_DELTA * 0.15)
+
+
         ###Power
         vError = 0
         if self.mode == True: #auto mode
@@ -194,8 +198,11 @@ class TrainController(QObject):
 
     #this function will report if passenger e brake status
     def passenger_EBrake(self, value):
-        self.pEBrake = value
-            
+        if value:
+            self.emergency_brake = True
+        else:
+            self.emergency_brake = False
+
     #this function will toggle modes
     def toggle_modes(self, value):
         if value:
