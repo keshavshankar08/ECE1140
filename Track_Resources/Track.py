@@ -412,7 +412,7 @@ class Line:
     #Function to get time between two blocks
     def get_time_between(self, start, end):
         #get shortest path first
-        path = self.get_shortest_path(start, end, path=[])
+        path = self.get_left_path(start, end)
 
         #multiply each block by time
         return len(path)*15
