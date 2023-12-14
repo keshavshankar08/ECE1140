@@ -9,7 +9,7 @@ from signals import *
 from Track_Resources.Track import *
 
 ##main module setup
-class CTCFrontend(QtWidgets.QMainWindow):
+class ScheduleBuilder(QtWidgets.QMainWindow):
     def __init__(self):
         #setup
         super().__init__()
@@ -21,19 +21,22 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #initialize variables
         self.track_instance_copy = Track()
         self.route_queue_copy = RouteQueue()
+        self.queue_trains_copy = QueueTrains()
+
+        #Current Line Signal
+        self.line_value_box.currentTextChanged.connect(self.line_value_box_changed)
 
         #Manual Scheduling Signals
         self.route_add_stop_button.clicked.connect(self.add_stop_button_clicked)
-        self.route_delete_stop_button.clicked.connect(self.delete_stop_button_clicked)
+        self.route_delete_stops_button.clicked.connect(self.delete_stop_button_clicked)
         self.route_clear_all_stops_button.clicked.connect(self.clear_all_stops_button_clicked)
-        self.route_add_route.clicked.connect(self.add_route_button_clicked)
+        self.route_add_route_button.clicked.connect(self.add_route_button_clicked)
 
-        #TODO
-        #Queue Table Signals
-        self.route.itemSelectionChanged.connect(self.route_table_selection_changed)
-
-        #Dispatched Table Signals
+        #Route Queue Table Signals
         self.route_queue_table.itemSelectionChanged.connect(self.route_queue_table_selection_changed)
+
+        #Confirm All Routes Button
+        self.confirm_all_routes_button.clicked.connect(self.confirm_all_routes_button_clicked)
 
     # Function to even out the tables
     def initialize_display(self):
@@ -54,6 +57,11 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #Line Selector
         self.line_value_box.addItems({"Green Line", "Red Line"})
         self.line_value_box.setCurrentIndex(-1)
+
+    #Menu Bar Signals
+    def line_value_box_changed(self):
+        if(len(self.route_queue_copy.routes) != 0):
+            QMessageBox.information(self, "Alert", "Make sure you confirm all routes before changing lines.")
 
     #Manual Scheduling Functions
     def add_stop_button_clicked(self):
@@ -76,7 +84,7 @@ class CTCFrontend(QtWidgets.QMainWindow):
         if(self.line_value_box.currentText() == "Green Line"):
             combo.addItems(self.track_instance_copy.green_line_station_names_ordered)
         self.route_table.setCellWidget(rowPosition, 0, combo)
-      
+
     def delete_stop_button_clicked(self):
         delIndex = self.route_table.currentRow()
         self.route_table.removeRow(delIndex)
@@ -110,7 +118,7 @@ class CTCFrontend(QtWidgets.QMainWindow):
                 #TODO - Error if incompatible time
                 print("incorrect dwell time format")
             '''
-                
+            
             #save data to route object
             new_route.stops.append(self.route_table.cellWidget(row, 0).currentText())
             new_route.stop_time.append(str(self.route_table.item(row, 1).text()))
@@ -125,11 +133,92 @@ class CTCFrontend(QtWidgets.QMainWindow):
         if (str(self.line_value_box.currentText()) == 'Red Line'):
             self.queue_trains_copy.add_train(Train(new_route, 0))
 
-        #clear the table
+        #clear the tables
         self.route_table.setRowCount(0)
+        self.route_queue_table.setRowCount(0)
+
+        #update train queue list
+        for train in self.queue_trains_copy.queue_trains:
+            #Add train ID and Departure Time
+            self.route_queue_table.insertRow(0)
+            train_id = QTableWidgetItem(str(train.train_ID))
+            self.route_queue_table.setItem(0, 0, train_id)
+            departure_time = QTableWidgetItem(str(train.departure_time))
+            self.route_queue_table.setItem(0, 1, departure_time)
+    
+    def route_queue_table_selection_changed(self):
+        #get selection
+        cur_index = self.route_queue_table.currentRow()
+
+        #exit function if no selection
+        if(cur_index == -1):
+            return
+        
+        train_id = str(self.route_queue_table.item(cur_index, 0).text())
+        
+        #fill schedule, clear table first
+        self.selected_schedule_table.setRowCount(0)
+
+        #check line
+        if(str(self.line_value_box.currentText()) == 'Green Line'):
+            #add each stop
+            for i in reversed(range(len(self.route_queue_copy.routes[int(train_id[3])].stops))):
+                #Add Stop, Station, and Dwell
+                self.selected_schedule_table.insertRow(0)
+                station = QTableWidgetItem(str(self.track_instance_copy.green_line_block_to_station(self.route_queue_copy.routes[int(train_id[3])].stops[i])))
+                self.selected_schedule_table.setItem(0, 0, station)
+                arrival = QTableWidgetItem(str(self.route_queue_copy.routes[int(train_id[3])].stop_time[i]))
+                self.selected_schedule_table.setItem(0, 1, arrival)
+                dwell = QTableWidgetItem(str(self.route_queue_copy.routes[int(train_id[3])].dwell_time[i]))
+                self.selected_schedule_table.setItem(0, 2, dwell)
+        
+        if(str(self.line_value_box.currentText()) == 'Red Line'):
+            #add each stop
+            for i in reversed(range(len(self.route_queue_copy.routes[int(train_id[3])].stops))):
+                #Add Stop, Station, and Dwell
+                self.selected_schedule_table.insertRow(0)
+                station = QTableWidgetItem(str(self.track_instance_copy.red_line_block_to_station(self.route_queue_copy.routes[int(train_id[3])].stops[i])))
+                self.selected_schedule_table.setItem(0, 0, station)
+                arrival = QTableWidgetItem(str(self.route_queue_copy.routes[int(train_id[3])].stop_time[i]))
+                self.selected_schedule_table.setItem(0, 1, arrival)
+                dwell = QTableWidgetItem(str(self.route_queue_copy.routes[int(train_id[3])].dwell_time[i]))
+                self.selected_schedule_table.setItem(0, 2, dwell)
+
+    #function for when confirm all routes button is pressed
+    def confirm_all_routes_button_clicked(self):
+        #error handling for empty routes
+        if(len(self.route_queue_copy.routes) == 0):
+            QMessageBox.information(self, "Alert", "Add routes before confirming.")
+
+        #get filename for schedule
+        name, done1 = QtWidgets.QInputDialog.getText(self, 'Input Dialog', 'Enter file name')
+
+        while(len(name) < 3):
+            QMessageBox.information(self, "Alert", "Filename not long enough. Must be longer than 3 characters.")
+            name, done1 = QtWidgets.QInputDialog.getText(self, 'Input Dialog', 'Enter file name')
+
+        #create a file
+        filename = "Modules/CTC/Backend/Routes/" + str(name) + ".txt"
+        route_file = open(filename, "w")
+
+        #write the line value
+        route_file.write(str(self.line_value_box.currentText()) + "\n")
+
+        #save each route with a delimiter as a string
+        for route in self.route_queue_copy.routes:
+            #create strings of route variables
+            stop_string = ','.join(str(x) for x in route.stops) + "\n"
+            dwell_string = ','.join(str(x) for x in route.dwell_time) + "\n"
+            stop_time_string = ','.join(str(x) for x in route.stop_time) + "\n"
+
+            #write to file with - as a delimiter
+            route_file.writelines([stop_string, dwell_string, stop_time_string, "-\n"])
+
+        #close file
+        route_file.close()
 
 #Main
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = CTCFrontend()
+    window = ScheduleBuilder()
     app.exec()

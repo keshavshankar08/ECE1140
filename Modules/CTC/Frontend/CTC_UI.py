@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import *
 import sys
 import os
 sys.path.append(".")
+from Modules.CTC.Frontend.schedule_builder import *
 from signals import *
 from Track_Resources.Track import *
 
@@ -22,6 +23,9 @@ class CTCFrontend(QtWidgets.QMainWindow):
         self.queue_trains_copy = QueueTrains()
         self.route_queue_copy = RouteQueue()
         self.ticket_sales_copy = 0
+
+        #create schedulebuilder window
+        self.schedule_builder_window = ScheduleBuilder()
 
         #initialize display
         self.initialize_display()
@@ -219,7 +223,7 @@ class CTCFrontend(QtWidgets.QMainWindow):
 
     #Menu Bar Functions
     def schedule_builder_clicked(self):
-        os.system("start EXCEL.EXE")
+        self.schedule_builder_window.show()
     
     def toggle_maintenance_button_clicked(self):
         #get block to toggle maintenance

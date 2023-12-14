@@ -220,7 +220,7 @@ p, li { white-space: pre-wrap; }
     </attribute>
     <column>
      <property name="text">
-      <string>Train ID</string>
+      <string>Temp ID</string>
      </property>
     </column>
     <column>
@@ -286,9 +286,9 @@ p, li { white-space: pre-wrap; }
    <widget class="QTextBrowser" name="route_queue_label">
     <property name="geometry">
      <rect>
-      <x>480</x>
+      <x>470</x>
       <y>60</y>
-      <width>111</width>
+      <width>141</width>
       <height>31</height>
      </rect>
     </property>
