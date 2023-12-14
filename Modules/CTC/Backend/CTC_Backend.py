@@ -123,10 +123,7 @@ def validate_time_hours(input_time):
     if(input_time == None):
         return False
     
-    if(re.search(p, input_time)):
-       return True
-    else:
-        return False
+    return re.search(p, input_time)
     
 def validate_time_minutes(input_time):
     regex = "^[0-5]?[0-9](?::[0-5]?[0-9])?$"
@@ -136,7 +133,4 @@ def validate_time_minutes(input_time):
     if(input_time == None):
         return False
     
-    if(re.search(p, input_time)):
-       return True
-    else:
-        return False
+    return re.search(p, input_time)

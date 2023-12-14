@@ -7,6 +7,7 @@ import os
 sys.path.append(".")
 from signals import *
 from Track_Resources.Track import *
+from Modules.CTC.Backend.CTC_Backend import validate_time_hours, validate_time_minutes
 
 ##main module setup
 class ScheduleBuilder(QtWidgets.QMainWindow):
@@ -54,6 +55,7 @@ class ScheduleBuilder(QtWidgets.QMainWindow):
         selected_schedule_table_header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
         selected_schedule_table_header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
         selected_schedule_table_header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
+
         #Line Selector
         self.line_value_box.addItems({"Green Line", "Red Line"})
         self.line_value_box.setCurrentIndex(-1)
@@ -100,24 +102,23 @@ class ScheduleBuilder(QtWidgets.QMainWindow):
         for row in range(self.route_table.rowCount()):
             #errors for station
             if self.route_table.cellWidget(row, 0).currentText() in new_route.stops:
-                #TODO - Error of duplicate station
-                continue
+                QMessageBox.information(self, "Alert", "Duplicate station. Try updating the routing.")
+                return
             
             #TODO - Error for station out of order
-            '''
+            
             #errors for time
             if self.route_table.item(row, 1) == None:
-                #TODO - Error if empty time
-                print("no time")
+                QMessageBox.information(self, "Alert", "A time value is missing. Fill and try again.")
+                return
                 
             if not validate_time_hours(str(self.route_table.item(row, 1).text())):
-                #TODO - Error if incompatible time
-                print("incorrect stop time format")
+                QMessageBox.information(self, "Alert", "Incorrect stop time format. It must be in hh:mm:ss up to 23:59:59")
+                return
                 
             if not validate_time_minutes(str(self.route_table.item(row, 2).text())):
-                #TODO - Error if incompatible time
-                print("incorrect dwell time format")
-            '''
+                QMessageBox.information(self, "Alert", "Incorrect dwell time format. It must be in mm:ss up to 59:59")
+                return
             
             #save data to route object
             new_route.stops.append(self.route_table.cellWidget(row, 0).currentText())
