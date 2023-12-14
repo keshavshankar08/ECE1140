@@ -79,7 +79,10 @@ class TrainControllerList(QObject):
         if isinstance(self.total_trains[id], TrainController):
             self.total_trains[id].update_suggested_speed(value)
 
+<<<<<<< HEAD
     def update_temp_value(self, id, value):
         self.total_trains[id].update_temp_value(value)
+=======
+>>>>>>> bfdd244713837e7be0e1871b51be617c095a2c7f
 
 train_controller_list = TrainControllerList()
