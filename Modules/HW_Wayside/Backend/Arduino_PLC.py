@@ -7,10 +7,31 @@ from Track_Resources.Track import *
 from Train_Resources.CTC_Train import *
 
 # exit if the Arduino isn't connect (COM3)
+
+# Try to connect
 try:
         SER = serial.Serial('COM3', 9600)
 except: 
-        exit
+        # if no connection established, terminate
+        try:
+                SER = serial.Serial('COM1', 9600)
+        except:
+                try:
+                        SER = serial.Serial('COM2', 9600)
+                except:
+                        try:
+                                SER = serial.Serial('COM4', 9600)
+                        except:
+                                try:
+                                        SER = serial.Serial('COM5', 9600)
+                                except:
+                                        try:
+                                                SER = serial.Serial('COM6', 9600)
+                                        except:
+                                               # if all these catches fail, no Arduino is connected.
+                                               # Exit program 
+                                                exit
+
 
 # send data to Arduino to display
 def send_arduino(data):
@@ -53,7 +74,7 @@ class Arduino_PLC():
             self.execute_plc_program()
         self.send_plc_update()
 
-    #*** Send updates from plc to wayside backend
+    # Send updates from plc to wayside backend
     def send_plc_update(self):
         signals.sw_wayside_plc_update.emit(self.track_instance_copy, self.active_trains_instance_copy)
 
@@ -137,6 +158,8 @@ class Arduino_PLC():
             # send line to Arduino
             code1 = "X" + token_line
             RESPONSE = send_arduino(code1)
+
+            # send token to Arduino to determine resulting action #
 
             # transfer CR or SW from Arduino back to Python
             if RESPONSE[0] == '1':

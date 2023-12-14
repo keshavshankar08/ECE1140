@@ -129,19 +129,6 @@ class TrainController(QObject):
         self.uk1 = self.uk
         self.ek1 = self.ek
 
-        ###Authority
-        # if self.authority:
-        #     if self.authority <= 5:
-        #         self.suggested_speed = 15
-        #         if self.authority <= 1:
-        #             self.service_brake = True
-        #         else:
-        #             self.service_brake = False
-        #     else:
-        #         pass
-        # else:
-        #     self.service_brake = True
-
     #this function will set the kp and ki by the engineer
     def set_KP(self, kp):
         self.KP = kp

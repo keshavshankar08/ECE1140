@@ -89,12 +89,27 @@ class Train:
 
         #the suggested speed inbetween each station
         self.suggested_speed_queue = copy.deepcopy(self.authority_stop_queue)
-        for speed in self.suggested_speed_queue:
-            for i in range(len(speed)):
-                if(i == len(speed)-1):
-                    speed[i] = 0
+        for i, speed in enumerate(self.suggested_speed_queue):
+            for j in range(len(speed)):
+                if(j == len(speed)-1):
+                    speed[j] = 0
                 else:
-                    speed[i] = 20
+                    if(self.current_line == 0):
+                        if(j == len(speed)-2):
+                            speed[j] = round(track.red_line_speed_limit[self.authority_stop_queue[i][j]] * 0.33)
+                        elif(j == len(speed)-3):
+                            speed[j] = round(track.red_line_speed_limit[self.authority_stop_queue[i][j]] * 0.66)
+                        else:
+                            speed[j] = track.red_line_speed_limit[self.authority_stop_queue[i][j]]
+                    if(self.current_line == 1):
+                        if(j == len(speed) - 2):
+                            speed[j] = round(track.green_line_speed_limit[self.authority_stop_queue[i][j]] * 0.33)      
+                        elif(j == len(speed)-3):
+                            speed[j] = round(track.green_line_speed_limit[self.authority_stop_queue[i][j]] * 0.66)
+                        else:
+                            speed[j] = track.green_line_speed_limit[self.authority_stop_queue[i][j]]
+        
+        print(f'speed queue: ',self.suggested_speed_queue)
 
         #set the current parameters
         self.current_authority = 0
@@ -163,6 +178,9 @@ class Train:
         #first check if if the list is empty
         if len(self.authority_stop_queue[self.stop_index]) == 0:
             return
+        
+        #update speed before removing it
+        self.current_suggested_speed = self.suggested_speed_queue[self.stop_index][0]
 
         if(self.current_line == 0):
             #if the first block is occupied, remove it from the route
@@ -170,6 +188,7 @@ class Train:
                 #update current block
                 self.current_block = self.authority_stop_queue[self.stop_index][0]
                 self.authority_stop_queue[self.stop_index] = self.authority_stop_queue[self.stop_index][1:]
+                self.suggested_speed_queue[self.stop_index] = self.suggested_speed_queue[self.stop_index][1:]
 
         if(self.current_line == 1):
             #if the first block is occupied, remove it from the route
@@ -177,6 +196,7 @@ class Train:
                 #update current block
                 self.current_block = self.authority_stop_queue[self.stop_index][0]
                 self.authority_stop_queue[self.stop_index] = self.authority_stop_queue[self.stop_index][1:]
+                self.suggested_speed_queue[self.stop_index] = self.suggested_speed_queue[self.stop_index][1:]
 
         #update current direction for each possible line
         if(self.current_line == 0):
