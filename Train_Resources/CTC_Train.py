@@ -98,16 +98,16 @@ class Train:
                 else:
                     if(self.current_line == 0):
                         if(j == len(speed)-2):
-                            speed[j] = round(track.red_line_speed_limit[self.authority_stop_queue[i][j]] * 0.33)
+                            speed[j] = 10
                         elif(j == len(speed)-3):
-                            speed[j] = round(track.red_line_speed_limit[self.authority_stop_queue[i][j]] * 0.66)
+                            speed[j] = 15
                         else:
                             speed[j] = track.red_line_speed_limit[self.authority_stop_queue[i][j]]
                     if(self.current_line == 1):
                         if(j == len(speed) - 2):
-                            speed[j] = round(track.green_line_speed_limit[self.authority_stop_queue[i][j]] * 0.33)      
+                            speed[j] = 10
                         elif(j == len(speed)-3):
-                            speed[j] = round(track.green_line_speed_limit[self.authority_stop_queue[i][j]] * 0.66)
+                            speed[j] = 15
                         else:
                             speed[j] = track.green_line_speed_limit[self.authority_stop_queue[i][j]]
 
@@ -129,6 +129,9 @@ class Train:
 
         else:
             self.departure_time = "0"
+
+        print(self.authority_stop_queue)
+        print(self.suggested_speed_queue)
 
     #function to get the train to the next stop
     def next_stop(self):
@@ -179,15 +182,14 @@ class Train:
         if len(self.authority_stop_queue[self.stop_index]) == 0:
             return
         
-        #update speed before removing it
-        self.current_suggested_speed = self.suggested_speed_queue[self.stop_index][0]
-
         if(self.current_line == 0):
             #if the first block is occupied, remove it from the route
             if track.red_line.blocks[self.authority_stop_queue[self.stop_index][0]].block_occupancy == True:
                 #update current block
                 self.current_block = self.authority_stop_queue[self.stop_index][0]
                 self.authority_stop_queue[self.stop_index] = self.authority_stop_queue[self.stop_index][1:]
+                #update current speed
+                self.current_suggested_speed = self.suggested_speed_queue[self.stop_index][0]
                 self.suggested_speed_queue[self.stop_index] = self.suggested_speed_queue[self.stop_index][1:]
 
         if(self.current_line == 1):
@@ -196,6 +198,8 @@ class Train:
                 #update current block
                 self.current_block = self.authority_stop_queue[self.stop_index][0]
                 self.authority_stop_queue[self.stop_index] = self.authority_stop_queue[self.stop_index][1:]
+                #update current speed
+                self.current_suggested_speed = self.suggested_speed_queue[self.stop_index][0]
                 self.suggested_speed_queue[self.stop_index] = self.suggested_speed_queue[self.stop_index][1:]
 
         #update current direction for each possible line
@@ -217,6 +221,11 @@ class Train:
         if(self.authority_reset_ready):
             self.authority_reset_ready = False
             self.current_authority_changed = False
+
+        print(f'speed list: ',self.suggested_speed_queue[self.stop_index])
+        print(f'authority list: ',self.authority_stop_queue[self.stop_index])
+        print(f'current speed: ',self.current_suggested_speed)
+        print(f'current block: ', self.current_block)
 
 class ActiveTrains:
     def __init__(self):
