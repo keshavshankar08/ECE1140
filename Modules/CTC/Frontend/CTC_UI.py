@@ -327,28 +327,47 @@ class CTCFrontend(QtWidgets.QMainWindow):
         #create station and time data
         new_route = Route()
 
-        #loop through 
+        #create route order list for route verification
+        route_order_list = []
+
+        #loop through
         for row in range(self.manual_table.rowCount()):
             #errors for station
             if self.manual_table.cellWidget(row, 0).currentText() in new_route.stops:
-                #TODO - Error of duplicate station
-                continue
+                QMessageBox.information(self, "Alert", "Duplicate station. Try updating the routing.")
+                return
             
-            #TODO - Error for station out of order
-            '''
+            #error for stations out of order
+            if(self.line_value_box.currentText() == 'Green Line'):
+                index = np.where(np.array(self.track_instance_copy.green_line_station_names_ordered) == self.manual_table.cellWidget(row, 0).currentText())
+                for ord in route_order_list:
+                    print(f'ord:',ord)
+                    if index < ord:
+                        QMessageBox.information(self, "Alert", "Station routed out of order. Follow the order in the dropdown menu.")
+                        return
+                route_order_list.append(index)
+
+            #error for stations out of order
+            if(self.line_value_box.currentText() == 'Red Line'):
+                index = np.where(self.track_instance_copy.red_line_station_names == self.manual_table.cellWidget(row, 0).currentText())
+                for ord in route_order_list:
+                    if index < ord:
+                        QMessageBox.information(self, "Alert", "Station routed out of order. Follow the order in the dropdown menu.")
+                        return
+                route_order_list.append(index)
+            
             #errors for time
             if self.manual_table.item(row, 1) == None:
-                #TODO - Error if empty time
-                print("no time")
+                QMessageBox.information(self, "Alert", "A time value is missing. Fill and try again.")
+                return
                 
             if not validate_time_hours(str(self.manual_table.item(row, 1).text())):
-                #TODO - Error if incompatible time
-                print("incorrect stop time format")
+                QMessageBox.information(self, "Alert", "Incorrect stop time format. It must be in hh:mm:ss up to 23:59:59")
+                return
                 
             if not validate_time_minutes(str(self.manual_table.item(row, 2).text())):
-                #TODO - Error if incompatible time
-                print("incorrect dwell time format")
-            '''
+                QMessageBox.information(self, "Alert", "Incorrect dwell time format. It must be in mm:ss up to 59:59")
+                return
                 
             #save data to route object
             new_route.stops.append(self.manual_table.cellWidget(row, 0).currentText())
