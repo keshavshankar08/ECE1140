@@ -228,7 +228,7 @@ class TrainController(QObject):
             self.R_door = False
             
     #this function is for announcements
-    def announce_station(self, beacon):
+    def beacon_receive(self, beacon):
         self.station = beacon
 
     #this function is for engine failure

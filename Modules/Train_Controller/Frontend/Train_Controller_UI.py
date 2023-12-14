@@ -104,11 +104,77 @@ class TrainControllerUI(QtWidgets.QMainWindow):
                 self.automatic_button_clicked()
             else:
                 self.manual_button_clicked()
-
-            # if self.current_train_controller.authority:
-            #     if self.current_train_controller >
             
-            # else:
+            self.temp_val.setValue(self.current_train_controller.train_temp)
+
+            #iteration for engine failure along with e brake
+            if self.current_train_controller.engine_fail:
+                self.engine_fail.setChecked(True)
+                self.current_train_controller.emergency_brake = True
+            else:
+                self.engine_fail.setChecked(False)
+                if self.current_train_controller.emergency_brake and self.current_train_controller.brake_fail == False and\
+                    self.current_train_controller.signal_fail == False and self.current_train_controller.mode == True:
+                    self.emergency_brake.setEnabled(True)
+                else:
+                    self.emergency_brake.setEnabled(False)
+            
+            #iteration for brake failure along with e brake
+            if self.current_train_controller.brake_fail:
+                self.brake_fail.setChecked(True)
+                self.current_train_controller.emergency_brake = True
+            else:
+                self.brake_fail.setChecked(False)
+                if self.current_train_controller.emergency_brake and self.current_train_controller.engine_fail == False and\
+                    self.current_train_controller.signal_fail == False and self.current_train_controller.mode == True:
+                    self.emergency_brake.setEnabled(True)
+                else:
+                    self.emergency_brake.setEnabled(False)
+
+            #iteration for signal failure along with e brake
+            if self.current_train_controller.signal_fail:
+                self.signal_fail.setChecked(True)
+                self.current_train_controller.emergency_brake = True
+            else:
+                self.signal_fail.setChecked(False)
+                if self.current_train_controller.emergency_brake and self.current_train_controller.engine_fail == False and\
+                    self.current_train_controller.brake_fail == False and self.current_train_controller.mode == True:
+                    self.emergency_brake.setEnabled(True)
+                else:
+                    self.emergency_brake.setEnabled(False)
+
+            # ###CONVERT CURRENT SPEED TO MPH
+            # if self.current_train_controller.authority: #authority has some value
+
+            #     if self.current_train_controller.authority <= 150: #authority is less than 150 m
+
+            #         if self.current_train_controller.current_speed <= 15: #current speed less than 15 mph
+            #             self.current_train_controller.service_brake = False
+
+            #             if self.current_train_controller.authority <= 20: #authority less than 20 m
+
+            #                 if self.current_train_controller.current_speed <= 5: #current speed less than 5 mph
+            #                     self.current_train_controller.service_brake = False
+
+            #                     if self.current_train_controller.authority != 0: #if authority does not equal 0 
+            #                         self.current_train_controller.service_brake = False
+
+            #                     else: #goes to authority 0
+            #                         pass
+
+            #                 else: #current speed greater than  to 5 mph
+            #                     self.current_train_controller.service_brake = True
+
+            #             else: #authority greater than 20 m
+            #                 self.current_train_controller.service_brake = False
+
+            #         else: #current speed greater than  to 15 mph 
+            #             self.current_train_controller.service_brake = True
+
+            #     else: #authority greater than 150 
+            #         self.current_train_controller.service_brake = False
+
+            # else: #authority is 0
             #     self.current_train_controller.service_brake = True
                 
 
@@ -160,6 +226,8 @@ class TrainControllerUI(QtWidgets.QMainWindow):
                 if self.current_train_controller.emergency_brake and self.current_train_controller.brake_fail == False and\
                     self.current_train_controller.signal_fail == False and self.current_train_controller.mode == True:
                     self.emergency_brake.setEnabled(True)
+                else:
+                    self.emergency_brake.setEnabled(False)
 
             #iteration for brake failure along with e brake
             if self.current_train_controller.brake_fail:
@@ -170,6 +238,8 @@ class TrainControllerUI(QtWidgets.QMainWindow):
                 if self.current_train_controller.emergency_brake and self.current_train_controller.engine_fail == False and\
                     self.current_train_controller.signal_fail == False and self.current_train_controller.mode == True:
                     self.emergency_brake.setEnabled(True)
+                else:
+                    self.emergency_brake.setEnabled(False)
 
             #iteration for signal failure along with e brake
             if self.current_train_controller.signal_fail:
@@ -180,6 +250,8 @@ class TrainControllerUI(QtWidgets.QMainWindow):
                 if self.current_train_controller.emergency_brake and self.current_train_controller.engine_fail == False and\
                     self.current_train_controller.brake_fail == False and self.current_train_controller.mode == True:
                     self.emergency_brake.setEnabled(True)
+                else:
+                    self.emergency_brake.setEnabled(False)
 
 
 

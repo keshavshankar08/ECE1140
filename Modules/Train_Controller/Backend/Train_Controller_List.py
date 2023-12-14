@@ -16,7 +16,7 @@ class TrainControllerList(QObject):
         #Signals
         signals.trainModel_send_actual_velocity.connect(self.update_current_speed)
         signals.trainModel_send_authority.connect(self.update_authority)
-        signals.trainModel_send_beacon.connect(self.announce_station)
+        signals.trainModel_send_beacon.connect(self.beacon_receive)
         signals.trainModel_send_emergency_brake.connect(self.passenger_EBrake)
         signals.trainModel_send_speed_limit.connect(self.update_suggested_speed)
         signals.trainModel_send_suggested_speed.connect(self.update_suggested_speed)
@@ -52,9 +52,8 @@ class TrainControllerList(QObject):
         if isinstance(self.total_trains[id], TrainController):
             self.total_trains[id].update_authority(value)
 
-    def announce_station(self, id, value):
-        if isinstance(self.total_trains[id], TrainController):
-            self.total_trains[id].announce_station(value)
+    def beacon_receive(self, id, value):
+        self.total_trains[id].beacon_receive(value)
 
     def passenger_EBrake(self, id, value):
         if isinstance(self.total_trains[id], TrainController):
@@ -79,5 +78,8 @@ class TrainControllerList(QObject):
     def update_suggested_speed(self, id, value):
         if isinstance(self.total_trains[id], TrainController):
             self.total_trains[id].update_suggested_speed(value)
+
+    def update_temp_value(self, id, value):
+        self.total_trains[id].update_temp_value(value)
 
 train_controller_list = TrainControllerList()
