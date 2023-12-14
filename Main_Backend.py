@@ -16,11 +16,15 @@ from Track_Resources.PLC import *
 from Main_Frontend import *
 from CONSTANTS import *
 
+# provides backend functionality to main launcher and timing system.
+
 class MainBackend(QObject):
     def __init__(self):
         super().__init__()
+        # QDateTime object to represent current system time
         self.current_time = QDateTime(constants.START_YEAR, constants.START_MONTH, constants.START_DAY,
                                       constants.START_HOUR, constants.START_MIN, constants.START_SEC)
+        # system timer which sends periodic signal to timerHandler refresh function
         self.system_timer = QTimer()
         self.system_timer.timeout.connect(self.timerHandler)
         signals.pause_timer.connect(self.pauseTimer)

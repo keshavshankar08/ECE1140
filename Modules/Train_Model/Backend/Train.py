@@ -25,12 +25,9 @@ GRAVITY = 9.8  # m/s^2
 MAX_ENGINE_FORCE = 40000  # N
 FRICTION_COEFF = 0.0  # dimensionless
 
-
 class Train(QObject):
     def __init__(self):
         super().__init__()
-        
-        
         #### Train ID
         self.train_id = 0
         #### Number of Passengers
@@ -120,7 +117,6 @@ class Train(QObject):
         self.slopeForce = self.mass * GRAVITY * math.sin(self.currentAngle)
         ### FRICTION
         self.frictionForce = self.mass * GRAVITY * FRICTION_COEFF * math.cos(self.currentAngle)
-        #self.frictionForce = 1000
         ### NET FORCE
         self.netForce = self.engineForce - self.slopeForce - self.brakeForce - self.frictionForce
         if (self.netForce > MAX_ENGINE_FORCE):
