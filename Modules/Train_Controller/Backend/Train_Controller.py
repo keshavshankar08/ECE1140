@@ -46,6 +46,7 @@ class TrainController(QObject):
         self.authority = 0.0
         self.station = None
         self.station_side = None
+        self.station_authority  = None
         self.train_id = None
         self.beacon_flag = False
         self.train_horn = False
@@ -155,7 +156,10 @@ class TrainController(QObject):
         
     #this function updates the authority
     def update_authority(self, newAuthority):
-        self.authority = newAuthority
+        if newAuthority:
+            self.authority = newAuthority
+        else:
+            self.authority = self.station_authority
             
     #this function updates the temp
     def update_temp_value(self, temperature):
@@ -212,17 +216,46 @@ class TrainController(QObject):
             
     #this function is for announcements
     def beacon_receive(self, beacon):
+        self.station = beacon
         if len(beacon) > 1:
                 temp_string = beacon.split()
                 if temp_string[0] == "CASTLE":
                     self.station = temp_string[0] + " " + temp_string[1]
                     self.station_side = temp_string[2]
+                    self.station_authority = float(temp_string[3])
                 elif temp_string[0] == "MT":
                     self.station = temp_string[0] + " " + temp_string[1]
                     self.station_side = temp_string[2]
+                    self.station_authority = float(temp_string[3])
+                #red line 
+                elif temp_string[0] == "HERRON":
+                    self.station = temp_string[0] + " " + temp_string[1]
+                    self.station_side = temp_string[2]
+                    self.station_authority = float(temp_string[3])
+                elif temp_string[0] == "PENN":
+                    self.station = temp_string[0] + " " + temp_string[1]
+                    self.station_side = "Left/Right"
+                    self.station_authority = float(temp_string[3])
+                elif temp_string[0] == "STEEL":
+                    self.station = temp_string[0] + " " + temp_string[1]
+                    self.station_side = temp_string[2]
+                    self.station_authority = float(temp_string[3])
+                elif temp_string[0] == "FIRST":
+                    self.station = temp_string[0] + " " + temp_string[1]
+                    self.station_side = temp_string[2]
+                    self.station_authority = float(temp_string[3])
+                elif temp_string[0] == "STATION":
+                    self.station = temp_string[0] + " " + temp_string[1]
+                    self.station_side = temp_string[2]
+                    self.station_authority = float(temp_string[3])
+                elif temp_string[0] == "SOUTH":
+                    self.station = temp_string[0] + " " + temp_string[1] + " " + temp_string[2]
+                    self.station_side = temp_string[3]
+                    self.station_authority = float(temp_string[4])
                 else:
                     self.station = temp_string[0]
                     self.station_side = temp_string[1]
+                    self.station_authority = float(temp_string[2])
 
     #this function is for engine failure
     def engine_failure(self, failure):

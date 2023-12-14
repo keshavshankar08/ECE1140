@@ -161,7 +161,6 @@ class TrainControllerUI(QtWidgets.QMainWindow):
                 self.ext_lights_on()
                 self.int_lights_on()
 
-
             if self.current_train_controller.mode:
                 self.receive_driver_throttle(self.current_train_controller.suggested_speed)
                 self.driver_throttle.setValue(int(self.current_train_controller.suggested_speed))
@@ -225,27 +224,19 @@ class TrainControllerUI(QtWidgets.QMainWindow):
 
             # ###CONVERT CURRENT SPEED TO MPH
             if self.current_train_controller.authority: #authority has some value
-
-                if self.current_train_controller.suggested_speed == 15 and\
-                    (self.current_train_controller.current_speed*2.23694) > self.current_train_controller.suggested_speed: #suggested speed is 15
-                        self.s_brake(True)
-
-                        if self.current_train_controller.suggested_speed == 10 and\
-                            (self.current_train_controller.current_speed*2.23694) > self.current_train_controller.suggested_speed: #suggested speed is 10
-                                self.s_brake(True)
-
-                                if self.current_train_controller.authority != 0: #authority is not 0
-                                    self.s_brake(False)
-
-                                else:
-                                    pass
-
-                        else:# current speed is equal to suggested speed
-                            self.s_brake(False)
+                
+                if (self.current_train_controller.current_speed*2.23694) > self.current_train_controller.suggested_speed:
+                    self.s_brake(True)
+           
                 else:
                     self.s_brake(False)
+
             else: #authority is 0
-                self.s_brake(True)
+                if self.current_train_controller.station_authority != 0:
+                     new_authority = self.current_train_controller.station_authority - self.current_train_controller.current_speed * (constants.TIME_DELTA*0.1)
+                     self.current_train_controller.authority = new_authority
+                else:
+                    self.s_brake(True)
 
 
 
