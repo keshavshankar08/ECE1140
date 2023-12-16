@@ -27,7 +27,7 @@ This section covers all directions to successfully install and run the applicati
 Prerequisites: [Python](https://www.python.org/downloads/) 3.7.9 or greater
 
 ## Usage and Configuration
-Main Launcher 
+### Main Launcher 
 
 User Interface 
 
@@ -61,7 +61,7 @@ Enter the admin code and press ‘Enter Admin Mode.’ If the code is correct, a
 
  
 
-CTC 
+### CTC 
 
 User Interface 
 
@@ -155,7 +155,7 @@ The version of Python used for this program was 3.12.0. Please ensure that this 
 
  
 
-Hardware Wayside Controller 
+### Hardware Wayside Controller 
 
 Arduino 
 
@@ -187,7 +187,7 @@ The version of Python used for this program was 3.12.0. Please ensure that this 
 
  
 
-Software Wayside Controller 
+### Software Wayside Controller 
 
 User Interface 
 
@@ -229,37 +229,7 @@ Python
 
 The version of Python used for this program was 3.7.9. Please ensure that this is the installed version or greater. 
 
- 
-
-Train Model 
-
-User Interface 
-
-Launch Train Model interface from the Main Launcher. 
-
-Train Selection 
-
-In the top left, there is a combo box where you can select any active train in the system. Upon selection, the train’s values will be displayed in the Train Model UI. 
-
-By default, there is no train selected, and all interface elements are deactivated. A train must be selected for the UI to be functional. 
-
-Train Information 
-
-In the UI, all of the chosen train’s information can be viewed. This includes crew count, passenger count, mass, length, width, lights, doors, temperature, brake status, velocity, acceleration, and power. It also includes beacon information, which contains current station name if the train is at a station.  
-
-The UI also includes advertisements for passengers at the bottom. 
-
-Failure Modes 
-
-The UI includes a selection of failure modes to simulate failure scenarios. These include signal pickup failure, brake failure, and engine failure. The failure modes can be activated or deactivated by clicking the corresponding checkboxes. 
-
-Emergency Brake 
-
-The UI includes a push button for the passenger emergency brake. Once activated by a passenger, it can only be deactivated by the Train Controller. 
-
- 
-
-Track Model  
+### Track Model  
 
 1. User Interface 
 
@@ -319,11 +289,33 @@ b. Railway Crossing Lights
 
 i. Circles exist at railway crossing blocks to indicate the status of the crossing. If 			the light is white, the crossing is in the inactive state, meaning the gates are up 			and traffic can cross the tracks. When the light is orange, the crossing is in an 			active state, meaning the gates are down and traffic cannot cross due to a train in 			close proximity to the crossing block.  
 
- 
+### Train Model 
 
-Train Controller 
+User Interface 
 
- 
+Launch Train Model interface from the Main Launcher. 
+
+Train Selection 
+
+In the top left, there is a combo box where you can select any active train in the system. Upon selection, the train’s values will be displayed in the Train Model UI. 
+
+By default, there is no train selected, and all interface elements are deactivated. A train must be selected for the UI to be functional. 
+
+Train Information 
+
+In the UI, all of the chosen train’s information can be viewed. This includes crew count, passenger count, mass, length, width, lights, doors, temperature, brake status, velocity, acceleration, and power. It also includes beacon information, which contains current station name if the train is at a station.  
+
+The UI also includes advertisements for passengers at the bottom. 
+
+Failure Modes 
+
+The UI includes a selection of failure modes to simulate failure scenarios. These include signal pickup failure, brake failure, and engine failure. The failure modes can be activated or deactivated by clicking the corresponding checkboxes. 
+
+Emergency Brake 
+
+The UI includes a push button for the passenger emergency brake. Once activated by a passenger, it can only be deactivated by the Train Controller. 
+
+### Train Controller 
 
 User Interface 
 
